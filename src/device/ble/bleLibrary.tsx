@@ -3,6 +3,8 @@ import BleManager from 'react-native-ble-manager';
 import { NativeEventEmitter, NativeModules } from 'react-native';
 import { Parser } from '../../libraries/comunications/cti-parser';
 import { pcomProccessResponse, pcomResponseClassifier } from '../../libraries/comunications/dosimacBleMessages';
+import { Platform } from 'react-native';
+
 
 
 const BleManagerModule = NativeModules.BleManager;
@@ -16,6 +18,7 @@ export interface BlePeripheral {
   name: string | null;
   advertising?: string | null;
   peripheral: any;
+  advBytes?: number[];
 }
 
 export let devices: BlePeripheral[];
@@ -31,6 +34,53 @@ let contador: number = 0;
 
 
 //!Implementations
+
+// utils BLE (misma librería donde tienes BleStart/scan/handleDiscoverPeripheral)
+
+
+function extractAdvBytesIOS(adv: any): number[] | null {
+  if (!adv) return null;
+
+  // 1) iOS: kCBAdvDataManufacturerData suele venir en base64 (string)
+  if (typeof adv.kCBAdvDataManufacturerData === 'string') {
+    try {
+      return Array.from(Buffer.from(adv.kCBAdvDataManufacturerData, 'base64'));
+    } catch {}
+  }
+
+  // 2) manufacturerData como objeto (a veces librerías lo exponen así)
+  if (adv.manufacturerData && typeof adv.manufacturerData === 'object') {
+    for (const k of Object.keys(adv.manufacturerData)) {
+      const v = adv.manufacturerData[k];
+      if (Array.isArray(v)) return v;
+      if (typeof v === 'string') {
+        try { return Array.from(Buffer.from(v, 'base64')); } catch {}
+      }
+    }
+  }
+
+  // 3) ServiceData como posible alternativa
+  if (adv.kCBAdvDataServiceData && typeof adv.kCBAdvDataServiceData === 'object') {
+    for (const k of Object.keys(adv.kCBAdvDataServiceData)) {
+      const v = adv.kCBAdvDataServiceData[k];
+      if (Array.isArray(v)) return v;
+      if (typeof v === 'string') {
+        try { return Array.from(Buffer.from(v, 'base64')); } catch {}
+      }
+    }
+  }
+
+  if (adv.serviceData && typeof adv.serviceData === 'object') {
+    for (const k of Object.keys(adv.serviceData)) {
+      const v = adv.serviceData[k];
+      if (Array.isArray(v)) return v;
+      if (v?.bytes && Array.isArray(v.bytes)) return v.bytes;
+    }
+  }
+
+  return null;
+}
+
 
 export const BleStart = () => {
   console.log("BleStart called");
@@ -54,22 +104,50 @@ export const startScanning = () => {
   });
 };
 
-const handleDiscoverPeripheral = (peripheral: BlePeripheral) => {
-  console.log('Got ble peripheral', peripheral);
-  if (!devices.some(device => device.id === peripheral.id)) {
-    const peritemp: BlePeripheral = {
-      id: peripheral.id,
-      name: peripheral.name,
-      //Utilizamos 10 digitos del advertising para identificar el equipo
-      advertising: (peripheral.advertising as any)?.rawData?.bytes?.slice(0, 8)?.toString(),
-      peripheral: peripheral,
+const handleDiscoverPeripheral = (p: any) => {
+  const adv: any = p?.advertising || {};
+  // iOS: nombre “completo” suele venir aquí
+  const localName =
+    adv?.kCBAdvDataLocalName ??
+    adv?.kCBAdvDataCompleteLocalName ??
+    adv?.localName ??
+    p?.name ??
+    null;
+
+  // Extraer bytes de advertising:
+  let advBytes: number[] | undefined;
+  // iOS
+  if (typeof adv?.kCBAdvDataManufacturerData === 'string') {
+    try { advBytes = Array.from(Buffer.from(adv.kCBAdvDataManufacturerData, 'base64')); } catch {}
+  }
+  if (!advBytes && adv?.manufacturerData && typeof adv.manufacturerData === 'object') {
+    const k = Object.keys(adv.manufacturerData)[0];
+    const v = k ? adv.manufacturerData[k] : undefined;
+    if (Array.isArray(v)) advBytes = v;
+    else if (typeof v === 'string') {
+      try { advBytes = Array.from(Buffer.from(v, 'base64')); } catch {}
     }
-    // devices.push(peripheral);
+  }
+  if (!advBytes && adv?.serviceData && typeof adv.serviceData === 'object') {
+    const k = Object.keys(adv.serviceData)[0];
+    const v: any = k ? adv.serviceData[k] : undefined;
+    const bytes = Array.isArray(v) ? v : Array.isArray(v?.bytes) ? v.bytes : undefined;
+    if (Array.isArray(bytes)) advBytes = bytes;
+  }
+  // Android (variantes)
+  if (!advBytes) advBytes = adv?.manufacturerRawData ?? adv?.rawData?.bytes ?? undefined;
+
+  const peritemp: BlePeripheral = {
+    id: p?.id,
+    name: localName,
+    peripheral: p,
+    advBytes,
+  };
+
+  if (!devices.some(d => d.id === peritemp.id)) {
     devices.push(peritemp);
   }
-
 };
-
 
 
 export const stopScanning = () => {

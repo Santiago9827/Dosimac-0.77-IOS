@@ -1,23 +1,59 @@
-/* eslint-disable prettier/prettier */
-import i18n from 'i18next';
+import i18n, { type LanguageDetectorAsyncModule } from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import en from './en';
 import es from './es';
+import ca from './ca';
+import fr from './fr';
+import pl from './pl';
+import ru from './ru';
+import ko from './ko';
+import uk from './uk';
+import zhTW from './zh-TW';
+import PT from './pt-PT';
+import it from './it';
 
-const resources = { // list of languages
- en,
- es,
+const resources = {
+  en, es, ca, fr, pl, ru, ko, uk,
+  'zh-TW': zhTW,
+  'pt-PT': PT, it
 };
- 
-i18n.use(initReactI18next) // passes i18n down to react-i18next
 
- .init({
-  compatibilityJSON: 'v3', //To make it work for Android devices, add this line.
-  resources,
-  lng: 'es', // default language to use.
-  // if you're using a language detector, do not define the lng option
-interpolation: {
-   escapeValue: false,
+const languageDetector: LanguageDetectorAsyncModule = {
+  type: 'languageDetector',
+  async: true,
+  detect: (cb) => {
+    AsyncStorage.getItem('@lang')
+      .then((lng) => { /* console.log('LANG@boot:', lng); */ cb(lng || 'es'); })
+      .catch(() => cb('es'));
   },
- });
+  init: () => { },
+  cacheUserLanguage: (lng) => {
+    // console.log('LANG@save:', lng);
+    AsyncStorage.setItem('@lang', lng).catch(() => { });
+  },
+};
+
+if (!i18n.isInitialized) {
+  i18n
+    //.use(languageDetector)
+    .use(initReactI18next)
+    .init({
+      compatibilityJSON: 'v3',
+      initImmediate: false,
+      resources,
+      fallbackLng: 'en',
+      supportedLngs: ['en', 'es', 'ca', 'fr', 'pl', 'ru', 'ko', 'uk', 'zh-TW', 'pt-PT', 'pt', 'it'],
+      nonExplicitSupportedLngs: true,
+      lowerCaseLng: false,
+      load: 'currentOnly',
+      interpolation: { escapeValue: false },
+      defaultNS: 'common',
+      ns: ['common', 'navigate', 'language'],
+      returnNull: false,
+      debug: __DEV__, // te da pistas en consola
+    });
+}
+
 export default i18n;

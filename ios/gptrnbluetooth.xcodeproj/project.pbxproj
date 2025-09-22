@@ -28,19 +28,19 @@
 		67C2F31A9D094356AC76A779 /* rfid1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 736E554983A24DCE955A22DC /* rfid1.jpg */; };
 		69553C016D8747569FFB1E72 /* Poppins-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 580FCCD17DC445D5A903B8AE /* Poppins-BlackItalic.ttf */; };
 		7200B003914F48D2BBBCFBA8 /* CfLcd521Regular-e4Jm.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2AC116DAFC3E42889A9702BD /* CfLcd521Regular-e4Jm.ttf */; };
+		7BF189D78A0D88B1B6AA9C38 /* libPods-gptrnbluetooth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E93BFCF8E7AC3F6E2EFB04 /* libPods-gptrnbluetooth.a */; };
 		7D0750F8CF624C6BADCAF8B6 /* Open24DisplaySt-KRL7.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EF430EB41DD4F028F7BC432 /* Open24DisplaySt-KRL7.ttf */; };
 		88F1D1B50DFD484DA75D1963 /* Roboto-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E804F15EB5F54FAA96302C04 /* Roboto-BoldItalic.ttf */; };
 		89933208BDA24CE587BEAFB5 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 29DA628A92A14073B683CFAE /* Poppins-SemiBold.ttf */; };
 		8AA567BAF0CA469296E29917 /* Segment7-4Gml.otf in Resources */ = {isa = PBXBuildFile; fileRef = EC2DE27115324986A6DA0521 /* Segment7-4Gml.otf */; };
 		8D36474BECB4459A92DA2094 /* Poppins-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 533656EF6566443A80CC1DE4 /* Poppins-ExtraBoldItalic.ttf */; };
 		8F296ED376374A70930D0F92 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51A0C0C4A4804B7E89652129 /* Poppins-Medium.ttf */; };
+		922E9E2C0F0A38DA3807C90F /* libPods-gptrnbluetooth-gptrnbluetoothTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56B57414C1088638AC0364C9 /* libPods-gptrnbluetooth-gptrnbluetoothTests.a */; };
 		9847ADC92E609CA0008EE05E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		99C339FBBF7941C08602FB74 /* configuracion_con_equipo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7BE0BDD3C6884EE18FAC5C8E /* configuracion_con_equipo.png */; };
 		9ACF7226B4A04A62A744253D /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 91227625ABB3487698A16EDE /* Poppins-Light.ttf */; };
 		A011E592505F4C3EB7D5DC50 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3569BC6F42D248AB9482A3C6 /* Poppins-Regular.ttf */; };
-		ABCC68A67776003905917823 /* libPods-gptrnbluetooth-gptrnbluetoothTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AC244F3ED903E553B6653EED /* libPods-gptrnbluetooth-gptrnbluetoothTests.a */; };
 		ACF89F690E0043CE9FDB68D4 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E8D00C083094F50A4C54725 /* Roboto-Bold.ttf */; };
-		B8525F590359702E1EAB7EAB /* libPods-gptrnbluetooth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7B70284914FE6A5E623709 /* libPods-gptrnbluetooth.a */; };
 		BA3A23A2DA98439FA1CB7A98 /* LedDigital7-vmYjy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3C045BCD3F4A454C855AEC87 /* LedDigital7-vmYjy.ttf */; };
 		C0DCC3FF55CA4DEEAD3CBCEB /* rfid2tb.png in Resources */ = {isa = PBXBuildFile; fileRef = 34913875BF1A400A8F6460AD /* rfid2tb.png */; };
 		C5F142A7E6F5432CBA558CA0 /* rfid1t.png in Resources */ = {isa = PBXBuildFile; fileRef = 6059F235DBF54856BF9F2648 /* rfid1t.png */; };
@@ -79,7 +79,6 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = gptrnbluetooth/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = gptrnbluetooth/main.m; sourceTree = "<group>"; };
 		19A282E86C584D9DA20CBFF3 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../src/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
-		19B48C51E19FB3B7C4AB476A /* Pods-gptrnbluetooth.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth.debug.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth.debug.xcconfig"; sourceTree = "<group>"; };
 		293F08C8907443C1A5F25F88 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BoldItalic.ttf"; path = "../src/assets/fonts/Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
 		29DA628A92A14073B683CFAE /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../src/assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		2AC116DAFC3E42889A9702BD /* CfLcd521Regular-e4Jm.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CfLcd521Regular-e4Jm.ttf"; path = "../src/assets/fonts/CfLcd521Regular-e4Jm.ttf"; sourceTree = "<group>"; };
@@ -87,24 +86,24 @@
 		3569BC6F42D248AB9482A3C6 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../src/assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		376CD77891E04670AD060824 /* Poppins-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-MediumItalic.ttf"; path = "../src/assets/fonts/Poppins-MediumItalic.ttf"; sourceTree = "<group>"; };
 		3C045BCD3F4A454C855AEC87 /* LedDigital7-vmYjy.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LedDigital7-vmYjy.ttf"; path = "../src/assets/fonts/LedDigital7-vmYjy.ttf"; sourceTree = "<group>"; };
-		409D699E088353B8675DD6F7 /* Pods-gptrnbluetooth.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth.release.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth.release.xcconfig"; sourceTree = "<group>"; };
+		3E60247DF7932F1044E5C6AE /* Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig"; sourceTree = "<group>"; };
 		411CAABE48BB476AA1E281B2 /* Poppins-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Thin.ttf"; path = "../src/assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; };
 		4512622FEC8A4935B3D704CF /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-LightItalic.ttf"; path = "../src/assets/fonts/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
-		480DB5602C81D49B4C9834E8 /* Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4B913FFC12E24FFEA338FC2A /* rfid2.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = rfid2.png; path = ../src/assets/images/rfid2.png; sourceTree = "<group>"; };
 		4BC3B082BBE04F57B0BE3862 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../src/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		4EF430EB41DD4F028F7BC432 /* Open24DisplaySt-KRL7.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Open24DisplaySt-KRL7.ttf"; path = "../src/assets/fonts/Open24DisplaySt-KRL7.ttf"; sourceTree = "<group>"; };
+		5170BFD9C8AA9B2EFD2B4FE4 /* Pods-gptrnbluetooth.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth.release.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth.release.xcconfig"; sourceTree = "<group>"; };
 		51A0C0C4A4804B7E89652129 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../src/assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		533656EF6566443A80CC1DE4 /* Poppins-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/Poppins-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		56B57414C1088638AC0364C9 /* libPods-gptrnbluetooth-gptrnbluetoothTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gptrnbluetooth-gptrnbluetoothTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		580FCCD17DC445D5A903B8AE /* Poppins-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BlackItalic.ttf"; path = "../src/assets/fonts/Poppins-BlackItalic.ttf"; sourceTree = "<group>"; };
+		5D02244524E49467AD3734DC /* Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6059F235DBF54856BF9F2648 /* rfid1t.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = rfid1t.png; path = ../src/assets/images/rfid1t.png; sourceTree = "<group>"; };
 		652CF2302EDF456A9CD31AF7 /* Poppins-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-LightItalic.ttf"; path = "../src/assets/fonts/Poppins-LightItalic.ttf"; sourceTree = "<group>"; };
 		6A02E231A36B416CA0FF1AB6 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../src/assets/fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; };
 		736E554983A24DCE955A22DC /* rfid1.jpg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = rfid1.jpg; path = ../src/assets/images/rfid1.jpg; sourceTree = "<group>"; };
 		77B8C7D1C0CB4D0D9D89C3C0 /* rfid2t.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = rfid2t.png; path = ../src/assets/images/rfid2t.png; sourceTree = "<group>"; };
-		790105DC0E43C57C9F8D0583 /* Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig"; sourceTree = "<group>"; };
 		7BE0BDD3C6884EE18FAC5C8E /* configuracion_con_equipo.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = configuracion_con_equipo.png; path = ../src/assets/images/configuracion_con_equipo.png; sourceTree = "<group>"; };
-		7E7B70284914FE6A5E623709 /* libPods-gptrnbluetooth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gptrnbluetooth.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = gptrnbluetooth/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83D7A0DF5DF443BAB7B6485F /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBold.ttf"; path = "../src/assets/fonts/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
 		84393F7BD0FB4B4AB10915EB /* Roboto-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Black.ttf"; path = "../src/assets/fonts/Roboto-Black.ttf"; sourceTree = "<group>"; };
@@ -117,9 +116,10 @@
 		9803AC132E5F53E100F81AD4 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		9803AC152E5F540E00F81AD4 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		A56A79D8B8074C1EBE98B959 /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBoldItalic.ttf"; path = "../src/assets/fonts/Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
-		AC244F3ED903E553B6653EED /* libPods-gptrnbluetooth-gptrnbluetoothTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gptrnbluetooth-gptrnbluetoothTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B501C0B1412949448BCD9054 /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-ThinItalic.ttf"; path = "../src/assets/fonts/Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
+		B86934AEA675ECF7DDA37A93 /* Pods-gptrnbluetooth.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth.debug.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth.debug.xcconfig"; sourceTree = "<group>"; };
 		B94D1675276F436B9E11F1CC /* Poppins-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Italic.ttf"; path = "../src/assets/fonts/Poppins-Italic.ttf"; sourceTree = "<group>"; };
+		D4E93BFCF8E7AC3F6E2EFB04 /* libPods-gptrnbluetooth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gptrnbluetooth.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D899C38EBAAB473981555A95 /* Poppins-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ThinItalic.ttf"; path = "../src/assets/fonts/Poppins-ThinItalic.ttf"; sourceTree = "<group>"; };
 		DC026BB22730417C85EA62FC /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../src/assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; };
 		E804F15EB5F54FAA96302C04 /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BoldItalic.ttf"; path = "../src/assets/fonts/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
@@ -134,7 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ABCC68A67776003905917823 /* libPods-gptrnbluetooth-gptrnbluetoothTests.a in Frameworks */,
+				922E9E2C0F0A38DA3807C90F /* libPods-gptrnbluetooth-gptrnbluetoothTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B8525F590359702E1EAB7EAB /* libPods-gptrnbluetooth.a in Frameworks */,
+				7BF189D78A0D88B1B6AA9C38 /* libPods-gptrnbluetooth.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,8 +183,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				7E7B70284914FE6A5E623709 /* libPods-gptrnbluetooth.a */,
-				AC244F3ED903E553B6653EED /* libPods-gptrnbluetooth-gptrnbluetoothTests.a */,
+				D4E93BFCF8E7AC3F6E2EFB04 /* libPods-gptrnbluetooth.a */,
+				56B57414C1088638AC0364C9 /* libPods-gptrnbluetooth-gptrnbluetoothTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -274,10 +274,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				19B48C51E19FB3B7C4AB476A /* Pods-gptrnbluetooth.debug.xcconfig */,
-				409D699E088353B8675DD6F7 /* Pods-gptrnbluetooth.release.xcconfig */,
-				480DB5602C81D49B4C9834E8 /* Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig */,
-				790105DC0E43C57C9F8D0583 /* Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig */,
+				B86934AEA675ECF7DDA37A93 /* Pods-gptrnbluetooth.debug.xcconfig */,
+				5170BFD9C8AA9B2EFD2B4FE4 /* Pods-gptrnbluetooth.release.xcconfig */,
+				5D02244524E49467AD3734DC /* Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig */,
+				3E60247DF7932F1044E5C6AE /* Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -289,12 +289,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "gptrnbluetoothTests" */;
 			buildPhases = (
-				B135BD5B39594230D25E7CED /* [CP] Check Pods Manifest.lock */,
+				2D881DEE301E7BA86530348F /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				8EDBD7A21D162D8DF0F15AAD /* [CP] Embed Pods Frameworks */,
-				E57DD4A7F1C105C77F74212B /* [CP] Copy Pods Resources */,
+				FCB92883634478DCA46A88A3 /* [CP] Embed Pods Frameworks */,
+				457CB819B0DEB935113A70CD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -310,13 +310,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "gptrnbluetooth" */;
 			buildPhases = (
-				F6D9BCABB7DDB42CC81B7312 /* [CP] Check Pods Manifest.lock */,
+				F05559E3FC556814171E7A29 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				C5055EA9AE6C3CF8CB7209AC /* [CP] Embed Pods Frameworks */,
-				AF21E631AE909138F74629D1 /* [CP] Copy Pods Resources */,
+				333BEE3F3C8F89782D5028E8 /* [CP] Embed Pods Frameworks */,
+				380CD9FB15872FBE99C364F6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -439,49 +439,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		8EDBD7A21D162D8DF0F15AAD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AF21E631AE909138F74629D1 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B135BD5B39594230D25E7CED /* [CP] Check Pods Manifest.lock */ = {
+		2D881DEE301E7BA86530348F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -503,7 +461,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C5055EA9AE6C3CF8CB7209AC /* [CP] Embed Pods Frameworks */ = {
+		333BEE3F3C8F89782D5028E8 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -524,7 +482,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E57DD4A7F1C105C77F74212B /* [CP] Copy Pods Resources */ = {
+		380CD9FB15872FBE99C364F6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		457CB819B0DEB935113A70CD /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -545,7 +524,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F6D9BCABB7DDB42CC81B7312 /* [CP] Check Pods Manifest.lock */ = {
+		F05559E3FC556814171E7A29 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -565,6 +544,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FCB92883634478DCA46A88A3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -600,7 +600,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 480DB5602C81D49B4C9834E8 /* Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig */;
+			baseConfigurationReference = 5D02244524E49467AD3734DC /* Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -627,7 +627,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 790105DC0E43C57C9F8D0583 /* Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig */;
+			baseConfigurationReference = 3E60247DF7932F1044E5C6AE /* Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -651,12 +651,12 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 19B48C51E19FB3B7C4AB476A /* Pods-gptrnbluetooth.debug.xcconfig */;
+			baseConfigurationReference = B86934AEA675ECF7DDA37A93 /* Pods-gptrnbluetooth.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 99YNMC58U9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -686,12 +686,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 409D699E088353B8675DD6F7 /* Pods-gptrnbluetooth.release.xcconfig */;
+			baseConfigurationReference = 5170BFD9C8AA9B2EFD2B4FE4 /* Pods-gptrnbluetooth.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 99YNMC58U9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

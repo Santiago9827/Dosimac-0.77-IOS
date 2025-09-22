@@ -1,9 +1,9 @@
 import common from './common';
-import navigate from './navigate';
 import language from './language';
+import navigate from './navigate';
 
 export default {
-	common,
-	navigate,
-	language,
+    common,
+    navigate,
+    language,
 };

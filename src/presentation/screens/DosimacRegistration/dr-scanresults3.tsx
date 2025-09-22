@@ -1,240 +1,206 @@
-import React, { useEffect, useState } from 'react'
-import { Pressable, View } from 'react-native'
-import { ActivityIndicator, Appbar, Text, Button, useTheme, RadioButton, Card, Portal, Dialog } from 'react-native-paper';
-import { MainButton } from '../../components/shared/MainButton '
-import { useTranslation } from 'react-i18next'
-import { globalStyles } from '../../theme/theme';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { ActivityIndicator, Appbar, Text, Button, Portal, Dialog } from 'react-native-paper';
+import { MainButton } from '../../components/shared/MainButton ';
+import { useTranslation } from 'react-i18next';
 import * as ble from '../../../device/ble/bleLibrary';
-import { PrimaryButton } from '../../components/shared/PrimaryButton';
-// import { useNavigation } from '@react-navigation/native';
-// import { bytesToString } from 'convert-string';
 import { BlePeripheral } from '../../../device/ble/bleLibrary';
 
-export const DRScanResultsScreen = ({ navigation, route }) => {
+type Props = {
+  navigation: any;
+  route: { params?: { operacion?: number } };
+};
 
-   const { t } = useTranslation();
-   // const navigation=useNavigation();
+// ASCII de “DOSIMAC”
+const DOSIMAC_ASCII = [68, 79, 83, 73, 77, 65, 67];
 
-   const [scanning, setScanning] = useState(true)
-   const [isVisible, setIsVisible] = useState(true);
-   const [startState, setStartState] = useState(0);
-   const [contadorIntervalo, setContadorIntervalo] = useState(0);
-   const [hasDevices, setHasDevices] = useState(false);
-
-   const [visible, setVisible] = React.useState(true);
-
-   const showDialog = () => setVisible(true);
-
-   const hideDialog = () => setVisible(false);
-   const deviceMark = [17, 68, 79, 83, 73, 77, 65, 67].toString(); //device.advertising son 10 caracteres
-
-   useEffect(() => {
-      console.log("inicio ------");
-
-      ble.BleStart();
-      ble.bleAddListener();
-      return () => {
-         ble.bleRemoveListener();
-      }
-
-
-   }, []);
-
-   //Maquina de estados para el escanedo inicial
-   useEffect(() => {
-      const incrementCount = () => {
-         setStartState(startState + 1);
-      };
-
-      const timer = setTimeout(() => {
-         if (startState < 2)
-            incrementCount()
-         else {
-            console.log("Inicio finalizado");
-            setScanning(false);
-            // console.log(ble.devices);
-            let cdevices = 0;
-            console.log(ble.devices.forEach(device => {
-               cdevices++;
-               console.log("-----: " + cdevices.toString());
-               console.log(device.id);
-               console.log(device.name);
-               console.log(device);
-            }));
-            console.log(ble.devices.length);
-
-            ble.devices.forEach(device => { if (device.advertising === deviceMark) setHasDevices(true) });
-
-
-
-
-         }
-      }, startBleStateMachine());
-      return () => clearTimeout(timer);
-
-   }, [startState])
-
-
-
-
-   const startBleStateMachine = (): number => {
-      let tiempo: number = 0;
-
-
-      switch (startState) {
-         case 0:
-            tiempo = 500;
-            // setStartState(1);
-            break;
-         case 1:
-            ble.startScanning();
-            // setStartState(1);
-            tiempo = 3000;
-            break;
-         case 2:
-            ble.stopScanning();
-            // setStartState(0);
-            tiempo = 100;
-            break;
-         default:
-            break;
-      }
-      console.log("Tiempo: " + tiempo);
-      return tiempo;
-
-   }
-
-
-   // useEffect(() => { 
-   //    console.log("DRScanResultsScreen:useEffect called");
-   //    console.log(ble.devices);
-   //    console.log(ble.devices.length);
-   //    console.log(ble.devices[0]);
-   //    console.log(ble.devices[0].id);
-   //    console.log(ble.devices[0].name);
-   //    console.log(ble.devices[0].rssi);
-   //    console.log(ble.devices[0].advertising);
-   //    console.log(ble.devices[0].advertising.kCBAdvDataManufacturerData);
-   //    console.log(ble.devices[0].advertising.kCBAdvDataServiceUUIDs);
-   //    console.log(ble.devices[0].advertising.kCBAdvDataServiceData);
-   //    console.log(ble.devices[0].advertising.kCBAdvDataLocalName);
-   //    console.log(ble.devices[0].advertising.kCBAdvDataTxPowerLevel);
-   //    console.log(ble.devices[0].advertising.kCBAdvData
-   // } ,[]);
-
-   const RenderIsScanning = () => {
-
-      return (
-         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size="large" />
-            <View>
-
-               <Text style={{ fontFamily: 'Roboto-Ligth', fontSize: 20 }}>Buscando equipos...</Text>
-
-
-            </View>
-
-         </View>
-      )
-   }
-
-   const dohideDialog = () => {
-      setVisible(false);
-      navigation.navigate('DR-NEWUPDATE')
-   }
-
-   const RenderDevicesNotFound = () => {
-      return (
-         <View style={{ alignItems: 'center', marginVertical: 60 }}>
-            <View>
-
-               {/* <Text style={{ fontFamily: 'Roboto-Ligth', fontSize: 20 }}>No hay dispositivos</Text> */}
-               <Portal>
-                  <Dialog visible={visible} onDismiss={dohideDialog}>
-                     <Dialog.Icon icon="warning" color="red" size={60} />
-                     <Dialog.Title style={{ color: 'red' }}>Aviso</Dialog.Title>
-                     <Dialog.Content>
-                        <Text variant="bodyLarge" >No hay dispositivos</Text>
-                     </Dialog.Content>
-                     <Dialog.Actions>
-                        <Button onPress={dohideDialog}>Aceptar</Button>
-                     </Dialog.Actions>
-                  </Dialog>
-               </Portal>
-
-
-            </View>
-
-         </View>
-      )
-   }
-
-   const renderDevice = (device: BlePeripheral) => {
-      const milabel: string = device.id.slice(-5)
-      const label: string = milabel.replace(":", "");
-      // console.log("milabel: ",milabel);
-      // console.log("label: ",label);
-      console.log("Advertising rendering:", device.advertising);
-      // const deviceMark=[17,68,79,83,73,77,65,67].toString(); //device.advertising son 10 caracteres
-      if (device.advertising === deviceMark)
-
-         // if (device.name === 'DOSIMAC') 
-
-         // <TabDr.Screen name="DRSETUP" component={DRSetup} />
-         return (
-
-            <View key={device.id} style={{ marginTop: 15 }}>
-               {/* <Text >{device.id}   {device.name}</Text> */}
-               <MainButton onPress={() => navigation.navigate('DR-SETUP', { id: device.id,operacion:route.params.operacion })}
-                  label={label}
-                  size={3}
-
-               />
-               {/* <MainButton onPress={() => navigation.navigate('DR-SETUP', { 
-                  screen:'DRSETUP',
-                  params:{
-                     id: device.id 
-                  }
-                  })}
-                  // label={milabel.trimEnd().slice(-7)}
-                  label={label}
-
-                  size={3}
-               /> */}
-            </View>
-
-         )
-   }
-
-   return (
-      <View style={{ flex: 1 }}>
-
-         <Appbar.Header elevated>
-
-            <Appbar.BackAction onPress={navigation.goBack} />
-            <Appbar.Content title={t('common:DosimacList')} />
-            {/* <Appbar.Action icon="add" onPress={() => {}} /> */}
-         </Appbar.Header>
-
-
-
-         {scanning &&
-            <RenderIsScanning />
-         }
-         {!scanning && (
-            hasDevices ? (
-               <View style={{ marginTop: 60, marginHorizontal: 40 }}>
-                  {ble.devices.map(device => renderDevice(device))}
-               </View>
-            ) : (
-               <View>
-                  <RenderDevicesNotFound />
-               </View>
-            ))
-         }
-
-
-      </View>
-
-   )
+function includesSubsequence(haystack: number[], needle: number[]) {
+  outer: for (let i = 0; i <= haystack.length - needle.length; i++) {
+    for (let j = 0; j < needle.length; j++) {
+      if (haystack[i + j] !== needle[j]) continue outer;
+    }
+    return true;
+  }
+  return false;
 }
+
+function isDosimac(d: BlePeripheral) {
+  const n = (d.name || '').toUpperCase();
+  if (n.includes('DOSIMAC')) return true;
+
+  // si la librería guarda advBytes (recomendado)
+  const advAny = (d as any).advBytes as number[] | undefined;
+  if (Array.isArray(advAny) && advAny.length >= 4) {
+    // saltamos Company ID de manufacturer (2 bytes)
+    const payload = advAny.slice(2);
+    return includesSubsequence(payload, DOSIMAC_ASCII);
+  }
+  return false;
+}
+
+function hex2(b: number) {
+  return (b & 0xff).toString(16).padStart(2, '0');
+}
+
+function isPrintableAscii(b: number) {
+  const x = b & 0xff;
+  return x >= 0x20 && x <= 0x7e; // visibles
+}
+
+// Etiqueta mostrada en el botón (lo que imprime el equipo)
+function getDeviceLabel(d: BlePeripheral): string {
+  // 1) Preferir ADV BYTES siempre (iOS: manufacturer data empieza con 2 bytes de Company ID)
+  const advAny = (d as any).advBytes as number[] | undefined;
+  if (Array.isArray(advAny) && advAny.length >= 4) {
+    const payload = advAny.slice(2);           // saltar Company ID
+    const tail4 = payload.slice(-4);           // últimos 4 bytes del payload
+
+    // Si esos 4 bytes son ASCII imprimibles, úsalos tal cual (lo que imprime el equipo)
+    if (tail4.length === 4 && tail4.every(isPrintableAscii)) {
+      return tail4.map(b => String.fromCharCode(b)).join('');
+    }
+
+    // Si no son ASCII, usa los últimos 2 en HEX (ej. BF8E)
+    const tail2 = payload.slice(-2);
+    if (tail2.length === 2) {
+      return tail2.map(hex2).join('').toUpperCase();
+    }
+  }
+
+  // 2) Fallback: últimas 4 del nombre si existe
+  const n = (d.name || '').trim();
+  if (n) return n.slice(-4).toUpperCase();
+
+  // 3) Último recurso: cola del UUID
+  return (d.id || '').replace(/-/g, '').slice(-5).toUpperCase();
+}
+export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
+  const { t } = useTranslation();
+
+  const [scanning, setScanning] = useState(true);
+  const [startState, setStartState] = useState(0);
+  const [hasDevices, setHasDevices] = useState(false);
+  const [visible, setVisible] = useState(true);
+
+  const dohideDialog = () => {
+    setVisible(false);
+    navigation.navigate('DR-NEWUPDATE');
+  };
+
+  useEffect(() => {
+    // inicio BLE
+    ble.BleStart();
+    ble.bleAddListener();
+    return () => {
+      ble.bleRemoveListener();
+    };
+  }, []);
+
+  // Máquina de estados para el escaneo inicial
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (startState < 2) {
+        setStartState(s => s + 1);
+      } else {
+        setScanning(false);
+
+        // ¿hay algún DOSIMAC?
+        const found = ble.devices.some(isDosimac);
+        setHasDevices(found);
+
+        // (opcional) logs de depuración
+        ble.devices.forEach((d, i) => {
+          console.log(`-----: ${i + 1}`);
+          console.log('ID:', d.id, 'NAME:', d.name ?? 'null');
+          console.log('advBytes length:', Array.isArray((d as any).advBytes) ? (d as any).advBytes.length : 0);
+        });
+        console.log('Total devices:', ble.devices.length);
+      }
+    }, startBleStateMachine());
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startState]);
+
+  const startBleStateMachine = (): number => {
+    switch (startState) {
+      case 0:
+        return 500;
+      case 1:
+        ble.startScanning();
+        return 3000;
+      case 2:
+        ble.stopScanning();
+        return 100;
+      default:
+        return 0;
+    }
+  };
+
+  const RenderIsScanning = () => (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator size="large" />
+      <View>
+        <Text style={{ fontFamily: 'Roboto-Light', fontSize: 20 }}>
+          {t('common:SearchingDevices') ?? 'Buscando equipos...'}
+        </Text>
+      </View>
+    </View>
+  );
+
+  const RenderDevicesNotFound = () => (
+    <View style={{ alignItems: 'center', marginVertical: 60 }}>
+      <Portal>
+        <Dialog visible={visible} onDismiss={dohideDialog}>
+          <Dialog.Icon icon="warning" color="red" size={60} />
+          <Dialog.Title style={{ color: 'red' }}>{t('common:Aviso') ?? 'Aviso'}</Dialog.Title>
+          <Dialog.Content>
+            <Text variant="bodyLarge">{t('common:No_hay_dispositivos') ?? 'No hay dispositivos'}</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={dohideDialog}>{t('common:Aceptar') ?? 'Aceptar'}</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    </View>
+  );
+
+  const renderDevice = (device: BlePeripheral) => {
+    const label = getDeviceLabel(device);
+    return (
+      <View key={device.id} style={{ marginTop: 15 }}>
+        <MainButton
+          onPress={() =>
+            navigation.navigate('DR-SETUP', {
+              id: device.id,
+              operacion: route?.params?.operacion,
+            })
+          }
+          label={label}
+          size={3}
+        />
+      </View>
+    );
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Appbar.Header elevated>
+        <Appbar.BackAction onPress={navigation.goBack} />
+        <Appbar.Content title={t('common:DosimacList') ?? 'Lista DOSIMAC'} />
+      </Appbar.Header>
+
+      {scanning && <RenderIsScanning />}
+
+      {!scanning &&
+        (hasDevices ? (
+          <View style={{ marginTop: 60, marginHorizontal: 40 }}>
+            {ble.devices.filter(isDosimac).map(renderDevice)}
+          </View>
+        ) : (
+          <RenderDevicesNotFound />
+        ))}
+    </View>
+  );
+};
+
+export default DRScanResultsScreen;
