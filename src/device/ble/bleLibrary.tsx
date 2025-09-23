@@ -6,11 +6,27 @@ import { pcomProccessResponse, pcomResponseClassifier } from '../../libraries/co
 import { Platform } from 'react-native';
 
 
-
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+let selectedDevice: string | null = null;
 
+const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
 
+async function writeChunkedIOS(
+  peripheralId: string,
+  serviceUUID: string,
+  characteristicUUID: string,
+  bytes: number[],
+  chunkSize = 20,
+  interChunkDelayMs = 10   // <- pausa
+) {
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.slice(i, i + chunkSize);
+    await BleManager.write(peripheralId, serviceUUID, characteristicUUID, chunk);
+    await sleep(interChunkDelayMs); // <- DA AIRE AL DISPOSITIVO
+  }
+}
+export const setSelectedDeviceId = (id: string) => { selectedDevice = id; };
 
 //!Vars definitions
 export interface BlePeripheral {
@@ -23,9 +39,15 @@ export interface BlePeripheral {
 
 export let devices: BlePeripheral[];
 export let conectedDevices: BlePeripheral[];
+let notifsReady = false;
+
+let notifyListenerAttached = false;
+
+let writeServiceUUIDIOS: string | null = null;
+let writeCharUUIDIOS: string | null = null;
+
 
 // let selectedDevice:Peripheral | null;
-let selectedDevice: any | null;
 
 const buffer = Buffer.from([66])  //Esto es una B
 let contador: number = 0;
@@ -166,105 +188,140 @@ const clearDevices = () => {
 
 
 export const bleConnection = (id: string) => {
-  if (id.length > 0) {
-    BleManager.connect(id)
-      .then(() => {
-        console.log('Connected to ' + id);
-        selectedDevice = id;
-        return BleManager.retrieveServices(id);
-      })
-      .then((peripheralInfo) => {
-        console.log(peripheralInfo);
-      })
-      .catch((error) => {
-        console.log('Connection error ....', error);
-      });
-  }
-  else {
-    console.log('BLEConnection: No device selected');
-  }
+  if (!id) { console.log('BLEConnection: No device selected'); return; }
 
+  // cada intento: limpia flags
+  notifsReady = false;
 
+  BleManager.connect(id)
+    .then(() => {
+      console.log('Connected to ' + id);
+      selectedDevice = id;
+      return BleManager.retrieveServices(id);
+    })
+    .then((peripheralInfo) => {
+      console.log(peripheralInfo);
+      // Opcional: aquí podrías llamar bleSubscribeNotify() si tu FSM lo permite
+    })
+    .catch((error) => {
+      console.log('Connection error ....', error);
+    });
 }
-
-export const blehandleMTU = () => {
-  if (selectedDevice) {
-    BleManager.requestMTU(selectedDevice, 512)
-      .then((mtu) => {
-        // Success code
-        console.log("MTU size changed to " + mtu + " bytes");
-      })
-      .catch((error) => {
-        // Failure code
-        console.log(error);
-      });
+export const blehandleMTU = async () => {
+  if (!selectedDevice) return;
+  try {
+    if (Platform.OS === 'android') {
+      const mtu = await BleManager.requestMTU(selectedDevice, 512);
+      console.log('MTU size changed to ' + mtu + ' bytes');
+    } else {
+      // iOS: no hace nada
+      console.log('iOS: requestMTU not supported, skipping');
+    }
+  } catch (e) {
+    console.log('requestMTU error (expected on iOS):', e);
   }
-}
+};
 
 //*Con esta funcion envio la informacón al dosimac
-export const bleDosimacWrite = (request: Buffer) => {
-  if (selectedDevice) {
-    BleManager.writeWithoutResponse(
-      selectedDevice,
-      "AFF2",
-      "CFF1",
-      // encode & extract raw `number[]`.
-      // Each number should be in the 0-255 range as it is converted from a valid byte.
-      request.toJSON().data,
-      512
-    )
-      .then(() => {
-        // Success code
-        console.log("** Write Success**: ");
+export const bleDosimacWrite = async (request: Buffer) => {
+  if (!selectedDevice) { console.log('bleDosimacWrite: No device selected'); return; }
+  if (!writeSvcUUID || !writeCharUUID) { console.log('bleDosimacWrite: write UUIDs no listos'); return; }
 
-      })
-      .catch((error) => {
-        // Failure code
-        console.log("Write Error... ");
-        console.log(error);
-        console.log(buffer.toJSON().data)
-
-      });
+  const data = request.toJSON().data;
+  try {
+    if (Platform.OS === 'ios') {
+      await writeChunkedIOS(selectedDevice, writeSvcUUID, writeCharUUID, data, 20, 10);
+    } else {
+      await BleManager.writeWithoutResponse(selectedDevice, writeSvcUUID, writeCharUUID, data, 512);
+    }
+    console.log('** Write Success **');
+  } catch (e) {
+    console.log('Write Error...', e);
   }
-  else {
-    console.log('bleDosimacWrite: No device selected');
-  }
-
-
 };
+
 
 export const bleDisconnection = (id: string) => {
-  if (id.length > 0) {
-    BleManager.disconnect(id)
-      .then(() => {
-        console.log('Disconected ' + id);
-        selectedDevice = null;
-      })
-      .catch((error) => {
-        console.log('Disconnection error ....', error);
+  if (!id) { console.log('bleDisconnection: No device selected'); return; }
 
-      })
-  }
-  else {
-    console.log('bleDisconnection: No device selected');
-  }
-
-
+  BleManager.disconnect(id)
+    .then(() => {
+      console.log('Disconected ' + id);
+      selectedDevice = null;
+      notifsReady = false;              // <--- CLAVE
+      notifyListenerAttached = false;   // (opcional) si quieres re-adjuntar en la próxima
+    })
+    .catch((error) => {
+      console.log('Disconnection error ....', error);
+    })
 };
-
 
 
 //Me suscribo a la notificicaicones para obtener respuesta de equipo
-export const bleSubscribeNotify = () => {
-  if (selectedDevice) {
+let writeCharUUID: string | null = null;
+let writeSvcUUID: string | null = null;
+let notifyCharUUID: string | null = null;
+let notifySvcUUID: string | null = null;
 
-    connectAndPrepare(
-      selectedDevice,
-      "AFF2",
-      "CFF5"
+export const bleSubscribeNotify = async () => {
+  if (!selectedDevice) return;
+
+  try {
+    const info = await BleManager.retrieveServices(selectedDevice);
+    const chars = info?.characteristics || [];
+
+    // localizar CFF1 (write) y CFF5 (notify) del servicio AFF2, case-insensitive
+    const cff1 = chars.find(c =>
+      String(c.service).toLowerCase() === 'aff2' &&
+      String(c.characteristic).toLowerCase() === 'cff1'
     );
+    const cff5 = chars.find(c =>
+      String(c.service).toLowerCase() === 'aff2' &&
+      String(c.characteristic).toLowerCase() === 'cff5'
+    );
+
+    if (!cff1 || !cff5) {
+      console.log('[bleSubscribeNotify] No se encontraron CFF1/CFF5 en AFF2. Dump:', chars);
+      notifsReady = false;
+      return;
+    }
+
+    // guardar para writes
+    writeSvcUUID = cff1.service;
+    writeCharUUID = cff1.characteristic;
+
+    // listener (una vez)
+    if (!notifyListenerAttached) {
+      bleManagerEmitter.addListener(
+        'BleManagerDidUpdateValueForCharacteristic',
+        ({ value, characteristic, service }) => {
+          // Útil para confirmar que viene de CFF5:
+          // console.log('NOTIFY de', service, characteristic, 'len=', value?.length);
+          const buff = Buffer.from(value);
+          pcomProccessResponse(buff, buff.length);
+        }
+      );
+      notifyListenerAttached = true;
+    }
+
+    // activar notificación en CFF5 (NO en CFF1)
+    notifySvcUUID = cff5.service;
+    notifyCharUUID = cff5.characteristic;
+
+    await BleManager.startNotification(selectedDevice, notifySvcUUID, notifyCharUUID);
+    notifsReady = true;
+    console.log('[bleSubscribeNotify] startNotification OK → notifsReady=true', notifySvcUUID, notifyCharUUID);
+  } catch (e) {
+    notifsReady = false;
+    console.log('[bleSubscribeNotify] startNotification ERROR → notifsReady=false', e);
   }
-}
+};
+
+
+
+export const canWrite = () => Boolean(selectedDevice && notifsReady);
+
+
 
 
 async function connectAndPrepare(peripheral: any, service: string, characteristic: string) {
@@ -309,13 +366,3 @@ const incrementNotifyCounter = () => {
   // setNotifyCounter(a=>a+1);
 
 }
-
-
-
-
-
-
-
-
-
-

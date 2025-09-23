@@ -1,6 +1,5 @@
-
 import { Buffer } from "buffer";
-import { bleConnection, bleDisconnection, bleDosimacWrite, bleSubscribeNotify, blehandleMTU } from "../../device/ble/bleLibrary";
+import { bleConnection, bleDisconnection, bleDosimacWrite, bleSubscribeNotify, blehandleMTU, canWrite } from "../../device/ble/bleLibrary";
 // import { BLETestingScreen } from "../../presentation/screens/Debug/BLETesting/BLETestingScreen";
 import { Parser } from "./cti-parser";
 import { DosimacInfo, DosimacSetup } from '../../sharedTypes/dosimacSetup';
@@ -583,20 +582,31 @@ const inicialStateMachine = (): number => {
          inicialState.state++;
          return 1500; //Wait 1 second before send MTU
          break;
-      case 1:
-         bleSubscribeNotify();
-         inicialState.state++;
-         return 200; //Wait 1 second before send MTU
-         break;
-      case 2:
-         blehandleMTU();
-         inicialState.state++;
-         return 200; //
-         break;
-      case 3:
-         masterState.isInitialized = true;
-         inicialState.state = 0;
-         return 100; //
+case 1:
+  // activar notificaciones
+  bleSubscribeNotify();
+  inicialState.state++;
+  return 300;
+
+case 2:
+  if (!canWrite()) {
+    // reintenta cada ~1s
+    if ((++inicialState.waitRetries % 5) === 0) {
+      console.log('[init] Reintentando startNotification…');
+      bleSubscribeNotify();
+    }
+    return 200; // sigue esperando
+  }
+  inicialState.waitRetries = 0;
+  inicialState.state++;
+  return 100;
+
+case 3:
+  masterState.isInitialized = true;
+  inicialState.state = 0;
+  return 100;
+
+
          break;
       default:
          return 100; //
@@ -607,60 +617,87 @@ const inicialStateMachine = (): number => {
 }
 
 export const stateMachineRequestState = (): number => {
+  console.log("stateMachineRequestState REQUEST: ", requestState.state, requestState.responseRecieved);
 
-   console.log("stateMachineRequestState REQUEST: ", requestState.state, requestState.responseRecieved);
+  switch (requestState.state) {
+    case 0: {
+      // Paso 0: Enviar B una única vez para abrir ventana de escritura
+      if (!canWrite()) return 150;     // aún no hay notifs/servicios listos
+      requestState.responseRecieved = 0;
+      requestState.waitRetries = 0;
+      pcomSendB();
+      requestState.state = 1;          // esperar ACK=1
+      return 200;
+    }
 
-   switch (requestState.state) {
-      case 0:
-         requestState.responseRecieved = 0;
-         pcomSendB();
-         requestState.state++;
-         return 200;
-         break;
-      case 1:
-         if (requestState.responseRecieved === 0) {
-            //Error: No ha llegado la respuesta. 
-            requestState.waitRetries++;
-            if (requestState.waitRetries > 60) {
-               requestState.state = 0;
-               requestState.waitRetries = 0;
-               if (requestState.stateRetries < 3)
-                  requestState.stateRetries++;
-               else {
-                  requestState.stateRetries = 0;
-                  masterState.unControlError = true;
-                  return 500; //! DEBE DAR ERROR
-
-               }
-            }
-            return 200;
-         }
-         else { //Correcto: solo puede entrar aqui con un 1
-
-            //requestState.state = 0;
+    case 1: {
+      // Esperando ACK (msgType 0x01 => responseRecieved=1)
+      if (requestState.responseRecieved === 0) {
+        // sigue esperando
+        if (++requestState.waitRetries > 60) { // ~12s
+          requestState.waitRetries = 0;
+          if (requestState.stateRetries++ < 3) {
+            requestState.state = 0; // reintento de B
+          } else {
             requestState.stateRetries = 0;
-            requestState.waitRetries = 0;
+            masterState.unControlError = true;
+            return 500; // error no controlado
+          }
+        }
+        return 200;
+      }
+
+      if (requestState.responseRecieved === 1) {
+        // ACK recibido: ahora sí pedimos estado UNA vez
+        requestState.responseRecieved = 0;  // limpiamos para esperar la respuesta de estado
+        requestState.waitRetries = 0;
+        requestState.stateRetries = 0;
+        pcomRequestDosimacStatus();
+        requestState.state = 2;            // ahora esperamos (2/4)
+        return 300;
+      }
+
+      // Si llegó una trama de estado aquí por carrera (2/4), pasa directo a case 2
+      requestState.state = 2;
+      return 0;
+    }
+
+    case 2: {
+      // Esperando la respuesta de estado: (pcomresponseStatus la coloca a 2 o 4)
+      if (requestState.responseRecieved === 0) {
+        if (++requestState.waitRetries > 60) {
+          // timeout esperando el estado -> reintenta pidiendo estado (sin volver a enviar B)
+          requestState.waitRetries = 0;
+          if (requestState.stateRetries++ < 3) {
             pcomRequestDosimacStatus();
+            return 300;
+          } else {
+            // demasiados timeouts -> vuelve a B
+            requestState.stateRetries = 0;
             requestState.state = 0;
-            return 2000; //Pido estado cada 2 segundos
-         }
-         break;
-      case 2:
-         requestState.state = 0;
-         requestState.stateRetries = 0;
-         requestState.waitRetries = 0;
-         return 200;
+            return 300;
+          }
+        }
+        return 200;
+      }
 
-         break;
-      default:
-         return 0;
-         break;
+      // Llegó estado (2 o 4) -> ciclo completado
+      // (ya has procesado el payload en pcomresponseStatus)
+      requestState.responseRecieved = 0;
+      requestState.waitRetries = 0;
+      requestState.stateRetries = 0;
 
-   }
+      // Importante: NO reenvíes la B. Simplemente vuelve a case 1 y pide estado de nuevo
+      // cuando quieras (p. ej., cada 2s).
+      requestState.state = 1;
+      return 2000; // siguiente sondeo dentro de 2s
+    }
 
+    default:
+      return 0;
+  }
+};
 
-
-}
 
 
 export const stateMachineSetupConfiguration = (): number => {
@@ -668,13 +705,16 @@ export const stateMachineSetupConfiguration = (): number => {
    console.log("stateMachine SETUP State: ", setupState.state, setupState.responseRecieved);
 
    switch (setupState.state) {
-      case 0:
-         setupState.responseRecieved = 0;
-         pcomSendB();
-         setupState.state++;
-         console.log("HE ENVIADO LA B ************************************************")
-         return 200;
-         break;
+     case 0:
+    if (!canWrite()) {
+      // aún no están listas las notificaciones; espera y reintenta
+      return 150;
+    }
+    setupState.responseRecieved = 0;
+    pcomSendB();
+    setupState.state = 1;
+    console.log("HE ENVIADO LA B ************************************************");
+    return 200;
       case 1:
          if (setupState.responseRecieved === 0) {
             //Error: No ha llegado la respuesta. 
