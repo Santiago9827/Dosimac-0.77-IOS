@@ -11,69 +11,103 @@ type Props = {
   route: { params?: { operacion?: number } };
 };
 
-// ASCII de “DOSIMAC”
-const DOSIMAC_ASCII = [68, 79, 83, 73, 77, 65, 67];
+/* =========================
+   Helpers comunes (ASCII)
+   ========================= */
+const ASCII = (s: string) => s.split('').map(c => c.charCodeAt(0));
+const bytesToAscii = (bytes: number[]) =>
+  String.fromCharCode(...bytes.map(b => b & 0xff));
 
-function includesSubsequence(haystack: number[], needle: number[]) {
-  outer: for (let i = 0; i <= haystack.length - needle.length; i++) {
+function includesSubsequence(hay: number[], needle: number[]) {
+  outer: for (let i = 0; i <= hay.length - needle.length; i++) {
     for (let j = 0; j < needle.length; j++) {
-      if (haystack[i + j] !== needle[j]) continue outer;
+      if ((hay[i + j] & 0xff) !== (needle[j] & 0xff)) continue outer;
     }
     return true;
   }
   return false;
 }
 
-function isDosimac(d: BlePeripheral) {
-  const n = (d.name || '').toUpperCase();
-  if (n.includes('DOSIMAC')) return true;
+/* =========================================================
+   Agujas según operación (1 = I, 3 = G) + fallback genérico
+   ========================================================= */
+function getNeedles(operacion?: number): string[] {
+  const op = Number(operacion) || 0;
+  if (op === 1) return ['DOSIMAC-I'];
+  if (op === 3) return ['DOSIMAC-G'];
+  return ['DOSIMAC'];
+}
 
-  // si la librería guarda advBytes (recomendado)
-  const advAny = (d as any).advBytes as number[] | undefined;
-  if (Array.isArray(advAny) && advAny.length >= 4) {
-    // saltamos Company ID de manufacturer (2 bytes)
-    const payload = advAny.slice(2);
-    return includesSubsequence(payload, DOSIMAC_ASCII);
+/* ==========================================
+   Recuperar los advBytes guardados por BLE
+   ========================================== */
+function getAdvBytes(d: BlePeripheral): number[] | null {
+  const adv = (d as any).advBytes;
+  return Array.isArray(adv) && adv.length ? adv : null;
+}
+
+/* ======================================================
+   ¿Es nuestro equipo? (iOS) — robusto para I/G y genérico
+   ====================================================== */
+function isOursIOS(d: BlePeripheral, operacion?: number): boolean {
+  const needles = getNeedles(operacion);
+
+  // 1) Nombre/localName (iOS suele traerlo), sin distinción de mayúsc/minúsc
+  const n = (d.name || '').toUpperCase();
+  if (n) {
+    if (needles.some(x => n.includes(x))) return true;
+    if (needles.length === 1 && needles[0] === 'DOSIMAC' && n.includes('DOSIMAC')) return true;
   }
+
+  // 2) Manufacturer/Service data: buscar en TODO el payload (no asumir offset=2)
+  const bytes = getAdvBytes(d);
+  if (bytes) {
+    const s = bytesToAscii(bytes).toUpperCase();
+    if (needles.some(x => s.includes(x))) return true;
+
+    // Genérico: por si el equipo emite "DOSIMAC" sin sufijo
+    if (needles.length === 1 && needles[0] === 'DOSIMAC') {
+      const DOSIMAC_ASCII = ASCII('DOSIMAC');
+      if (includesSubsequence(bytes, DOSIMAC_ASCII)) return true;
+    }
+  }
+
   return false;
 }
 
+/* ==========================================
+   Etiqueta de botón (bonita y estable)
+   ========================================== */
+function isPrintableAscii(b: number) {
+  const x = b & 0xff;
+  return x >= 0x20 && x <= 0x7e;
+}
 function hex2(b: number) {
   return (b & 0xff).toString(16).padStart(2, '0');
 }
-
-function isPrintableAscii(b: number) {
-  const x = b & 0xff;
-  return x >= 0x20 && x <= 0x7e; // visibles
-}
-
-// Etiqueta mostrada en el botón (lo que imprime el equipo)
 function getDeviceLabel(d: BlePeripheral): string {
-  // 1) Preferir ADV BYTES siempre (iOS: manufacturer data empieza con 2 bytes de Company ID)
-  const advAny = (d as any).advBytes as number[] | undefined;
-  if (Array.isArray(advAny) && advAny.length >= 4) {
-    const payload = advAny.slice(2);           // saltar Company ID
-    const tail4 = payload.slice(-4);           // últimos 4 bytes del payload
-
-    // Si esos 4 bytes son ASCII imprimibles, úsalos tal cual (lo que imprime el equipo)
-    if (tail4.length === 4 && tail4.every(isPrintableAscii)) {
+  // Preferimos derivarla del payload de advertising (últimos 4 bytes si son ASCII)
+  const adv = getAdvBytes(d);
+  if (adv && adv.length >= 4) {
+    const tail4 = adv.slice(-4);
+    if (tail4.every(isPrintableAscii)) {
       return tail4.map(b => String.fromCharCode(b)).join('');
     }
-
-    // Si no son ASCII, usa los últimos 2 en HEX (ej. BF8E)
-    const tail2 = payload.slice(-2);
+    // Si no son ASCII, usar los últimos 2 bytes en HEX (p.ej. "BF8E")
+    const tail2 = adv.slice(-2);
     if (tail2.length === 2) {
       return tail2.map(hex2).join('').toUpperCase();
     }
   }
 
-  // 2) Fallback: últimas 4 del nombre si existe
+  // Fallback: últimas 4 letras del nombre, si existe
   const n = (d.name || '').trim();
   if (n) return n.slice(-4).toUpperCase();
 
-  // 3) Último recurso: cola del UUID
+  // Último recurso: cola del UUID
   return (d.id || '').replace(/-/g, '').slice(-5).toUpperCase();
 }
+
 export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
   const { t } = useTranslation();
 
@@ -88,7 +122,7 @@ export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    // inicio BLE
+    // Inicio BLE
     ble.BleStart();
     ble.bleAddListener();
     return () => {
@@ -104,15 +138,16 @@ export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
       } else {
         setScanning(false);
 
-        // ¿hay algún DOSIMAC?
-        const found = ble.devices.some(isDosimac);
+        // ¿hay algún DOSIMAC del tipo solicitado?
+        const found = ble.devices.some(d => isOursIOS(d, route?.params?.operacion));
         setHasDevices(found);
 
         // (opcional) logs de depuración
         ble.devices.forEach((d, i) => {
+          const adv = getAdvBytes(d);
           console.log(`-----: ${i + 1}`);
           console.log('ID:', d.id, 'NAME:', d.name ?? 'null');
-          console.log('advBytes length:', Array.isArray((d as any).advBytes) ? (d as any).advBytes.length : 0);
+          console.log('advBytes length:', Array.isArray(adv) ? adv.length : 0);
         });
         console.log('Total devices:', ble.devices.length);
       }
@@ -126,7 +161,8 @@ export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
       case 0:
         return 500;
       case 1:
-        ble.startScanning();
+        // En iOS es útil ampliar a 5–6s si los anuncios son lentos
+        ble.startScanning(); // tu bleLibrary puede ajustar la duración si lo deseas
         return 3000;
       case 2:
         ble.stopScanning();
@@ -165,6 +201,7 @@ export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
   );
 
   const renderDevice = (device: BlePeripheral) => {
+    if (!isOursIOS(device, route?.params?.operacion)) return null;
     const label = getDeviceLabel(device);
     return (
       <View key={device.id} style={{ marginTop: 15 }}>
@@ -194,7 +231,7 @@ export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
       {!scanning &&
         (hasDevices ? (
           <View style={{ marginTop: 60, marginHorizontal: 40 }}>
-            {ble.devices.filter(isDosimac).map(renderDevice)}
+            {ble.devices.map(renderDevice)}
           </View>
         ) : (
           <RenderDevicesNotFound />
