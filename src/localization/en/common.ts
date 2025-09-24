@@ -49,6 +49,14 @@ export default {
    Enviar: 'Send',
    Salir: 'Exit',
    Informacion: 'Information',
+   InicioConfiguracion: "Starting connection",
+    ConfiguracionWifi: "Configuring...",
+    ConfiguracionRealizada: "*Configuration completed*",
+    ErrorConfiguracion: "*Configuration error*",
+    CapturaTagCorral: "Capture corral tag",
+    CorralTag: "Corral tag",
+    versionUint16: "This device version only supports corral up to 65000",
+    versionUint32: "This device version supports corral up to 4000000000"
 
 
 };

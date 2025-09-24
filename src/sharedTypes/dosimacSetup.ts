@@ -8,6 +8,7 @@ export interface DosimacSetup {
    deviceNumber:number;
    nfcTag:string;
    corral:number;
+   corral32?:number;
 
 }
 

@@ -47,5 +47,14 @@ export default {
     Enviar: 'Отправить',
     Salir: 'Выйти',
     Informacion: 'Информация',
-
+     InicioConfiguracion: "Початок підключення",
+  ConfiguracionWifi: "Налаштування...",
+  ConfiguracionRealizada: "*Налаштування виконано*",
+  ErrorConfiguracion: "*Помилка налаштування*",
+  CapturaTagCorral: "Зчитати тег загону",
+  CorralTag: "Тег загону",
+  versionUint16: "Ця версія пристрою підтримує номер загону лише до 65000",
+  versionUint32: "Ця версія пристрою підтримує номер загону до 4000000000"
+    
+    
 };

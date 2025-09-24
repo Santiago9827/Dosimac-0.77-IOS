@@ -47,5 +47,12 @@ export default {
     Enviar: '보내기',
     Salir: '나가기',
     Informacion: '정보',
-
+    InicioConfiguracion: "연결 시작",
+  ConfiguracionWifi: "구성 중...",
+  ConfiguracionRealizada: "*구성이 완료되었습니다*",
+  ErrorConfiguracion: "*구성 오류*",
+  CapturaTagCorral: "우리 태그 캡처",
+  CorralTag: "우리 태그",
+  versionUint16: "이 기기 버전은 우리 번호를 최대 65000까지만 지원합니다",
+  versionUint32: "이 기기 버전은 우리 번호를 최대 4000000000까지 지원합니다"
 };

@@ -47,4 +47,13 @@ export default {
     Enviar: 'Envoyer',
     Salir: 'Quitter',
     Informacion: 'Information',
+
+     InicioConfiguracion: "Démarrage de la connexion",
+  ConfiguracionWifi: "Configuration...",
+  ConfiguracionRealizada: "*Configuration réalisée*",
+  ErrorConfiguracion: "*Erreur de configuration*",
+  CapturaTagCorral: "Capturer l’étiquette de l’enclos",
+  CorralTag: "Étiquette de l’enclos",
+  versionUint16: "Cette version de l’appareil ne prend en charge que des enclos jusqu’à 65000",
+  versionUint32: "Cette version de l’appareil prend en charge des enclos jusqu’à 4000000000"
 };

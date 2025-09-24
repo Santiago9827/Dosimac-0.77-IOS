@@ -55,6 +55,14 @@ export default {
    Enviar: "Enviar",
    Salir: "Salir",
    Informacion: "Información",
+   InicioConfiguracion: "Iniciando conexion",
+   ConfiguracionWifi: "Configurando.... ",
+   ConfiguracionRealizada: "*Configuracion realizada*",
+   ErrorConfiguracion: "*Error de configuración*",
+   CapturaTagCorral: "Capturar tag de corral",
+   CorralTag: "Corral tag",
+   versionUint16: "Esta versión del equipo solo soporta corral hasta 65000",
+   versionUint32: "Esta versión del equipo soporta corral hasta 4000000000",
 
 
 

@@ -47,5 +47,12 @@ export default {
     Enviar: 'Отправить',
     Salir: 'Выйти',
     Informacion: 'Информация',
-
+    InicioConfiguracion: "Инициация подключения",
+  ConfiguracionWifi: "Настройка...",
+  ConfiguracionRealizada: "*Настройка выполнена*",
+  ErrorConfiguracion: "*Ошибка настройки*",
+  CapturaTagCorral: "Считать метку загона",
+  CorralTag: "Метка загона",
+  versionUint16: "Эта версия устройства поддерживает номер загона только до 65000",
+  versionUint32: "Эта версия устройства поддерживает номер загона до 4000000000"
 };

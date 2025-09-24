@@ -47,4 +47,13 @@ export default {
     Enviar: 'Enviar',
     Salir: 'Sortir',
     Informacion: 'Informació',
+
+    InicioConfiguracion: "Iniciant connexió",
+  ConfiguracionWifi: "Configurant...",
+  ConfiguracionRealizada: "*Configuració realitzada*",
+  ErrorConfiguracion: "*Error de configuració*",
+  CapturaTagCorral: "Capturar etiqueta de corral",
+  CorralTag: "Etiqueta de corral",
+  versionUint16: "Aquesta versió de l'equip només admet corral fins a 65000",
+  versionUint32: "Aquesta versió de l'equip admet corral fins a 4000000000"
 };

@@ -16,10 +16,12 @@ import { GestationScreen } from '../screens/Gestation/Gestation';
 import { MaternityScreen } from '../screens/Maternity/Maternity';
 import { MaternityStackNavigator } from './Mat-StackNavigator';
 import { isDebugMode } from '../../sharedTypes/globlaVars';
+import { useTranslation } from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
 
 export const BottomTabNavigator = () => {
+  const { t } = useTranslation('common'); 
   return (
     <Tab.Navigator
       sceneContainerStyle={{
@@ -53,7 +55,17 @@ export const BottomTabNavigator = () => {
 
     >
       {/* <Tab.Screen name="Tab1" options={{title:"Inicio",tabBarIcon:({color})=>(<IonIcon name="home-outline" color={color}/>)}} component={Tab1Screen} /> */}
-      <Tab.Screen name="Tab1" options={{ title: "Inicio", tabBarIcon: ({ color }) => (<IonIcon name="home-outline" color={color} />) }} component={HomeScreen} />
+      {/* <Tab.Screen name="Tab1" options={{ title: "Inicio", tabBarIcon: ({ color }) => (<IonIcon name="home-outline" color={color} />) }} component={HomeScreen} /> */}
+    <Tab.Screen
+        name="Tab1"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: t('Tabs'),    
+          title: t('Tabs'),
+          tabBarIcon: ({ color }) => <IonIcon name="home-outline" color={color} />,
+        }}
+      />
+
       {isDebugMode && (
         <>
           <Tab.Screen name="Tab2" options={{ title: "Gestación", tabBarIcon: ({ color }) => (<IonIcon name="people-circle-outline" color={color} />) }} component={GestationScreen} />

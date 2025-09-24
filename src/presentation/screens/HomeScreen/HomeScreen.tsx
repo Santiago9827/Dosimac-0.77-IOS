@@ -5,9 +5,13 @@ import { HamburgerMenu } from '../../components/shared/HamburgerMenu';
 import { Input } from 'postcss';
 import { farmStore } from '../../../stores/store';
 import { Divider } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
+
 
 export const HomeScreen = () => {
   const sfarm = farmStore((state) => state.farm);
+  const { t } = useTranslation(['common']); // ← se suscribe a cambios de idioma
+
 
   return (
     // <View style={styles.Container}>
@@ -33,16 +37,17 @@ export const HomeScreen = () => {
         <Divider className='w-44 bg-black my-10' />
         {sfarm ? <View className="  flex flex-col  pt-6 px-6 py-4 rounded-xl border-gray-400  ">
 
-          <Text className='text-lg mb-2 font-bold text-blue-800 text-center '>Instalación seleccionada</Text>
+          <Text className='text-lg mb-2 font-bold text-blue-800 text-center '>{t('common:Instalación_seleccionada')}</Text>
           <Text className='text-lg text-center text-slate-700'>{sfarm.name}</Text>
           <Text className='text-lg text-center text-slate-700'>{sfarm.location}</Text>
+          
           {/* <Text className='text-lg'>WIFI: {sfarm.ssid}</Text>
           <Text className='text-lg'>Server: {sfarm.serverIp}</Text> */}
 
         </View> :
           <View className="  flex flex-col  pt-6 px-6 py-4 rounded-xl border-gray-400  ">
 
-            <Text className='text-lg mb-2 font-bold text-red-800 text-center '>No hay instalación seleccionada</Text>
+            <Text className='text-lg mb-2 font-bold text-red-800 text-center '>{t('common:NoInstalacionSeleccionada')}</Text>
 
           </View>
         }

@@ -167,12 +167,12 @@ export const FarmScreen = ({ navigation, route }) => {
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 140 }}
         >
           <View style={{ marginTop: 20, gap: 10, marginHorizontal: 10, paddingHorizontal: 10 }}>
-            <TextInput label="Farm Name" mode="outlined" placeholder="Nombre de la granja" value={name} onChangeText={setName} />
-            <TextInput label="Location" mode="outlined" placeholder="Población" value={location} onChangeText={setLocation} />
-            <TextInput label="Province" mode="outlined" placeholder="Provincia" value={province} onChangeText={setProvince} />
-            <TextInput label="Wifi SSID" mode="outlined" placeholder="Nombre red WIFI" value={ssid} onChangeText={setSsid} />
+            <TextInput label={t("NombreGranja")} mode="outlined" placeholder="Nombre de la granja" value={name} onChangeText={setName} />
+            <TextInput label={t("Localidad")} mode="outlined" placeholder="Población" value={location} onChangeText={setLocation} />
+            <TextInput label={t("Provincia")} mode="outlined" placeholder="Provincia" value={province} onChangeText={setProvince} />
+            <TextInput label={t("NombreWifi")} mode="outlined" placeholder="Nombre red WIFI" value={ssid} onChangeText={setSsid} />
             <TextInput
-              label="Wifi password"
+              label={t("PasswordWifi")}
               mode="outlined"
               placeholder="Wifi Password"
               value={wifiPassword}
@@ -187,9 +187,9 @@ export const FarmScreen = ({ navigation, route }) => {
               }
             />
 
-            <TextInput label="User name" mode="outlined" placeholder="Nombre usuario" value={userName} onChangeText={setUsername} />
+            <TextInput label={t("username")} mode="outlined" placeholder="Nombre usuario" value={userName} onChangeText={setUsername} />
             <TextInput
-              label="User password"
+              label={t("password")}
               mode="outlined"
               placeholder="Password usuario"
               value={password}
@@ -206,7 +206,7 @@ export const FarmScreen = ({ navigation, route }) => {
 
             <TextInput
               keyboardType="default"        
-              label="Server IP"
+              label={t("Server")}
               mode="outlined"
               placeholder="IP Servidor"
               value={serverIp}

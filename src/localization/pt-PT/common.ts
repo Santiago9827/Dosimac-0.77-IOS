@@ -47,4 +47,12 @@ export default {
     Enviar: 'Enviar',
     Salir: 'Sair',
     Informacion: 'Informação',
+    InicioConfiguracion: "A iniciar ligação",
+  ConfiguracionWifi: "A configurar...",
+  ConfiguracionRealizada: "*Configuração concluída*",
+  ErrorConfiguracion: "*Erro de configuração*",
+  CapturaTagCorral: "Capturar etiqueta do curral",
+  CorralTag: "Etiqueta do curral",
+  versionUint16: "Esta versão do equipamento só suporta curral até 65000",
+  versionUint32: "Esta versão do equipamento suporta curral até 4000000000"
 }

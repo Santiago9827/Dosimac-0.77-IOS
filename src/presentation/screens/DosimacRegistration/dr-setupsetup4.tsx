@@ -143,7 +143,7 @@ export const DRSetup = ({ navigation, route }) => {
   const closeMenu = () => setVisibleMenu(false);
 
   const sendButtonClick = () => {
-    // Validaciones
+    // Validaciones básicas
     const corralNum = parseInt(corral);
     if (!Number.isSafeInteger(corralNum) || corralNum <= 0) {
       setSendHasMsg(true);
@@ -166,16 +166,57 @@ export const DRSetup = ({ navigation, route }) => {
       }
     }
 
+    // === REGLAS POR VERSIÓN: I vs G + swVersion ===
+    const intendedDeviceType = globals.dispenserType <= 2 ? 200 : 203; // I:200 / G:203
+    const isI = intendedDeviceType === 200;
+    const isG = intendedDeviceType === 203;
+    const sw = dosimacInfo.swVersion || 0;
+
+    const allowUint32 = (isI && sw >= 155) || (isG && sw >= 134);
+    console.log(
+  `[DOSIMAC][UI] ${new Date().toISOString()} Enviar: ` +
+  `sw=${sw}, intendedDeviceType=${intendedDeviceType} (I=${isI}, G=${isG}), ` +
+  `allowUint32=${allowUint32}, corralIntroducido=${corralNum}`
+);
+
+    // Rango permitido
+    if (!allowUint32 && corralNum > 65000) {
+      setSendHasMsg(true);
+      setSendMsg(t("VersionUint16"));
+      setSendVisible(true);
+      setSendHasError(true);
+      setWaitingSetting(false);
+      return;
+    }
+    if (allowUint32 && corralNum > 4000000000) {
+      setSendHasMsg(true);
+      setSendMsg(t("VersionUint32"));
+      setSendVisible(true);
+      setSendHasError(true);
+      setWaitingSetting(false);
+      return;
+    }
+
     // Preparar estructura a enviar
     dosimacSetup.ssid = sfarm.ssid || '';
     dosimacSetup.wifiPassword = sfarm.wifiPassword || '';
     dosimacSetup.serverIp = sfarm.serverIp || '';
 
-    dosimacSetup.deviceType = globals.dispenserType <= 2 ? 200 : 203;
+    dosimacSetup.deviceType = intendedDeviceType;
     dosimacSetup.phase = globals.dispenserType <= 2 ? 3 : 2;
     dosimacSetup.deviceNumber = parseInt(deviceNumber) || 1;
     dosimacSetup.nfcTag = nfcTag || '';
-    dosimacSetup.corral = corralNum;
+
+    // Asignación dual corral16/corral32
+    if (allowUint32) {
+      dosimacSetup.corral = 0;                                   // en 16-bit va 0
+      (dosimacSetup as any).corral32 = corralNum;                // nuevo 32-bit
+    } else {
+      dosimacSetup.corral = corralNum;                           // 16-bit normal
+      (dosimacSetup as any).corral32 = 0;                        // 0 en 32-bit
+    }
+
+    
 
     // Reset UI y lanzar FSM de setup
     setWaitingSetting(true);
@@ -213,7 +254,7 @@ export const DRSetup = ({ navigation, route }) => {
             />
           )}
         >
-          <Text style={{ fontWeight: 'bold' }}> Información</Text>
+          <Text style={{ fontWeight: 'bold' }}> {t("Informacion")}</Text>
           {'\n'}
           {'\n'}
           <Text> {sfarm.name}</Text>
@@ -247,7 +288,7 @@ export const DRSetup = ({ navigation, route }) => {
               </ScrollView>
             </Dialog.ScrollArea>
             <Dialog.Actions>
-              <Button onPress={dohideDialog}>Aceptar</Button>
+              <Button onPress={dohideDialog}>{t("Aceptar")}</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>
@@ -272,12 +313,12 @@ export const DRSetup = ({ navigation, route }) => {
                     }`}
                   >
                     {configState === 0
-                      ? 'Iniciando conexion'
+                      ? t("InicioConfiguracion")
                       : configState === 1
-                      ? 'configurando...'
+                      ? t("ConfiguracionWifi")
                       : dInfoComState === 0
-                      ? `Error configuración (${dInfomanState})`
-                      : '*Configuracion realizada*'}
+                      ? `${t("ErrorConfiguracion")} (${dInfomanState})`
+                      : t("ConfiguracionServidor")}
                   </Text>
 
                   {configState === 2 && dInfoComState === 2 ? (
@@ -309,7 +350,7 @@ export const DRSetup = ({ navigation, route }) => {
         {/* Dialog captura tag */}
         <Portal>
           <Dialog visible={tagVisible} onDismiss={dohideDialogTagCapture} style={{ maxHeight: 0.6 * Dimensions.get('window').height }}>
-            <Dialog.Title style={{ color: '#007263', alignSelf: 'center' }}>Capturar tag de corral</Dialog.Title>
+            <Dialog.Title style={{ color: '#007263', alignSelf: 'center' }}>{t("CapturaTagCorral")}</Dialog.Title>
             <Dialog.Content>
               <ScrollView contentContainerStyle={{ paddingHorizontal: 24 }}>
                 <ActivityIndicator animating color="green" size="large" />
@@ -320,7 +361,7 @@ export const DRSetup = ({ navigation, route }) => {
               </ScrollView>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={dohideDialogTagCapture}>Aceptar</Button>
+              <Button onPress={dohideDialogTagCapture}>{t("Aceptar")}</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>
@@ -340,7 +381,7 @@ export const DRSetup = ({ navigation, route }) => {
             onDismiss={closeMenu}
             anchor={
               <Pressable android_ripple={{ color: 'blue' }} style={{ ...styles.boton2 }} onPress={openMenu}>
-                <Text style={styles.texto}>Corral Tag</Text>
+                <Text style={styles.texto}>{t("CorralTag")}</Text>
               </Pressable>
             }
             anchorPosition="top"
@@ -392,7 +433,7 @@ export const DRSetup = ({ navigation, route }) => {
       {/* Botones */}
       <View style={{ marginTop: 60, gap: 25, marginHorizontal: 10, paddingHorizontal: 10 }}>
         <Pressable android_ripple={{ color: 'blue' }} style={styles.boton} onPress={sendButtonClick}>
-          <Text style={styles.texto}>Enviar</Text>
+          <Text style={styles.texto}>{t("Enviar")}</Text>
         </Pressable>
 
         <Pressable
@@ -403,7 +444,7 @@ export const DRSetup = ({ navigation, route }) => {
             navigation.navigate('DR-NEWUPDATE', { operacion: route.params.operacion });
           }}
         >
-          <Text style={styles.texto}>Salir</Text>
+          <Text style={styles.texto}>{t("Salir")}</Text>
         </Pressable>
       </View>
     </ScrollView>

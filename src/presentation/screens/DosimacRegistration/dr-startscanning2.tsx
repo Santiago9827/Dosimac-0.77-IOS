@@ -26,7 +26,7 @@ export const DRstartscanningScreen = ({ navigation, route }) => {
             >
                <Card.Content >
                   {/* <Text style={{fontSize:18}}>Presione sobre el boton para buscar dispositivos DOSIMAC</Text>                   */}
-                  <Text className='font-RobotoRegular  text-[20px] text-center'>Presione sobre el boton para buscar dispositivos DOSIMAC</Text>
+                  <Text className='font-RobotoRegular  text-[20px] text-center'>{t("TestoPresioneAlta")}</Text>
 
                </Card.Content>
             </Card>
@@ -38,7 +38,7 @@ export const DRstartscanningScreen = ({ navigation, route }) => {
                onPress={() => navigation.navigate('DR-SCANRESULTS', { operacion: route.params.operacion })}
             >
             <View className='flex-row   items-center justify-center w-[180px] h-[180px] bg-teal-700 rounded-full border-1 border-gray-800'>
-               <Text className='text-white text-2xl font-medium'> Pulse</Text>
+               <Text className='text-white text-2xl font-medium'>{t("PressToScan")}</Text>
                
 
 

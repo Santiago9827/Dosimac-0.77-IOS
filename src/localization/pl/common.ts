@@ -47,5 +47,12 @@ export default {
     Enviar: 'Wyślij',
     Salir: 'Wyjdź',
     Informacion: 'Informacje',
-
+    InicioConfiguracion: "Rozpoczynanie łączenia",
+  ConfiguracionWifi: "Konfigurowanie...",
+  ConfiguracionRealizada: "*Konfiguracja zakończona*",
+  ErrorConfiguracion: "*Błąd konfiguracji*",
+  CapturaTagCorral: "Przechwyć tag kojca",
+  CorralTag: "Tag kojca",
+  versionUint16: "Ta wersja urządzenia obsługuje numery kojców tylko do 65000",
+  versionUint32: "Ta wersja urządzenia obsługuje numery kojców do 4000000000"
 };

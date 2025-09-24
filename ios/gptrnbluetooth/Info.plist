@@ -76,6 +76,7 @@
 		<string>LedDigital7-vmYjy.ttf</string>
 		<string>Ionicons.ttf</string>
 		<string>MaterialCommunityIcons.ttf</string>
+		<string>MaterialIcons.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

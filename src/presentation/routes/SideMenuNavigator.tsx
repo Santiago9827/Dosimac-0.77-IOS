@@ -4,7 +4,7 @@
 import React from 'react';
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem, DrawerItemList, createDrawerNavigator } from '@react-navigation/drawer';
 import { globalColors } from '../theme/theme';
-import { Linking, View, useWindowDimensions } from 'react-native';
+import { Linking, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { BottomTabNavigator } from './BottomTabNavigator';
 import { IonIcon } from '../components/shared/IonIcon';
 import { Divider } from 'react-native-paper';
@@ -16,6 +16,12 @@ import { DebugNavigator } from './DebugNavigator';
 import { MaintenaceStackNavigator } from './MaintenaceStackNavigator';
 import { DRStackNavigator } from './dr_StackNavigator';
 import { isDebugMode } from '../../sharedTypes/globlaVars';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { DrawerActions } from '@react-navigation/native';
+import { Text } from 'react-native'; // <-- asegúrate de tenerlo importado
+import { SettingsStackNavigator } from './SettingsStackNavigator';
+
+
 
 
 
@@ -70,14 +76,36 @@ export const SideMenuNavigator = () => {
          {/* <Drawer.Screen name="Home" component={StackNavigator} /> */}
          {/* <Drawer.Screen options={{ drawerIcon:({color})=>(<IonIcon name="folder-open" color={color}/>)}} name="Tabs" component={BottomTabNavigator} /> */}
 
-         <Drawer.Screen options={{ drawerIcon: ({ color }) => (<IonIcon name="home-outline" color={color} />) }} name={t('common:Tabs')} component={BottomTabNavigator} />
+         {/* <Drawer.Screen options={{ drawerIcon: ({ color }) => (<IonIcon name="home-outline" color={color} />) }} name={t('common:Tabs')} component={BottomTabNavigator} /> */}
 
          {/* <Drawer.Screen options={{drawerIcon:({color})=>(<IonIcon name="bluetooth" color={color}/>)}} name="BLE Testing" component={BLETestingScreen} /> */}
 
          {/* <Drawer.Screen options={{drawerIcon:({color})=>(<IonIcon name="airplane" color={color}/>)}} name="Farm List" component={FarmListScreen} /> */}
-         
-         <Drawer.Screen options={{ drawerIcon: ({ color }) => (<IonIcon name="add-outline" color={color} />) }} name={t('common:DosimacRegistration')} component={DRStackNavigator} />
-         <Drawer.Screen options={{ drawerIcon: ({ color }) => (<IonIcon name="document-text-outline" color={color} />) }} name={t('common:Lista_instalaciones')} component={FarmListNavigator} />
+
+         <Drawer.Screen
+            name="Tabs"
+            component={BottomTabNavigator}
+            options={{ drawerIcon: ({ color }) => <IonIcon name="home-outline" color={color} />, title: t('common:Tabs') }}
+         />
+         <Drawer.Screen
+            name="Register"
+            component={DRStackNavigator}
+            options={{ drawerIcon: ({ color }) => <IonIcon name="add-outline" color={color} />, title: t('common:DosimacRegistration') }}
+         />
+         <Drawer.Screen
+            name="FarmList"
+            component={FarmListNavigator}
+            options={{ drawerIcon: ({ color }) => <IonIcon name="document-text-outline" color={color} />, title: t('common:Lista_instalaciones') }}
+         />
+         <Drawer.Screen
+            name="Settings"                         // ← FIJO
+            component={SettingsStackNavigator}
+            options={{
+               title: t('common:settings'),
+               drawerItemStyle: { height: 0 },       // lo oculta visualmente
+               drawerLabel: () => null,
+            }}
+         />
 
 
          {/* <Drawer.Screen options={{drawerIcon:({color})=>(<IonIcon name="airplane" color={color}/>)}} name="Farm Settings" component={FarmScreen} /> */}
@@ -100,57 +128,61 @@ export const SideMenuNavigator = () => {
       </Drawer.Navigator>
    );
 };
-
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
-   // const navigation=useNavigation();
+   const { t } = useTranslation();
+   const insets = useSafeAreaInsets();
+   const focused = props.state.routeNames[props.state.index] === 'Settings';
+   const activeBg = globalColors.primary;
+   const activeTint = 'white';
+   const inactiveTint = globalColors.primary;
+
    return (
+      <DrawerContentScrollView
+         {...props}
+         contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom + 12 }}
+      >
+         {/* Lista completa. Settings no se verá por las options de arriba */}
+         <DrawerItemList {...props} />
 
-      <DrawerContentScrollView style={{ flex: 1, flexDirection: 'column' }} {...props}>
-         {/* <View style={{
-            height:200,
-            backgroundColor:globalColors.primary,
-            margin:30,
-            borderRadius:50,
+         {/* Footer abajo */}
+         <View style={{ marginTop: 'auto' }}>
+            <Text
+               style={{
+                  marginLeft: 16,
+                  marginBottom: 6, // un pequeño margen antes de la línea
+                  fontSize: 12,
+                  fontWeight: '600',
+                  color: '#666',
+               }}
+            >
+               {/* Si tienes la clave en i18n, úsala; si no, caerá en 'softwareVersion' */}
+               {t('common:softwareVersion', { defaultValue: 'softwareVersion' })} 2
+            </Text>
 
-         }}
-         /> */}
-         {/* <DrawerItemList {...props} /> */}
-         <View style={{ flex: 1 }}>
+            <Divider style={{ marginHorizontal: 16, marginBottom: 4 }} />
 
-            <DrawerItemList {...props} />
 
-         </View>
-
-         {/* <Text>HOla</Text> */}
-
-         {isDebugMode && (
-            <View style={{ flex: 1, backgroundColor: 'white', marginTop: 300 }}>
-               <Divider />
-
-               <DrawerItem
-                  // style={{flexDirection:'column-reverse'}}
-                  label="CTIcontrol"
-                  onPress={() => Linking.openURL('https://www.cticontrol.com')}
-               //   onPress={() => navigation.navigate('Home Debug' as never)}
-
-               />
-               {/* <Button 
-               title="Go somewhere" 
-                  onPress={() => {
-                  // Navigate using the `navigation` prop that you received
-                  props.navigation.navigate('BLE Testing');
-                  // props.navigation.navigate('Tag Reader');
-                  
-                  //HomeDebugScreen()
-
-                  
+            <DrawerItem
+               label={t('common:settings', { defaultValue: 'Ajustes' })}
+               icon={() => (
+                  <IonIcon
+                     name="settings-outline"
+                     color={focused ? activeTint : inactiveTint}
+                  />
+               )}
+               labelStyle={{ color: focused ? activeTint : inactiveTint }}
+               style={[
+                  { marginHorizontal: 8, borderRadius: 100, paddingHorizontal: 20 },
+                  focused && { backgroundColor: activeBg },
+               ]}
+               onPress={() => {
+                  const nav = props.navigation;
+                  nav.closeDrawer();
+                  setTimeout(() => nav.navigate('Settings' as never), 120);
                }}
             />
-             */}
-            </View>
-         )}
 
+         </View>
       </DrawerContentScrollView>
-   )
-
-}
+   );
+};

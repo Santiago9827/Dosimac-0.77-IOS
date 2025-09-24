@@ -47,4 +47,12 @@ export default {
     Enviar: 'Invia',
     Salir: 'Esci',
     Informacion: 'Informazioni',
+    InicioConfiguracion: "Avvio connessione",
+  ConfiguracionWifi: "Configurazione in corso...",
+  ConfiguracionRealizada: "*Configurazione completata*",
+  ErrorConfiguracion: "*Errore di configurazione*",
+  CapturaTagCorral: "Acquisisci tag del recinto",
+  CorralTag: "Tag recinto",
+  versionUint16: "Questa versione del dispositivo supporta il recinto solo fino a 65000",
+  versionUint32: "Questa versione del dispositivo supporta il recinto fino a 4000000000"
 };
