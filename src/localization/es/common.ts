@@ -64,6 +64,12 @@ export default {
    versionUint16: "Esta versión del equipo solo soporta corral hasta 65000",
    versionUint32: "Esta versión del equipo soporta corral hasta 4000000000",
 
+   EnvioConfiguracion: "Envio de configuración",
+   NumeroCorral: "Número de corral",
+   NumeroMaquina: "Número de máquina",
+   Corralnovalida: "Corral no válido",
+   NumeroMaquinanovalida: "Numero de máquina no válida",
+
 
 
 

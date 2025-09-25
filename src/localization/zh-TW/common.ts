@@ -54,5 +54,10 @@ export default {
   CapturaTagCorral: "擷取畜欄標籤",
   CorralTag: "畜欄標籤",
   versionUint16: "此裝置版本僅支援畜欄編號至 65000",
-  versionUint32: "此裝置版本支援畜欄編號至 4000000000"
+  versionUint32: "此裝置版本支援畜欄編號至 4000000000",
+  EnvioConfiguracion: "傳送設定",
+  NumeroCorral: "畜欄編號",
+  NumeroMaquina: "機器編號",
+  Corralnovalida: "無效的畜欄編號",
+  NumeroMaquinanovalida: "無效的機器編號",
 };

@@ -22,6 +22,7 @@ import { farmStore } from '../../../stores/store';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { IonIcon } from '../../components/shared/IonIcon';
 
+
 export const FarmScreen = ({ navigation, route }) => {
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
@@ -114,7 +115,7 @@ export const FarmScreen = ({ navigation, route }) => {
   const deleteFarm = async () => {
     vglobal.coinciden = false;
     if (route.params.isNewFarm) {
-      Alert.alert('No se puede borrar una granja nueva');
+      Alert.alert(t("NoSePuedeBorrarGranja"), "");
     } else {
       await deleteFarmById(route.params.id);
       if (route.params.id === route.params.SetectedValue) {
@@ -142,10 +143,15 @@ export const FarmScreen = ({ navigation, route }) => {
             <MaterialCommunityIcons name="delete" size={props.size} color={props.color} />
           )}
           onPress={() => {
-            Alert.alert('Borrar granja', 'Desea borrar la granja', [
-              { text: 'OK', onPress: deleteFarm },
-              { text: 'Cancelar' },
-            ]);
+         Alert.alert(
+              t('BorrarGranja'),
+              t('Deseaborrarlagranja'),
+              [
+                { text: t('Cancelar'), style: 'cancel' },
+                { text: 'OK', style: 'destructive', onPress: () => deleteFarm() },
+              ],
+              { cancelable: true }
+            );
           }}
         />
       </Appbar.Header>

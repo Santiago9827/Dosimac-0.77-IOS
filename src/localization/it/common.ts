@@ -54,5 +54,10 @@ export default {
   CapturaTagCorral: "Acquisisci tag del recinto",
   CorralTag: "Tag recinto",
   versionUint16: "Questa versione del dispositivo supporta il recinto solo fino a 65000",
-  versionUint32: "Questa versione del dispositivo supporta il recinto fino a 4000000000"
+  versionUint32: "Questa versione del dispositivo supporta il recinto fino a 4000000000",
+  EnvioConfiguracion: "Invio della configurazione",
+NumeroCorral: "Numero del recinto",
+NumeroMaquina: "Numero della macchina",
+Corralnovalida: "Recinto non valido",
+NumeroMaquinanovalida: "Numero della macchina non valido",
 };

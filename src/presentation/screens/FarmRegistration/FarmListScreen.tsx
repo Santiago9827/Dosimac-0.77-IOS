@@ -175,10 +175,16 @@ export const FarmListScreen = ({navigation,route}) => {
         // left={props => <List.Icon {...props} icon="folder" />}
         left={props => <List.Icon {...props} icon="house" style={{}} />}
         // right={() => <Switch disabled style={styles.centered} />}
-        right={() => 
+        // right={() => 
         
-        <RadioButton  value={item.id.toString()} />
-        }
+        // <RadioButton  value={item.id.toString()} />
+        // }
+        right={() => (
+  <RadioButton.Android
+    value={item.id.toString()}
+    color="#0a0a0a" // opcional
+  />
+)}
 
 
         // onPress={() =>  alert(item.name+'      id: '+item.id.toString()) }

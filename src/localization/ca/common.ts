@@ -55,5 +55,10 @@ export default {
   CapturaTagCorral: "Capturar etiqueta de corral",
   CorralTag: "Etiqueta de corral",
   versionUint16: "Aquesta versió de l'equip només admet corral fins a 65000",
-  versionUint32: "Aquesta versió de l'equip admet corral fins a 4000000000"
+  versionUint32: "Aquesta versió de l'equip admet corral fins a 4000000000",
+  EnvioConfiguracion: "Enviant la configuració",
+NumeroCorral: "Número de corral",
+NumeroMaquina: "Número de màquina",
+Corralnovalida: "Corral no vàlid",
+NumeroMaquinanovalida: "Número de màquina no vàlid",
 };

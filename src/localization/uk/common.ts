@@ -54,7 +54,12 @@ export default {
   CapturaTagCorral: "Зчитати тег загону",
   CorralTag: "Тег загону",
   versionUint16: "Ця версія пристрою підтримує номер загону лише до 65000",
-  versionUint32: "Ця версія пристрою підтримує номер загону до 4000000000"
+  versionUint32: "Ця версія пристрою підтримує номер загону до 4000000000",
+  EnvioConfiguracion: "Відправка конфігурації",
+NumeroCorral: "Номер загону",
+NumeroMaquina: "Номер машини",
+Corralnovalida: "Недійсний номер загону",
+NumeroMaquinanovalida: "Недійсний номер машини",
     
     
 };

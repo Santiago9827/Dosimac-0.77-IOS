@@ -54,5 +54,10 @@ export default {
   CapturaTagCorral: "Przechwyć tag kojca",
   CorralTag: "Tag kojca",
   versionUint16: "Ta wersja urządzenia obsługuje numery kojców tylko do 65000",
-  versionUint32: "Ta wersja urządzenia obsługuje numery kojców do 4000000000"
+  versionUint32: "Ta wersja urządzenia obsługuje numery kojców do 4000000000",
+  EnvioConfiguracion: "Wysyłanie konfiguracji",
+  NumeroCorral: "Numer kojca",
+  NumeroMaquina: "Numer maszyny",
+  Corralnovalida: "Nieprawidłowy numer kojca",
+  NumeroMaquinanovalida: "Nieprawidłowy numer maszyny",
 };

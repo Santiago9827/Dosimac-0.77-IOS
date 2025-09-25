@@ -54,5 +54,11 @@ export default {
   CapturaTagCorral: "우리 태그 캡처",
   CorralTag: "우리 태그",
   versionUint16: "이 기기 버전은 우리 번호를 최대 65000까지만 지원합니다",
-  versionUint32: "이 기기 버전은 우리 번호를 최대 4000000000까지 지원합니다"
+  versionUint32: "이 기기 버전은 우리 번호를 최대 4000000000까지 지원합니다",
+  EnvioConfiguracion: "구성 전송",
+NumeroCorral: "우리 번호",
+NumeroMaquina: "기계 번호",
+Corralnovalida: "유효하지 않은 우리 번호",
+NumeroMaquinanovalida: "유효하지 않은 기계 번호",
+
 };

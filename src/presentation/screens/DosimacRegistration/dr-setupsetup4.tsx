@@ -147,7 +147,7 @@ export const DRSetup = ({ navigation, route }) => {
     const corralNum = parseInt(corral);
     if (!Number.isSafeInteger(corralNum) || corralNum <= 0) {
       setSendHasMsg(true);
-      setSendMsg('Corral no valido');
+      setSendMsg(t('Corralnovalido'));
       setSendVisible(true);
       setSendHasError(true);
       setWaitingSetting(false);
@@ -158,7 +158,7 @@ export const DRSetup = ({ navigation, route }) => {
       const devNum = parseInt(deviceNumber);
       if (!Number.isSafeInteger(devNum) || devNum <= 0 || devNum > 4) {
         setSendHasMsg(true);
-        setSendMsg('Número de máquina no valido');
+        setSendMsg(t('Númeromáquinanovalido'));
         setSendVisible(true);
         setSendHasError(true);
         setWaitingSetting(false);
@@ -182,7 +182,7 @@ export const DRSetup = ({ navigation, route }) => {
     // Rango permitido
     if (!allowUint32 && corralNum > 65000) {
       setSendHasMsg(true);
-      setSendMsg(t("VersionUint16"));
+      setSendMsg(t("versionUint16"));
       setSendVisible(true);
       setSendHasError(true);
       setWaitingSetting(false);
@@ -190,7 +190,7 @@ export const DRSetup = ({ navigation, route }) => {
     }
     if (allowUint32 && corralNum > 4000000000) {
       setSendHasMsg(true);
-      setSendMsg(t("VersionUint32"));
+      setSendMsg(t("versionUint32"));
       setSendVisible(true);
       setSendHasError(true);
       setWaitingSetting(false);
@@ -300,7 +300,7 @@ export const DRSetup = ({ navigation, route }) => {
             onDismiss={dohideDialogSendConfiguration}
             style={{ maxHeight: 0.6 * Dimensions.get('window').height }}
           >
-            <Dialog.Title style={{ color: '#007263', alignSelf: 'center' }}>Envío de configuración</Dialog.Title>
+            <Dialog.Title style={{ color: '#007263', alignSelf: 'center' }}>{t("EnvioConfiguracion")}</Dialog.Title>
             <Dialog.Content className="flex-col items-center ">
               {!sendHasError && (configState === 2 ? null : <ActivityIndicator animating color="green" size="large" />)}
               <Text> </Text>
@@ -330,7 +330,7 @@ export const DRSetup = ({ navigation, route }) => {
                         navigation.navigate('DR-NEWUPDATE', { operacion: route.params.operacion });
                       }}
                     >
-                      <Text className="text-center text-gray-100 text-lg px-14 font-semibold">Salir</Text>
+                      <Text className="text-center text-gray-100 text-lg px-14 font-semibold">{("Salir")}</Text>
                     </Pressable>
                   ) : (
                     configState === 2 &&
@@ -410,7 +410,7 @@ export const DRSetup = ({ navigation, route }) => {
         <TextInput
           style={{ marginTop: 5 }}
           keyboardType="number-pad"
-          label="Número de  corral"
+          label={t("NumeroCorral")}
           mode="outlined"
           placeholder="Marcador corral"
           value={corral}
@@ -421,7 +421,7 @@ export const DRSetup = ({ navigation, route }) => {
           <TextInput
             style={{ marginTop: 5 }}
             keyboardType="number-pad"
-            label="Número de  máquina"
+            label={t("NumeroMaquina")}
             mode="outlined"
             placeholder="Número de máquina"
             value={deviceNumber}
