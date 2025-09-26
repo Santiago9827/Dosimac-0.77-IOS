@@ -5,6 +5,9 @@ import { MainButton } from '../../components/shared/MainButton ';
 import { useTranslation } from 'react-i18next';
 import * as ble from '../../../device/ble/bleLibrary';
 import { BlePeripheral } from '../../../device/ble/bleLibrary';
+import { SevenSegButton } from '../../components/shared/SevenSeg';
+
+
 
 type Props = {
   navigation: any;
@@ -213,25 +216,28 @@ export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
     </View>
   );
 
+
 const renderDevice = (device: BlePeripheral) => {
   if (!isOursIOS(device, route?.params?.operacion)) return null;
-  const raw = getDeviceLabel(device);
-  const pretty = prettifySegments(raw);   // ← aplica la regla de mayúsc/minúsc
+  const label = getDeviceLabel(device); // déjalo tal cual
   return (
     <View key={device.id} style={{ marginTop: 15 }}>
-      <MainButton
-        onPress={() =>
-          navigation.navigate('DR-SETUP', {
-            id: device.id,
-            operacion: route?.params?.operacion,
-          })
-        }
-        label={pretty}
-        size={3}
-      />
+  <SevenSegButton
+  text={label}
+  onPress={() => navigation.navigate('DR-SETUP', { id: device.id, operacion: route?.params?.operacion })}
+  // ↓↓↓ AJUSTES DE TAMAÑO Y ESPACIADO ↓↓↓
+  size={28}            // antes 40 → más pequeño (alto “media celda”)
+  thickness={6}        // antes 8 → segmentos menos gruesos
+  letterSpacing={18}   // antes 10 → más separación entre caracteres
+  containerPadding={14}// antes 18 → menos padding del botón
+  borderRadius={22}    // opcional: botón ligeramente menos “ovalado”
+  backgroundColor="#006d75"
+/>
+
     </View>
   );
 };
+
 
 
   return (
