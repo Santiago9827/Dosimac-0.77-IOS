@@ -15,8 +15,6 @@
 		12804BC1C7E6469B8FAC3348 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19A282E86C584D9DA20CBFF3 /* Roboto-Medium.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		172F9E70423E4A978560A4E9 /* rfid2t.png in Resources */ = {isa = PBXBuildFile; fileRef = 77B8C7D1C0CB4D0D9D89C3C0 /* rfid2t.png */; };
-		1D8BB55964A04442AD1FF43B /* cerdo_sinfondo.png in Resources */ = {isa = PBXBuildFile; fileRef = FC22DB1CDBF545619D5157D2 /* cerdo_sinfondo.png */; };
 		2C0A451DDFC84BBEAB2FC191 /* Poppins-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0EF4FE1AC12D4B939E445D49 /* Poppins-ExtraLightItalic.ttf */; };
 		3B5A618D42054FB4863931F8 /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4512622FEC8A4935B3D704CF /* Roboto-LightItalic.ttf */; };
 		421C5CEC8C634082AD12C7F4 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8FF08E6EB0404FD4A8C4D47B /* Poppins-Bold.ttf */; };
@@ -25,7 +23,6 @@
 		4FE32A93FE364C83AD3D01AB /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B501C0B1412949448BCD9054 /* Roboto-ThinItalic.ttf */; };
 		57323CB1A3AD43E3BD6E4E14 /* Poppins-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A56A79D8B8074C1EBE98B959 /* Poppins-SemiBoldItalic.ttf */; };
 		62903AB967DE4AFDAA3E8906 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B94D1675276F436B9E11F1CC /* Poppins-Italic.ttf */; };
-		67C2F31A9D094356AC76A779 /* rfid1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 736E554983A24DCE955A22DC /* rfid1.jpg */; };
 		69553C016D8747569FFB1E72 /* Poppins-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 580FCCD17DC445D5A903B8AE /* Poppins-BlackItalic.ttf */; };
 		7200B003914F48D2BBBCFBA8 /* CfLcd521Regular-e4Jm.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2AC116DAFC3E42889A9702BD /* CfLcd521Regular-e4Jm.ttf */; };
 		7BF189D78A0D88B1B6AA9C38 /* libPods-gptrnbluetooth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E93BFCF8E7AC3F6E2EFB04 /* libPods-gptrnbluetooth.a */; };
@@ -37,13 +34,10 @@
 		8F296ED376374A70930D0F92 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51A0C0C4A4804B7E89652129 /* Poppins-Medium.ttf */; };
 		922E9E2C0F0A38DA3807C90F /* libPods-gptrnbluetooth-gptrnbluetoothTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56B57414C1088638AC0364C9 /* libPods-gptrnbluetooth-gptrnbluetoothTests.a */; };
 		9847ADC92E609CA0008EE05E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		99C339FBBF7941C08602FB74 /* configuracion_con_equipo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7BE0BDD3C6884EE18FAC5C8E /* configuracion_con_equipo.png */; };
 		9ACF7226B4A04A62A744253D /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 91227625ABB3487698A16EDE /* Poppins-Light.ttf */; };
 		A011E592505F4C3EB7D5DC50 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3569BC6F42D248AB9482A3C6 /* Poppins-Regular.ttf */; };
 		ACF89F690E0043CE9FDB68D4 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E8D00C083094F50A4C54725 /* Roboto-Bold.ttf */; };
 		BA3A23A2DA98439FA1CB7A98 /* LedDigital7-vmYjy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3C045BCD3F4A454C855AEC87 /* LedDigital7-vmYjy.ttf */; };
-		C0DCC3FF55CA4DEEAD3CBCEB /* rfid2tb.png in Resources */ = {isa = PBXBuildFile; fileRef = 34913875BF1A400A8F6460AD /* rfid2tb.png */; };
-		C5F142A7E6F5432CBA558CA0 /* rfid1t.png in Resources */ = {isa = PBXBuildFile; fileRef = 6059F235DBF54856BF9F2648 /* rfid1t.png */; };
 		C787C116187548EBAAB4F8BC /* Poppins-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 376CD77891E04670AD060824 /* Poppins-MediumItalic.ttf */; };
 		CA2A7DCE60D5400AA0E2109F /* Poppins-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FF1B4F5ECD2E4F15B31E3274 /* Poppins-Black.ttf */; };
 		DB9021206A024CC78113F6A6 /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84393F7BD0FB4B4AB10915EB /* Roboto-Black.ttf */; };
@@ -52,8 +46,8 @@
 		EF16D9AFE0F440E7AADC79B6 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC026BB22730417C85EA62FC /* Roboto-Light.ttf */; };
 		F2B3E643609547E6B639EB16 /* Roboto-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 90FC4C53480C42C08DDEE5A1 /* Roboto-MediumItalic.ttf */; };
 		F3D6428271A9483D874F0D24 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 411CAABE48BB476AA1E281B2 /* Poppins-Thin.ttf */; };
-		F6FFBA9DC5284FDCB5E9A9CC /* rfid2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B913FFC12E24FFEA338FC2A /* rfid2.png */; };
 		FDEACB715B01467EBFFAE9A7 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6A02E231A36B416CA0FF1AB6 /* Roboto-Italic.ttf */; };
+		25B2E43B16274EF9A30988E1 /* digital-7.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA9B9B32B57845B2BE90CF78 /* digital-7.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,14 +76,12 @@
 		293F08C8907443C1A5F25F88 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BoldItalic.ttf"; path = "../src/assets/fonts/Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
 		29DA628A92A14073B683CFAE /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../src/assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		2AC116DAFC3E42889A9702BD /* CfLcd521Regular-e4Jm.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CfLcd521Regular-e4Jm.ttf"; path = "../src/assets/fonts/CfLcd521Regular-e4Jm.ttf"; sourceTree = "<group>"; };
-		34913875BF1A400A8F6460AD /* rfid2tb.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = rfid2tb.png; path = ../src/assets/images/rfid2tb.png; sourceTree = "<group>"; };
 		3569BC6F42D248AB9482A3C6 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../src/assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		376CD77891E04670AD060824 /* Poppins-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-MediumItalic.ttf"; path = "../src/assets/fonts/Poppins-MediumItalic.ttf"; sourceTree = "<group>"; };
 		3C045BCD3F4A454C855AEC87 /* LedDigital7-vmYjy.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LedDigital7-vmYjy.ttf"; path = "../src/assets/fonts/LedDigital7-vmYjy.ttf"; sourceTree = "<group>"; };
 		3E60247DF7932F1044E5C6AE /* Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests.release.xcconfig"; sourceTree = "<group>"; };
 		411CAABE48BB476AA1E281B2 /* Poppins-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Thin.ttf"; path = "../src/assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; };
 		4512622FEC8A4935B3D704CF /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-LightItalic.ttf"; path = "../src/assets/fonts/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
-		4B913FFC12E24FFEA338FC2A /* rfid2.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = rfid2.png; path = ../src/assets/images/rfid2.png; sourceTree = "<group>"; };
 		4BC3B082BBE04F57B0BE3862 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../src/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		4EF430EB41DD4F028F7BC432 /* Open24DisplaySt-KRL7.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Open24DisplaySt-KRL7.ttf"; path = "../src/assets/fonts/Open24DisplaySt-KRL7.ttf"; sourceTree = "<group>"; };
 		5170BFD9C8AA9B2EFD2B4FE4 /* Pods-gptrnbluetooth.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth.release.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth.release.xcconfig"; sourceTree = "<group>"; };
@@ -98,12 +90,8 @@
 		56B57414C1088638AC0364C9 /* libPods-gptrnbluetooth-gptrnbluetoothTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gptrnbluetooth-gptrnbluetoothTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		580FCCD17DC445D5A903B8AE /* Poppins-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BlackItalic.ttf"; path = "../src/assets/fonts/Poppins-BlackItalic.ttf"; sourceTree = "<group>"; };
 		5D02244524E49467AD3734DC /* Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests.debug.xcconfig"; sourceTree = "<group>"; };
-		6059F235DBF54856BF9F2648 /* rfid1t.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = rfid1t.png; path = ../src/assets/images/rfid1t.png; sourceTree = "<group>"; };
 		652CF2302EDF456A9CD31AF7 /* Poppins-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-LightItalic.ttf"; path = "../src/assets/fonts/Poppins-LightItalic.ttf"; sourceTree = "<group>"; };
 		6A02E231A36B416CA0FF1AB6 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../src/assets/fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; };
-		736E554983A24DCE955A22DC /* rfid1.jpg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = rfid1.jpg; path = ../src/assets/images/rfid1.jpg; sourceTree = "<group>"; };
-		77B8C7D1C0CB4D0D9D89C3C0 /* rfid2t.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = rfid2t.png; path = ../src/assets/images/rfid2t.png; sourceTree = "<group>"; };
-		7BE0BDD3C6884EE18FAC5C8E /* configuracion_con_equipo.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = configuracion_con_equipo.png; path = ../src/assets/images/configuracion_con_equipo.png; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = gptrnbluetooth/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83D7A0DF5DF443BAB7B6485F /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBold.ttf"; path = "../src/assets/fonts/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
 		84393F7BD0FB4B4AB10915EB /* Roboto-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Black.ttf"; path = "../src/assets/fonts/Roboto-Black.ttf"; sourceTree = "<group>"; };
@@ -125,8 +113,8 @@
 		E804F15EB5F54FAA96302C04 /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BoldItalic.ttf"; path = "../src/assets/fonts/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
 		EC2DE27115324986A6DA0521 /* Segment7-4Gml.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Segment7-4Gml.otf"; path = "../src/assets/fonts/Segment7-4Gml.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		FC22DB1CDBF545619D5157D2 /* cerdo_sinfondo.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = cerdo_sinfondo.png; path = ../src/assets/images/cerdo_sinfondo.png; sourceTree = "<group>"; };
 		FF1B4F5ECD2E4F15B31E3274 /* Poppins-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Black.ttf"; path = "../src/assets/fonts/Poppins-Black.ttf"; sourceTree = "<group>"; };
+		EA9B9B32B57845B2BE90CF78 /* digital-7.ttf */ = {isa = PBXFileReference; name = "digital-7.ttf"; path = "../src/assets/fonts/digital-7.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,13 +214,7 @@
 				EC2DE27115324986A6DA0521 /* Segment7-4Gml.otf */,
 				2AC116DAFC3E42889A9702BD /* CfLcd521Regular-e4Jm.ttf */,
 				3C045BCD3F4A454C855AEC87 /* LedDigital7-vmYjy.ttf */,
-				736E554983A24DCE955A22DC /* rfid1.jpg */,
-				6059F235DBF54856BF9F2648 /* rfid1t.png */,
-				4B913FFC12E24FFEA338FC2A /* rfid2.png */,
-				77B8C7D1C0CB4D0D9D89C3C0 /* rfid2t.png */,
-				34913875BF1A400A8F6460AD /* rfid2tb.png */,
-				FC22DB1CDBF545619D5157D2 /* cerdo_sinfondo.png */,
-				7BE0BDD3C6884EE18FAC5C8E /* configuracion_con_equipo.png */,
+				EA9B9B32B57845B2BE90CF78 /* digital-7.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -410,13 +392,7 @@
 				8AA567BAF0CA469296E29917 /* Segment7-4Gml.otf in Resources */,
 				7200B003914F48D2BBBCFBA8 /* CfLcd521Regular-e4Jm.ttf in Resources */,
 				BA3A23A2DA98439FA1CB7A98 /* LedDigital7-vmYjy.ttf in Resources */,
-				67C2F31A9D094356AC76A779 /* rfid1.jpg in Resources */,
-				C5F142A7E6F5432CBA558CA0 /* rfid1t.png in Resources */,
-				F6FFBA9DC5284FDCB5E9A9CC /* rfid2.png in Resources */,
-				172F9E70423E4A978560A4E9 /* rfid2t.png in Resources */,
-				C0DCC3FF55CA4DEEAD3CBCEB /* rfid2tb.png in Resources */,
-				1D8BB55964A04442AD1FF43B /* cerdo_sinfondo.png in Resources */,
-				99C339FBBF7941C08602FB74 /* configuracion_con_equipo.png in Resources */,
+				25B2E43B16274EF9A30988E1 /* digital-7.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -656,7 +632,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_TEAM = 99YNMC58U9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -691,7 +667,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_TEAM = 99YNMC58U9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

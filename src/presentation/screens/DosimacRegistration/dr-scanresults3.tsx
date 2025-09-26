@@ -62,7 +62,7 @@ function isOursIOS(d: BlePeripheral, operacion?: number): boolean {
   // 2) Manufacturer/Service data: buscar en TODO el payload (no asumir offset=2)
   const bytes = getAdvBytes(d);
   if (bytes) {
-    const s = bytesToAscii(bytes).toUpperCase();
+    const s = bytesToAscii(bytes);
     if (needles.some(x => s.includes(x))) return true;
 
     // Genérico: por si el equipo emite "DOSIMAC" sin sufijo
@@ -96,16 +96,29 @@ function getDeviceLabel(d: BlePeripheral): string {
     // Si no son ASCII, usar los últimos 2 bytes en HEX (p.ej. "BF8E")
     const tail2 = adv.slice(-2);
     if (tail2.length === 2) {
-      return tail2.map(hex2).join('').toUpperCase();
+      return tail2.map(hex2).join('');
     }
   }
 
   // Fallback: últimas 4 letras del nombre, si existe
   const n = (d.name || '').trim();
-  if (n) return n.slice(-4).toUpperCase();
+  if (n) return n.slice(-4);
 
   // Último recurso: cola del UUID
-  return (d.id || '').replace(/-/g, '').slice(-5).toUpperCase();
+  return (d.id || '').replace(/-/g, '').slice(-5);
+}
+
+// Solo A/C/E/F -> mayúscula, b/d -> minúscula. Lo demás se deja igual.
+function prettifySegments(s: string): string {
+  return (s || '')
+    .split('')
+    .map(ch => {
+      const lower = ch.toLowerCase();
+      if (['a', 'c', 'e', 'f'].includes(lower)) return lower.toUpperCase(); // A C E F
+      if (['b', 'd'].includes(lower)) return lower;                         // b d
+      return ch; // números u otras letras sin cambio
+    })
+    .join('');
 }
 
 export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
@@ -200,24 +213,26 @@ export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
     </View>
   );
 
-  const renderDevice = (device: BlePeripheral) => {
-    if (!isOursIOS(device, route?.params?.operacion)) return null;
-    const label = getDeviceLabel(device);
-    return (
-      <View key={device.id} style={{ marginTop: 15 }}>
-        <MainButton
-          onPress={() =>
-            navigation.navigate('DR-SETUP', {
-              id: device.id,
-              operacion: route?.params?.operacion,
-            })
-          }
-          label={label}
-          size={3}
-        />
-      </View>
-    );
-  };
+const renderDevice = (device: BlePeripheral) => {
+  if (!isOursIOS(device, route?.params?.operacion)) return null;
+  const raw = getDeviceLabel(device);
+  const pretty = prettifySegments(raw);   // ← aplica la regla de mayúsc/minúsc
+  return (
+    <View key={device.id} style={{ marginTop: 15 }}>
+      <MainButton
+        onPress={() =>
+          navigation.navigate('DR-SETUP', {
+            id: device.id,
+            operacion: route?.params?.operacion,
+          })
+        }
+        label={pretty}
+        size={3}
+      />
+    </View>
+  );
+};
+
 
   return (
     <View style={{ flex: 1 }}>

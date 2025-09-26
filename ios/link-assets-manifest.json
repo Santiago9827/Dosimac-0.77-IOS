@@ -138,32 +138,8 @@
       "sha1": "11fd7ab362bb0e394e63c7ff8147c6f8c8e58db7"
     },
     {
-      "path": "src/assets/images/cerdo_sinfondo.png",
-      "sha1": "79391e36683ead391ec290ed788f2893ffd4229a"
-    },
-    {
-      "path": "src/assets/images/configuracion_con_equipo.png",
-      "sha1": "aab848468abd602a420ccbaa0d8c1225999cf815"
-    },
-    {
-      "path": "src/assets/images/rfid1.jpg",
-      "sha1": "c68b682981a85cdfe8d4eed35b5235207f2003cb"
-    },
-    {
-      "path": "src/assets/images/rfid1t.png",
-      "sha1": "ed5e4a885107261d95bbde13536c2191866940b5"
-    },
-    {
-      "path": "src/assets/images/rfid2.png",
-      "sha1": "45bcce46e9ab4b2a9b83c8294fdb0723b86dd550"
-    },
-    {
-      "path": "src/assets/images/rfid2t.png",
-      "sha1": "99fea974ad27e5ddb30de77a03bfbc5eb0ba0f46"
-    },
-    {
-      "path": "src/assets/images/rfid2tb.png",
-      "sha1": "40b0cba80890937de904da528a6fe65f3a2cace1"
+      "path": "src/assets/fonts/digital-7.ttf",
+      "sha1": "e76e159f9de13b1c91e03c2933b3f9454788050e"
     }
   ]
 }

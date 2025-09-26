@@ -1,12 +1,10 @@
+// react-native.config.js
 module.exports = {
   project: {
-    // ios: {
-    //   automaticPodsInstallation: true
-    // }
+    ios: {},
     android: {},
   },
-  assets: ['src\\assets\\fonts', 'src\\assets\\images'],
-
+  assets: ['./src/assets/fonts'], // ← usa slashes normales y solo fonts
   dependencies: {
     boost: {
       platforms: {
