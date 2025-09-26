@@ -62,7 +62,6 @@ export const SevenSegChar: React.FC<SevenSegCharProps> = ({
   size = 40,
   thickness = 8,
   color = '#ffffff',
-  offColor = 'rgba(255,255,255,0.16)',
   rounded = 4,
 }) => {
   const mask = SEG[ch] ?? [false, false, false, false, false, false, false];

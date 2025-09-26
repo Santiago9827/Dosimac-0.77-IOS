@@ -15,6 +15,7 @@
 		12804BC1C7E6469B8FAC3348 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19A282E86C584D9DA20CBFF3 /* Roboto-Medium.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		25B2E43B16274EF9A30988E1 /* digital-7.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA9B9B32B57845B2BE90CF78 /* digital-7.ttf */; };
 		2C0A451DDFC84BBEAB2FC191 /* Poppins-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0EF4FE1AC12D4B939E445D49 /* Poppins-ExtraLightItalic.ttf */; };
 		3B5A618D42054FB4863931F8 /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4512622FEC8A4935B3D704CF /* Roboto-LightItalic.ttf */; };
 		421C5CEC8C634082AD12C7F4 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8FF08E6EB0404FD4A8C4D47B /* Poppins-Bold.ttf */; };
@@ -47,7 +48,6 @@
 		F2B3E643609547E6B639EB16 /* Roboto-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 90FC4C53480C42C08DDEE5A1 /* Roboto-MediumItalic.ttf */; };
 		F3D6428271A9483D874F0D24 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 411CAABE48BB476AA1E281B2 /* Poppins-Thin.ttf */; };
 		FDEACB715B01467EBFFAE9A7 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6A02E231A36B416CA0FF1AB6 /* Roboto-Italic.ttf */; };
-		25B2E43B16274EF9A30988E1 /* digital-7.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA9B9B32B57845B2BE90CF78 /* digital-7.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,10 +111,10 @@
 		D899C38EBAAB473981555A95 /* Poppins-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ThinItalic.ttf"; path = "../src/assets/fonts/Poppins-ThinItalic.ttf"; sourceTree = "<group>"; };
 		DC026BB22730417C85EA62FC /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../src/assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; };
 		E804F15EB5F54FAA96302C04 /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BoldItalic.ttf"; path = "../src/assets/fonts/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
+		EA9B9B32B57845B2BE90CF78 /* digital-7.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "digital-7.ttf"; path = "../src/assets/fonts/digital-7.ttf"; sourceTree = "<group>"; };
 		EC2DE27115324986A6DA0521 /* Segment7-4Gml.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Segment7-4Gml.otf"; path = "../src/assets/fonts/Segment7-4Gml.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FF1B4F5ECD2E4F15B31E3274 /* Poppins-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Black.ttf"; path = "../src/assets/fonts/Poppins-Black.ttf"; sourceTree = "<group>"; };
-		EA9B9B32B57845B2BE90CF78 /* digital-7.ttf */ = {isa = PBXFileReference; name = "digital-7.ttf"; path = "../src/assets/fonts/digital-7.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -632,7 +632,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_TEAM = 99YNMC58U9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -667,7 +667,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_TEAM = 99YNMC58U9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
