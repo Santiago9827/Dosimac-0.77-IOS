@@ -60,4 +60,5 @@ export default {
   NumeroMaquina: "Numer maszyny",
   Corralnovalida: "Nieprawidłowy numer kojca",
   NumeroMaquinanovalida: "Nieprawidłowy numer maszyny",
+  configuarIntalacion: "Należy skonfigurować instalację przed użyciem tej funkcji",
 };

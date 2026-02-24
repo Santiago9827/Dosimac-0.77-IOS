@@ -60,4 +60,5 @@ export default {
     NumeroMaquina: "Número da máquina",
     Corralnovalida: "Número do curral inválido",
     NumeroMaquinanovalida: "Número da máquina inválido",
+    configuarIntalacion: "É necessário configurar a instalação antes de usar esta funcionalidade",
 }

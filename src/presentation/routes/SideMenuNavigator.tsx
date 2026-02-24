@@ -156,7 +156,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
                }}
             >
                {/* Si tienes la clave en i18n, úsala; si no, caerá en 'softwareVersion' */}
-               {t('common:softwareVersion', { defaultValue: 'softwareVersion' })} 2
+               {t('common:softwareVersion', { defaultValue: 'softwareVersion' })} 3
             </Text>
 
             <Divider style={{ marginHorizontal: 16, marginBottom: 4 }} />

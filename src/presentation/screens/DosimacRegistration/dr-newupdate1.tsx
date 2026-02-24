@@ -115,14 +115,17 @@ export default function Drnewupdate() {
             </View> :
                <View>
                   <Portal>
-                     <Dialog visible={visible} onDismiss={dohideDialog}>
+                 <Dialog visible={visible} onDismiss={dohideDialog}>
                         <Dialog.Icon icon="warning" color="red" size={60} />
-                        <Dialog.Title style={{ color: 'red' }}>Aviso</Dialog.Title>
+                        <Dialog.Title style={{ color: 'red' }}>{t('common:Aviso')}</Dialog.Title>
                         <Dialog.Content>
-                           <Text >Debe configurar al menos una instalación</Text>
+                           <Text style={{ color: theme.colors.onSurface }}>
+
+                              {t('common:configuarIntalacion')}
+                           </Text>
                         </Dialog.Content>
                         <Dialog.Actions>
-                           <Button onPress={dohideDialog}>Aceptar</Button>
+                           <Button onPress={dohideDialog}>{t('common:Aceptar')}</Button>
                         </Dialog.Actions>
                      </Dialog>
                   </Portal>

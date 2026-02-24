@@ -60,5 +60,7 @@ NumeroCorral: "우리 번호",
 NumeroMaquina: "기계 번호",
 Corralnovalida: "유효하지 않은 우리 번호",
 NumeroMaquinanovalida: "유효하지 않은 기계 번호",
+configuarIntalacion: "이 기능을 사용하려면 설치를 구성해야 합니다",
+
 
 };

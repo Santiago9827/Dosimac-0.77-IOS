@@ -60,4 +60,5 @@ export default {
   NumeroMaquina: "機器編號",
   Corralnovalida: "無效的畜欄編號",
   NumeroMaquinanovalida: "無效的機器編號",
+  configuarIntalacion: "在使用此功能之前需要設定安裝",
 };

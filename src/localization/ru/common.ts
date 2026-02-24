@@ -60,4 +60,5 @@ NumeroCorral: "Номер загона",
 NumeroMaquina: "Номер машины",
 Corralnovalida: "Недопустимый номер загона",
 NumeroMaquinanovalida: "Недопустимый номер машины",
+configuarIntalacion: "Необходимо настроить установку перед использованием этой функции",
 };

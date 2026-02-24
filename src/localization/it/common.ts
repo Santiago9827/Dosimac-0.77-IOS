@@ -60,4 +60,5 @@ NumeroCorral: "Numero del recinto",
 NumeroMaquina: "Numero della macchina",
 Corralnovalida: "Recinto non valido",
 NumeroMaquinanovalida: "Numero della macchina non valido",
+configuarIntalacion: "È necessario configurare l'installazione prima di utilizzare questa funzione",
 };

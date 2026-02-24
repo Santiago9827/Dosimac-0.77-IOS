@@ -63,5 +63,6 @@ export default {
     NumeroMaquina: "Machine number",
     Corralnovalida: "Invalid corral",
     NumeroMaquinanovalida: "Invalid machine number",
+    configuarIntalacion: "You must configure an installation to continue",
 
 };

@@ -61,4 +61,5 @@ NumeroCorral: "Numéro d’enclos",
 NumeroMaquina: "Numéro de machine",
 Corralnovalida: "Enclos non valide",
 NumeroMaquinanovalida: "Numéro de machine non valide",
+  configuarIntalacion: "Vous devez configurer l’installation avant d’utiliser cette fonction",
 };

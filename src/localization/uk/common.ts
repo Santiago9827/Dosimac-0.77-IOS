@@ -60,6 +60,7 @@ NumeroCorral: "Номер загону",
 NumeroMaquina: "Номер машини",
 Corralnovalida: "Недійсний номер загону",
 NumeroMaquinanovalida: "Недійсний номер машини",
+configuarIntalacion: "Необхідно налаштувати установку перед використанням цієї функції",
     
     
 };

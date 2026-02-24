@@ -1,3 +1,5 @@
+import { config } from "process";
+
 export default {
     username: 'Usuari',
     password: 'Clau',
@@ -61,4 +63,5 @@ NumeroCorral: "Número de corral",
 NumeroMaquina: "Número de màquina",
 Corralnovalida: "Corral no vàlid",
 NumeroMaquinanovalida: "Número de màquina no vàlid",
+configuarIntalacion: "Cal configurar la instal·lació abans d'usar aquesta funció",
 };
