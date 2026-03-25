@@ -28,7 +28,7 @@ import { SettingsStackNavigator } from './SettingsStackNavigator';
 const Drawer = createDrawerNavigator();
 
 
-export const SideMenuNavigator = () => {
+export const PrivateDrawerNavigator = () => {
 
    const dimensions = useWindowDimensions();
    const { t } = useTranslation();

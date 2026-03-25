@@ -10,9 +10,12 @@ import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native-gesture-handler';
 import { FarmScreen } from './FarmScreen';
 import { farmFacility } from '../../../sharedTypes/farmInterface';
-import { GetFarmsList } from '../../../FarmDB/farmsDB';
+import { GetFarmsList, InicialiceFarmDataTable } from '../../../FarmDB/farmsDB';
 import { farmStore } from '../../../stores/store';
 import { vglobal } from '../../../sharedTypes/globlaVars';
+import { useAuthStore } from '../../../stores/authStore';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 
 
 
@@ -31,37 +34,80 @@ import { vglobal } from '../../../sharedTypes/globlaVars';
 
 
 
-export const FarmListScreen = ({navigation,route}) => {
+export const FarmListScreen = ({ navigation, route }) => {
 
   // const navigation = useNavigation();
   const { t } = useTranslation();
-  const [value, setValue] = useState('1');
+  const [value, setValue] = useState('');
   const [farms, setFarms] = useState<farmFacility[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  const sfarm=farmStore((state)=> state.farm);
-  const sfarmId=farmStore((state)=> state.farmId);
-  // const UseSetFarm=farmStore((state)=> state.UseSetFarm);
-  const UseSetFarmId=farmStore((state)=> state.UseSetFarmId);
-  const UseSetNewFarm=farmStore((state)=> state.UseSetNewFarm);
-  const farmDataChange=farmStore((state)=> state.farmDataChange);
-  const resetFarm=farmStore((state)=> state.resetFarm);
-  const setFirstElment=farmStore((state)=> state.setFirstElement);
-  const UseSetFirstElement=farmStore((state)=> state.UseSetFirstElement);
-  const UseSetFarmsAmount= farmStore((state) => state.UseSetFarmsAmount);
-  const farmsAmount= farmStore((state) => state.farmsAmount);
 
-  
+  const sfarm = farmStore((state) => state.farm);
+  const sfarmId = farmStore((state) => state.farmId);
+  // const UseSetFarm=farmStore((state)=> state.UseSetFarm);
+  const UseSetFarmId = farmStore((state) => state.UseSetFarmId);
+  const UseSetNewFarm = farmStore((state) => state.UseSetNewFarm);
+  const farmDataChange = farmStore((state) => state.farmDataChange);
+  const resetFarm = farmStore((state) => state.resetFarm);
+  const setFirstElment = farmStore((state) => state.setFirstElement);
+  const UseSetFirstElement = farmStore((state) => state.UseSetFirstElement);
+  const UseSetFarmsAmount = farmStore((state) => state.UseSetFarmsAmount);
+  const farmsAmount = farmStore((state) => state.farmsAmount);
+
+  const token = useAuthStore((s) => s.token);
+
+  const goToHome = () => {
+    const parent = navigation.getParent?.();
+
+    if (token) {
+      // ✅ sesión iniciada -> drawer privado
+      if (parent?.navigate) parent.navigate('Tabs');
+      else navigation.navigate('Tabs');
+    } else {
+      // ✅ sin sesión -> drawer público
+      if (parent?.navigate) parent.navigate('PublicHome');
+      else navigation.navigate('PublicHome');
+    }
+  };
+
 
 
   // const navigator=useNavigation();
 
-  const fetchFarms = async () => {
-    const farmsList = await GetFarmsList();
-    setFarms(farmsList);
-    UseSetFarmsAmount(farmsList.length);
-    setLoading(false);
-  };
+  const fetchFarms = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      await InicialiceFarmDataTable();
+
+      const list = await GetFarmsList();   // puede lanzar error si hay SQL mal
+      setFarms(list ?? []);
+      UseSetFarmsAmount(list?.length ?? 0);
+    } catch (e) {
+      console.log('GetFarmsList ERR', e);
+      setFarms([]);                        // fuerza vacío
+    } finally {
+      setLoading(false);                   // SIEMPRE baja el loading
+    }
+  }, [UseSetFarmsAmount]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchFarms();
+      return () => { };
+    }, [fetchFarms, farmDataChange])
+  );
+
+  useEffect(() => {
+    const selectedId = sfarm?.id;
+    if (selectedId && farms.some(f => f.id === selectedId)) {
+      setValue(String(selectedId));
+    } else if (farms.length > 0) {
+      setValue(String(farms[0].id));
+      UseSetNewFarm(farms[0].id);
+    } else {
+      setValue('');
+    }
+  }, [sfarm?.id, farms, UseSetNewFarm]);
 
 
 
@@ -71,13 +117,13 @@ export const FarmListScreen = ({navigation,route}) => {
     //   setFarms(farmsList);
     // };
 
-    
+
     // fetchFarms();
-    console.log('reder farmlist',sfarm);
-    
+    console.log('reder farmlist', sfarm);
+
     // (if farms.length===0)
 
-    if (sfarm)      
+    if (sfarm)
       setValue(sfarm.id.toString());
     else {
       setValue('1');
@@ -85,48 +131,48 @@ export const FarmListScreen = ({navigation,route}) => {
         UseSetNewFarm(farms[0].id);
     }
 
-      console.log('use efect de farmlist');
-    
+    console.log('use efect de farmlist');
+
   }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchFarms();
-      if (farms.length === 1){
-        UseSetNewFarm(farms[0].id);
-        setValue('1');
-      }
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     fetchFarms();
+  //     if (farms.length === 1) {
+  //       UseSetNewFarm(farms[0].id);
+  //       setValue('1');
+  //     }
 
-      if (vglobal.coinciden)
-        console.log('setFirstElment true')
-      else
-        console.log('setFirstElment false')
+  //     if (vglobal.coinciden)
+  //       console.log('setFirstElment true')
+  //     else
+  //       console.log('setFirstElment false')
 
-      if (vglobal.coinciden)  {
-        vglobal.coinciden=false;
-        if ((farms.length>0)){
-          UseSetNewFarm(farms[0].id);
-          console.log(farms[0].id)
-          setValue(farms[0].id.toString());
-          UseSetFirstElement(false);
-        }
-      }
-      if (farms.length === 0){
-        // resetFarm();
-        
-      }
-      // if (farmDataChange)
-      // farmsList
-      //Alert.alert('Screen was focused');
-      // Do something when the screen is focused
-      console.log('screen was focused');
-      return () => {
-        // Alert.alert('Screen was unfocused');
-        // Do something when the screen is unfocused
-        // Useful for cleanup functions
-      };
-    }, [])
-  );
+  //     if (vglobal.coinciden) {
+  //       vglobal.coinciden = false;
+  //       if ((farms.length > 0)) {
+  //         UseSetNewFarm(farms[0].id);
+  //         console.log(farms[0].id)
+  //         setValue(farms[0].id.toString());
+  //         UseSetFirstElement(false);
+  //       }
+  //     }
+  //     if (farms.length === 0) {
+  //       // resetFarm();
+
+  //     }
+  //     // if (farmDataChange)
+  //     // farmsList
+  //     //Alert.alert('Screen was focused');
+  //     // Do something when the screen is focused
+  //     console.log('screen was focused');
+  //     return () => {
+  //       // Alert.alert('Screen was unfocused');
+  //       // Do something when the screen is unfocused
+  //       // Useful for cleanup functions
+  //     };
+  //   }, [])
+  // );
 
   const handleRender = (item: farmFacility) => {
     return (
@@ -166,34 +212,24 @@ export const FarmListScreen = ({navigation,route}) => {
   const handleRender2 = (item: farmFacility) => {
     return (
 
+
       <List.Item
-        style={{paddingHorizontal:10}}
-        titleStyle={{ fontSize: 16, fontWeight: '600' ,textAlign: 'left', color:'#0a0a0a' }}
-        descriptionStyle={{ fontSize: 16, fontWeight: '100', textAlign: 'left', color:'#940909',paddingTop:5 }}
+        style={{ paddingHorizontal: 10 }}
+        titleStyle={{ fontSize: 16, fontWeight: '600', textAlign: 'left', color: '#0a0a0a' }}
+        descriptionStyle={{ fontSize: 16, fontWeight: '100', textAlign: 'left', color: '#940909', paddingTop: 5 }}
         title={item.name.toUpperCase()}
         description={`${item.location}    ${item.province}`}
-        // left={props => <List.Icon {...props} icon="folder" />}
-        left={props => <List.Icon {...props} icon="house" style={{}} />}
-        // right={() => <Switch disabled style={styles.centered} />}
-        // right={() => 
-        
-        // <RadioButton  value={item.id.toString()} />
-        // }
-        right={() => (
-  <RadioButton.Android
-    value={item.id.toString()}
-    color="#0a0a0a" // opcional
-  />
-)}
-
-
-        // onPress={() =>  alert(item.name+'      id: '+item.id.toString()) }
-
-        onPress={() =>  navigation.navigate("Farm detalils",{id:item.id,isNewFarm:false,SetectedValue:Number(value)})}
-
-
-
-
+        left={props => (
+          <View style={[props.style, { width: 40, alignItems: 'center', justifyContent: 'center' }]}>
+            <Ionicons
+              name="home-outline"
+              size={24}
+              color={props.color ?? '#6b7280'}
+            />
+          </View>
+        )}
+        right={() => <RadioButton value={item.id.toString()} />}
+        onPress={() => navigation.navigate('Farm detalils', { id: item.id, isNewFarm: false, SetectedValue: Number(value) })}
       />
     );
   };
@@ -212,10 +248,10 @@ export const FarmListScreen = ({navigation,route}) => {
     <ScrollView>
 
       <Appbar.Header elevated>
-        
-        <Appbar.BackAction onPress={navigation.goBack} />
+
+        <Appbar.BackAction onPress={goToHome} />
         <Appbar.Content title={t('common:Lista_instalaciones')} />
-        <Appbar.Action icon="add" onPress={() => {navigation.navigate("Farm detalils",{id:0,isNewFarm:true,SetectedValue:0}) }} />
+        <Appbar.Action icon="add" onPress={() => { navigation.navigate("Farm detalils", { id: 0, isNewFarm: true, SetectedValue: 0 }) }} />
         {/* <Appbar.Action icon="add" onPress={() => {UseSetFirstElement(!setFirstElment)}} /> */}
       </Appbar.Header>
 
@@ -227,27 +263,26 @@ export const FarmListScreen = ({navigation,route}) => {
             keyExtractor={(item)=>item.id.toString()}
             // extraData={renderFlag}
          /> */}
-      
 
-      <RadioButton.Group 
-          onValueChange={ newValue => {setValue(newValue); 
-                                      // UseSetFarmId(Number(newValue));
-                                      UseSetNewFarm(Number(newValue));
-                                      console.log('new value!!!: ',newValue);
-                                    }
-                       }
-          value={value}
-      >         
-        {farms.length>0?(
-        <View>
-          {farms.map((item) => 
-              <View key={item.id}>{handleRender2(item)}
-              <Divider style={{ height: 8, backgroundColor: 'lightgray' }} />
-          </View>)}
-        </View>
-        ):(<>{!loading&&(<>{renderEmptyList()}</>)}</>)}
 
+      <RadioButton.Group
+        value={value}
+        onValueChange={nv => { setValue(nv); UseSetNewFarm(Number(nv)); }}
+      >
+        {loading ? null : farms.length === 0 ? (
+          renderEmptyList()
+        ) : (
+          <View>
+            {farms.map(item => (
+              <View key={item.id}>
+                {handleRender2(item)}
+                <Divider style={{ height: 8, backgroundColor: 'lightgray' }} />
+              </View>
+            ))}
+          </View>
+        )}
       </RadioButton.Group>
+
     </ScrollView>
   );
 };
@@ -288,20 +323,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
 
   },
-  nodataContainer:{
+  nodataContainer: {
     // flex: 1, 
     alignContent: 'center',
     justifyContent: 'center',
 
     alignItems: 'center',
     marginTop: 30,
-    backgroundColor:'lightgrey',
+    backgroundColor: 'lightgrey',
     paddingHorizontal: 10,
   },
-  nodata:{
-    color:'red',
+  nodata: {
+    color: 'red',
     fontSize: 20,
-    padding:30,
+    padding: 30,
   }
 
 

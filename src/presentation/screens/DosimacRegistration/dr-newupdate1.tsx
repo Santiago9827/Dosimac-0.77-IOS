@@ -28,7 +28,7 @@ export type RootStackParamList = {
 
 export default function Drnewupdate() {
    const { t } = useTranslation();
-   const navigation = useNavigation();
+   const navigation = useNavigation<any>();
    const theme = useTheme();
    const [visible, setVisibles] = React.useState(true);
 
@@ -64,13 +64,21 @@ export default function Drnewupdate() {
       }, [])
    );
 
-
+   const goToPublicHome = () => {
+  // si Drnewupdate está dentro del stack "Register", su parent suele ser el Drawer (PublicDrawer)
+  const parent = navigation.getParent?.();
+  if (parent?.navigate) {
+    parent.navigate('PublicHome'); // ✅ usa el nombre real de tu PublicDrawerNavigator
+  } else {
+    navigation.navigate('PublicHome');
+  }
+};
 
 
 
    const dohideDialog = () => {
       setVisibles(false);
-      navigation.goBack();
+      goToPublicHome();
 
    }
 
