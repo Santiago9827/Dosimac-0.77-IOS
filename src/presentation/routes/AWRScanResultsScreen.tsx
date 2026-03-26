@@ -167,7 +167,7 @@ export const AWRScanResultsScreen = ({ navigation }) => {
         setErrorMsg('');
         setConnecting(true);
         try {
-            await ble.bleConnection(device.id);
+           // await ble.bleConnection(device.id);
 
             // GUARDAR EN STORE
             const label = labelFor(device);

@@ -106,11 +106,19 @@ function extractAdvBytesIOS(adv: any): number[] | null {
 }
 
 
-export const BleStart = () => {
-  console.log("BleStart called");
-  clearDevices();
-  BleManager.start({ showAlert: false });
-}
+let bleStarted = false;
+
+export const BleStart = async () => {
+  if (bleStarted) return;            // ✅ evita reiniciar BLE
+  bleStarted = true;
+
+  console.log("BleStart called (once)");
+
+  // ✅ NO limpies selectedDevice aquí
+  // clearDevices();  ❌ quítalo de aquí
+
+  await BleManager.start({ showAlert: false });
+};
 
 export const bleAddListener = () => {
   bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral);
@@ -120,12 +128,11 @@ export const bleRemoveListener = () => {
   bleManagerEmitter.removeAllListeners('BleManagerDiscoverPeripheral');
 }
 
-export const startScanning = () => {
+export const startScanning = async () => {
+  await BleStart();   // ✅ garantiza init 1 vez
   clearDevices();
   console.log('Start Scanning...');
-  BleManager.scan([], 3, false, { matchMode: 2 }).then(() => {
-    console.log('Scanning...');
-  });
+  await BleManager.scan([], 3, false, { matchMode: 2 });
 };
 
 const handleDiscoverPeripheral = (p: any) => {
@@ -216,7 +223,7 @@ export const bleConnection = async (id: string) => {
   notifsReady = false;
 
   try {
-    // iOS: mejor parar escaneo antes de conectar
+    // iOS: parar escaneo antes de conectar
     try { await BleManager.stopScan(); } catch {}
 
     await BleManager.connect(id);
@@ -224,15 +231,14 @@ export const bleConnection = async (id: string) => {
 
     selectedDevice = id;
 
-    // IMPORTANTE en iOS: retrieveServices después de conectar
     const info = await BleManager.retrieveServices(id);
     console.log('Services retrieved', info);
 
-    return info; // ✅ ahora el await sí espera
+    return info;
   } catch (error) {
     console.log('Connection error ....', error);
     selectedDevice = null;
-    throw error; // ✅ para que tu store vea el error real
+    throw error;
   }
 };
 export const blehandleMTU = async () => {

@@ -4,8 +4,11 @@ import { create } from 'zustand';
 import { Buffer } from 'buffer';
 import * as ble from '../device/ble/bleLibrary';
 
-const SVC_UUID = '0000180f-0000-1000-8000-00805f9b34fb';
-const CHR_UUID = '00002a19-0000-1000-8000-00805f9b34fb';
+// const SVC_UUID = '0000180f-0000-1000-8000-00805f9b34fb';
+// const CHR_UUID = '00002a19-0000-1000-8000-00805f9b34fb';
+
+const SVC_UUID = '180f';
+const CHR_UUID = '2a19';
 
 let notifHandle: { remove?: () => Promise<void> | void } | null = null;
 let acc = '';
@@ -42,7 +45,7 @@ export const useAwrConn = create<State>((set, get) => ({
     history: [],
 
     ensureBle: async () => {
-        try { ble.BleStart(); } catch { }
+        try { await ble.BleStart(); } catch { }
         if (!listenersBound) {
             unbind = ble.addConnectionListeners(
                 (id) => {
