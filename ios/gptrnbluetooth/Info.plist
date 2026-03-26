@@ -6,10 +6,6 @@
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>DOSIMAC</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Necesitamos Bluetooth para detectar y configurar los dispositivos DOSIMAC.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Esta app usa Bluetooth para comunicarse con dispositivos cercanos.</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -35,8 +31,12 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Necesitamos Bluetooth para detectar y configurar los dispositivos DOSIMAC.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Esta app usa Bluetooth para comunicarse con dispositivos cercanos.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Black.ttf</string>

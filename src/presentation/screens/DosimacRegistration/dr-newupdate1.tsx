@@ -12,6 +12,7 @@ import { MainButton } from '../../components/shared/MainButton ';
 import { vgDoRegistration } from '../../../sharedTypes/gvarsDosimacRegistration';
 import { farmStore } from '../../../stores/store';
 import { globals } from '../../../sharedTypes/globlaVars';
+import { useAuthStore } from '../../../stores/authStore';
 //import {glDispenserType} from '../../../sharedTypes/globlaVars'; 
 
 
@@ -31,6 +32,7 @@ export default function Drnewupdate() {
    const navigation = useNavigation<any>();
    const theme = useTheme();
    const [visible, setVisibles] = React.useState(true);
+   const token = useAuthStore((s) => s.token);
 
    const sfarm = farmStore((state) => state.farm);
 
@@ -64,21 +66,24 @@ export default function Drnewupdate() {
       }, [])
    );
 
-   const goToPublicHome = () => {
-  // si Drnewupdate está dentro del stack "Register", su parent suele ser el Drawer (PublicDrawer)
-  const parent = navigation.getParent?.();
-  if (parent?.navigate) {
-    parent.navigate('PublicHome'); // ✅ usa el nombre real de tu PublicDrawerNavigator
-  } else {
-    navigation.navigate('PublicHome');
-  }
-};
+ const goToHome = () => {
+      const parent = navigation.getParent?.();
 
+      if (token) {
+         // ✅ Sesión iniciada -> Drawer privado -> Inicio = Tabs
+         if (parent?.navigate) parent.navigate('Tabs');
+         else navigation.navigate('Tabs');
+      } else {
+         // ✅ Sin sesión -> Drawer público -> Home pública
+         if (parent?.navigate) parent.navigate('PublicHome');
+         else navigation.navigate('PublicHome');
+      }
+   };
 
 
    const dohideDialog = () => {
       setVisibles(false);
-      goToPublicHome();
+      goToHome();
 
    }
 
@@ -86,7 +91,12 @@ export default function Drnewupdate() {
       <View>
          <Appbar.Header elevated>
 
-            <Appbar.BackAction onPress={navigation.goBack} />
+            {/* <Appbar.BackAction onPress={navigation.goBack} /> */}
+            <Appbar.BackAction onPress={() => {
+               if (!sfarm) goToHome();
+               else navigation.goBack();
+            }}
+            />            
             <Appbar.Content title={t('common:DosimacRegistration')} />
             {/* <Appbar.Action icon="add" onPress={() => {}} /> */}
          </Appbar.Header>

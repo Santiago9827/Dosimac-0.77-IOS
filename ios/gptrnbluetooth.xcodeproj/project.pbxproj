@@ -445,13 +445,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -466,13 +462,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -487,13 +479,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -530,13 +518,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

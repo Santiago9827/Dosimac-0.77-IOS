@@ -51,6 +51,8 @@ let writeCharUUIDIOS: string | null = null;
 
 const buffer = Buffer.from([66])  //Esto es una B
 let contador: number = 0;
+type ConnCb = (id: string) => void;
+type DiscCb = (id: string, error?: any) => void;
 
 //const parser=new Parser();
 
@@ -187,26 +189,52 @@ const clearDevices = () => {
 
 
 
-export const bleConnection = (id: string) => {
-  if (!id) { console.log('BLEConnection: No device selected'); return; }
+// export const bleConnection = (id: string) => {
+//   if (!id) { console.log('BLEConnection: No device selected'); return; }
 
-  // cada intento: limpia flags
+//   // cada intento: limpia flags
+//   notifsReady = false;
+
+//   BleManager.connect(id)
+//     .then(() => {
+//       console.log('Connected to ' + id);
+//       selectedDevice = id;
+//       return BleManager.retrieveServices(id);
+//     })
+//     .then((peripheralInfo) => {
+//       console.log(peripheralInfo);
+//       // Opcional: aquí podrías llamar bleSubscribeNotify() si tu FSM lo permite
+//     })
+//     .catch((error) => {
+//       console.log('Connection error ....', error);
+//     });
+// }
+// bleLibrary.ts
+export const bleConnection = async (id: string) => {
+  if (!id) throw new Error('BLEConnection: No device selected');
+
   notifsReady = false;
 
-  BleManager.connect(id)
-    .then(() => {
-      console.log('Connected to ' + id);
-      selectedDevice = id;
-      return BleManager.retrieveServices(id);
-    })
-    .then((peripheralInfo) => {
-      console.log(peripheralInfo);
-      // Opcional: aquí podrías llamar bleSubscribeNotify() si tu FSM lo permite
-    })
-    .catch((error) => {
-      console.log('Connection error ....', error);
-    });
-}
+  try {
+    // iOS: mejor parar escaneo antes de conectar
+    try { await BleManager.stopScan(); } catch {}
+
+    await BleManager.connect(id);
+    console.log('Connected to ' + id);
+
+    selectedDevice = id;
+
+    // IMPORTANTE en iOS: retrieveServices después de conectar
+    const info = await BleManager.retrieveServices(id);
+    console.log('Services retrieved', info);
+
+    return info; // ✅ ahora el await sí espera
+  } catch (error) {
+    console.log('Connection error ....', error);
+    selectedDevice = null;
+    throw error; // ✅ para que tu store vea el error real
+  }
+};
 export const blehandleMTU = async () => {
   if (!selectedDevice) return;
   try {
@@ -322,6 +350,58 @@ export const bleSubscribeNotify = async () => {
 export const canWrite = () => Boolean(selectedDevice && notifsReady);
 
 
+export const addConnectionListeners = (onConnect: ConnCb, onDisconnect: DiscCb) => {
+  const subConn = bleManagerEmitter.addListener(
+    'BleManagerConnectPeripheral',
+    ({ peripheral }) => onConnect?.(peripheral)
+  );
+  const subDisc = bleManagerEmitter.addListener(
+    'BleManagerDisconnectPeripheral',
+    ({ peripheral, error }) => onDisconnect?.(peripheral, error)
+  );
+  return () => { try { subConn.remove(); } catch { } try { subDisc.remove(); } catch { }; };
+};
+
+export const addBtStateListener = (onState: (state: string) => void) => {
+  const sub = bleManagerEmitter.addListener('BleManagerDidUpdateState', ({ state }) => onState?.(state));
+  return () => { try { sub.remove(); } catch { } };
+};
+
+export const bleIsConnected = async (id: string) => {
+  try { return await BleManager.isPeripheralConnected(id, []); } catch { return false; }
+};
+
+export const bleSubscribeGeneric = async (
+  serviceUUID: string,
+  characteristicUUID: string,
+  onValue: (value: number[]) => void
+) => {
+  if (!selectedDevice) throw new Error('No device selected');
+
+  // listener SOLO para ese device/servicio/char
+  const listener = bleManagerEmitter.addListener(
+    'BleManagerDidUpdateValueForCharacteristic',
+    ({ value, peripheral, characteristic, service }) => {
+      const sameDev = peripheral?.toLowerCase?.() === selectedDevice?.toLowerCase?.();
+      const sameSvc = service?.toLowerCase?.() === serviceUUID?.toLowerCase?.();
+      const sameChr = characteristic?.toLowerCase?.() === characteristicUUID?.toLowerCase?.();
+      if (sameDev && sameSvc && sameChr) {
+        onValue(value as number[]);
+      }
+    }
+  );
+
+  // habilita notificaciones
+  await BleManager.startNotification(selectedDevice, serviceUUID, characteristicUUID);
+
+  // devuelve handle para limpiar
+  return {
+    remove: async () => {
+      try { await BleManager.stopNotification(selectedDevice!, serviceUUID, characteristicUUID); } catch { }
+      try { listener.remove(); } catch { }
+    }
+  };
+};
 
 
 async function connectAndPrepare(peripheral: any, service: string, characteristic: string) {
