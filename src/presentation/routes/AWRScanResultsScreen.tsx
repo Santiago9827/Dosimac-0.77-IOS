@@ -115,6 +115,41 @@ export const AWRScanResultsScreen = ({ navigation }) => {
         return parts.length >= 2 ? parts.slice(-2).join('') : '';
     };
 
+const shortFromAwrName = (name?: string | null) => {
+  if (!name) return '';
+  const up = name.toUpperCase().trim();
+
+  // Ej: AWR300_011106  -> 011106
+  const m = up.match(/AWR300[_-]?(\d+)/);
+  if (m?.[1]) {
+    const digits = m[1];           // "011106"
+    return digits.slice(-4);       // "1106"
+  }
+
+  return '';
+};
+
+const shortFromUuid = (id?: string | null) => {
+  if (!id) return '';
+  // UUID iOS: c62ee8ee-...-5577 -> 5577
+  const compact = id.replace(/-/g, '').toUpperCase();
+  return compact.slice(-4);
+};
+
+// ✅ ESTE será el label que verá el usuario
+const labelShortFor = (d: BlePeripheral) => {
+  const mac = macSuffix(d.id);
+  if (mac) return `AWR ${mac}`;                 // Android: 1EB9
+
+  const nm = getLocalName(d);
+  const fromName = shortFromAwrName(nm);
+  if (fromName) return `AWR ${fromName}`;       // iOS: AWR 1106
+
+  const fromUuid = shortFromUuid(d.id);
+  if (fromUuid) return `AWR ${fromUuid}`;       // fallback iOS
+
+  return 'AWR';
+};
     const labelFor = (d: BlePeripheral) =>
         macSuffix(d.id) || getLocalName(d) || (d.id ?? '').toUpperCase();
 
@@ -132,7 +167,6 @@ export const AWRScanResultsScreen = ({ navigation }) => {
 
     // === Escaneo ===
     useEffect(() => {
-        ble.BleStart();
         ble.bleAddListener();
         return () => {
             try { ble.stopScanning(); } catch { }
@@ -170,7 +204,7 @@ export const AWRScanResultsScreen = ({ navigation }) => {
            // await ble.bleConnection(device.id);
 
             // GUARDAR EN STORE
-            const label = labelFor(device);
+            const label = labelShortFor(device);
             upsert({
                 id: device.id,
                 label,
@@ -188,7 +222,7 @@ export const AWRScanResultsScreen = ({ navigation }) => {
         } catch (e: any) {
             const msg = String(e?.message || e);
             if (msg.toLowerCase().includes('already')) {
-                const label = labelFor(device);
+                const label = labelShortFor(device);
                 upsert({
                     id: device.id,
                     label,
@@ -248,7 +282,7 @@ export const AWRScanResultsScreen = ({ navigation }) => {
 
     const renderDevice = (device: BlePeripheral) => {
         if (!isAWR(device)) return null;
-        const label = labelFor(device);
+        const label = labelShortFor(device);
         return (
             <View key={device.id} style={{ marginTop: 12 }}>
                 <MainButton
