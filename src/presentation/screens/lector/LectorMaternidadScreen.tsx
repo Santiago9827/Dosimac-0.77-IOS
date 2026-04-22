@@ -1271,9 +1271,9 @@ export const LectorMaternidadScreen = () => {
                                         ? "checkmark-circle-outline"
                                         : estadoIdVisual === "error"
                                             ? "alert-circle-outline"
-                                            : "hash"
+                                            : "pricetag-outline"
                                 }
-                                usarFeather={estadoIdVisual === "neutro"}
+                                usarFeather={false}
                                 titulo={t("maternityReader_readId")}
                                 valor={idRecibido ? String(idRecibido) : "—"}
                                 fondo={estilosCajaId.backgroundColor}

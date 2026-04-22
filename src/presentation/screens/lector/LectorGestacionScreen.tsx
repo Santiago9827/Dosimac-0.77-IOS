@@ -1317,9 +1317,9 @@ export const LectorGestacionScreen = () => {
                                         ? "checkmark-circle-outline"
                                         : estadoIdVisual === "error"
                                             ? "alert-circle-outline"
-                                            : "hash"
+                                           : "pricetag-outline"
                                 }
-                                usarFeather={estadoIdVisual === "neutro"}
+                                usarFeather={false}
                                 titulo={t("gestationReader_readId")}
                                 valor={idRecibido ? String(idRecibido) : "—"}
                                 fondo={estilosCajaId.backgroundColor}
@@ -1332,7 +1332,8 @@ export const LectorGestacionScreen = () => {
                                         : estadoIdVisual === "error"
                                             ? t("gestationReader_unknownAnimal")
                                             : undefined
-                                } />
+                                }
+                            />
                         </View>
                     </View>
                 )}
