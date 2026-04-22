@@ -78,26 +78,33 @@ export const ConfiguracionIPScreen = () => {
     }, []);
 
     const onGuardar = async () => {
-        if (!valor.trim() || invalido) return;
+    if (!valor.trim() || invalido) return;
 
-        try {
-            setLoading(true);
+    try {
+        setLoading(true);
 
-            const hostLimpio = toInputHost(valor);
-            const respuesta = await validarServidorPorIp(hostLimpio);
-            const resultado = interpretarRespuestaValidacionIp(respuesta.status);
+        const hostLimpio = toInputHost(valor);
 
-            if (resultado.guardar) {
-                await AsyncStorage.setItem(STORAGE_KEY, respuesta.baseUrl);
-                setGuardado(respuesta.baseUrl);
-                setValor(hostLimpio);
-            }
+        let respuesta = await validarServidorPorIp(hostLimpio);
 
-            Alert.alert(resultado.titulo, resultado.mensaje);
-        } finally {
-            setLoading(false);
+        if (respuesta.status === 0) {
+            await new Promise((resolve) => setTimeout(resolve, 1200));
+            respuesta = await validarServidorPorIp(hostLimpio);
         }
-    };
+
+        const resultado = interpretarRespuestaValidacionIp(respuesta.status);
+
+        if (resultado.guardar) {
+            await AsyncStorage.setItem(STORAGE_KEY, respuesta.baseUrl);
+            setGuardado(respuesta.baseUrl);
+            setValor(hostLimpio);
+        }
+
+        Alert.alert(resultado.titulo, resultado.mensaje);
+    } finally {
+        setLoading(false);
+    }
+};
 
     const onReset = async () => {
         try {
