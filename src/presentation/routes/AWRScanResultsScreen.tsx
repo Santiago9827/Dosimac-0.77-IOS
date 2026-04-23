@@ -259,7 +259,7 @@ const labelShortFor = (d: BlePeripheral) => {
     const RenderIsScanning = () => (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" />
-            <Text style={{ fontSize: 18, marginTop: 8 }}>Buscando AWR300…</Text>
+            <Text style={{ fontSize: 18, marginTop: 8 }}> {t("awrScanResults_searching")}</Text>
         </View>
     );
 
@@ -268,12 +268,12 @@ const labelShortFor = (d: BlePeripheral) => {
             <Portal>
                 <Dialog visible={visible} onDismiss={handleNoDevicesAccept}>
                     <Dialog.Icon icon="warning" color="red" size={60} />
-                    <Dialog.Title style={{ color: 'red' }}>Aviso</Dialog.Title>
+                    <Dialog.Title style={{ color: 'red' }}>{t("Aviso")}</Dialog.Title>
                     <Dialog.Content>
-                        <Text variant="bodyLarge">No se han encontrado AWR300 cercanos.</Text>
+                        <Text variant="bodyLarge">{t("awrScanResults_noDevicesNearby")}.</Text>
                     </Dialog.Content>
                     <Dialog.Actions>
-                        <Button onPress={handleNoDevicesAccept}>Aceptar</Button>
+                        <Button onPress={handleNoDevicesAccept}>{t("Aceptar")}</Button>
                     </Dialog.Actions>
                 </Dialog>
             </Portal>
@@ -298,13 +298,13 @@ const labelShortFor = (d: BlePeripheral) => {
         <View style={{ flex: 1 }}>
             <Appbar.Header elevated>
                 <Appbar.BackAction onPress={navigation.goBack} />
-                <Appbar.Content title="AWR300 – Resultados de escaneo" />
+                <Appbar.Content title="AWR – Resultados de escaneo" />
             </Appbar.Header>
 
             {(connecting || errorMsg) && (
                 <View style={{ marginHorizontal: 24, marginTop: 16 }}>
                     <Card mode="contained" style={{ borderRadius: 16, padding: 12 }}>
-                        {connecting && <Text>Conectando…</Text>}
+                        {connecting && <Text>{t("awrSavedList_connecting")}</Text>}
                         {!!errorMsg && <Text style={{ color: 'red' }}>{errorMsg}</Text>}
                     </Card>
                 </View>
@@ -326,14 +326,14 @@ const labelShortFor = (d: BlePeripheral) => {
             <Portal>
                 <Dialog visible={successVisible} dismissable={false}>
                     <Dialog.Icon icon="check-circle" color="green" size={60} />
-                    <Dialog.Title style={{ color: 'green' }}>Conectado</Dialog.Title>
+                    <Dialog.Title style={{ color: 'green' }}>{t("awrSavedList_connected")}</Dialog.Title>
                     <Dialog.Content>
                         <Text variant="bodyLarge">
-                            Conexión establecida con {connectedLabel || 'el dispositivo'}.
+                            {t("awrScanResults_connectedMessage")} {connectedLabel || 'el dispositivo'}.
                         </Text>
                     </Dialog.Content>
                     <Dialog.Actions>
-                        <Button onPress={handleSuccessAccept}>Aceptar</Button>
+                        <Button onPress={handleSuccessAccept}>{t("Aceptar")}</Button>
                     </Dialog.Actions>
                 </Dialog>
             </Portal>

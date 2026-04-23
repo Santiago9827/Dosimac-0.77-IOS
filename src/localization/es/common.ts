@@ -95,9 +95,11 @@ export default {
    login_invalidIpTitle: "IP no válida",
    login_invalidIpMessage: "Introduce una IP o dirección de servidor válida.",
    login_saveIpErrorMessage: "No se pudo guardar la configuración IP.",
-awrStartScan_title: "AWR Settings",
+   awrStartScan_title: "Configuracion AWR ",
    awrStartScan_description: "Pantalla para escanear lectores Agrident AWR.",
    awrStartScan_button: "Escanear AWR",
+   awrBluetoothPermissionMessage: "Activa Bluetooth y acepta el permiso para poder escanear.",
+
 
    gestacionConfig_screenTitle: "Configuración Gestación",
    gestacionConfig_chooseOptionTitle: "Elige una opción",
@@ -419,7 +421,32 @@ awrStartScan_title: "AWR Settings",
    ipConfig_alertErrorTitle: "Error",
    ipConfig_alertInvalidIp: "IP no válida",
 
+   portal_preparing: "Preparando portal...",
+   portal_noSessionToken: "No hay token de sesión. Inicia sesión de nuevo.",
+   portal_noIpConfigured: "No hay IP configurada. Configura primero la IP del servidor.",
+   portal_prepareUrlError: "No se pudo preparar la URL del portal.",
+   portal_loadError: "No se pudo cargar el portal.",
+   portal_checkingConnection: "Comprobando conexión con el portal...",
+   portal_noConnectionTitle: "No hay conexión",
+   portal_connectionTimeout: "No se ha podido conectar con el portal. Verifica que esté conectada la red correcta.",
+   portal_connectionError: "No se ha podido conectar con el portal. Verifica la red o la IP configurada.",
+   portal_httpError: "No se ha podido abrir el portal. Error HTTP {{status}}.",
+   portal_retry: "Reintentar",
+   portal_loading: "Cargando portal...",
 
 
+   AltaDispositivos: "Alta dispositivos",
+   LectorMaternidad: "Lector Maternidad",
+   LectorGestacion: "Lector Gestación",
+   ConfiguracionIP: "Configuración IP",
+   ConfiguracionAWR: "Configuración AWR",
+   DarDeAltaAWR: "Dar de Alta AWR",
+   AWREscaneados: "AWR escaneados",
+   CerrarSesion: "Cerrar sesión",
+
+
+   Config_lastReadMismatchTitle: "El animal leído no coincide con la búsqueda",
+   Config_lastReadMismatchCrotal: "Crotal",
+   Config_lastReadMismatchId: "ID",
 
 };

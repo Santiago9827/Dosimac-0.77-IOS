@@ -87,7 +87,7 @@ export default {
     login_invalidIpTitle: "IP inválido",
     login_invalidIpMessage: "Introduza um IP ou endereço de servidor válido.",
     login_saveIpErrorMessage: "Não foi possível guardar a configuração IP.",
-awrStartScan_title: "Configuração AWR",
+    awrStartScan_title: "Configuração AWR",
     awrStartScan_description: "Ecrã para digitalizar leitores Agrident AWR.",
     awrStartScan_button: "Digitalizar AWR",
 
@@ -394,4 +394,33 @@ awrStartScan_title: "Configuração AWR",
     ipConfig_alertServerNotUpdated: "Servidor não atualizado",
     ipConfig_alertErrorTitle: "Erro",
     ipConfig_alertInvalidIp: "IP inválido",
+
+    portal_preparing: "A preparar o portal...",
+    portal_noSessionToken: "Não existe token de sessão. Inicie sessão novamente.",
+    portal_noIpConfigured: "Não há nenhum IP configurado. Configure primeiro o IP do servidor.",
+    portal_prepareUrlError: "Não foi possível preparar o URL do portal.",
+    portal_loadError: "Não foi possível carregar o portal.",
+    portal_checkingConnection: "A verificar a ligação ao portal...",
+    portal_noConnectionTitle: "Sem ligação",
+    portal_connectionTimeout: "Não foi possível ligar ao portal. Verifique se está ligado à rede correta.",
+    portal_connectionError: "Não foi possível ligar ao portal. Verifique a rede ou o IP configurado.",
+    portal_httpError: "Não foi possível abrir o portal. Erro HTTP {{status}}.",
+    portal_retry: "Tentar novamente",
+    portal_loading: "A carregar o portal...",
+
+
+    AltaDispositivos: "Registo de dispositivos",
+    LectorMaternidad: "Leitor Maternidade",
+    LectorGestacion: "Leitor Gestação",
+    ConfiguracionIP: "Configuração IP",
+    ConfiguracionAWR: "Configuração AWR",
+    DarDeAltaAWR: "Registar AWR",
+    AWREscaneados: "AWR digitalizados",
+    CerrarSesion: "Terminar sessão",
+
+    Config_lastReadMismatchTitle: "O animal lido não corresponde à pesquisa",
+    Config_lastReadMismatchCrotal: "Brinco",
+    Config_lastReadMismatchId: "ID",
+    awrBluetoothPermissionMessage: "Ative o Bluetooth e aceite a permissão para poder digitalizar.", 
+
 }

@@ -178,7 +178,7 @@ const PublicDrawerContent = (props: DrawerContentComponentProps) => {
             {isSimpleMenu ? (
                 <>
                     <DrawerItem
-                        label="Login"
+                        label={t("login")}
                         icon={() => <IonIcon name="log-in-outline" color={iconColor(activeRoute === "Login")} />}
                         labelStyle={labelStyle(activeRoute === "Login")}
                         style={itemStyle(activeRoute === "Login")}
@@ -186,7 +186,7 @@ const PublicDrawerContent = (props: DrawerContentComponentProps) => {
                     />
 
                     <DrawerItem
-                        label="Alta dispositivos"
+                        label={t("AltaDispositivos")}
                         icon={() => <IonIcon name="add-outline" color={iconColor(false)} />}
                         labelStyle={labelStyle(false)}
                         style={itemStyle(false)}
@@ -194,7 +194,7 @@ const PublicDrawerContent = (props: DrawerContentComponentProps) => {
                     />
 
                     <DrawerItem
-                        label="Configuración IP"
+                       label={t("ConfiguracionIP")}
                         icon={() => <IonIcon name="wifi-outline" color={iconColor(activeRoute === "ConfigIP")} />}
                         labelStyle={labelStyle(activeRoute === "ConfigIP")}
                         style={itemStyle(activeRoute === "ConfigIP")}
@@ -204,14 +204,14 @@ const PublicDrawerContent = (props: DrawerContentComponentProps) => {
             ) : (
                 <>
                     <DrawerItem
-                        label="Login"
+                        label={t("login")}
                         icon={() => <IonIcon name="log-in-outline" color={iconColor(false)} />}
                         labelStyle={labelStyle(false)}
                         style={itemStyle(false)}
                         onPress={() => go("Login")}
                     />
                     <DrawerItem
-                        label="Alta Dosimac"
+                        label={t("AltaDispositivos", { defaultValue: "Alta Dosimac" })}
                         icon={() => <IonIcon name="add-outline" color={iconColor(activeRoute === "Register")} />}
                         labelStyle={labelStyle(activeRoute === "Register")}
                         style={itemStyle(activeRoute === "Register")}
@@ -219,7 +219,7 @@ const PublicDrawerContent = (props: DrawerContentComponentProps) => {
                     />
 
                     <DrawerItem
-                        label="Instalaciones"
+                        label={t("Lista_instalaciones", { defaultValue: "Instalaciones" })}
                         icon={() => <IonIcon name="document-text-outline" color={iconColor(activeRoute === "FarmList")} />}
                         labelStyle={labelStyle(activeRoute === "FarmList")}
                         style={itemStyle(activeRoute === "FarmList")}

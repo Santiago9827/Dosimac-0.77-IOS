@@ -5,6 +5,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuthStore } from "../../../stores/authStore";
 import { extraerOrigin } from "../../../stores/ipConfig";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useTranslation } from "react-i18next";
+ 
 
 const STORAGE_KEY = "@cti_portal_base_url";
 
@@ -53,6 +55,8 @@ async function comprobarPortalConTimeout(url: string, timeoutMs = 10000) {
 }
 
 export const PortalScreen = () => {
+  const { t } = useTranslation();
+
   const token = useAuthStore((s) => s.token);
   const isHydrated = useAuthStore((s) => s.isHydrated);
 
@@ -65,44 +69,44 @@ export const PortalScreen = () => {
   const [errorPortal, setErrorPortal] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
-  useEffect(() => {
-    const prepararUrl = async () => {
-      try {
-        setPreparandoUrl(true);
-        setError(null);
-        setErrorPortal(null);
-        setPortalDisponible(false);
+ useEffect(() => {
+  const prepararUrl = async () => {
+    try {
+      setPreparandoUrl(true);
+      setError(null);
+      setErrorPortal(null);
+      setPortalDisponible(false);
 
-        if (!isHydrated) return;
+      if (!isHydrated) return;
 
-        if (!token) {
-          setError("No hay token de sesión. Inicia sesión de nuevo.");
-          return;
-        }
-
-        const baseUrlGuardada = await AsyncStorage.getItem(STORAGE_KEY);
-
-        if (!baseUrlGuardada) {
-          setError("No hay IP configurada. Configura primero la IP del servidor.");
-          return;
-        }
-
-        const urlFinal = construirUrlPortalDesdeApi(baseUrlGuardada, token);
-
-        console.log("PORTAL iOS baseUrlGuardada:", baseUrlGuardada);
-        console.log("PORTAL iOS urlFinal:", urlFinal);
-
-        setUrlPortal(urlFinal);
-      } catch (e: any) {
-        console.log("PORTAL iOS error preparando URL:", e);
-        setError(e?.message || "No se pudo preparar la URL del portal.");
-      } finally {
-        setPreparandoUrl(false);
+      if (!token) {
+        setError(t("portal_noSessionToken"));
+        return;
       }
-    };
 
-    prepararUrl();
-  }, [token, isHydrated]);
+      const baseUrlGuardada = await AsyncStorage.getItem(STORAGE_KEY);
+
+      if (!baseUrlGuardada) {
+        setError(t("portal_noIpConfigured"));
+        return;
+      }
+
+      const urlFinal = construirUrlPortalDesdeApi(baseUrlGuardada, token);
+
+      console.log("PORTAL iOS baseUrlGuardada:", baseUrlGuardada);
+      console.log("PORTAL iOS urlFinal:", urlFinal);
+
+      setUrlPortal(urlFinal);
+    } catch (e: any) {
+      console.log("PORTAL iOS error preparando URL:", e);
+      setError(t("portal_prepareUrlError"));
+    } finally {
+      setPreparandoUrl(false);
+    }
+  };
+
+  prepararUrl();
+}, [token, isHydrated]);
 
   useEffect(() => {
     const validarPortal = async () => {
@@ -121,16 +125,16 @@ export const PortalScreen = () => {
         }
 
         if (resultado.timeout) {
-          setErrorPortal("No se ha podido conectar con el portal. Verifica la red o la IP configurada.");
+         setErrorPortal(t("portal_connectionTimeout"));
           return;
         }
 
         if (resultado.status > 0) {
-          setErrorPortal(`No se ha podido abrir el portal. Error HTTP ${resultado.status}.`);
+          setErrorPortal(t("portal_httpError", { status: resultado.status }));
           return;
         }
 
-        setErrorPortal("No se ha podido conectar con el portal. Verifica la red o la IP configurada.");
+        setErrorPortal(t("portal_connectionError"));
       } finally {
         setComprobandoPortal(false);
       }
@@ -143,7 +147,7 @@ export const PortalScreen = () => {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <ActivityIndicator size="large" />
-        <Text style={{ marginTop: 10 }}>Preparando portal...</Text>
+        <Text style={{ marginTop: 10 }}>{t("portal_preparing")}</Text>
       </View>
     );
   }
@@ -152,7 +156,7 @@ export const PortalScreen = () => {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 20 }}>
         <Text style={{ textAlign: "center", color: "#DC2626", fontWeight: "700" }}>
-          {error ?? "No se pudo cargar el portal."}
+          {error ?? t("portal_loadError")}
         </Text>
       </View>
     );
@@ -163,7 +167,7 @@ export const PortalScreen = () => {
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F8FAFC" }}>
         <ActivityIndicator size="large" />
         <Text style={{ marginTop: 10, color: "#4B5563" }}>
-          Comprobando conexión con el portal...
+          {t("portal_checkingConnection")}
         </Text>
       </View>
     );
@@ -210,7 +214,7 @@ export const PortalScreen = () => {
               marginBottom: 14,
             }}
           >
-            No hay conexión
+             {t("portal_noConnectionTitle")}
           </Text>
 
           <Text
@@ -240,7 +244,7 @@ export const PortalScreen = () => {
             }}
           >
             <Text style={{ color: "white", fontWeight: "700", fontSize: 17 }}>
-              Reintentar
+               {t("portal_retry")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -260,18 +264,18 @@ export const PortalScreen = () => {
         onError={(e) => {
           console.log("WEBVIEW iOS onError:", e.nativeEvent);
           setPortalDisponible(false);
-          setErrorPortal("No se ha podido conectar con el portal. Verifica la red o la IP configurada.");
+          setErrorPortal(t("portal_connectionError"));
         }}
         onHttpError={(e) => {
           console.log("WEBVIEW iOS onHttpError:", e.nativeEvent);
           setPortalDisponible(false);
-          setErrorPortal(`No se ha podido abrir el portal. Error HTTP ${e.nativeEvent.statusCode}.`);
+          setErrorPortal(t("portal_httpError", { status: e.nativeEvent.statusCode }));
         }}
         startInLoadingState
         renderLoading={() => (
           <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
             <ActivityIndicator size="large" />
-            <Text style={{ marginTop: 10 }}>Cargando portal...</Text>
+            <Text style={{ marginTop: 10 }}>{t("portal_loading")}</Text>
           </View>
         )}
         javaScriptEnabled

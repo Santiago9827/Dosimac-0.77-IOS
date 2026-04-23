@@ -66,19 +66,34 @@ export default function Drnewupdate() {
       }, [])
    );
 
- const goToHome = () => {
+//  const goToHome = () => {
+//       const parent = navigation.getParent?.();
+
+//       if (token) {
+//          // ✅ Sesión iniciada -> Drawer privado -> Inicio = Tabs
+//          if (parent?.navigate) parent.navigate('Tabs');
+//          else navigation.navigate('Tabs');
+//       } else {
+//          // ✅ Sin sesión -> Drawer público -> Home pública
+//          if (parent?.navigate) parent.navigate('PublicHome');
+//          else navigation.navigate('PublicHome');
+//       }
+//    };
+
+   //Prueba
+   const goToHome = () => {
       const parent = navigation.getParent?.();
 
       if (token) {
-         // ✅ Sesión iniciada -> Drawer privado -> Inicio = Tabs
-         if (parent?.navigate) parent.navigate('Tabs');
-         else navigation.navigate('Tabs');
+         if (parent?.navigate) parent.navigate('AltaDispositivosHome');
+         else navigation.navigate('AltaDispositivosHome');
       } else {
-         // ✅ Sin sesión -> Drawer público -> Home pública
          if (parent?.navigate) parent.navigate('PublicHome');
          else navigation.navigate('PublicHome');
       }
    };
+
+   //
 
 
    const dohideDialog = () => {

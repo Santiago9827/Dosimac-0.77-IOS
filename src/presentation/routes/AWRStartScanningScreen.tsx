@@ -5,14 +5,18 @@ import { View, Pressable } from 'react-native';
 import { Appbar, Card, Text, ActivityIndicator } from 'react-native-paper';
 import BleManager from 'react-native-ble-manager';
 import * as ble from '../../device/ble/bleLibrary';
+import { useTranslation } from 'react-i18next';
+
 
 export const AWRStartScanningScreen = ({ navigation }) => {
+  const { t } = useTranslation();
+
   const [btListo, setBtListo] = useState(false);
   const [pidiendoPermiso, setPidiendoPermiso] = useState(true);
 
   useEffect(() => {
     // 1) Arranca BLE manager (esto es lo que hace que iOS pueda pedir permiso)
-    try { ble.BleStart(); } catch {}
+    try { ble.BleStart(); } catch { }
 
     // 2) Escucha el estado del BT (on/off/unknown)
     const unsub = ble.addBtStateListener((state) => {
@@ -22,10 +26,10 @@ export const AWRStartScanningScreen = ({ navigation }) => {
     });
 
     // 3) Fuerza a iOS a emitir el estado (y a mostrar el popup la primera vez)
-    try { BleManager.checkState(); } catch {}
+    try { BleManager.checkState(); } catch { }
 
     return () => {
-      try { unsub?.(); } catch {}
+      try { unsub?.(); } catch { }
     };
   }, []);
 
@@ -33,21 +37,21 @@ export const AWRStartScanningScreen = ({ navigation }) => {
     <View>
       <Appbar.Header elevated>
         <Appbar.BackAction onPress={navigation.goBack} />
-        <Appbar.Content title="AWR300 Test" />
+        <Appbar.Content title={t("awrStartScan_title")} />
       </Appbar.Header>
 
       <View style={{ marginHorizontal: 30, marginTop: 40, borderWidth: 1, borderRadius: 10, borderColor: 'lightgrey' }}>
         <Card mode="contained">
           <Card.Content>
             <Text style={{ fontSize: 18, textAlign: 'center' }}>
-              Pantalla de pruebas para escanear lectores Agrident AWR300.
+              {t("awrStartScan_description")}
             </Text>
 
             {pidiendoPermiso && (
               <View style={{ marginTop: 14, alignItems: 'center' }}>
                 <ActivityIndicator />
                 <Text style={{ marginTop: 10, textAlign: 'center', color: '#64748B' }}>
-                  Activa Bluetooth y acepta el permiso para poder escanear.
+                  {t("awrBluetoothPermissionMessage")}
                 </Text>
               </View>
             )}
@@ -74,7 +78,7 @@ export const AWRStartScanningScreen = ({ navigation }) => {
             }}
           >
             <Text style={{ color: 'white', fontSize: 20, fontWeight: '700' }}>
-              Escanear AWR300
+              {t("awrStartScan_button")}
             </Text>
           </View>
         </Pressable>

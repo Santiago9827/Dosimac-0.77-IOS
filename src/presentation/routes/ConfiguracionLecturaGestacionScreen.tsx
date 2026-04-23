@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { View, Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import {
     Appbar,
@@ -113,6 +113,13 @@ export const ConfiguracionGestacionScreen = () => {
     const requiereCorral = modo === "entrada";
     const requiereBusqueda = modo === "busqueda";
 
+    const [lecturaNoCoincidente, setLecturaNoCoincidente] = useState<{
+        crotal: string;
+        id: string;
+    } | null>(null);
+
+    const ultimoCrotalProcesadoRef = useRef<string>("");
+
     const irAConfiguracionAwr = () => {
         navigation.navigate(hayEspadasGuardadas ? "AWR-SAVED" : "AWR-STARTSCAN");
     };
@@ -124,6 +131,8 @@ export const ConfiguracionGestacionScreen = () => {
         setAnimalPendiente(null);
         setCrotalEsperado("");
         limpiarCrotalLeido();
+        setLecturaNoCoincidente(null);
+        ultimoCrotalProcesadoRef.current = "";
         try {
             await detenerLectura?.();
         } catch { }
@@ -184,6 +193,9 @@ export const ConfiguracionGestacionScreen = () => {
             setAnimalPendiente(animal);
             setCrotalEsperado(crotalAnimal);
             setEsperandoCoincidencia(true);
+
+            setLecturaNoCoincidente(null);
+            ultimoCrotalProcesadoRef.current = "";
 
             limpiarCrotalLeido();
             await iniciarLectura();
@@ -395,19 +407,81 @@ export const ConfiguracionGestacionScreen = () => {
         const esperado = String(crotalEsperado ?? "").trim();
 
         if (!esperandoCoincidencia || !animalPendiente || !leido || !esperado) return;
-        if (leido !== esperado) return;
 
-        setEsperandoCoincidencia(false);
-        limpiarCrotalLeido();
-        detenerLectura?.().catch(() => { });
+        // Evitar reprocesar el mismo crotal una y otra vez
+        if (ultimoCrotalProcesadoRef.current === leido) return;
+        ultimoCrotalProcesadoRef.current = leido;
 
-        navigation.navigate("LectorGestacion", {
-            modo: "busqueda",
-            tipoBusqueda,
-            origenBusquedaCrotal,
-            valorBusqueda,
-            animalEncontrado: animalPendiente,
-        });
+        // Si coincide, continuar flujo normal
+        if (leido === esperado) {
+            setLecturaNoCoincidente(null);
+            setEsperandoCoincidencia(false);
+            limpiarCrotalLeido();
+            detenerLectura?.().catch(() => { });
+
+            navigation.navigate("LectorGestacion", {
+                modo: "busqueda",
+                tipoBusqueda,
+                origenBusquedaCrotal,
+                valorBusqueda,
+                animalEncontrado: animalPendiente,
+            });
+            return;
+        }
+
+        // Si NO coincide, pedir info del animal leído y mostrarla
+        let cancelado = false;
+
+        const cargarLecturaNoCoincidente = async () => {
+            try {
+                const r = await obtenerLecturaEspada(leido);
+
+                if (cancelado) return;
+
+                if (r.ok) {
+                    const animalLeido = r.data ?? {};
+
+                    const crotalTexto =
+                        animalLeido?.crotal !== null &&
+                            animalLeido?.crotal !== undefined &&
+                            String(animalLeido.crotal).trim() !== ""
+                            ? String(animalLeido.crotal)
+                            : leido;
+
+                    const idTexto =
+                        animalLeido?.animalId !== null &&
+                            animalLeido?.animalId !== undefined &&
+                            String(animalLeido.animalId).trim() !== ""
+                            ? String(animalLeido.animalId)
+                            : "—";
+
+                    setLecturaNoCoincidente({
+                        crotal: crotalTexto,
+                        id: idTexto,
+                    });
+                    return;
+                }
+
+                // Si no existe en backend, mostramos crotal leído e ID vacío
+                setLecturaNoCoincidente({
+                    crotal: leido,
+                    id: "—",
+                });
+            } catch {
+                if (!cancelado) {
+                    setLecturaNoCoincidente({
+                        crotal: leido,
+                        id: "—",
+                    });
+                }
+            }
+        };
+
+        cargarLecturaNoCoincidente();
+
+        return () => {
+            cancelado = true;
+        };
     }, [
         esperandoCoincidencia,
         animalPendiente,
@@ -682,12 +756,39 @@ export const ConfiguracionGestacionScreen = () => {
                                         ? t("gestacionConfig_waitingMatchDescription", { crotal: crotalEsperado })
                                         : t("gestacionConfig_searchingAnimalDescription")}
                             </Text>
-                            {/* 
-                            {!!crotalLeido && (
-                                <Text style={{ marginTop: 10, color: TEXT, fontWeight: "800" }}>
-                                    Crotal leído: {String(crotalLeido)}
-                                </Text>
-                            )} */}
+                            {esperandoCoincidencia && lecturaNoCoincidente && (
+                                <View
+                                    style={{
+                                        marginTop: 14,
+                                        borderRadius: 14,
+                                        borderWidth: 1,
+                                        borderColor: "#FECACA",
+                                        backgroundColor: "#FEF2F2",
+                                        padding: 12,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: "#991B1B",
+                                            fontWeight: "900",
+                                            fontSize: 14,
+                                        }}
+                                    >
+                                        {t("Config_lastReadMismatchTitle")}
+                                    </Text>
+
+                                    <Text
+                                        style={{
+                                            marginTop: 6,
+                                            color: "#B91C1C",
+                                            fontSize: 13,
+                                            fontWeight: "700",
+                                        }}
+                                    >
+                                        {t("Config_lastReadMismatchCrotal")}: {lecturaNoCoincidente.crotal} ·  {t("Config_lastReadMismatchId")}: {lecturaNoCoincidente.id}
+                                    </Text>
+                                </View>
+                            )}
                         </Card.Content>
                     </Card>
                 )}

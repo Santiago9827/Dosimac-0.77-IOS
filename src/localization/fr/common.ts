@@ -88,7 +88,7 @@ export default {
     login_invalidIpTitle: "IP invalide",
     login_invalidIpMessage: "Saisissez une IP ou une adresse serveur valide.",
     login_saveIpErrorMessage: "Impossible d'enregistrer la configuration IP.",
-gestacionConfig_screenTitle: "Configuration Gestation",
+    gestacionConfig_screenTitle: "Configuration Gestation",
     gestacionConfig_chooseOptionTitle: "Choisissez une option",
     gestacionConfig_chooseOptionDescription: "Définissez le flux avant de commencer avec le lecteur.",
 
@@ -396,6 +396,33 @@ gestacionConfig_screenTitle: "Configuration Gestation",
     ipConfig_alertServerNotUpdated: "Serveur non mis à jour",
     ipConfig_alertErrorTitle: "Erreur",
     ipConfig_alertInvalidIp: "IP invalide",
+
+    portal_preparing: "Préparation du portail...",
+    portal_noSessionToken: "Aucun jeton de session n’est disponible. Veuillez vous reconnecter.",
+    portal_noIpConfigured: "Aucune IP n’est configurée. Configurez d’abord l’IP du serveur.",
+    portal_prepareUrlError: "Impossible de préparer l’URL du portail.",
+    portal_loadError: "Impossible de charger le portail.",
+    portal_checkingConnection: "Vérification de la connexion au portail...",
+    portal_noConnectionTitle: "Pas de connexion",
+    portal_connectionTimeout: "Impossible de se connecter au portail. Vérifiez que vous êtes connecté au bon réseau.",
+    portal_connectionError: "Impossible de se connecter au portail. Vérifiez le réseau ou l’IP configurée.",
+    portal_httpError: "Impossible d’ouvrir le portail. Erreur HTTP {{status}}.",
+    portal_retry: "Réessayer",
+    portal_loading: "Chargement du portail...",
+
+    AltaDispositivos: "Enregistrement des appareils",
+    LectorMaternidad: "Lecteur Maternité",
+    LectorGestacion: "Lecteur Gestation",
+    ConfiguracionIP: "Configuration IP",
+    ConfiguracionAWR: "Configuration AWR",
+    DarDeAltaAWR: "Enregistrer AWR",
+    AWREscaneados: "AWR scannés",
+    CerrarSesion: "Se déconnecter",
+
+    Config_lastReadMismatchTitle: "L'animal lu ne correspond pas à la recherche",
+    Config_lastReadMismatchCrotal: "Boucle",
+    Config_lastReadMismatchId: "ID",
+    awrBluetoothPermissionMessage: "Active le Bluetooth et acceptez l’autorisation pour pouvoir scanner.",
 
 
 };
