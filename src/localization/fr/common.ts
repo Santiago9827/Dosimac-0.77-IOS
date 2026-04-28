@@ -424,5 +424,20 @@ export default {
     Config_lastReadMismatchId: "ID",
     awrBluetoothPermissionMessage: "Active le Bluetooth et acceptez l’autorisation pour pouvoir scanner.",
 
+    animalState: {
+    gestation: "Gestation",
+    maternity: "Maternité",
+    out_of_gestation: "Hors gestation",
+    out_of_maternity: "Hors maternité"
+  },
+
+
+Reader_readingTitle: "Lecture des boucles",
+Reader_labelId: "ID",
+Reader_labelCrotal: "Boucle",
+Reader_labelCorral: "Enclos",
+Reader_labelHouse: "Bâtiment",
+Reader_labelState: "État",
+Reader_autoReadingBadge: "Lecture automatique",
 
 };

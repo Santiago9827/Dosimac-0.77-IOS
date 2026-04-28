@@ -359,9 +359,9 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
         contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom + 12 }}
       >
         <DrawerItem
-          label={t("common:back", { defaultValue: "Atrás" })}
-          icon={() => <IonIcon name="chevron-back-outline" color={gray} />}
-          labelStyle={{ color: gray, fontWeight: "700" }}
+          label={t("common:back", { defaultValue: "Dosimac Server" })}
+          icon={() => <IonIcon name="chevron-back-outline" color={inactiveTint} />}
+          labelStyle={{ color: inactiveTint, fontWeight: "700" }}
           style={{ marginHorizontal: 8, borderRadius: 100, paddingHorizontal: 20 }}
           onPress={() => {
             if (activeRoute === "AltaDispositivosHome") {
@@ -371,7 +371,6 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             }
           }}
         />
-
         <Divider style={{ marginHorizontal: 16, marginVertical: 8 }} />
 
         <DrawerItem

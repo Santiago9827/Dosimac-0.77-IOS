@@ -422,6 +422,20 @@ export default {
   Config_lastReadMismatchId: "ID",
   awrBluetoothPermissionMessage: "스캔하려면 Bluetooth를 켜고 권한을 허용하세요.",
 
+  animalState: {
+        gestation: "임신",
+        maternity: "분만",
+        out_of_gestation: "임신 아님",
+        out_of_maternity: "분만 종료"
+    },
 
+
+    Reader_readingTitle: "이표 판독",
+    Reader_labelId: "ID",
+    Reader_labelCrotal: "이표",
+    Reader_labelCorral: "우리",
+    Reader_labelHouse: "축사",
+    Reader_labelState: "상태",
+    Reader_autoReadingBadge: "자동 판독",
 
 };

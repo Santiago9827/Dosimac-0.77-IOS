@@ -449,4 +449,19 @@ export default {
    Config_lastReadMismatchCrotal: "Crotal",
    Config_lastReadMismatchId: "ID",
 
+   animalState: {
+      gestation: "Gestación",
+      maternity: "Maternidad",
+      out_of_gestation: "Fuera de gestación",
+      out_of_maternity: "Fuera de maternidad"
+   },
+
+   Reader_readingTitle: "Lectura Crotales",
+  Reader_labelId: "ID",
+  Reader_labelCrotal: "Crotal",
+  Reader_labelCorral: "Corral",
+  Reader_labelHouse: "Nave",
+  Reader_labelState: "Estado",
+  Reader_autoReadingBadge: "Lectura automática"
+
 };

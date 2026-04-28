@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { View, Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { View, Alert, KeyboardAvoidingView, Platform, ScrollView, Modal } from "react-native";
 import {
     Appbar,
     Button,
@@ -14,7 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import { awrStore } from "../../stores/awrStore";
 import { useAwrConn } from "../../stores/awrConnStore";
-import { obtenerLecturaEspada, obtenerAnimalPorId } from "./obtenerLecturaEspada";
+import { obtenerLecturaEspada, obtenerAnimalPorId } from "../routes/obtenerLecturaEspada";
 import { useTranslation } from "react-i18next";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -81,6 +81,11 @@ function OptionCard({
     );
 }
 
+const limpiarMensajeBackend = (mensaje?: string) => {
+    if (!mensaje) return "";
+    return mensaje.replace(/^Error:\s*/i, "").trim();
+};
+
 export const ConfiguracionGestacionScreen = () => {
     const { t } = useTranslation();
     const navigation = useNavigation<any>();
@@ -107,11 +112,20 @@ export const ConfiguracionGestacionScreen = () => {
     const [leyendoBusquedaEspada, setLeyendoBusquedaEspada] = useState(false);
     const [esperandoCoincidencia, setEsperandoCoincidencia] = useState(false);
 
+    const [avisoVisible, setAvisoVisible] = useState(false);
+    const [avisoTitulo, setAvisoTitulo] = useState("");
+    const [avisoMensaje, setAvisoMensaje] = useState("");
+    const [avisoTipo, setAvisoTipo] = useState<"warning" | "error" | "info">("info");
+
     const [animalPendiente, setAnimalPendiente] = useState<any | null>(null);
     const [crotalEsperado, setCrotalEsperado] = useState("");
 
     const requiereCorral = modo === "entrada";
     const requiereBusqueda = modo === "busqueda";
+
+    const irAConfiguracionAwr = () => {
+        navigation.navigate(hayEspadasGuardadas ? "AWR-SAVED" : "AWR-STARTSCAN");
+    };
 
     const [lecturaNoCoincidente, setLecturaNoCoincidente] = useState<{
         crotal: string;
@@ -120,8 +134,21 @@ export const ConfiguracionGestacionScreen = () => {
 
     const ultimoCrotalProcesadoRef = useRef<string>("");
 
-    const irAConfiguracionAwr = () => {
-        navigation.navigate(hayEspadasGuardadas ? "AWR-SAVED" : "AWR-STARTSCAN");
+    const mostrarAviso = (
+        titulo: string,
+        mensaje: string,
+        tipo: "warning" | "error" | "info" = "info"
+    ) => {
+        setAvisoTitulo(titulo);
+        setAvisoMensaje(mensaje);
+        setAvisoTipo(tipo);
+        setAvisoVisible(true);
+    };
+
+    const cerrarAviso = () => {
+        setAvisoVisible(false);
+        setAvisoTitulo("");
+        setAvisoMensaje("");
     };
 
     const resetEstadoBusqueda = async () => {
@@ -178,15 +205,16 @@ export const ConfiguracionGestacionScreen = () => {
                 : "";
 
         if (!crotalAnimal) {
-            Alert.alert("Error", "El backend no devolvió un crotal válido para comparar.");
-            return false;
+            mostrarAviso("Aviso", "El backend no devolvió un crotal válido para comparar.", "warning"); return false;
         }
 
         if (!lectorConectado) {
-            Alert.alert(
+            mostrarAviso(
                 t("gestacionConfig_alerts_awrNotConnected"),
-                t("gestacionConfig_alerts_connectSwordBeforeContinue")
-            ); return false;
+                t("gestacionConfig_alerts_connectSwordBeforeContinue"),
+                "warning"
+            );
+            return false;
         }
 
         try {
@@ -202,10 +230,12 @@ export const ConfiguracionGestacionScreen = () => {
 
             return true;
         } catch {
-            Alert.alert(
+            mostrarAviso(
                 t("gestacionConfig_alerts_error"),
-                t("gestacionConfig_alerts_couldNotStartReading")
-            ); setEsperandoCoincidencia(false);
+                t("gestacionConfig_alerts_couldNotStartReading"),
+                "error"
+            );
+            setEsperandoCoincidencia(false);
             setAnimalPendiente(null);
             setCrotalEsperado("");
             return false;
@@ -244,11 +274,12 @@ export const ConfiguracionGestacionScreen = () => {
                 const valor = valorBusqueda.trim();
 
                 if (!valor) {
-                    Alert.alert(
-                        "Falta dato",
+                    mostrarAviso(
+                        "Aviso",
                         tipoBusqueda === "crotal"
                             ? t("gestacionConfig_alerts_writeCrotalToSearch")
-                            : t("gestacionConfig_alerts_writeIdToSearch")
+                            : t("gestacionConfig_alerts_writeIdToSearch"),
+                        "warning"
                     );
                     return;
                 }
@@ -260,11 +291,12 @@ export const ConfiguracionGestacionScreen = () => {
 
                 if (!r.ok) {
                     if (r.status === 404) {
-                        Alert.alert(
+                        mostrarAviso(
                             t("gestacionConfig_alerts_notFound"),
                             tipoBusqueda === "crotal"
                                 ? t("gestacionConfig_alerts_animalNotFoundByCrotal")
-                                : t("gestacionConfig_alerts_animalNotFoundById")
+                                : t("gestacionConfig_alerts_animalNotFoundById"),
+                            "warning"
                         );
                         return;
                     }
@@ -279,11 +311,19 @@ export const ConfiguracionGestacionScreen = () => {
                             `HTTP ${r.status}`;
 
                     if (r.status === 400) {
-                        Alert.alert(t("gestacionConfig_alerts_warning"), String(detalle));
+                        mostrarAviso(
+                            t("gestacionConfig_alerts_warning"),
+                            limpiarMensajeBackend(String(detalle)),
+                            "warning"
+                        );
                         return;
                     }
 
-                    Alert.alert(t("gestacionConfig_alerts_searchError"), String(detalle));
+                    mostrarAviso(
+                        t("gestacionConfig_alerts_searchError"),
+                        limpiarMensajeBackend(String(detalle)),
+                        "error"
+                    );
                     return;
                 }
 
@@ -304,10 +344,12 @@ export const ConfiguracionGestacionScreen = () => {
 
                 return;
             } catch {
-                Alert.alert(
+                mostrarAviso(
                     t("gestacionConfig_alerts_networkError"),
-                    t("gestacionConfig_alerts_networkErrorMessage")
-                ); return;
+                    t("gestacionConfig_alerts_networkErrorMessage"),
+                    "error"
+                );
+                return;
             } finally {
                 setBuscandoAnimal(false);
             }
@@ -338,11 +380,14 @@ export const ConfiguracionGestacionScreen = () => {
                 if (!r.ok) {
                     setLeyendoBusquedaEspada(false);
 
+
                     if (r.status === 404) {
-                        Alert.alert(
+                        mostrarAviso(
                             t("gestacionConfig_alerts_notFound"),
-                            t("gestacionConfig_alerts_animalNotFoundByCrotal")
-                        ); return;
+                            t("gestacionConfig_alerts_animalNotFoundByCrotal"),
+                            "warning"
+                        );
+                        return;
                     }
 
                     const detalle =
@@ -353,13 +398,20 @@ export const ConfiguracionGestacionScreen = () => {
                             r.data?.mensaje ||
                             r.rawText ||
                             `HTTP ${r.status}`;
-
                     if (r.status === 400) {
-                        Alert.alert(t("gestacionConfig_alerts_warning"), String(detalle));
+                        mostrarAviso(
+                            t("gestacionConfig_alerts_warning"),
+                            limpiarMensajeBackend(String(detalle)),
+                            "warning"
+                        );
                         return;
                     }
 
-                    Alert.alert(t("gestacionConfig_alerts_searchError"), String(detalle));
+                    mostrarAviso(
+                        t("gestacionConfig_alerts_searchError"),
+                        limpiarMensajeBackend(String(detalle)),
+                        "error"
+                    );
                     return;
                 }
 
@@ -785,7 +837,7 @@ export const ConfiguracionGestacionScreen = () => {
                                             fontWeight: "700",
                                         }}
                                     >
-                                        {t("Config_lastReadMismatchCrotal")}: {lecturaNoCoincidente.crotal} ·  {t("Config_lastReadMismatchId")}: {lecturaNoCoincidente.id}
+                                        {t("Config_lastReadMismatchCrotal")}: {lecturaNoCoincidente.crotal} · {t("Config_lastReadMismatchId")}: {lecturaNoCoincidente.id}
                                     </Text>
                                 </View>
                             )}
@@ -888,6 +940,119 @@ export const ConfiguracionGestacionScreen = () => {
                     </Button>
                 </View>
             </ScrollView>
+            <Modal
+                visible={avisoVisible}
+                transparent
+                animationType="fade"
+                onRequestClose={cerrarAviso}
+            >
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: "rgba(15, 23, 42, 0.45)",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        paddingHorizontal: 24,
+                    }}
+                >
+                    <View
+                        style={{
+                            width: "100%",
+                            maxWidth: 390,
+                            backgroundColor: "#FFFFFF",
+                            borderRadius: 24,
+                            paddingHorizontal: 20,
+                            paddingVertical: 18,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 10,
+                                marginBottom: 14,
+                                alignSelf: "flex-start",
+                                marginLeft: 4,
+                            }}
+                        >
+                            <View
+                                style={{
+                                    width: 44,
+                                    height: 44,
+                                    borderRadius: 22,
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor:
+                                        avisoTipo === "error"
+                                            ? "#FEF2F2"
+                                            : avisoTipo === "warning"
+                                                ? "#FFF7ED"
+                                                : "#EEF2FF",
+                                }}
+                            >
+                                <Ionicons
+                                    name={
+                                        avisoTipo === "error"
+                                            ? "alert-circle-outline"
+                                            : avisoTipo === "warning"
+                                                ? "warning-outline"
+                                                : "information-circle-outline"
+                                    }
+                                    size={22}
+                                    color={
+                                        avisoTipo === "error"
+                                            ? "#DC2626"
+                                            : avisoTipo === "warning"
+                                                ? "#EA580C"
+                                                : BRAND
+                                    }
+                                />
+                            </View>
+
+                            <Text
+                                style={{
+                                    fontSize: 22,
+                                    fontWeight: "900",
+                                    color: TEXT,
+                                }}
+                            >
+                                {avisoTitulo}
+                            </Text>
+                        </View>
+
+                        <Text
+                            style={{
+                                fontSize: 17,
+                                lineHeight: 25,
+                                color: MUTED,
+                                textAlign: "center",
+                                marginBottom: 18,
+                            }}
+                        >
+                            {avisoMensaje}
+                        </Text>
+
+                        <TouchableOpacity
+                            onPress={cerrarAviso}
+                            activeOpacity={0.9}
+                            style={{
+                                height: 42,
+                                borderRadius: 14,
+                                backgroundColor: BRAND,
+                                alignItems: "center",
+                                justifyContent: "center",
+                                alignSelf: "center",
+                                paddingHorizontal: 34,
+                                minWidth: 130,
+                            }}
+                        >
+                            <Text style={{ color: "white", fontWeight: "900", fontSize: 15 }}>
+                                {t("Aceptar")}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </KeyboardAvoidingView>
     );
 };

@@ -427,5 +427,19 @@ export default {
   Config_lastReadMismatchId: "ID",
   awrBluetoothPermissionMessage: "Włącz Bluetooth i zaakceptuj uprawnienie, aby móc skanować.", 
 
+  animalState: {
+    gestation: "Ciąża",
+    maternity: "Macierzyństwo",
+    out_of_gestation: "Poza ciążą",
+    out_of_maternity: "Poza macierzyństwem"
+  },
 
+  
+Reader_readingTitle: "Odczyt kolczyków",
+Reader_labelId: "ID",
+Reader_labelCrotal: "Kolczyk",
+Reader_labelCorral: "Zagroda",
+Reader_labelHouse: "Budynek",
+Reader_labelState: "Stan",
+Reader_autoReadingBadge: "Odczyt automatyczny", 
 };
