@@ -692,11 +692,12 @@ export const LectorMaternidadScreen = () => {
     const route = useRoute<RouteProp<Record<string, LectorMaternidadParams>, string>>();
     const params = route.params ?? {};
 
-    const tituloHeader =
-        params.modo === "lectura"
-            ? t("Reader_readingTitle")
-            : t("maternityReader_screenTitle");
+    const esTituloLectura =
+        params.modo === "lectura" || params.modo === "busqueda";
 
+    const tituloHeader = esTituloLectura
+        ? t("Reader_readingTitle")
+        : t("maternityReader_screenTitle");
 
 
     const valorBusquedaParam = params.valorBusqueda ?? "";
@@ -739,6 +740,20 @@ export const LectorMaternidadScreen = () => {
         }
     }, []);
 
+    //!------Para traducir-------- 
+    const traducirEstadosEnMensaje = (
+        mensaje: string,
+        t: (clave: string) => string
+    ) => {
+        if (!mensaje) return "";
+
+        return mensaje.replace(
+            /\b(gestation|out_of_gestation|maternity|out_of_maternity)\b/g,
+            (estado) => traducirEstadoAnimal(estado, t)
+        );
+    };
+    //!-----Fin traduccion--------
+
 
 
     const mostrarAviso = (
@@ -774,18 +789,6 @@ export const LectorMaternidadScreen = () => {
             setIdRecibido("");
             setEstadoIdVisual("neutro");
         }, 3000);
-    };
-
-    const traducirEstadosEnMensaje = (
-        mensaje: string,
-        t: (clave: string) => string
-    ) => {
-        if (!mensaje) return "";
-
-        return mensaje.replace(
-            /\b(gestation|out_of_gestation|maternity|out_of_maternity)\b/g,
-            (estado) => traducirEstadoAnimal(estado, t)
-        );
     };
 
     useEffect(() => {
@@ -898,6 +901,11 @@ export const LectorMaternidadScreen = () => {
     };
     const onEnviar = React.useCallback(async (crotalForzado?: string) => {
         if (!pantallaActivaRef.current) return;
+
+        if (mostrarActualizarId || actualizandoId) {
+            limpiarCrotalLeido();
+            return;
+        }
 
         const corralTxt = corralInput.trim();
         const crotalTxt = (crotalForzado ?? crotalLeido ?? "").trim();
@@ -1140,7 +1148,9 @@ export const LectorMaternidadScreen = () => {
         } finally {
             setEstaEnviando(false);
         }
-    }, [corralInput, crotalLeido, requiereCorral, esEntrada, esSalida, esLectura, limpiarCrotalLeido]);
+    }, [corralInput, crotalLeido, requiereCorral, esEntrada, esSalida, esLectura, limpiarCrotalLeido, mostrarActualizarId,
+        actualizandoId,
+        limpiarCrotalLeido,]);
 
     const actualizarIdAnimal = React.useCallback(async () => {
         const idManual = nuevoIdManual.trim();
@@ -1241,6 +1251,17 @@ export const LectorMaternidadScreen = () => {
             return;
         }
 
+        if (mostrarActualizarId || actualizandoId) {
+            limpiarAutoEnvioTimer();
+
+            if (crotalActual) {
+                limpiarCrotalLeido();
+            }
+
+            ultimoCrotalAutoRef.current = null;
+            return;
+        }
+
         if (!usaEnvioAutomatico) {
             limpiarAutoEnvioTimer();
             ultimoCrotalAutoRef.current = null;
@@ -1276,8 +1297,10 @@ export const LectorMaternidadScreen = () => {
         estaEnviando,
         onEnviar,
         limpiarAutoEnvioTimer,
+        mostrarActualizarId,
+        actualizandoId,
+        limpiarCrotalLeido,
     ]);
-
     const estilosCajaId = useMemo(() => {
         if (estadoIdVisual === "success") {
             return {

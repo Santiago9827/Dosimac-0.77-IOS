@@ -727,19 +727,40 @@ export const LectorGestacionScreen = () => {
     const abrirActualizacionId = React.useCallback((crotal: string, corral: string) => {
         if (!detectarDesconocidos) return;
 
+        limpiarAutoEnvioTimer();
+        ultimoCrotalAutoRef.current = null;
+        limpiarCrotalLeido();
+        detenerLectura?.().catch(() => { });
+
         setMostrarActualizarId(true);
         setNuevoIdManual("");
         setCrotalPendienteId(String(crotal));
         setCorralPendienteId(corral?.trim() ? corral : "—");
-    }, [detectarDesconocidos]);
+    }, [
+        detectarDesconocidos,
+        limpiarAutoEnvioTimer,
+        limpiarCrotalLeido,
+        detenerLectura,
+    ]);
 
     const cerrarActualizacionId = React.useCallback(() => {
         setMostrarActualizarId(false);
         setNuevoIdManual("");
         setCrotalPendienteId("");
         setCorralPendienteId("—");
-    }, []);
 
+        limpiarCrotalLeido();
+        ultimoCrotalAutoRef.current = null;
+
+        if (!esBusqueda && idLector) {
+            iniciarLectura?.().catch(() => { });
+        }
+    }, [
+        esBusqueda,
+        idLector,
+        iniciarLectura,
+        limpiarCrotalLeido,
+    ]);
 
     //--------------Dailog para abrirlo y cerrarlo----------
     const mostrarAviso = (
@@ -904,6 +925,13 @@ export const LectorGestacionScreen = () => {
     };
     const enviarRegistro = React.useCallback(async (crotalForzado?: string) => {
         if (!pantallaActivaRef.current) return;
+
+        if (mostrarActualizarId || actualizandoId) {
+            limpiarAutoEnvioTimer();
+            limpiarCrotalLeido();
+            ultimoCrotalAutoRef.current = null;
+            return;
+        }
 
         const requiereCorral = esEntrada;
         const corralTxt = corralInput.trim();
@@ -1143,7 +1171,7 @@ export const LectorGestacionScreen = () => {
         } finally {
             setEstaEnviando(false);
         }
-    }, [esEntrada, esLectura, esSalida, corralInput, crotalLeido, limpiarCrotalLeido]);
+    }, [esEntrada, esLectura, esSalida, corralInput, crotalLeido, limpiarCrotalLeido, mostrarActualizarId, actualizandoId, limpiarAutoEnvioTimer,]);
 
     const onEnviar = () => {
         if (esLectura || !confirmar) return;
@@ -1247,6 +1275,17 @@ export const LectorGestacionScreen = () => {
             return;
         }
 
+        if (mostrarActualizarId || actualizandoId) {
+            limpiarAutoEnvioTimer();
+
+            if (crotalActual) {
+                limpiarCrotalLeido();
+            }
+
+            ultimoCrotalAutoRef.current = null;
+            return;
+        }
+
         if (!usaEnvioAutomatico) {
             limpiarAutoEnvioTimer();
             ultimoCrotalAutoRef.current = null;
@@ -1282,6 +1321,9 @@ export const LectorGestacionScreen = () => {
         estaEnviando,
         enviarRegistro,
         limpiarAutoEnvioTimer,
+        mostrarActualizarId,
+        actualizandoId,
+        limpiarCrotalLeido,
     ]);
 
     const estilosCajaId = useMemo(() => {
