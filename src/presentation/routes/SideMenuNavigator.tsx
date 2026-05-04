@@ -4,7 +4,7 @@
 import React from 'react';
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem, DrawerItemList, createDrawerNavigator } from '@react-navigation/drawer';
 import { globalColors } from '../theme/theme';
-import { Text, View, Platform, Dimensions, useWindowDimensions } from 'react-native';
+import { Text, View, Platform, Dimensions, useWindowDimensions, Image } from 'react-native';
 import { BottomTabNavigator } from './BottomTabNavigator';
 import { IonIcon } from '../components/shared/IonIcon';
 import { Divider } from 'react-native-paper';
@@ -325,6 +325,8 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
   const logout = useAuthStore((s) => s.logout);
   const gray = "#6B7280";
 
+  const CERDO_ICON = require('../../assets/images/CerdoAzul.png');
+
   const [menu, setMenu] = React.useState<"main" | "alta">("main");
   const activeRoute = props.state.routeNames[props.state.index];
   const mostrarSubmenuAlta =
@@ -360,7 +362,12 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
       >
         <DrawerItem
           label={t("common:back", { defaultValue: "Dosimac Server" })}
-          icon={() => <IonIcon name="chevron-back-outline" color={inactiveTint} />}
+          icon={() => (
+            <Image
+              source={CERDO_ICON}
+              style={{ width: 24, height: 24, resizeMode: 'contain' }}
+            />
+          )}
           labelStyle={{ color: inactiveTint, fontWeight: "700" }}
           style={{ marginHorizontal: 8, borderRadius: 100, paddingHorizontal: 20 }}
           onPress={() => {
@@ -467,7 +474,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
       />
 
       <DrawerItem
-         label={t("LectorGestacion")}
+        label={t("LectorGestacion")}
         icon={() => <IonIcon name="barcode-outline" color={inactiveTint} />}
         labelStyle={labelStyle(false)}
         style={itemStyle(false)}
@@ -514,7 +521,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
         onPress={() => go("ConfigIP")}
       /> */}
       <DrawerItem
-       label={t("ConfiguracionAWR")}
+        label={t("ConfiguracionAWR")}
         icon={() => (
           <IonIcon
             name={awrOpen ? "chevron-down-outline" : "chevron-forward-outline"}
