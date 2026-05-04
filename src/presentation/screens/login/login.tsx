@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState } from "react";
 import {
 	Image,
@@ -13,6 +14,7 @@ import {
 	Alert,
 } from "react-native";
 import { Button, Dialog, Portal, TextInput as PaperInput } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 import { useAuthStore } from "../../../stores/authStore";
 import { HamburgerMenu } from "../../components/shared/HamburgerMenu";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -26,15 +28,12 @@ import {
 } from "../../../stores/ipConfig";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-
 const BG = require("../../../assets/images/TecLogin.png");
 const LOGO = require("../../../assets/images/logo-cti.png");
 
-
-
 export const LoginScreen = () => {
-
 	const { t } = useTranslation();
+	const navigation = useNavigation<any>();
 
 	const [userName, setUserName] = useState("");
 	const [pass, setPass] = useState("");
@@ -63,12 +62,20 @@ export const LoginScreen = () => {
 			}
 
 			if (!respuesta.ok) {
+				const rawText = String(respuesta.rawText ?? "").toLowerCase();
+
+				const esCredencialIncorrecta =
+					respuesta.status === 401 || rawText.includes("unauthorized");
+
+				if (esCredencialIncorrecta) {
+					Alert.alert(t("login_errorTitle"), t("login_invalidCredentials")); return;
+				}
+
 				const detalle =
 					(typeof respuesta.data === "object" &&
 						(respuesta.data?.message ||
 							respuesta.data?.error ||
 							respuesta.data?.mensaje)) ||
-					respuesta.rawText ||
 					`HTTP ${respuesta.status}`;
 
 				Alert.alert("Error de login", String(detalle));
@@ -87,6 +94,7 @@ export const LoginScreen = () => {
 			}
 
 			login(token, { email: usernameLimpio });
+			navigation.getParent()?.replace("Privado");
 		} catch {
 			Alert.alert(t("login_networkErrorTitle"), t("login_networkErrorMessage"));
 		} finally {
@@ -122,7 +130,8 @@ export const LoginScreen = () => {
 			Alert.alert(
 				t("login_invalidIpTitle"),
 				t("login_invalidIpMessage")
-			); return;
+			);
+			return;
 		}
 
 		try {
@@ -193,7 +202,9 @@ export const LoginScreen = () => {
 									{t("login_subtitle")}
 								</Text>
 
-								<Text className="text-slate-700 mb-2 font-semibold">{t("login_username")}</Text>
+								<Text className="text-slate-700 mb-2 font-semibold">
+									{t("login_username")}
+								</Text>
 								<View className="flex-row items-center h-10 rounded-lg bg-slate-50 border border-slate-200 px-3">
 									<Ionicons name="person-outline" size={14} color="#64748b" />
 									<TextInput
@@ -226,7 +237,7 @@ export const LoginScreen = () => {
 										returnKeyType="done"
 									/>
 
-									<TouchableOpacity onPress={() => setShowPass(v => !v)} style={{ paddingLeft: 6 }}>
+									<TouchableOpacity onPress={() => setShowPass((v) => !v)} style={{ paddingLeft: 6 }}>
 										<Ionicons
 											name={showPass ? "eye-off-outline" : "eye-outline"}
 											size={14}
@@ -255,7 +266,11 @@ export const LoginScreen = () => {
 				</KeyboardAvoidingView>
 
 				<Portal>
-					<Dialog visible={ipModalVisible} dismissable={!guardandoIp} onDismiss={() => setIpModalVisible(false)}>
+					<Dialog
+						visible={ipModalVisible}
+						dismissable={!guardandoIp}
+						onDismiss={() => setIpModalVisible(false)}
+					>
 						<Dialog.Title>{t("login_ipRequiredTitle")}</Dialog.Title>
 						<Dialog.Content>
 							<Text style={{ marginBottom: 12, color: "#111827" }}>
@@ -270,14 +285,18 @@ export const LoginScreen = () => {
 								autoCapitalize="none"
 								autoCorrect={false}
 								keyboardType="url"
-								placeholder="192.168.1.10"
+								placeholder=""
 							/>
 						</Dialog.Content>
 						<Dialog.Actions>
 							<Button onPress={() => setIpModalVisible(false)} disabled={guardandoIp}>
 								{t("login_cancel")}
 							</Button>
-							<Button onPress={onGuardarIpYContinuar} loading={guardandoIp} disabled={guardandoIp}>
+							<Button
+								onPress={onGuardarIpYContinuar}
+								loading={guardandoIp}
+								disabled={guardandoIp}
+							>
 								{t("login_accept")}
 							</Button>
 						</Dialog.Actions>

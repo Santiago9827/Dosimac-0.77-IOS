@@ -3,20 +3,36 @@ import { View, Text, ActivityIndicator, TouchableOpacity } from "react-native";
 import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuthStore } from "../../../stores/authStore";
-import { extraerOrigin } from "../../../stores/ipConfig";
-import Ionicons from "react-native-vector-icons/Ionicons";
+
 import { useTranslation } from "react-i18next";
- 
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { extraerOrigin } from "../../../stores/ipConfig";
+
 
 const STORAGE_KEY = "@cti_portal_base_url";
+const TIMEOUT_PORTAL_INICIAL_MS = 1500;
+const TIMEOUT_PORTAL_REINTENTO_MS = 5000;
 
-function construirUrlPortalDesdeApi(baseUrl: string, token: string) {
+/* function construirUrlPortalDesdeApi(baseUrl: string, token: string) {
+  const urlApi = new URL(baseUrl);
+
+  urlApi.port = "8080";
+  urlApi.pathname = "/CtiAlimentacion/login.xhtml";
+  urlApi.search = "";
+
+  urlApi.searchParams.set("type", "espada");
+  urlApi.searchParams.set("token", token);
+
+  return urlApi.toString();
+} */
+
+  function construirUrlPortalDesdeApi(baseUrl: string, token: string) {
   const origin = extraerOrigin(baseUrl);
   const origin8080 = origin.replace(/:\d+$/, ":8080");
   return `${origin8080}/CtiAlimentacion/login.xhtml?type=espada&token=${encodeURIComponent(token)}`;
 }
 
-async function comprobarPortalConTimeout(url: string, timeoutMs = 10000) {
+async function comprobarPortalConTimeout(url: string, timeoutMs = TIMEOUT_PORTAL_INICIAL_MS) {
   const controlador = new AbortController();
 
   const timeout = setTimeout(() => {
@@ -69,79 +85,77 @@ export const PortalScreen = () => {
   const [errorPortal, setErrorPortal] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
- useEffect(() => {
-  const prepararUrl = async () => {
-    try {
-      setPreparandoUrl(true);
-      setError(null);
-      setErrorPortal(null);
-      setPortalDisponible(false);
-
-      if (!isHydrated) return;
-
-      if (!token) {
-        setError(t("portal_noSessionToken"));
-        return;
-      }
-
-      const baseUrlGuardada = await AsyncStorage.getItem(STORAGE_KEY);
-
-      if (!baseUrlGuardada) {
-        setError(t("portal_noIpConfigured"));
-        return;
-      }
-
-      const urlFinal = construirUrlPortalDesdeApi(baseUrlGuardada, token);
-
-      console.log("PORTAL iOS baseUrlGuardada:", baseUrlGuardada);
-      console.log("PORTAL iOS urlFinal:", urlFinal);
-
-      setUrlPortal(urlFinal);
-    } catch (e: any) {
-      console.log("PORTAL iOS error preparando URL:", e);
-      setError(t("portal_prepareUrlError"));
-    } finally {
-      setPreparandoUrl(false);
-    }
-  };
-
-  prepararUrl();
-}, [token, isHydrated]);
-
   useEffect(() => {
-    const validarPortal = async () => {
-      if (!urlPortal) return;
-
+    const prepararUrl = async () => {
       try {
-        setComprobandoPortal(true);
+        setPreparandoUrl(true);
+        setError(null);
         setErrorPortal(null);
         setPortalDisponible(false);
 
-        const resultado = await comprobarPortalConTimeout(urlPortal, 10000);
+        if (!isHydrated) return;
 
-        if (resultado.ok || resultado.status === 200 || resultado.status === 302) {
-          setPortalDisponible(true);
+        if (!token) {
+           setError(t("portal_noSessionToken"));
           return;
         }
 
-        if (resultado.timeout) {
-         setErrorPortal(t("portal_connectionTimeout"));
+        const baseUrlGuardada = await AsyncStorage.getItem(STORAGE_KEY);
+
+        if (!baseUrlGuardada) {
+           setError(t("portal_noIpConfigured"));
           return;
         }
 
-        if (resultado.status > 0) {
-          setErrorPortal(t("portal_httpError", { status: resultado.status }));
-          return;
-        }
-
-        setErrorPortal(t("portal_connectionError"));
+        const urlFinal = construirUrlPortalDesdeApi(baseUrlGuardada, token);
+        setUrlPortal(urlFinal);
+      } catch {
+          setError(t("portal_prepareUrlError"));
       } finally {
-        setComprobandoPortal(false);
+        setPreparandoUrl(false);
       }
     };
 
-    validarPortal();
-  }, [urlPortal, reloadKey]);
+    prepararUrl();
+  }, [token, isHydrated]);
+
+ useEffect(() => {
+  const validarPortal = async () => {
+    if (!urlPortal) return;
+
+    try {
+      setComprobandoPortal(true);
+      setErrorPortal(null);
+      setPortalDisponible(false);
+
+      const timeoutActual =
+        reloadKey === 0 ? TIMEOUT_PORTAL_INICIAL_MS : TIMEOUT_PORTAL_REINTENTO_MS;
+
+      const resultado = await comprobarPortalConTimeout(urlPortal, timeoutActual);
+
+      if (resultado.ok || resultado.status === 200 || resultado.status === 302) {
+        setPortalDisponible(true);
+        return;
+      }
+
+      if (resultado.timeout) {
+        setErrorPortal(t("portal_connectionTimeout"));
+        return;
+      }
+
+      if (resultado.status > 0) {
+        setErrorPortal(t("portal_httpError", { status: resultado.status }));
+        return;
+      }
+
+      setErrorPortal(t("portal_connectionError"));
+    } finally {
+      setComprobandoPortal(false);
+    }
+  };
+
+  validarPortal();
+}, [urlPortal, reloadKey]);
 
   if (!isHydrated || preparandoUrl) {
     return (
@@ -166,9 +180,7 @@ export const PortalScreen = () => {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F8FAFC" }}>
         <ActivityIndicator size="large" />
-        <Text style={{ marginTop: 10, color: "#4B5563" }}>
-          {t("portal_checkingConnection")}
-        </Text>
+        <Text style={{ marginTop: 10, color: "#4B5563" }}>{t("portal_checkingConnection")}</Text>
       </View>
     );
   }
@@ -214,7 +226,7 @@ export const PortalScreen = () => {
               marginBottom: 14,
             }}
           >
-             {t("portal_noConnectionTitle")}
+            {t("portal_noConnectionTitle")}
           </Text>
 
           <Text
@@ -244,7 +256,7 @@ export const PortalScreen = () => {
             }}
           >
             <Text style={{ color: "white", fontWeight: "700", fontSize: 17 }}>
-               {t("portal_retry")}
+             {t("portal_retry")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -259,23 +271,20 @@ export const PortalScreen = () => {
   return (
     <View style={{ flex: 1 }}>
       <WebView
-        key={reloadKey}
         source={{ uri: urlPortal }}
-        onError={(e) => {
-          console.log("WEBVIEW iOS onError:", e.nativeEvent);
+        onError={() => {
           setPortalDisponible(false);
           setErrorPortal(t("portal_connectionError"));
         }}
         onHttpError={(e) => {
-          console.log("WEBVIEW iOS onHttpError:", e.nativeEvent);
           setPortalDisponible(false);
-          setErrorPortal(t("portal_httpError", { status: e.nativeEvent.statusCode }));
+         setErrorPortal(t("portal_httpError", { status: e.nativeEvent.statusCode }));
         }}
         startInLoadingState
         renderLoading={() => (
           <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
             <ActivityIndicator size="large" />
-            <Text style={{ marginTop: 10 }}>{t("portal_loading")}</Text>
+            <Text style={{ marginTop: 10 }}> {t("portal_loading")}</Text>
           </View>
         )}
         javaScriptEnabled

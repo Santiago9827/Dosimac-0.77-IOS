@@ -70,6 +70,7 @@ export default {
     login_button: "Se connecter",
     login_loading: "Connexion...",
     login_footer: "Panneau de contrôle",
+    login_invalidCredentials: "Nom d'utilisateur ou mot de passe incorrect",
 
     login_ipRequiredTitle: "Configuration IP requise",
     login_ipRequiredMessage: "Vous n'avez pas configuré l'adresse IP du serveur. Saisissez-la pour pouvoir vous connecter.",

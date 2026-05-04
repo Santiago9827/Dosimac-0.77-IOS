@@ -69,6 +69,7 @@ export default {
   login_button: "로그인",
   login_loading: "로그인 중...",
   login_footer: "제어판",
+  login_invalidCredentials: "사용자 이름 또는 비밀번호가 올바르지 않습니다",
 
   login_ipRequiredTitle: "IP 설정 필요",
   login_ipRequiredMessage: "서버 IP 주소가 설정되지 않았습니다. 로그인하려면 입력하세요.",

@@ -75,6 +75,7 @@ export default {
   login_serverIpLabel: "伺服器 IP",
   login_cancel: "取消",
   login_accept: "接受",
+  login_invalidCredentials: "使用者名稱或密碼錯誤",
 
   login_configTitle: "設定",
   login_errorTitle: "登入錯誤",

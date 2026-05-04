@@ -1,38 +1,72 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, ActivityIndicator, Alert } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { useAuthStore } from '../../stores/authStore';
 
 import { PublicDrawerNavigator } from './PublicDrawerNavigator';
 import { PrivateDrawerNavigator } from './SideMenuNavigator';
-import { validarTokenEspada } from '../../stores/validarToken'; // ajusta la ruta real
+import { validarTokenEspada } from '../../stores/validarToken';
+import { PublicStartScreen } from '../routes/PantallaSeleccionInicio';
+
+const Stack = createStackNavigator();
+
+const PantallaInicioSeleccion = ({ navigation }: any) => {
+    const token = useAuthStore((s) => s.token);
+
+    const navigationProxy = {
+        ...navigation,
+        navigate: (destino: string, params?: any) => {
+            if (destino === 'Login') {
+                if (token) {
+                    navigation.replace('Privado', { screen: 'Tabs' });
+                } else {
+                    navigation.replace('Publico', { screen: 'Login' });
+                }
+                return;
+            }
+
+            if (destino === 'PublicHome') {
+                if (token) {
+                    navigation.replace('Privado', { screen: 'AltaDispositivosHome' });
+                } else {
+                    navigation.replace('Publico', { screen: 'PublicHome' });
+                }
+                return;
+            }
+
+            navigation.navigate(destino, params);
+        },
+    };
+
+    return <PublicStartScreen navigation={navigationProxy} />;
+};
+const PantallaPrivadaProtegida = () => {
+    const token = useAuthStore((s) => s.token);
+
+    if (!token) {
+        return <PublicDrawerNavigator />;
+    }
+
+    return <PrivateDrawerNavigator />;
+};
 
 export const RootNavigator = () => {
     const token = useAuthStore((s) => s.token);
     const isHydrated = useAuthStore((s) => s.isHydrated);
     const logout = useAuthStore((s) => s.logout);
 
-    const [validandoToken, setValidandoToken] = useState(false);
-    const [tokenValidado, setTokenValidado] = useState(false);
-
     useEffect(() => {
-        const comprobarToken = async () => {
-            if (!isHydrated) return;
+        let cancelado = false;
 
-            if (!token) {
-                setTokenValidado(false);
-                setValidandoToken(false);
-                return;
-            }
+        const comprobarToken = async () => {
+            if (!isHydrated || !token) return;
 
             try {
-                setValidandoToken(true);
-
                 const respuesta = await validarTokenEspada(token);
 
-                if (respuesta.ok) {
-                    setTokenValidado(true);
-                    return;
-                }
+                if (cancelado) return;
+
+                if (respuesta.ok) return;
 
                 if (respuesta.status === 401) {
                     const detalle =
@@ -45,38 +79,23 @@ export const RootNavigator = () => {
 
                     Alert.alert('Sesión expirada', String(detalle));
                     logout();
-                    setTokenValidado(false);
-                    return;
                 }
 
-                const detalle =
-                    (respuesta.data &&
-                        (respuesta.data.message ||
-                            respuesta.data.error ||
-                            respuesta.data.mensaje)) ||
-                    respuesta.rawText ||
-                    `HTTP ${respuesta.status}`;
-
-                Alert.alert('Aviso', String(detalle));
-
-                // Mantener sesión
-                setTokenValidado(true);
+                // Si falla por red o por otra causa distinta de 401,
+                // no bloqueamos el arranque.
             } catch {
-                Alert.alert(
-                    'Error de red',
-                    'No se pudo validar la sesión con el servidor.'
-                );
-
-                // Mantener sesión
-                setTokenValidado(true);
-            } finally {
-                setValidandoToken(false);
+                // Sin alerta al arrancar para no molestar al usuario.
             }
         };
 
         comprobarToken();
+
+        return () => {
+            cancelado = true;
+        };
     }, [token, isHydrated, logout]);
-    if (!isHydrated || validandoToken) {
+
+    if (!isHydrated) {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <ActivityIndicator size="large" />
@@ -84,9 +103,20 @@ export const RootNavigator = () => {
         );
     }
 
-    if (!token || !tokenValidado) {
-        return <PublicDrawerNavigator />;
-    }
-
-    return <PrivateDrawerNavigator />;
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+                name="InicioSeleccion"
+                component={PantallaInicioSeleccion}
+            />
+            <Stack.Screen
+                name="Publico"
+                component={PublicDrawerNavigator}
+            />
+            <Stack.Screen
+                name="Privado"
+                component={PantallaPrivadaProtegida}
+            />
+        </Stack.Navigator>
+    );
 };

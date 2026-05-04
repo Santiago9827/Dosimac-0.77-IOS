@@ -2,14 +2,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { extraerOrigin } from "./ipConfig";
 
 const STORAGE_KEY = "@cti_portal_base_url";
-const TIMEOUT_MS = 10000;
+const TIMEOUT_INICIO_MS = 2000;
+const TIMEOUT_NORMAL_MS = 8000;
 
 function construirUrlValidateToken(baseUrl: string) {
+    //const url = new URL(baseUrl);
+
+    //url.pathname = "/CtiAlimentacionAPI/api/espada/validateToken";
+    //url.search = "";
+
+    //return url.toString();
     const origin = extraerOrigin(baseUrl);
     return `${origin}/CtiAlimentacionAPI/api/espada/validateToken`;
+
 }
 
-export async function validarTokenEspada(token: string) {
+export async function validarTokenEspada(
+    token: string,
+    timeoutMs = TIMEOUT_INICIO_MS
+) {
     const baseUrlGuardada = await AsyncStorage.getItem(STORAGE_KEY);
 
     if (!baseUrlGuardada) {
@@ -23,13 +34,10 @@ export async function validarTokenEspada(token: string) {
 
     const endpoint = construirUrlValidateToken(baseUrlGuardada);
 
-    console.log("VALIDAR TOKEN baseUrlGuardada:", baseUrlGuardada);
-    console.log("VALIDAR TOKEN endpoint:", endpoint);
-
     const controller = new AbortController();
     const timeoutId = setTimeout(() => {
         controller.abort();
-    }, TIMEOUT_MS);
+    }, timeoutMs);
 
     try {
         const respuesta = await fetch(endpoint, {
@@ -77,3 +85,5 @@ export async function validarTokenEspada(token: string) {
         throw new Error("No se pudo conectar con el servidor.");
     }
 }
+
+export { TIMEOUT_INICIO_MS, TIMEOUT_NORMAL_MS };

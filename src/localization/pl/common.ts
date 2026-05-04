@@ -75,6 +75,7 @@ export default {
   login_serverIpLabel: "IP serwera",
   login_cancel: "Anuluj",
   login_accept: "Akceptuj",
+  login_invalidCredentials: "Nieprawidłowa nazwa użytkownika lub hasło",
 
   login_configTitle: "Konfiguracja",
   login_errorTitle: "Błąd logowania",

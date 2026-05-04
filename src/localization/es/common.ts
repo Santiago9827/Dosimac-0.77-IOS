@@ -77,12 +77,14 @@ export default {
    login_button: "Entrar",
    login_loading: "Entrando...",
    login_footer: "Panel de control",
+   
 
    login_ipRequiredTitle: "Configuración IP requerida",
    login_ipRequiredMessage: "No has configurado la dirección IP del servidor. Introdúcela para poder iniciar sesión.",
    login_serverIpLabel: "IP del servidor",
    login_cancel: "Cancelar",
    login_accept: "Aceptar",
+   login_invalidCredential: "Usuario o contraseña incorrectos",
 
    login_configTitle: "Configuración",
    login_errorTitle: "Error de login",
