@@ -209,6 +209,13 @@ class JSI_EXPORT Runtime {
   virtual Value evaluatePreparedJavaScript(
       const std::shared_ptr<const PreparedJavaScript>& js) = 0;
 
+  /// Queues a microtask in the JavaScript VM internal Microtask (a.k.a. Job in
+  /// ECMA262) queue, to be executed when the host drains microtasks in
+  /// its event loop implementation.
+  ///
+  /// \param callback a function to be executed as a microtask.
+  virtual void queueMicrotask(const jsi::Function& callback) = 0;
+
   /// Drain the JavaScript VM internal Microtask (a.k.a. Job in ECMA262) queue.
   ///
   /// \param maxMicrotasksHint a hint to tell an implementation that it should
@@ -281,7 +288,7 @@ class JSI_EXPORT Runtime {
   // rvalue arguments/methods would also reduce the number of clones.
 
   struct PointerValue {
-    virtual void invalidate() = 0;
+    virtual void invalidate() noexcept = 0;
 
    protected:
     virtual ~PointerValue() = default;
@@ -387,6 +394,14 @@ class JSI_EXPORT Runtime {
 
   virtual bool instanceOf(const Object& o, const Function& f) = 0;
 
+  /// See Object::setExternalMemoryPressure.
+  virtual void setExternalMemoryPressure(
+      const jsi::Object& obj,
+      size_t amount) = 0;
+
+  virtual std::u16string utf16(const String& str);
+  virtual std::u16string utf16(const PropNameID& sym);
+
   // These exist so derived classes can access the private parts of
   // Value, Symbol, String, and Object, which are all friends of Runtime.
   template <typename T>
@@ -403,7 +418,7 @@ class JSI_EXPORT Runtime {
 // Base class for pointer-storing types.
 class JSI_EXPORT Pointer {
  protected:
-  explicit Pointer(Pointer&& other) : ptr_(other.ptr_) {
+  explicit Pointer(Pointer&& other) noexcept : ptr_(other.ptr_) {
     other.ptr_ = nullptr;
   }
 
@@ -413,7 +428,7 @@ class JSI_EXPORT Pointer {
     }
   }
 
-  Pointer& operator=(Pointer&& other);
+  Pointer& operator=(Pointer&& other) noexcept;
 
   friend class Runtime;
   friend class Value;
@@ -482,11 +497,16 @@ class JSI_EXPORT PropNameID : public Pointer {
 
   // Creates a vector of given PropNameIDs.
   template <size_t N>
-  static std::vector<PropNameID> names(PropNameID(&&propertyNames)[N]);
+  static std::vector<PropNameID> names(PropNameID (&&propertyNames)[N]);
 
   /// Copies the data in a PropNameID as utf8 into a C++ string.
   std::string utf8(Runtime& runtime) const {
     return runtime.utf8(*this);
+  }
+
+  /// Copies the data in a PropNameID as utf16 into a C++ string.
+  std::u16string utf16(Runtime& runtime) const {
+    return runtime.utf16(*this);
   }
 
   static bool compare(
@@ -637,6 +657,11 @@ class JSI_EXPORT String : public Pointer {
   /// Copies the data in a JS string as utf8 into a C++ string.
   std::string utf8(Runtime& runtime) const {
     return runtime.utf8(*this);
+  }
+
+  /// Copies the data in a JS string as utf16 into a C++ string.
+  std::u16string utf16(Runtime& runtime) const {
+    return runtime.utf16(*this);
   }
 
   friend class Runtime;
@@ -834,6 +859,16 @@ class JSI_EXPORT Object : public Pointer {
   /// works.  I only need it in one place.)
   Array getPropertyNames(Runtime& runtime) const;
 
+  /// Inform the runtime that there is additional memory associated with a given
+  /// JavaScript object that is not visible to the GC. This can be used if an
+  /// object is known to retain some native memory, and may be used to guide
+  /// decisions about when to run garbage collection.
+  /// This method may be invoked multiple times on an object, and subsequent
+  /// calls will overwrite any previously set value. Once the object is garbage
+  /// collected, the associated external memory will be considered freed and may
+  /// no longer factor into GC decisions.
+  void setExternalMemoryPressure(Runtime& runtime, size_t amt) const;
+
  protected:
   void setPropertyValue(
       Runtime& runtime,
@@ -978,6 +1013,11 @@ class JSI_EXPORT Function : public Object {
   /// \param name the name property for the function.
   /// \param paramCount the length property for the function, which
   /// may not be the number of arguments the function is passed.
+  /// \note The std::function's dtor will be called when the GC finalizes this
+  /// function. As with HostObject, this may be as late as when the Runtime is
+  /// shut down, and may occur on an arbitrary thread. If the function contains
+  /// any captured values, you are responsible for ensuring that their
+  /// destructors are safe to call on any thread.
   static Function createFromHostFunction(
       Runtime& runtime,
       const jsi::PropNameID& name,
@@ -1081,7 +1121,7 @@ class JSI_EXPORT Function : public Object {
 class JSI_EXPORT Value {
  public:
   /// Default ctor creates an \c undefined JS value.
-  Value() : Value(UndefinedKind) {}
+  Value() noexcept : Value(UndefinedKind) {}
 
   /// Creates a \c null JS value.
   /* implicit */ Value(std::nullptr_t) : kind_(NullKind) {}
@@ -1122,7 +1162,7 @@ class JSI_EXPORT Value {
         "Value cannot be constructed directly from const char*");
   }
 
-  Value(Value&& value);
+  Value(Value&& other) noexcept;
 
   /// Copies a Symbol lvalue into a new JS value.
   Value(Runtime& runtime, const Symbol& sym) : Value(SymbolKind) {
@@ -1177,7 +1217,7 @@ class JSI_EXPORT Value {
   /// https://262.ecma-international.org/11.0/#sec-strict-equality-comparison
   static bool strictEquals(Runtime& runtime, const Value& a, const Value& b);
 
-  Value& operator=(Value&& other) {
+  Value& operator=(Value&& other) noexcept {
     this->~Value();
     new (this) Value(std::move(other));
     return *this;

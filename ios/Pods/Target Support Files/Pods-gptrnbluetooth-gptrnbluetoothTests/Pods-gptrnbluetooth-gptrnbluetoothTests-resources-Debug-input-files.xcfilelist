@@ -1,4 +1,6 @@
 ${PODS_ROOT}/Target Support Files/Pods-gptrnbluetooth-gptrnbluetoothTests/Pods-gptrnbluetooth-gptrnbluetoothTests-resources.sh
+${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/RCT-Folly_privacy.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle
 ${PODS_CONFIGURATION_BUILD_DIR}/RNPermissions/RNPermissionsPrivacyInfo.bundle
 ${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf
 ${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf
@@ -19,4 +21,7 @@ ${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.tt
 ${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf
 ${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf
 ${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf
-${PODS_CONFIGURATION_BUILD_DIR}/React-Core/RCTI18nStrings.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/boost/boost_privacy.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/glog/glog_privacy.bundle

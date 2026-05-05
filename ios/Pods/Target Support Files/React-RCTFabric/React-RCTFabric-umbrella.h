@@ -10,7 +10,9 @@
 #endif
 #endif
 
+#import "React/AppleEventBeat.h"
 #import "React/RCTActivityIndicatorViewComponentView.h"
+#import "React/RCTDebuggingOverlayComponentView.h"
 #import "React/RCTImageComponentView.h"
 #import "React/RCTInputAccessoryComponentView.h"
 #import "React/RCTInputAccessoryContentView.h"
@@ -56,12 +58,14 @@
 #import "React/RCTSurfacePresenterBridgeAdapter.h"
 #import "React/RCTSurfaceRegistry.h"
 #import "React/RCTSurfaceTouchHandler.h"
-#import "React/RCTThirdPartyFabricComponentsProvider.h"
 #import "React/RCTTouchableComponentViewProtocol.h"
 #import "React/RCTFabricSurface.h"
 #import "React/PlatformRunLoopObserver.h"
+#import "React/RCTBoxShadow.h"
+#import "React/RCTColorSpaceUtils.h"
 #import "React/RCTGenericDelegateSplitter.h"
 #import "React/RCTIdentifierPool.h"
+#import "React/RCTLinearGradient.h"
 #import "React/RCTReactTaggedView.h"
 
 FOUNDATION_EXPORT double RCTFabricVersionNumber;
