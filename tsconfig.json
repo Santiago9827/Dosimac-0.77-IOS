@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "strict": false, // 🔧 Desactiva modo estricto completo
-    "noImplicitAny": false, // 🔧 Permite variables sin tipo
-    "strictNullChecks": false // 🔧 Permite null/undefined sin marcar error
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
-   "extends": "@react-native/typescript-config/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json"
 }
