@@ -267,7 +267,6 @@ const labelShortFor = (d: BlePeripheral) => {
         <View style={{ alignItems: 'center', marginVertical: 60 }}>
             <Portal>
                 <Dialog visible={visible} onDismiss={handleNoDevicesAccept}>
-                    <Dialog.Icon icon="warning" color="red" size={60} />
                     <Dialog.Title style={{ color: 'red' }}>{t("Aviso")}</Dialog.Title>
                     <Dialog.Content>
                         <Text variant="bodyLarge">{t("awrScanResults_noDevicesNearby")}.</Text>
@@ -325,7 +324,6 @@ const labelShortFor = (d: BlePeripheral) => {
             {/* ✅ Dialog de éxito: solo botón Aceptar */}
             <Portal>
                 <Dialog visible={successVisible} dismissable={false}>
-                    <Dialog.Icon icon="check-circle" color="green" size={60} />
                     <Dialog.Title style={{ color: 'green' }}>{t("awrSavedList_connected")}</Dialog.Title>
                     <Dialog.Content>
                         <Text variant="bodyLarge">

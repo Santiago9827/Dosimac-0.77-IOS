@@ -56,20 +56,17 @@ export const FarmListScreen = ({ navigation, route }) => {
 
   const token = useAuthStore((s) => s.token);
 
-  const goToHome = () => {
+ const goToHome = () => {
     const parent = navigation.getParent?.();
 
     if (token) {
-      // ✅ sesión iniciada -> drawer privado
-      if (parent?.navigate) parent.navigate('Tabs');
-      else navigation.navigate('Tabs');
+      if (parent?.navigate) parent.navigate('AltaDispositivosHome');
+      else navigation.navigate('AltaDispositivosHome');
     } else {
-      // ✅ sin sesión -> drawer público
       if (parent?.navigate) parent.navigate('PublicHome');
       else navigation.navigate('PublicHome');
     }
   };
-
 
 
   // const navigator=useNavigation();

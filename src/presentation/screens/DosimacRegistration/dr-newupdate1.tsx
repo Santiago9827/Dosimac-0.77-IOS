@@ -107,11 +107,7 @@ export default function Drnewupdate() {
          <Appbar.Header elevated>
 
             {/* <Appbar.BackAction onPress={navigation.goBack} /> */}
-            <Appbar.BackAction onPress={() => {
-               if (!sfarm) goToHome();
-               else navigation.goBack();
-            }}
-            />            
+           <Appbar.BackAction onPress={goToHome} />
             <Appbar.Content title={t('common:DosimacRegistration')} />
             {/* <Appbar.Action icon="add" onPress={() => {}} /> */}
          </Appbar.Header>
