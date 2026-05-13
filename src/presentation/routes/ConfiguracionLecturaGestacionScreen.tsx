@@ -1,6 +1,16 @@
 /* eslint-disable prettier/prettier */
+//cambio a 0.77
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { View, Alert, KeyboardAvoidingView, Platform, ScrollView, Modal } from "react-native";
+import {
+    View,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    Modal,
+    Keyboard,
+    TouchableOpacity,
+} from "react-native";
 import {
     Appbar,
     Button,
@@ -11,7 +21,6 @@ import {
     TextInput,
 } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native";
 import { awrStore } from "../../stores/awrStore";
 import { useAwrConn } from "../../stores/awrConnStore";
 import { obtenerLecturaEspada, obtenerAnimalPorId } from "../routes/obtenerLecturaEspada";
@@ -26,57 +35,203 @@ const CARD = "#FFFFFF";
 const BORDER = "#E5E7EB";
 const TEXT = "#0F172A";
 const MUTED = "#64748B";
+const ERROR = "#B91C1C";
 
-function OptionCard({
-    label,
-    icon,
+const SHADOW_CARD = {
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 4,
+};
+
+const SHADOW_SOFT = {
+    shadowColor: "#0F172A",
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 2,
+};
+
+const SHADOW_ACTIVE = {
+    shadowColor: BRAND,
+    shadowOpacity: 0.16,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
+};
+
+const CARD_STYLE = {
+    borderRadius: 18,
+    backgroundColor: CARD,
+    borderWidth: 1,
+    borderColor: "#EEF2F7",
+    ...SHADOW_CARD,
+};
+
+function ModoCard({
+    titulo,
+    descripcion,
     active,
     onPress,
 }: {
-    label: string;
-    icon: any;
+    titulo: string;
+    descripcion: string;
     active: boolean;
     onPress: () => void;
 }) {
     return (
-        <View
+        <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={onPress}
             style={{
                 flex: 1,
+                minHeight: 64,
                 borderRadius: 14,
-                borderWidth: 1,
+                borderWidth: active ? 1.5 : 1,
                 borderColor: active ? BRAND : BORDER,
-                backgroundColor: active ? "#ECFDF5" : "#fff",
-                overflow: "hidden",
+                backgroundColor: active ? "#F0FDFA" : "#FFFFFF",
+                paddingVertical: 9,
+                paddingHorizontal: 10,
+                justifyContent: "space-between",
+                ...(active ? SHADOW_ACTIVE : SHADOW_SOFT),
             }}
         >
-            <Button
-                onPress={onPress}
-                mode="text"
-                contentStyle={{
-                    height: 46,
-                    justifyContent: "flex-start",
-                    paddingLeft: 10,
+            <View
+                style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 8,
                 }}
-                labelStyle={{
-                    color: TEXT,
-                    fontWeight: "800",
-                    textAlign: "left",
+            >
+                <Text
+                    style={{
+                        color: TEXT,
+                        fontWeight: "900",
+                        fontSize: 15,
+                    }}
+                    numberOfLines={1}
+                >
+                    {titulo}
+                </Text>
+
+                <View
+                    style={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: 5,
+                        backgroundColor: active ? BRAND : "#CBD5E1",
+                    }}
+                />
+            </View>
+
+            <Text
+                style={{
+                    color: active ? BRAND : MUTED,
+                    fontSize: 11,
+                    lineHeight: 14,
+                    fontWeight: active ? "700" : "500",
+                    marginTop: 3,
                 }}
-                icon={() => (
-                    <Ionicons
-                        name={icon}
-                        size={18}
-                        color={active ? BRAND : MUTED}
-                        style={{ marginRight: 4 }}
-                    />
-                )}
+                numberOfLines={2}
+            >
+                {descripcion}
+            </Text>
+        </TouchableOpacity>
+    );
+}
+
+function OpcionCompacta({
+    label,
+    active,
+    onPress,
+}: {
+    label: string;
+    active: boolean;
+    onPress: () => void;
+}) {
+    return (
+        <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={onPress}
+            style={{
+                flex: 1,
+                height: 40,
+                borderRadius: 12,
+                borderWidth: active ? 1.5 : 1,
+                borderColor: active ? BRAND : BORDER,
+                backgroundColor: active ? "#F0FDFA" : "#FFFFFF",
+                alignItems: "center",
+                justifyContent: "center",
+                ...(active ? SHADOW_ACTIVE : SHADOW_SOFT),
+            }}
+        >
+            <Text
+                style={{
+                    color: active ? BRAND : TEXT,
+                    fontWeight: "900",
+                    fontSize: 13,
+                }}
+                numberOfLines={1}
             >
                 {label}
-            </Button>
+            </Text>
+        </TouchableOpacity>
+    );
+}
 
-            {active && (
-                <View style={{ height: 3, backgroundColor: BRAND, opacity: 0.9 }} />
-            )}
+function SwitchLine({
+    title,
+    description,
+    value,
+    onValueChange,
+}: {
+    title: string;
+    description: string;
+    value: boolean;
+    onValueChange: (value: boolean) => void;
+}) {
+    return (
+        <View
+            style={{
+                borderRadius: 14,
+                borderWidth: 1,
+                borderColor: "#E2E8F0",
+                backgroundColor: "#F8FAFC",
+                paddingVertical: 9,
+                paddingHorizontal: 10,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 10,
+                ...SHADOW_SOFT,
+            }}
+        >
+            <View style={{ flex: 1, paddingRight: 8 }}>
+                <Text
+                    style={{
+                        color: TEXT,
+                        fontWeight: "900",
+                        fontSize: 14,
+                    }}
+                >
+                    {title}
+                </Text>
+
+                <Text
+                    style={{
+                        color: MUTED,
+                        marginTop: 2,
+                        fontSize: 11,
+                        lineHeight: 15,
+                    }}
+                >
+                    {description}
+                </Text>
+            </View>
+
+            <Switch value={value} onValueChange={onValueChange} />
         </View>
     );
 }
@@ -102,7 +257,7 @@ export const ConfiguracionGestacionScreen = () => {
     const [modo, setModo] = useState<Modo>("entrada");
     const [corral, setCorral] = useState("");
     const [detectarDesconocidos, setDetectarDesconocidos] = useState(true);
-    const [confirmar, setConfirmar] = useState(true);
+    const [confirmar, setConfirmar] = useState(false);
 
     const [tipoBusqueda, setTipoBusqueda] = useState<"crotal" | "id">("crotal");
     const [origenBusquedaCrotal, setOrigenBusquedaCrotal] = useState<"manual" | "espada">("manual");
@@ -116,6 +271,9 @@ export const ConfiguracionGestacionScreen = () => {
     const [avisoTitulo, setAvisoTitulo] = useState("");
     const [avisoMensaje, setAvisoMensaje] = useState("");
     const [avisoTipo, setAvisoTipo] = useState<"warning" | "error" | "info">("info");
+
+    const scrollRef = useRef<ScrollView | null>(null);
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
 
     const [animalPendiente, setAnimalPendiente] = useState<any | null>(null);
     const [crotalEsperado, setCrotalEsperado] = useState("");
@@ -160,10 +318,26 @@ export const ConfiguracionGestacionScreen = () => {
         limpiarCrotalLeido();
         setLecturaNoCoincidente(null);
         ultimoCrotalProcesadoRef.current = "";
+
         try {
             await detenerLectura?.();
         } catch { }
     };
+
+    useEffect(() => {
+        const showSub = Keyboard.addListener("keyboardDidShow", (e) => {
+            setKeyboardHeight(e.endCoordinates.height);
+        });
+
+        const hideSub = Keyboard.addListener("keyboardDidHide", () => {
+            setKeyboardHeight(0);
+        });
+
+        return () => {
+            showSub.remove();
+            hideSub.remove();
+        };
+    }, []);
 
     useEffect(() => {
         return () => {
@@ -182,6 +356,7 @@ export const ConfiguracionGestacionScreen = () => {
             if (tipoBusqueda === "crotal" && origenBusquedaCrotal === "espada") {
                 return lectorConectado;
             }
+
             return valorBusqueda.trim().length > 0;
         }
 
@@ -205,7 +380,8 @@ export const ConfiguracionGestacionScreen = () => {
                 : "";
 
         if (!crotalAnimal) {
-            mostrarAviso("Aviso", "El backend no devolvió un crotal válido para comparar.", "warning"); return false;
+            mostrarAviso("Aviso", "El backend no devolvió un crotal válido para comparar.", "warning");
+            return false;
         }
 
         if (!lectorConectado) {
@@ -235,6 +411,7 @@ export const ConfiguracionGestacionScreen = () => {
                 t("gestacionConfig_alerts_couldNotStartReading"),
                 "error"
             );
+
             setEsperandoCoincidencia(false);
             setAnimalPendiente(null);
             setCrotalEsperado("");
@@ -247,13 +424,13 @@ export const ConfiguracionGestacionScreen = () => {
             try {
                 setBuscandoAnimal(true);
 
-                // Búsqueda por crotal leyendo directamente de la espada
                 if (tipoBusqueda === "crotal" && origenBusquedaCrotal === "espada") {
                     if (!lectorConectado) {
                         Alert.alert(
                             t("gestacionConfig_alerts_awrNotConnected"),
                             t("gestacionConfig_alerts_connectSwordBeforeContinue")
-                        ); return;
+                        );
+                        return;
                     }
 
                     setLeyendoBusquedaEspada(true);
@@ -265,7 +442,8 @@ export const ConfiguracionGestacionScreen = () => {
                         Alert.alert(
                             t("gestacionConfig_alerts_error"),
                             t("gestacionConfig_alerts_couldNotStartReading")
-                        ); setLeyendoBusquedaEspada(false);
+                        );
+                        setLeyendoBusquedaEspada(false);
                     }
 
                     return;
@@ -355,15 +533,18 @@ export const ConfiguracionGestacionScreen = () => {
             }
         }
 
-        navigation.navigate("LectorGestacion", {
-            modo,
-            corral: corral.trim(),
-            detectarDesconocidos,
-            confirmar,
-        });
+        Keyboard.dismiss();
+
+        setTimeout(() => {
+            navigation.navigate("LectorGestacion", {
+                modo,
+                corral: corral.trim(),
+                detectarDesconocidos,
+                confirmar,
+            });
+        }, Platform.OS === "android" ? 80 : 0);
     };
 
-    // Caso: búsqueda por crotal usando la espada directamente
     useEffect(() => {
         const crotalActual = String(crotalLeido ?? "").trim();
 
@@ -379,7 +560,6 @@ export const ConfiguracionGestacionScreen = () => {
 
                 if (!r.ok) {
                     setLeyendoBusquedaEspada(false);
-
 
                     if (r.status === 404) {
                         mostrarAviso(
@@ -398,6 +578,7 @@ export const ConfiguracionGestacionScreen = () => {
                             r.data?.mensaje ||
                             r.rawText ||
                             `HTTP ${r.status}`;
+
                     if (r.status === 400) {
                         mostrarAviso(
                             t("gestacionConfig_alerts_warning"),
@@ -422,7 +603,8 @@ export const ConfiguracionGestacionScreen = () => {
                     Alert.alert(
                         t("gestacionConfig_alerts_notFound"),
                         t("gestacionConfig_alerts_animalNotFoundByCrotal")
-                    ); return;
+                    );
+                    return;
                 }
 
                 setLeyendoBusquedaEspada(false);
@@ -438,6 +620,7 @@ export const ConfiguracionGestacionScreen = () => {
                 });
             } catch {
                 if (cancelado) return;
+
                 setLeyendoBusquedaEspada(false);
                 Alert.alert(
                     t("gestacionConfig_alerts_networkError"),
@@ -453,18 +636,15 @@ export const ConfiguracionGestacionScreen = () => {
         };
     }, [leyendoBusquedaEspada, crotalLeido, navigation, limpiarCrotalLeido, detenerLectura]);
 
-    // Caso: búsqueda manual por crotal o por ID, y esperar coincidencia con la espada
     useEffect(() => {
         const leido = String(crotalLeido ?? "").trim();
         const esperado = String(crotalEsperado ?? "").trim();
 
         if (!esperandoCoincidencia || !animalPendiente || !leido || !esperado) return;
 
-        // Evitar reprocesar el mismo crotal una y otra vez
         if (ultimoCrotalProcesadoRef.current === leido) return;
         ultimoCrotalProcesadoRef.current = leido;
 
-        // Si coincide, continuar flujo normal
         if (leido === esperado) {
             setLecturaNoCoincidente(null);
             setEsperandoCoincidencia(false);
@@ -481,7 +661,6 @@ export const ConfiguracionGestacionScreen = () => {
             return;
         }
 
-        // Si NO coincide, pedir info del animal leído y mostrarla
         let cancelado = false;
 
         const cargarLecturaNoCoincidente = async () => {
@@ -514,7 +693,6 @@ export const ConfiguracionGestacionScreen = () => {
                     return;
                 }
 
-                // Si no existe en backend, mostramos crotal leído e ID vacío
                 setLecturaNoCoincidente({
                     crotal: leido,
                     id: "—",
@@ -550,62 +728,118 @@ export const ConfiguracionGestacionScreen = () => {
     return (
         <KeyboardAvoidingView
             style={{ flex: 1, backgroundColor: BG }}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={90}
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
         >
             <Appbar.Header elevated style={{ backgroundColor: BRAND }}>
                 <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
-                <Appbar.Content title={t("gestacionConfig_screenTitle")} titleStyle={{ color: "white" }} />
+                <Appbar.Content
+                    title={t("gestacionConfig_screenTitle")}
+                    titleStyle={{ color: "white", fontWeight: "700" }}
+                />
             </Appbar.Header>
 
             <ScrollView
+                ref={scrollRef}
                 contentContainerStyle={{
                     flexGrow: 1,
-                    padding: 16,
-                    gap: 12,
-                    paddingBottom: 24,
+                    padding: 12,
+                    gap: 8,
+                    paddingBottom: keyboardHeight > 0 ? keyboardHeight + 24 : 14,
                 }}
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
             >
-                <Card mode="contained" style={{ borderRadius: 18, backgroundColor: CARD }}>
-                    <Card.Content>
-                        <Text style={{ fontSize: 18, fontWeight: "900", color: TEXT }}>
-                            {t("gestacionConfig_chooseOptionTitle")}
-                        </Text>
-                        <Text style={{ marginTop: 4, color: MUTED }}>
-                            {t("gestacionConfig_chooseOptionDescription")}
-                        </Text>
+                <Card mode="contained" style={CARD_STYLE}>
+                    <Card.Content style={{ paddingVertical: 12 }}>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                marginBottom: 10,
+                            }}
+                        >
+                            <View style={{ flex: 1 }}>
+                                <Text
+                                    style={{
+                                        color: TEXT,
+                                        fontSize: 18,
+                                        fontWeight: "900",
+                                    }}
+                                >
+                                    Modo de trabajo
+                                </Text>
 
-                        <View style={{ height: 12 }} />
+                                <Text
+                                    style={{
+                                        color: MUTED,
+                                        marginTop: 4,
+                                        lineHeight: 19,
+                                    }}
+                                >
+                                    Selecciona qué hará el lector.
+                                </Text>
+                            </View>
+
+                            <View
+                                style={{
+                                    paddingHorizontal: 10,
+                                    paddingVertical: 5,
+                                    borderRadius: 999,
+                                    backgroundColor: "#ECFDF5",
+                                    borderWidth: 1,
+                                    borderColor: "#CCFBF1",
+                                    ...SHADOW_SOFT,
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: BRAND,
+                                        fontWeight: "900",
+                                        fontSize: 12,
+                                    }}
+                                >
+                                    {modo === "entrada"
+                                        ? "Entrada"
+                                        : modo === "salida"
+                                            ? "Salida"
+                                            : modo === "lectura"
+                                                ? "Lectura"
+                                                : "Búsqueda"}
+                                </Text>
+                            </View>
+                        </View>
 
                         <View style={{ flexDirection: "row", gap: 10 }}>
-                            <OptionCard
-                                label={t("gestacionConfig_entry")}
-                                icon="log-in-outline"
+                            <ModoCard
+                                titulo={t("gestacionConfig_entry")}
+                                descripcion="Registrar entrada"
                                 active={modo === "entrada"}
                                 onPress={() => setModo("entrada")}
                             />
-                            <OptionCard
-                                label={t("gestacionConfig_exit")}
-                                icon="log-out-outline"
+
+                            <ModoCard
+                                titulo={t("gestacionConfig_exit")}
+                                descripcion="Registrar salida"
                                 active={modo === "salida"}
                                 onPress={() => setModo("salida")}
                             />
                         </View>
 
-                        <View style={{ height: 10 }} />
+                        <View style={{ height: 8 }} />
 
                         <View style={{ flexDirection: "row", gap: 10 }}>
-                            <OptionCard
-                                label={t("gestacionConfig_reading")}
-                                icon="barcode-outline"
+                            <ModoCard
+                                titulo={t("gestacionConfig_reading")}
+                                descripcion="Solo consultar"
                                 active={modo === "lectura"}
                                 onPress={() => setModo("lectura")}
                             />
-                            <OptionCard
-                                label={t("gestacionConfig_search")}
-                                icon="search-outline"
+
+                            <ModoCard
+                                titulo={t("gestacionConfig_search")}
+                                descripcion="Buscar animal"
                                 active={modo === "busqueda"}
                                 onPress={() => setModo("busqueda")}
                             />
@@ -614,105 +848,141 @@ export const ConfiguracionGestacionScreen = () => {
                 </Card>
 
                 {(modo === "entrada" || modo === "salida") && (
-                    <Card mode="contained" style={{ borderRadius: 18, backgroundColor: CARD }}>
-                        <Card.Content>
-                            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-                                <Ionicons name="options-outline" size={18} color={BRAND} />
-                                <Text style={{ fontSize: 16, fontWeight: "900", color: TEXT }}>
-                                    {modo === "entrada" ? "Parámetros de entrada" : "Parámetros de salida"}
-                                </Text>
-                            </View>
-
-                            <Text style={{ marginTop: 6, color: MUTED }}>
-                                {modo === "entrada"
-                                    ? t("gestacionConfig_entryParamsDescription")
-                                    : t("gestacionConfig_exitParamsDescription")}
+                    <Card mode="contained" style={CARD_STYLE}>
+                        <Card.Content style={{ paddingVertical: 12 }}>
+                            <Text style={{ fontSize: 17, fontWeight: "900", color: TEXT }}>
+                                Ajustes del envío
                             </Text>
 
-                            <View style={{ height: 12 }} />
+                            <Text style={{ marginTop: 4, color: MUTED, lineHeight: 19 }}>
+                                Configura cómo se comporta el flujo al leer animales.
+                            </Text>
+
+                            <View style={{ height: 10 }} />
+
+                            <SwitchLine
+                                title={t("gestacionConfig_detectUnknownTitle")}
+                                description={t("gestacionConfig_detectUnknownDescription")}
+                                value={detectarDesconocidos}
+                                onValueChange={setDetectarDesconocidos}
+                            />
+
+                            <View style={{ height: 8 }} />
+
+                            <SwitchLine
+                                title={t("gestacionConfig_confirmTitle")}
+                                description={t("gestacionConfig_confirmDescription")}
+                                value={confirmar}
+                                onValueChange={setConfirmar}
+                            />
 
                             {modo === "entrada" && (
                                 <>
-                                    <TextInput
-                                        mode="outlined"
-                                        label={t("gestacionConfig_corralLabel")}
-                                        value={corral}
-                                        onChangeText={setCorral}
-                                        placeholder={t("gestacionConfig_corralPlaceholder")}
-                                        keyboardType="number-pad"
-                                        left={<TextInput.Icon icon="home-outline" />}
-                                        outlineColor={BORDER}
-                                        activeOutlineColor={BRAND}
+                                    <View style={{ height: 14 }} />
+
+                                    <Divider
+                                        style={{
+                                            height: 1,
+                                            backgroundColor: "#E2E8F0",
+                                        }}
                                     />
 
+                                    <View style={{ height: 10 }} />
+
+                                    <Text
+                                        style={{
+                                            color: TEXT,
+                                            fontSize: 16,
+                                            fontWeight: "900",
+                                            marginBottom: 8,
+                                        }}
+                                    >
+                                        Corral de entrada
+                                    </Text>
+
+                                    <View
+                                        style={{
+                                            borderRadius: 12,
+                                            backgroundColor: "#FFFFFF",
+                                            ...(corral.trim().length === 0 ? {} : SHADOW_SOFT),
+                                        }}
+                                    >
+                                        <TextInput
+                                            mode="outlined"
+                                            dense
+                                            label={t("gestacionConfig_corralLabel")}
+                                            value={corral}
+                                            onChangeText={setCorral}
+                                            placeholder={t("gestacionConfig_corralPlaceholder")}
+                                            keyboardType="number-pad"
+                                            outlineColor={corral.trim().length === 0 ? ERROR : BORDER}
+                                            activeOutlineColor={corral.trim().length === 0 ? ERROR : BRAND}
+                                            textColor={TEXT}
+                                            style={{
+                                                backgroundColor: "#FFFFFF",
+                                                height: 44,
+                                            }}
+                                            outlineStyle={{
+                                                borderRadius: 12,
+                                                borderWidth: corral.trim().length === 0 ? 2 : 1,
+                                            }}
+                                            contentStyle={{
+                                                fontWeight: "800",
+                                                fontSize: 16,
+                                            }}
+                                            onFocus={() => {
+                                                if (Platform.OS === "android") {
+                                                    setTimeout(() => {
+                                                        scrollRef.current?.scrollToEnd({ animated: true });
+                                                    }, 250);
+                                                }
+                                            }}
+                                        />
+                                    </View>
+
                                     {!puedeContinuar && (
-                                        <Text style={{ color: "#DC2626", fontWeight: "700", marginTop: 8 }}>
+                                        <Text
+                                            style={{
+                                                color: ERROR,
+                                                fontWeight: "800",
+                                                marginTop: 6,
+                                                fontSize: 13,
+                                            }}
+                                        >
                                             {t("gestacionConfig_corralRequired")}
                                         </Text>
                                     )}
-
-                                    <View style={{ height: 14 }} />
-                                    <Divider />
-                                    <View style={{ height: 14 }} />
                                 </>
                             )}
-
-                            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <View style={{ flex: 1, paddingRight: 10 }}>
-                                    <Text style={{ color: TEXT, fontWeight: "800" }}>
-                                        {t("gestacionConfig_detectUnknownTitle")}
-                                    </Text>
-                                    <Text style={{ color: MUTED, marginTop: 2, fontSize: 12 }}>
-                                        {t("gestacionConfig_detectUnknownDescription")}
-                                    </Text>
-                                </View>
-                                <Switch value={detectarDesconocidos} onValueChange={setDetectarDesconocidos} />
-                            </View>
-
-                            <View style={{ height: 12 }} />
-
-                            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <View style={{ flex: 1, paddingRight: 10 }}>
-                                    <Text style={{ color: TEXT, fontWeight: "800" }}> {t("gestacionConfig_confirmTitle")}</Text>
-                                    <Text style={{ color: MUTED, marginTop: 2, fontSize: 12 }}>
-                                        {t("gestacionConfig_confirmDescription")}
-                                    </Text>
-                                </View>
-                                <Switch value={confirmar} onValueChange={setConfirmar} />
-                            </View>
                         </Card.Content>
                     </Card>
                 )}
 
                 {modo === "busqueda" && (
-                    <Card mode="contained" style={{ borderRadius: 18, backgroundColor: CARD }}>
-                        <Card.Content>
-                            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-                                <Ionicons name="search-outline" size={18} color={BRAND} />
-                                <Text style={{ fontSize: 16, fontWeight: "900", color: TEXT }}>
-                                    {t("gestacionConfig_animalSearchTitle")}
-                                </Text>
-                            </View>
+                    <Card mode="contained" style={CARD_STYLE}>
+                        <Card.Content style={{ paddingVertical: 12 }}>
+                            <Text style={{ fontSize: 17, fontWeight: "900", color: TEXT }}>
+                                {t("gestacionConfig_animalSearchTitle")}
+                            </Text>
 
-                            <Text style={{ marginTop: 6, color: MUTED }}>
+                            <Text style={{ marginTop: 4, color: MUTED, lineHeight: 19 }}>
                                 {t("gestacionConfig_animalSearchDescription")}
                             </Text>
 
-                            <View style={{ height: 12 }} />
+                            <View style={{ height: 10 }} />
 
                             <View style={{ flexDirection: "row", gap: 10 }}>
-                                <OptionCard
+                                <OpcionCompacta
                                     label={t("gestacionConfig_searchByCrotal")}
-                                    icon="barcode-outline"
                                     active={tipoBusqueda === "crotal"}
                                     onPress={() => {
                                         setTipoBusqueda("crotal");
                                         setValorBusqueda("");
                                     }}
                                 />
-                                <OptionCard
+
+                                <OpcionCompacta
                                     label={t("gestacionConfig_searchById")}
-                                    icon="id-card-outline"
                                     active={tipoBusqueda === "id"}
                                     onPress={() => {
                                         setTipoBusqueda("id");
@@ -723,21 +993,20 @@ export const ConfiguracionGestacionScreen = () => {
 
                             {tipoBusqueda === "crotal" && (
                                 <>
-                                    <View style={{ height: 12 }} />
+                                    <View style={{ height: 8 }} />
 
                                     <View style={{ flexDirection: "row", gap: 10 }}>
-                                        <OptionCard
+                                        <OpcionCompacta
                                             label={t("gestacionConfig_manual")}
-                                            icon="create-outline"
                                             active={origenBusquedaCrotal === "manual"}
                                             onPress={() => {
                                                 setOrigenBusquedaCrotal("manual");
                                                 setValorBusqueda("");
                                             }}
                                         />
-                                        <OptionCard
+
+                                        <OpcionCompacta
                                             label={t("gestacionConfig_withSword")}
-                                            icon="barcode-outline"
                                             active={origenBusquedaCrotal === "espada"}
                                             onPress={() => {
                                                 setOrigenBusquedaCrotal("espada");
@@ -750,24 +1019,29 @@ export const ConfiguracionGestacionScreen = () => {
 
                             {!(tipoBusqueda === "crotal" && origenBusquedaCrotal === "espada") && (
                                 <>
-                                    <View style={{ height: 12 }} />
+                                    <View style={{ height: 10 }} />
 
-                                    <TextInput
-                                        mode="outlined"
-                                        label={tipoBusqueda === "crotal" ? "Crotal" : "ID"}
-                                        value={valorBusqueda}
-                                        onChangeText={setValorBusqueda}
-                                        placeholder={
-                                            tipoBusqueda === "crotal"
-                                                ? t("gestacionConfig_crotalPlaceholderSearch")
-                                                : t("gestacionConfig_idPlaceholderSearch")
-                                        }
-                                        keyboardType={tipoBusqueda === "crotal" ? "number-pad" : "default"}
-                                        autoCapitalize={tipoBusqueda === "id" ? "characters" : "none"}
-                                        autoCorrect={false}
-                                        outlineColor={BORDER}
-                                        activeOutlineColor={BRAND}
-                                    />
+                                    <View style={{ borderRadius: 12, backgroundColor: "#FFFFFF", ...SHADOW_SOFT }}>
+                                        <TextInput
+                                            mode="outlined"
+                                            label={tipoBusqueda === "crotal" ? "Crotal" : "ID"}
+                                            value={valorBusqueda}
+                                            onChangeText={setValorBusqueda}
+                                            placeholder={
+                                                tipoBusqueda === "crotal"
+                                                    ? t("gestacionConfig_crotalPlaceholderSearch")
+                                                    : t("gestacionConfig_idPlaceholderSearch")
+                                            }
+                                            keyboardType={tipoBusqueda === "crotal" ? "number-pad" : "default"}
+                                            autoCapitalize={tipoBusqueda === "id" ? "characters" : "none"}
+                                            autoCorrect={false}
+                                            outlineColor={BORDER}
+                                            activeOutlineColor={BRAND}
+                                            style={{ backgroundColor: "#FFFFFF" }}
+                                            outlineStyle={{ borderRadius: 12 }}
+                                        />
+                                    </View>
+
                                     {valorBusqueda.trim().length === 0 && (
                                         <Text style={{ color: "#DC2626", fontWeight: "700", marginTop: 8 }}>
                                             {tipoBusqueda === "crotal"
@@ -788,10 +1062,11 @@ export const ConfiguracionGestacionScreen = () => {
                 )}
 
                 {(buscandoAnimal || leyendoBusquedaEspada || esperandoCoincidencia) && (
-                    <Card mode="contained" style={{ borderRadius: 18, backgroundColor: CARD }}>
-                        <Card.Content>
+                    <Card mode="contained" style={CARD_STYLE}>
+                        <Card.Content style={{ paddingVertical: 12 }}>
                             <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                                 <Ionicons name="scan-outline" size={22} color={BRAND} />
+
                                 <Text style={{ fontSize: 16, fontWeight: "900", color: TEXT }}>
                                     {leyendoBusquedaEspada
                                         ? t("gestacionConfig_readingSword")
@@ -808,6 +1083,7 @@ export const ConfiguracionGestacionScreen = () => {
                                         ? t("gestacionConfig_waitingMatchDescription", { crotal: crotalEsperado })
                                         : t("gestacionConfig_searchingAnimalDescription")}
                             </Text>
+
                             {esperandoCoincidencia && lecturaNoCoincidente && (
                                 <View
                                     style={{
@@ -817,6 +1093,7 @@ export const ConfiguracionGestacionScreen = () => {
                                         borderColor: "#FECACA",
                                         backgroundColor: "#FEF2F2",
                                         padding: 12,
+                                        ...SHADOW_SOFT,
                                     }}
                                 >
                                     <Text
@@ -846,8 +1123,8 @@ export const ConfiguracionGestacionScreen = () => {
                 )}
 
                 {!lectorConectado && (
-                    <Card mode="contained" style={{ borderRadius: 18, backgroundColor: CARD }}>
-                        <Card.Content>
+                    <Card mode="contained" style={CARD_STYLE}>
+                        <Card.Content style={{ paddingVertical: 12 }}>
                             <TouchableOpacity
                                 activeOpacity={0.9}
                                 onPress={irAConfiguracionAwr}
@@ -857,6 +1134,7 @@ export const ConfiguracionGestacionScreen = () => {
                                     borderColor: "#FECACA",
                                     backgroundColor: "#FEF2F2",
                                     padding: 14,
+                                    ...SHADOW_SOFT,
                                 }}
                             >
                                 <View
@@ -917,7 +1195,8 @@ export const ConfiguracionGestacionScreen = () => {
                         </Card.Content>
                     </Card>
                 )}
-                <View style={{ marginTop: 16 }}>
+
+                <View style={{ marginTop: 8, marginBottom: 6 }}>
                     <Button
                         mode="contained"
                         onPress={onContinuar}
@@ -929,17 +1208,19 @@ export const ConfiguracionGestacionScreen = () => {
                         }
                         style={{
                             borderRadius: 16,
-                            paddingVertical: 6,
                             backgroundColor: puedeContinuar ? BRAND : "#94A3B8",
+                            ...SHADOW_CARD,
                         }}
-                        contentStyle={{ height: 48 }}
+                        contentStyle={{ height: 46 }}
                         labelStyle={{ fontSize: 16, fontWeight: "900" }}
                     >
-                        {modo === "busqueda" ? t("gestacionConfig_scan")
+                        {modo === "busqueda"
+                            ? t("gestacionConfig_scan")
                             : t("gestacionConfig_continue")}
                     </Button>
                 </View>
             </ScrollView>
+
             <Modal
                 visible={avisoVisible}
                 transparent
@@ -963,6 +1244,7 @@ export const ConfiguracionGestacionScreen = () => {
                             borderRadius: 24,
                             paddingHorizontal: 20,
                             paddingVertical: 18,
+                            ...SHADOW_CARD,
                         }}
                     >
                         <View
@@ -1044,6 +1326,7 @@ export const ConfiguracionGestacionScreen = () => {
                                 alignSelf: "center",
                                 paddingHorizontal: 34,
                                 minWidth: 130,
+                                ...SHADOW_ACTIVE,
                             }}
                         >
                             <Text style={{ color: "white", fontWeight: "900", fontSize: 15 }}>

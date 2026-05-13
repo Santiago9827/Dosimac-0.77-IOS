@@ -1,10 +1,31 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, BackHandler, Modal } from "react-native";
+import {
+    View,
+    Text,
+    ScrollView,
+    TouchableOpacity,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    BackHandler,
+    Modal,
+    Keyboard,
+} from "react-native";
 import { Appbar, Switch, TextInput } from "react-native-paper";
 import { useAwrConn } from "../../../stores/awrConnStore";
-import { useRoute, RouteProp, useFocusEffect, useNavigation, useIsFocused } from "@react-navigation/native";
-import { obtenerLecturaEspada, formatearSoloFecha, postActualizarId } from "../../routes/obtenerLecturaEspada";
+import {
+    useRoute,
+    RouteProp,
+    useFocusEffect,
+    useNavigation,
+    useIsFocused,
+} from "@react-navigation/native";
+import {
+    obtenerLecturaEspada,
+    formatearSoloFecha,
+    postActualizarId,
+} from "../../routes/obtenerLecturaEspada";
 import { construirEndpointEspada } from "../../../stores/apiConfig";
 import { useTranslation } from "react-i18next";
 import { traducirEstadoAnimal } from "../../hooks/traducirEstadoAnimal";
@@ -12,8 +33,6 @@ import { formatearCrotalVisual } from "../../hooks/formatearCrotalVisual";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import { IndicadorConexionAnimado } from "../../components/IndicadorConexionAnimado";
-
-
 
 type LectorMaternidadParams = {
     modo?: "entrada" | "salida" | "lectura" | "busqueda";
@@ -37,12 +56,6 @@ const SOFT_BORDER = "#C7D2FE";
 const DANGER = "#DC2626";
 const SUCCESS = "#16A34A";
 
-// const ENDPOINT_MATERNITY_ENTRADA =
-//     "http://192.168.11.203:6060/CtiAlimentacionAPI/api/espada/maternity";
-
-// const ENDPOINT_MATERNITY_SALIDA =
-//     "http://192.168.11.203:6060/CtiAlimentacionAPI/api/espada/maternity/exit";
-
 const SHADOW = {
     shadowColor: "#000",
     shadowOpacity: 0.06,
@@ -61,7 +74,7 @@ type RegistroEnviado = {
 };
 
 type TipoMovimiento = "entrada" | "salida" | "lectura" | "busqueda";
-// ---------- helpers ----------
+
 const normalizarClave = (valor: string) =>
     valor.trim().toUpperCase().replace(/\s+/g, "");
 
@@ -119,6 +132,7 @@ async function postMaternity(
 
     return { ok: res.ok, status: res.status, data, rawText };
 }
+
 function upsertRegistroPorCrotal(
     prev: RegistroEnviado[],
     corralValor: string,
@@ -162,36 +176,7 @@ function upsertRegistroPorCrotal(
     ];
 }
 
-// ---------- UI helpers ----------
-const SwitchRowReadonly = ({
-    title,
-    description,
-    value,
-}: {
-    title: string;
-    description: string;
-    value: boolean;
-}) => (
-    <View
-        style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: 12,
-        }}
-    >
-        <View style={{ flex: 1, paddingRight: 10 }}>
-            <Text style={{ color: TEXT, fontWeight: "800" }}>{title}</Text>
-            <Text style={{ color: MUTED, marginTop: 2, fontSize: 12 }}>
-                {description}
-            </Text>
-        </View>
 
-        <View pointerEvents="none">
-            <Switch value={value} onValueChange={() => { }} />
-        </View>
-    </View>
-);
 
 const MiniResumenCard = ({
     icon,
@@ -232,8 +217,6 @@ const MiniResumenCard = ({
         </Text>
     </View>
 );
-
-
 
 const CajaDatoLectura = ({
     icon,
@@ -316,7 +299,6 @@ const CajaDatoLectura = ({
                 {textoSecundario}
             </Text>
         )}
-
     </View>
 );
 
@@ -616,7 +598,6 @@ const limpiarMensajeBackend = (mensaje?: string) => {
     return mensaje.replace(/^Error:\s*/i, "").trim();
 };
 
-// ---------- componente ----------
 export const LectorMaternidadScreen = () => {
     const ANCHO_CORRAL = 60;
     const ANCHO_ID = 56;
@@ -624,26 +605,11 @@ export const LectorMaternidadScreen = () => {
 
     const ESPACIO_CORRAL_ID_ENTRADA = 30;
     const ESPACIO_ID_CROTAL_ENTRADA = 70;
-
     const ESPACIO_ID_CROTAL_SALIDA = 24;
+
     const COLOR_LINEA_COLUMNA = "#E2E8F0";
     const PADDING_TABLA_X = 14;
-
-    const LineaVerticalTabla = ({ left }: { left: number }) => (
-        <View
-            pointerEvents="none"
-            style={{
-                position: "absolute",
-                left,
-                top: 0,
-                bottom: 0,
-                width: 1,
-                backgroundColor: COLOR_LINEA_COLUMNA,
-                zIndex: 1,
-            }}
-        />
-    );
-
+    const TAM_PAGINA = 10;
 
     const navigation = useNavigation<any>();
     const { t } = useTranslation();
@@ -656,6 +622,17 @@ export const LectorMaternidadScreen = () => {
     const iniciarLectura = useAwrConn((s) => s.startReading);
     const detenerLectura = useAwrConn((s) => s.stopReading);
     const limpiarCrotalLeido = useAwrConn((s) => s.clearLastTag);
+
+    const route = useRoute<RouteProp<Record<string, LectorMaternidadParams>, string>>();
+    const params = route.params ?? {};
+
+    const timerIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const autoEnvioTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const ultimoCrotalAutoRef = useRef<string | null>(null);
+    const scrollRef = useRef<ScrollView | null>(null);
+    const formularioIdYRef = useRef(0);
+
+    const [altoTeclado, setAltoTeclado] = useState(0);
 
     const [idRecibido, setIdRecibido] = useState("");
     const [estadoIdVisual, setEstadoIdVisual] = useState<"neutro" | "success" | "error">("neutro");
@@ -671,26 +648,20 @@ export const LectorMaternidadScreen = () => {
     const [avisoMensaje, setAvisoMensaje] = useState("");
     const [avisoTipo, setAvisoTipo] = useState<"warning" | "error" | "info">("info");
 
-    const timerIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const autoEnvioTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const ultimoCrotalAutoRef = useRef<string | null>(null);
-    const scrollRef = useRef<ScrollView | null>(null);
-
     const [corralInput, setCorralInput] = useState("");
     const [tipoMovimiento, setTipoMovimiento] = useState<TipoMovimiento>("entrada");
-
     const [registrosEnviados, setRegistrosEnviados] = useState<RegistroEnviado[]>([]);
     const [estaEnviando, setEstaEnviando] = useState(false);
 
     const [detectarDesconocidos, setDetectarDesconocidos] = useState(true);
     const [confirmar, setConfirmar] = useState(true);
+
+    const [pagina, setPagina] = useState(0);
+
     const esEntrada = tipoMovimiento === "entrada";
     const esSalida = tipoMovimiento === "salida";
     const esLectura = tipoMovimiento === "lectura";
     const esBusqueda = tipoMovimiento === "busqueda";
-
-    const route = useRoute<RouteProp<Record<string, LectorMaternidadParams>, string>>();
-    const params = route.params ?? {};
 
     const esTituloLectura =
         params.modo === "lectura" || params.modo === "busqueda";
@@ -699,16 +670,11 @@ export const LectorMaternidadScreen = () => {
         ? t("Reader_readingTitle")
         : t("maternityReader_screenTitle");
 
-
-    const valorBusquedaParam = params.valorBusqueda ?? "";
-    const animalEncontradoParam = params.animalEncontrado ?? null;
-    const animalBusqueda = animalEncontradoParam ?? null;
-
-    const TAM_PAGINA = 10;
-    const [pagina, setPagina] = useState(0);
+    const animalBusqueda = params.animalEncontrado ?? null;
 
     const totalPaginas = Math.max(1, Math.ceil(registrosEnviados.length / TAM_PAGINA));
     const totalRegistrosEnviados = registrosEnviados.length;
+    const hayRegistros = registrosEnviados.length > 0;
 
     const pageItems = useMemo(() => {
         const start = pagina * TAM_PAGINA;
@@ -725,6 +691,34 @@ export const LectorMaternidadScreen = () => {
             autoEnvioTimerRef.current = null;
         }
     }, []);
+
+    const subirFormularioId = React.useCallback(() => {
+        const yFormulario = Math.max(formularioIdYRef.current - 80, 0);
+
+        scrollRef.current?.scrollTo({
+            y: yFormulario,
+            animated: true,
+        });
+    }, []);
+
+    const LineaVerticalTabla = ({ left }: { left: number }) => (
+        <View
+            pointerEvents="none"
+            style={{
+                position: "absolute",
+                left,
+                top: 0,
+                bottom: 0,
+                width: 1,
+                backgroundColor: COLOR_LINEA_COLUMNA,
+                zIndex: 1,
+            }}
+        />
+    );
+
+    const volverAConfiguracionMaternidad = React.useCallback(() => {
+        navigation.navigate("ConfiguracionLectura");
+    }, [navigation]);
 
     const abrirActualizacionId = React.useCallback((crotal: string, corral: string) => {
         if (!detectarDesconocidos) return;
@@ -764,22 +758,17 @@ export const LectorMaternidadScreen = () => {
         limpiarCrotalLeido,
     ]);
 
-
-    //!------Para traducir-------- 
     const traducirEstadosEnMensaje = (
         mensaje: string,
-        t: (clave: string) => string
+        tFuncion: (clave: string) => string
     ) => {
         if (!mensaje) return "";
 
         return mensaje.replace(
             /\b(gestation|out_of_gestation|maternity|out_of_maternity)\b/g,
-            (estado) => traducirEstadoAnimal(estado, t)
+            (estado) => traducirEstadoAnimal(estado, tFuncion)
         );
     };
-    //!-----Fin traduccion--------
-
-
 
     const mostrarAviso = (
         titulo: string,
@@ -816,124 +805,49 @@ export const LectorMaternidadScreen = () => {
         }, 3000);
     };
 
-    useEffect(() => {
-        pantallaActivaRef.current = pantallaEnfocada;
-
-        if (!pantallaEnfocada) {
-            limpiarAutoEnvioTimer();
-            ultimoCrotalAutoRef.current = null;
+    const estilosCajaId = useMemo(() => {
+        if (estadoIdVisual === "success") {
+            return {
+                backgroundColor: "#ECFDF5",
+                borderColor: "#BBF7D0",
+                colorTexto: SUCCESS,
+                colorSubtexto: "#15803D",
+                icono: "checkmark-circle-outline" as const,
+            };
         }
-    }, [pantallaEnfocada, limpiarAutoEnvioTimer]);
 
-    useEffect(() => {
-        return () => {
-            if (timerIdRef.current) {
-                clearTimeout(timerIdRef.current);
-            }
-            if (autoEnvioTimerRef.current) {
-                clearTimeout(autoEnvioTimerRef.current);
-            }
+        if (estadoIdVisual === "error") {
+            return {
+                backgroundColor: "#FEF2F2",
+                borderColor: "#FECACA",
+                colorTexto: DANGER,
+                colorSubtexto: "#B91C1C",
+                icono: "alert-circle-outline" as const,
+            };
+        }
+
+        return {
+            backgroundColor: "#F1F5F9",
+            borderColor: BORDER,
+            colorTexto: TEXT,
+            colorSubtexto: MUTED,
+            icono: "id-card-outline" as const,
         };
-    }, []);
+    }, [estadoIdVisual]);
 
-    useEffect(() => {
-        const maxPagina = Math.max(0, Math.ceil(registrosEnviados.length / TAM_PAGINA) - 1);
-        if (pagina > maxPagina) setPagina(maxPagina);
-    }, [registrosEnviados.length, pagina]);
-
-
-    useFocusEffect(
-        React.useCallback(() => {
-            const onBackPress = () => {
-                navigation.navigate("ConfiguracionLectura");
-                return true;
-            };
-
-            const subscription = BackHandler.addEventListener(
-                "hardwareBackPress",
-                onBackPress
-            );
-
-            return () => subscription.remove();
-        }, [navigation])
-    );
-
-    useFocusEffect(
-        React.useCallback(() => {
-            const modoInicial: TipoMovimiento =
-                params.modo === "salida"
-                    ? "salida"
-                    : params.modo === "lectura"
-                        ? "lectura"
-                        : params.modo === "busqueda"
-                            ? "busqueda"
-                            : "entrada";
-
-            setTipoMovimiento(modoInicial);
-            setCorralInput(
-                modoInicial === "entrada" && params.corral
-                    ? soloDigitos(String(params.corral))
-                    : ""
-            );
-            setDetectarDesconocidos(params.detectarDesconocidos ?? true);
-            setConfirmar(params.confirmar ?? true);
-
-            setRegistrosEnviados([]);
-            limpiarCrotalLeido();
-            setIdRecibido("");
-            setEstadoIdVisual("neutro");
-            cerrarActualizacionId();
-
-            if (timerIdRef.current) {
-                clearTimeout(timerIdRef.current);
-            }
-
-            limpiarAutoEnvioTimer();
-            ultimoCrotalAutoRef.current = null;
-
-            (async () => {
-                if (modoInicial === "busqueda") return;
-                if (!idLector) return;
-                try {
-                    await iniciarLectura();
-                } catch { }
-            })();
-            return () => {
-                if (timerIdRef.current) {
-                    clearTimeout(timerIdRef.current);
-                }
-
-                limpiarAutoEnvioTimer();
-                ultimoCrotalAutoRef.current = null;
-
-                detenerLectura?.().catch(() => { });
-            };
-        }, [
-            params?.modo,
-            params?.corral,
-            params?.detectarDesconocidos,
-            params?.confirmar,
-            idLector,
-            iniciarLectura,
-            detenerLectura,
-            limpiarCrotalLeido,
-            limpiarAutoEnvioTimer,
-            cerrarActualizacionId,
-        ])
-    );
-    const volverAConfiguracionMaternidad = () => {
-        navigation.navigate("ConfiguracionLectura");
-    };
     const onEnviar = React.useCallback(async (crotalForzado?: string) => {
         if (!pantallaActivaRef.current) return;
 
         if (mostrarActualizarId || actualizandoId) {
+            limpiarAutoEnvioTimer();
             limpiarCrotalLeido();
+            ultimoCrotalAutoRef.current = null;
             return;
         }
 
         const corralTxt = corralInput.trim();
         const crotalTxt = (crotalForzado ?? crotalLeido ?? "").trim();
+
         if (!crotalTxt) {
             Alert.alert(
                 t("maternityReader_alertMissingCrotalTitle"),
@@ -974,9 +888,10 @@ export const LectorMaternidadScreen = () => {
 
                     mostrarAviso(
                         t("maternityReader_alertReadErrorTitle"),
-                        String(detalle),
+                        limpiarMensajeBackend(String(detalle)),
                         "error"
-                    ); return;
+                    );
+                    return;
                 }
 
                 const animal = respuesta.data ?? {};
@@ -987,6 +902,7 @@ export const LectorMaternidadScreen = () => {
                         String(animal.animalId).trim() !== ""
                         ? String(animal.animalId)
                         : "—";
+
                 const esIdDesconocido = idBackendTexto === "0";
 
                 const crotalTexto =
@@ -1115,7 +1031,7 @@ export const LectorMaternidadScreen = () => {
 
                 mostrarAviso(
                     t("maternityReader_alertSendErrorTitle"),
-                    String(detalle),
+                    limpiarMensajeBackend(String(detalle)),
                     "error"
                 );
                 return;
@@ -1149,6 +1065,7 @@ export const LectorMaternidadScreen = () => {
             } else {
                 mostrarIdTemporal("—", "error");
             }
+
             setRegistrosEnviados((prev) =>
                 upsertRegistroPorCrotal(
                     prev,
@@ -1173,9 +1090,22 @@ export const LectorMaternidadScreen = () => {
         } finally {
             setEstaEnviando(false);
         }
-    }, [corralInput, crotalLeido, requiereCorral, esEntrada, esSalida, esLectura, limpiarCrotalLeido, mostrarActualizarId,
+    }, [
+        pantallaActivaRef,
+        mostrarActualizarId,
         actualizandoId,
-        limpiarCrotalLeido,]);
+        limpiarAutoEnvioTimer,
+        limpiarCrotalLeido,
+        corralInput,
+        crotalLeido,
+        t,
+        esLectura,
+        requiereCorral,
+        esSalida,
+        esEntrada,
+        abrirActualizacionId,
+        cerrarActualizacionId,
+    ]);
 
     const actualizarIdAnimal = React.useCallback(async () => {
         const idManual = nuevoIdManual.trim();
@@ -1226,9 +1156,10 @@ export const LectorMaternidadScreen = () => {
 
                 mostrarAviso(
                     t("maternityReader_alertUpdateIdErrorTitle"),
-                    String(detalle),
+                    limpiarMensajeBackend(String(detalle)),
                     "error"
-                ); return;
+                );
+                return;
             }
 
             const idActualizado =
@@ -1265,7 +1196,159 @@ export const LectorMaternidadScreen = () => {
         } finally {
             setActualizandoId(false);
         }
-    }, [nuevoIdManual, crotalPendienteId, corralPendienteId, cerrarActualizacionId]);
+    }, [
+        nuevoIdManual,
+        crotalPendienteId,
+        corralPendienteId,
+        cerrarActualizacionId,
+        t,
+    ]);
+
+    useEffect(() => {
+        pantallaActivaRef.current = pantallaEnfocada;
+
+        if (!pantallaEnfocada) {
+            limpiarAutoEnvioTimer();
+            ultimoCrotalAutoRef.current = null;
+        }
+    }, [pantallaEnfocada, limpiarAutoEnvioTimer]);
+
+    useEffect(() => {
+        const eventoMostrar =
+            Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+
+        const eventoOcultar =
+            Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+
+        const subMostrar = Keyboard.addListener(eventoMostrar, (event) => {
+            setAltoTeclado(event.endCoordinates?.height ?? 0);
+
+            if (mostrarActualizarId) {
+                setTimeout(() => {
+                    subirFormularioId();
+                }, Platform.OS === "ios" ? 80 : 180);
+            }
+        });
+
+        const subOcultar = Keyboard.addListener(eventoOcultar, () => {
+            setAltoTeclado(0);
+        });
+
+        return () => {
+            subMostrar.remove();
+            subOcultar.remove();
+        };
+    }, [mostrarActualizarId, subirFormularioId]);
+
+    useEffect(() => {
+        if (!mostrarActualizarId) return;
+
+        const timer = setTimeout(() => {
+            subirFormularioId();
+        }, 250);
+
+        return () => clearTimeout(timer);
+    }, [mostrarActualizarId, subirFormularioId]);
+
+    useEffect(() => {
+        return () => {
+            if (timerIdRef.current) {
+                clearTimeout(timerIdRef.current);
+            }
+
+            if (autoEnvioTimerRef.current) {
+                clearTimeout(autoEnvioTimerRef.current);
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        const maxPagina = Math.max(0, Math.ceil(registrosEnviados.length / TAM_PAGINA) - 1);
+        if (pagina > maxPagina) setPagina(maxPagina);
+    }, [registrosEnviados.length, pagina]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            const onBackPress = () => {
+                volverAConfiguracionMaternidad();
+                return true;
+            };
+
+            const subscription = BackHandler.addEventListener(
+                "hardwareBackPress",
+                onBackPress
+            );
+
+            return () => subscription.remove();
+        }, [volverAConfiguracionMaternidad])
+    );
+
+    useFocusEffect(
+        React.useCallback(() => {
+            const modoInicial: TipoMovimiento =
+                params.modo === "salida"
+                    ? "salida"
+                    : params.modo === "lectura"
+                        ? "lectura"
+                        : params.modo === "busqueda"
+                            ? "busqueda"
+                            : "entrada";
+
+            setTipoMovimiento(modoInicial);
+            setCorralInput(
+                modoInicial === "entrada" && params.corral
+                    ? soloDigitos(String(params.corral))
+                    : ""
+            );
+
+            setDetectarDesconocidos(params.detectarDesconocidos ?? true);
+            setConfirmar(params.confirmar ?? true);
+
+            setRegistrosEnviados([]);
+            limpiarCrotalLeido();
+            setIdRecibido("");
+            setEstadoIdVisual("neutro");
+            cerrarActualizacionId();
+
+            if (timerIdRef.current) {
+                clearTimeout(timerIdRef.current);
+            }
+
+            limpiarAutoEnvioTimer();
+            ultimoCrotalAutoRef.current = null;
+
+            (async () => {
+                if (modoInicial === "busqueda") return;
+                if (!idLector) return;
+
+                try {
+                    await iniciarLectura();
+                } catch { }
+            })();
+
+            return () => {
+                if (timerIdRef.current) {
+                    clearTimeout(timerIdRef.current);
+                }
+
+                limpiarAutoEnvioTimer();
+                ultimoCrotalAutoRef.current = null;
+
+                detenerLectura?.().catch(() => { });
+            };
+        }, [
+            params?.modo,
+            params?.corral,
+            params?.detectarDesconocidos,
+            params?.confirmar,
+            idLector,
+            iniciarLectura,
+            detenerLectura,
+            limpiarCrotalLeido,
+            limpiarAutoEnvioTimer,
+            cerrarActualizacionId,
+        ])
+    );
 
     useEffect(() => {
         const crotalActual = (crotalLeido ?? "").trim();
@@ -1326,40 +1409,12 @@ export const LectorMaternidadScreen = () => {
         actualizandoId,
         limpiarCrotalLeido,
     ]);
-    const estilosCajaId = useMemo(() => {
-        if (estadoIdVisual === "success") {
-            return {
-                backgroundColor: "#ECFDF5",
-                borderColor: "#BBF7D0",
-                colorTexto: SUCCESS,
-                colorSubtexto: "#15803D",
-                icono: "checkmark-circle-outline" as const,
-            };
-        }
 
-        if (estadoIdVisual === "error") {
-            return {
-                backgroundColor: "#FEF2F2",
-                borderColor: "#FECACA",
-                colorTexto: "#DC2626",
-                colorSubtexto: "#B91C1C",
-                icono: "alert-circle-outline" as const,
-            };
-        }
-
-        return {
-            backgroundColor: "#F1F5F9",
-            borderColor: BORDER,
-            colorTexto: TEXT,
-            colorSubtexto: MUTED,
-            icono: "id-card-outline" as const,
-        };
-    }, [estadoIdVisual]);
     return (
         <KeyboardAvoidingView
             style={{ flex: 1, backgroundColor: BG }}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={90}
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
         >
             <Appbar.Header
                 elevated
@@ -1372,11 +1427,15 @@ export const LectorMaternidadScreen = () => {
                 <Appbar.BackAction color={TEXT} onPress={volverAConfiguracionMaternidad} />
                 <Appbar.Content title={tituloHeader} titleStyle={{ color: TEXT }} />
             </Appbar.Header>
+
             <ScrollView
                 ref={scrollRef}
                 contentContainerStyle={{
                     padding: 16,
-                    paddingBottom: 140,
+                    paddingBottom:
+                        mostrarActualizarId && altoTeclado > 0
+                            ? altoTeclado + 180
+                            : 140,
                     gap: 14,
                     flexGrow: 1,
                 }}
@@ -1432,7 +1491,7 @@ export const LectorMaternidadScreen = () => {
                                         fontWeight: "900",
                                     }}
                                 >
-                                    {t("maternityReader_animalIdLabel")}  {String(animalBusqueda?.animalId ?? "—")}
+                                    {t("maternityReader_animalIdLabel")} {String(animalBusqueda?.animalId ?? "—")}
                                 </Text>
 
                                 <Text
@@ -1492,7 +1551,7 @@ export const LectorMaternidadScreen = () => {
                             </View>
 
                             <TouchableOpacity
-                                onPress={() => navigation.navigate("ConfiguracionLecturaMaternidad")}
+                                onPress={volverAConfiguracionMaternidad}
                                 activeOpacity={0.9}
                                 style={{
                                     marginTop: 4,
@@ -1510,82 +1569,168 @@ export const LectorMaternidadScreen = () => {
                         </View>
                     </View>
                 )}
-                {/* Resumen */}
+
                 {!esLectura && !esBusqueda && (
                     <View
                         style={{
                             backgroundColor: CARD,
                             borderRadius: 18,
-                            overflow: "hidden",
                             borderWidth: 1,
                             borderColor: BORDER,
+                            padding: 8,
                             ...SHADOW,
                         }}
                     >
                         <View
                             style={{
-                                backgroundColor: SOFT,
-                                padding: 14,
-                                borderBottomWidth: 1,
-                                borderBottomColor: SOFT_BORDER,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 8,
                             }}
                         >
-                            <Text style={{ color: TEXT, fontSize: 18, fontWeight: "900" }}> {t("maternityReader_summaryTitle")}</Text>
-                            <Text style={{ color: MUTED, marginTop: 4 }}>
-                                {t("maternityReader_summaryDescription")}
-                            </Text>
-                        </View>
-
-                        <View style={{ padding: 14, gap: 12 }}>
-                            <View style={{ flexDirection: "row", gap: 10 }}>
-                                <MiniResumenCard
-                                    icon="swap-horizontal-outline"
-                                    titulo={t("maternityReader_mode")}
-                                    valor={
-                                        tipoMovimiento === "entrada"
-                                            ? t("maternityReader_modeEntry")
-                                            : tipoMovimiento === "salida"
-                                                ? t("maternityReader_modeExit")
-                                                : t("maternityReader_modeReading")
-                                    }
-                                />
-
-                                {esEntrada && (
-                                    <MiniResumenCard
-                                        icon="home-outline"
-                                        titulo="Corral"
-                                        valor={corralInput || "—"}
+                            {/* Modo + Corral */}
+                            <View
+                                style={{
+                                    flex: 1,
+                                    minHeight: 54,
+                                    borderRadius: 14,
+                                    backgroundColor: "#F8FAFC",
+                                    borderWidth: 1,
+                                    borderColor: BORDER,
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    paddingHorizontal: 10,
+                                }}
+                            >
+                                {/* Modo */}
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Ionicons
+                                        name="swap-horizontal-outline"
+                                        size={18}
+                                        color={BRAND}
                                     />
+
+                                    <View>
+                                        <Text
+                                            style={{
+                                                color: MUTED,
+                                                fontSize: 10,
+                                                fontWeight: "800",
+                                            }}
+                                        >
+                                            {t("maternityReader_mode")}
+                                        </Text>
+
+                                        <Text
+                                            style={{
+                                                color: TEXT,
+                                                fontSize: 14,
+                                                fontWeight: "900",
+                                                marginTop: 1,
+                                            }}
+                                            numberOfLines={1}
+                                        >
+                                            {tipoMovimiento === "entrada"
+                                                ? t("maternityReader_modeEntry")
+                                                : tipoMovimiento === "salida"
+                                                    ? t("maternityReader_modeExit")
+                                                    : t("maternityReader_modeReading")}
+                                        </Text>
+                                    </View>
+                                </View>
+
+                                {/* Corral solo en entrada */}
+                                {esEntrada && (
+                                    <>
+                                        <View
+                                            style={{
+                                                width: 1,
+                                                height: 30,
+                                                backgroundColor: "#E2E8F0",
+                                                marginHorizontal: 8,
+                                            }}
+                                        />
+
+                                        <View
+                                            style={{
+                                                flex: 0.75,
+                                                flexDirection: "row",
+                                                alignItems: "center",
+                                                gap: 8,
+                                            }}
+                                        >
+                                            <Ionicons
+                                                name="home-outline"
+                                                size={18}
+                                                color={BRAND}
+                                            />
+
+                                            <View>
+                                                <Text
+                                                    style={{
+                                                        color: MUTED,
+                                                        fontSize: 10,
+                                                        fontWeight: "800",
+                                                    }}
+                                                >
+                                                    {t("maternityReader_fieldCorral")}
+                                                </Text>
+
+                                                <Text
+                                                    style={{
+                                                        color: TEXT,
+                                                        fontSize: 14,
+                                                        fontWeight: "900",
+                                                        marginTop: 1,
+                                                    }}
+                                                    numberOfLines={1}
+                                                >
+                                                    {corralInput || "—"}
+                                                </Text>
+                                            </View>
+                                        </View>
+                                    </>
                                 )}
                             </View>
 
-                            <View style={{ height: 1, backgroundColor: "#F1F5F9" }} />
-
-                            <SwitchRowReadonly
-                                title={t("maternityReader_detectUnknownTitle")}
-                                description={t("maternityReader_detectUnknownDescription")}
-                                value={detectarDesconocidos}
-                            />
-
-                            <SwitchRowReadonly
-                                title={t("maternityReader_confirmSendTitle")}
-                                description={t("maternityReader_confirmSendDescription")}
-                                value={confirmar}
-                            />
-
+                            {/* Botón cambiar */}
                             <TouchableOpacity
-                                onPress={() => navigation.navigate("ConfiguracionLectura")}
+                                onPress={volverAConfiguracionMaternidad}
                                 activeOpacity={0.9}
                                 style={{
-                                    marginTop: 6,
-                                    height: 42,
-                                    borderRadius: 12,
+                                    height: 54,
+                                    width: 120,
+                                    borderRadius: 14,
                                     alignItems: "center",
                                     justifyContent: "center",
                                     backgroundColor: "#E5E7EB",
+                                    paddingHorizontal: 8,
                                 }}
                             >
-                                <Text style={{ color: TEXT, fontWeight: "900" }}>
+                                <Ionicons
+                                    name="settings-outline"
+                                    size={17}
+                                    color={TEXT}
+                                    style={{ marginBottom: 2 }}
+                                />
+
+                                <Text
+                                    style={{
+                                        color: TEXT,
+                                        fontWeight: "900",
+                                        fontSize: 11,
+                                        textAlign: "center",
+                                    }}
+                                    numberOfLines={1}
+                                    adjustsFontSizeToFit
+                                >
                                     {t("maternityReader_changeSettings")}
                                 </Text>
                             </TouchableOpacity>
@@ -1593,7 +1738,6 @@ export const LectorMaternidadScreen = () => {
                     </View>
                 )}
 
-                {/* Lectura actual */}
                 {!esLectura && !esBusqueda && (
                     <View
                         style={{
@@ -1692,6 +1836,9 @@ export const LectorMaternidadScreen = () => {
 
                 {!esBusqueda && mostrarActualizarId && (
                     <View
+                        onLayout={(event) => {
+                            formularioIdYRef.current = event.nativeEvent.layout.y;
+                        }}
                         style={{
                             backgroundColor: CARD,
                             borderRadius: 18,
@@ -1727,6 +1874,11 @@ export const LectorMaternidadScreen = () => {
                                 label={t("maternityReader_newIdLabel")}
                                 value={nuevoIdManual}
                                 onChangeText={setNuevoIdManual}
+                                onFocus={() => {
+                                    setTimeout(() => {
+                                        subirFormularioId();
+                                    }, Platform.OS === "ios" ? 100 : 250);
+                                }}
                                 placeholder={t("maternityReader_newIdPlaceholder")}
                                 autoCapitalize="characters"
                                 autoCorrect={false}
@@ -1756,8 +1908,8 @@ export const LectorMaternidadScreen = () => {
                                 }}
                             >
                                 <Text style={{ color: "white", fontWeight: "900", fontSize: 16 }}>
-                                    {actualizandoId ?
-                                        t("maternityReader_updatingId")
+                                    {actualizandoId
+                                        ? t("maternityReader_updatingId")
                                         : t("maternityReader_updateId")}
                                 </Text>
                             </TouchableOpacity>
@@ -1925,7 +2077,7 @@ export const LectorMaternidadScreen = () => {
                         </View>
 
                         <View style={{ position: "relative" }}>
-                            {!esLectura && esEntrada && (
+                            {hayRegistros && !esLectura && esEntrada && (
                                 <>
                                     <LineaVerticalTabla
                                         left={PADDING_TABLA_X + ANCHO_CORRAL + ESPACIO_CORRAL_ID_ENTRADA / 2}
@@ -1942,7 +2094,7 @@ export const LectorMaternidadScreen = () => {
                                 </>
                             )}
 
-                            {esSalida && (
+                            {hayRegistros && esSalida && (
                                 <LineaVerticalTabla
                                     left={PADDING_TABLA_X + ANCHO_ID + ESPACIO_ID_CROTAL_SALIDA / 2}
                                 />
@@ -2008,7 +2160,9 @@ export const LectorMaternidadScreen = () => {
 
                                     {registrosEnviados.length === 0 ? (
                                         <View style={{ padding: 14 }}>
-                                            <Text style={{ color: MUTED }}>{t("maternityReader_noRecords")}</Text>
+                                            <Text style={{ color: MUTED }}>
+                                                {t("maternityReader_noRecords")}
+                                            </Text>
                                         </View>
                                     ) : (
                                         pageItems.map((r, idx) => (
@@ -2113,7 +2267,9 @@ export const LectorMaternidadScreen = () => {
 
                                     {registrosEnviados.length === 0 ? (
                                         <View style={{ padding: 14 }}>
-                                            <Text style={{ color: MUTED }}>{t("maternityReader_noRecords")}</Text>
+                                            <Text style={{ color: MUTED }}>
+                                                {t("maternityReader_noRecords")}
+                                            </Text>
                                         </View>
                                     ) : (
                                         pageItems.map((r, idx) => (
@@ -2178,9 +2334,7 @@ export const LectorMaternidadScreen = () => {
                     </View>
                 )}
 
-                {/* Enviar */}
                 {!esBusqueda && !esLectura && (
-
                     <View style={{ marginTop: 12 }}>
                         <TouchableOpacity
                             onPress={() => {
@@ -2223,6 +2377,7 @@ export const LectorMaternidadScreen = () => {
                     </View>
                 )}
             </ScrollView>
+
             <Modal
                 visible={avisoVisible}
                 transparent

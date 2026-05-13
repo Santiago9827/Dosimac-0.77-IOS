@@ -1,6 +1,17 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, BackHandler, Modal } from "react-native";
+import {
+    View,
+    Text,
+    ScrollView,
+    TouchableOpacity,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    BackHandler,
+    Modal,
+    Keyboard,
+} from "react-native";
 import { useAwrConn } from "../../../stores/awrConnStore";
 import { useFocusEffect, useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import { Appbar, Switch, TextInput } from "react-native-paper";
@@ -53,8 +64,6 @@ const parseNumeroSeguro = (txt: string) => {
     return Number.isFinite(n) ? n : null;
 };
 
-
-
 async function postGestation(
     endpoint: string,
     payload: { corral?: number; crotal: number }
@@ -85,6 +94,7 @@ async function postGestation(
 
     return { ok: res.ok, status: res.status, data, rawText };
 }
+
 function upsertRegistroPorCrotal(
     prev: RegistroEnviado[],
     corralValor: string,
@@ -127,92 +137,6 @@ function upsertRegistroPorCrotal(
         ...prev,
     ];
 }
-// ---------- UI helpers ----------
-// const InfoRow = ({
-//     icon,
-//     label,
-//     value,
-// }: {
-//     icon: any;
-//     label: string;
-//     value: string;
-// }) => (
-//     <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-//         <Ionicons name={icon} size={18} color={MUTED} />
-//         <Text style={{ color: MUTED, fontWeight: "800", width: 160 }}>{label}</Text>
-//         <Text style={{ color: TEXT, fontWeight: "900", flex: 1, textAlign: "right" }}>{value}</Text>
-//     </View>
-// );
-
-const SwitchRowReadonly = ({
-    title,
-    description,
-    value,
-}: {
-    title: string;
-    description: string;
-    value: boolean;
-}) => (
-    <View
-        style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: 12,
-        }}
-    >
-        <View style={{ flex: 1, paddingRight: 10 }}>
-            <Text style={{ color: TEXT, fontWeight: "800" }}>{title}</Text>
-            <Text style={{ color: MUTED, marginTop: 2, fontSize: 12 }}>
-                {description}
-            </Text>
-        </View>
-
-        <View pointerEvents="none">
-            <Switch value={value} onValueChange={() => { }} />
-        </View>
-    </View>
-);
-
-const MiniResumenCard = ({
-    icon,
-    titulo,
-    valor,
-}: {
-    icon: any;
-    titulo: string;
-    valor: string;
-}) => (
-    <View
-        style={{
-            flex: 1,
-            backgroundColor: "#F8FAFF",
-            borderWidth: 1,
-            borderColor: "#E0E7FF",
-            borderRadius: 14,
-            padding: 12,
-            gap: 8,
-        }}
-    >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <Ionicons name={icon} size={16} color={BRAND} />
-            <Text style={{ color: MUTED, fontWeight: "800", fontSize: 12 }}>
-                {titulo}
-            </Text>
-        </View>
-
-        <Text
-            style={{
-                color: TEXT,
-                fontWeight: "900",
-                fontSize: 16,
-            }}
-            numberOfLines={1}
-        >
-            {valor}
-        </Text>
-    </View>
-);
 
 const CajaDatoLectura = ({
     icon,
@@ -589,22 +513,6 @@ const RegistroLecturaCard = ({
     );
 };
 
-
-const formatearFecha = (fecha?: string) => {
-    if (!fecha) return "—";
-
-    try {
-        const fechaLimpia = fecha.replace("[UTC]", "");
-        const d = new Date(fechaLimpia);
-
-        if (Number.isNaN(d.getTime())) return fecha;
-
-        return d.toLocaleString("es-ES");
-    } catch {
-        return fecha;
-    }
-};
-
 const limpiarMensajeBackend = (mensaje?: string) => {
     if (!mensaje) return "";
     return mensaje.replace(/^Error:\s*/i, "").trim();
@@ -612,29 +520,36 @@ const limpiarMensajeBackend = (mensaje?: string) => {
 
 // ---------- componente ----------
 export const LectorGestacionScreen = () => {
-
     const ANCHO_CORRAL = 60;
     const ANCHO_ID = 56;
     const ANCHO_CROTAL_SALIDA = 150;
 
     const ESPACIO_CORRAL_ID_ENTRADA = 30;
     const ESPACIO_ID_CROTAL_ENTRADA = 70;
-
     const ESPACIO_ID_CROTAL_SALIDA = 24;
+
     const COLOR_LINEA_COLUMNA = "#E2E8F0";
     const PADDING_TABLA_X = 14;
+    const TAM_PAGINA = 10;
 
     const navigation = useNavigation<any>();
     const { t } = useTranslation();
     const pantallaEnfocada = useIsFocused();
     const pantallaActivaRef = useRef(false);
+    const scrollRef = useRef<ScrollView | null>(null);
+    const formularioIdYRef = useRef(0);
+
+    const timerIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const autoEnvioTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const ultimoCrotalAutoRef = useRef<string | null>(null);
+
+    const [altoTeclado, setAltoTeclado] = useState(0);
 
     const [avisoVisible, setAvisoVisible] = useState(false);
     const [avisoTitulo, setAvisoTitulo] = useState("");
     const [avisoMensaje, setAvisoMensaje] = useState("");
     const [avisoTipo, setAvisoTipo] = useState<"warning" | "error" | "info">("info");
 
-    // AWR store
     const lectorConectado = useAwrConn((s) => s.isConnected);
     const idLector = useAwrConn((s) => s.currentId);
     const crotalLeido = useAwrConn((s) => s.lastTag);
@@ -645,8 +560,6 @@ export const LectorGestacionScreen = () => {
     const [detectarDesconocidos, setDetectarDesconocidos] = useState(true);
     const [confirmar, setConfirmar] = useState(true);
 
-
-    // UI state
     const [corralInput, setCorralInput] = useState("");
     const [tipoMovimiento, setTipoMovimiento] = useState<TipoMovimiento>("entrada");
     const [registrosEnviados, setRegistrosEnviados] = useState<RegistroEnviado[]>([]);
@@ -655,29 +568,6 @@ export const LectorGestacionScreen = () => {
     const [idRecibido, setIdRecibido] = useState("");
     const [estadoIdVisual, setEstadoIdVisual] = useState<EstadoIdVisual>("neutro");
 
-    const timerIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const autoEnvioTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const ultimoCrotalAutoRef = useRef<string | null>(null);
-
-    const route = useRoute<any>();
-    const modoParam = route.params?.modo ?? "entrada";
-    const tituloHeader =
-        modoParam === "lectura"
-            ? t("Reader_readingTitle")
-            : t("gestationReader_screenTitle");
-    const corralParam = route.params?.corral ?? "";
-    const detectarParam = route.params?.detectarDesconocidos ?? true;
-    const confirmarParam = route.params?.confirmar ?? true;
-    const valorBusquedaParam = route.params?.valorBusqueda ?? "";
-    const animalEncontradoParam = route.params?.animalEncontrado ?? null;
-    const animalBusqueda = animalEncontradoParam ?? null;
-    // const tipoBusquedaParam = route.params?.tipoBusqueda ?? "crotal";
-
-    const fechaCambioEstado = formatearFecha(animalBusqueda?.stateChangeDate);
-    const fechaEntradaSistema = formatearFecha(animalBusqueda?.systemEntryDate);
-
-    // paginación
-    const TAM_PAGINA = 10;
     const [pagina, setPagina] = useState(0);
 
     const [mostrarActualizarId, setMostrarActualizarId] = useState(false);
@@ -686,30 +576,77 @@ export const LectorGestacionScreen = () => {
     const [corralPendienteId, setCorralPendienteId] = useState("—");
     const [actualizandoId, setActualizandoId] = useState(false);
 
-    const totalPaginas = Math.max(1, Math.ceil(registrosEnviados.length / TAM_PAGINA));
-    const totalRegistrosEnviados = registrosEnviados.length;
+    const route = useRoute<any>();
 
+    const modoParam = route.params?.modo ?? "entrada";
+    const corralParam = route.params?.corral ?? "";
+    const detectarParam = route.params?.detectarDesconocidos ?? true;
+    const confirmarParam = route.params?.confirmar ?? true;
+    const animalEncontradoParam = route.params?.animalEncontrado ?? null;
+    const animalBusqueda = animalEncontradoParam ?? null;
+
+    const esTituloLectura =
+        modoParam === "lectura" || modoParam === "busqueda";
+
+    const tituloHeader = esTituloLectura
+        ? t("Reader_readingTitle")
+        : t("gestationReader_screenTitle");
 
     const esEntrada = tipoMovimiento === "entrada";
     const esSalida = tipoMovimiento === "salida";
     const esLectura = tipoMovimiento === "lectura";
     const esBusqueda = tipoMovimiento === "busqueda";
-    const scrollRef = useRef<ScrollView | null>(null);
 
     const requiereCorral = esEntrada;
     const usaEnvioAutomatico = !esBusqueda && (esLectura || !confirmar);
     const tiempoAutoEnvioMs = esLectura ? 300 : 1000;
 
+    const totalPaginas = Math.max(1, Math.ceil(registrosEnviados.length / TAM_PAGINA));
+    const totalRegistrosEnviados = registrosEnviados.length;
+    const hayRegistros = registrosEnviados.length > 0;
+
     const itemsPagina = useMemo(() => {
         const start = pagina * TAM_PAGINA;
         return registrosEnviados.slice(start, start + TAM_PAGINA);
     }, [registrosEnviados, pagina]);
+
+    const estilosCajaId = useMemo(() => {
+        if (estadoIdVisual === "success") {
+            return {
+                backgroundColor: "#ECFDF5",
+                borderColor: "#BBF7D0",
+                colorTexto: SUCCESS,
+                colorSubtexto: "#15803D",
+                icono: "checkmark-circle-outline" as const,
+            };
+        }
+
+        if (estadoIdVisual === "error") {
+            return {
+                backgroundColor: "#FEF2F2",
+                borderColor: "#FECACA",
+                colorTexto: DANGER,
+                colorSubtexto: "#B91C1C",
+                icono: "close-circle-outline" as const,
+            };
+        }
+
+        return {
+            backgroundColor: "#F1F5F9",
+            borderColor: BORDER,
+            colorTexto: TEXT,
+            colorSubtexto: MUTED,
+            icono: "id-card-outline" as const,
+        };
+    }, [estadoIdVisual]);
+
     const limpiarAutoEnvioTimer = React.useCallback(() => {
         if (autoEnvioTimerRef.current) {
             clearTimeout(autoEnvioTimerRef.current);
             autoEnvioTimerRef.current = null;
         }
     }, []);
+
     const LineaVerticalTabla = ({ left }: { left: number }) => (
         <View
             pointerEvents="none"
@@ -724,6 +661,19 @@ export const LectorGestacionScreen = () => {
             }}
         />
     );
+
+    const volverAConfiguracionGestacion = React.useCallback(() => {
+        navigation.navigate("ConfiguracionGestacion");
+    }, [navigation]);
+
+    const subirFormularioId = React.useCallback(() => {
+        const yFormulario = Math.max(formularioIdYRef.current - 80, 0);
+
+        scrollRef.current?.scrollTo({
+            y: yFormulario,
+            animated: true,
+        });
+    }, []);
 
     const abrirActualizacionId = React.useCallback((crotal: string, corral: string) => {
         if (!detectarDesconocidos) return;
@@ -763,7 +713,6 @@ export const LectorGestacionScreen = () => {
         limpiarCrotalLeido,
     ]);
 
-    //--------------Dailog para abrirlo y cerrarlo----------
     const mostrarAviso = (
         titulo: string,
         mensaje: string,
@@ -784,19 +733,69 @@ export const LectorGestacionScreen = () => {
         limpiarCrotalLeido();
         ultimoCrotalAutoRef.current = null;
     };
-    //------Fin abrirlo y cerrarlo-------------------
 
     const traducirEstadosEnMensaje = (
         mensaje: string,
-        t: (clave: string) => string
+        tFunction: (clave: string) => string
     ) => {
         if (!mensaje) return "";
 
         return mensaje.replace(
             /\b(gestation|out_of_gestation|maternity|out_of_maternity)\b/g,
-            (estado) => traducirEstadoAnimal(estado, t)
+            (estado) => traducirEstadoAnimal(estado, tFunction)
         );
     };
+
+    const mostrarIdTemporal = (valor: string, estado: EstadoIdVisual) => {
+        if (timerIdRef.current) {
+            clearTimeout(timerIdRef.current);
+        }
+
+        setIdRecibido(valor);
+        setEstadoIdVisual(estado);
+
+        timerIdRef.current = setTimeout(() => {
+            setIdRecibido("");
+            setEstadoIdVisual("neutro");
+        }, 3000);
+    };
+
+    useEffect(() => {
+        const eventoMostrar =
+            Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+
+        const eventoOcultar =
+            Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+
+        const subMostrar = Keyboard.addListener(eventoMostrar, (event) => {
+            setAltoTeclado(event.endCoordinates?.height ?? 0);
+
+            if (mostrarActualizarId) {
+                setTimeout(() => {
+                    subirFormularioId();
+                }, Platform.OS === "ios" ? 80 : 180);
+            }
+        });
+
+        const subOcultar = Keyboard.addListener(eventoOcultar, () => {
+            setAltoTeclado(0);
+        });
+
+        return () => {
+            subMostrar.remove();
+            subOcultar.remove();
+        };
+    }, [mostrarActualizarId, subirFormularioId]);
+
+    useEffect(() => {
+        if (!mostrarActualizarId) return;
+
+        const timer = setTimeout(() => {
+            subirFormularioId();
+        }, 250);
+
+        return () => clearTimeout(timer);
+    }, [mostrarActualizarId, subirFormularioId]);
 
     useEffect(() => {
         pantallaActivaRef.current = pantallaEnfocada;
@@ -806,7 +805,6 @@ export const LectorGestacionScreen = () => {
             ultimoCrotalAutoRef.current = null;
         }
     }, [pantallaEnfocada, limpiarAutoEnvioTimer]);
-
 
     useEffect(() => {
         const maxPagina = Math.max(0, Math.ceil(registrosEnviados.length / TAM_PAGINA) - 1);
@@ -823,24 +821,11 @@ export const LectorGestacionScreen = () => {
             }
         };
     }, []);
-    const mostrarIdTemporal = (valor: string, estado: EstadoIdVisual) => {
-        if (timerIdRef.current) {
-            clearTimeout(timerIdRef.current);
-        }
-
-        setIdRecibido(valor);
-        setEstadoIdVisual(estado);
-
-        timerIdRef.current = setTimeout(() => {
-            setIdRecibido("");
-            setEstadoIdVisual("neutro");
-        }, 3000);
-    };
 
     useFocusEffect(
         React.useCallback(() => {
             const onBackPress = () => {
-                navigation.navigate("ConfiguracionGestacion");
+                volverAConfiguracionGestacion();
                 return true;
             };
 
@@ -850,10 +835,9 @@ export const LectorGestacionScreen = () => {
             );
 
             return () => subscription.remove();
-        }, [navigation])
+        }, [volverAConfiguracionGestacion])
     );
 
-    // al entrar/salir
     useFocusEffect(
         React.useCallback(() => {
             let mounted = true;
@@ -921,9 +905,7 @@ export const LectorGestacionScreen = () => {
             cerrarActualizacionId,
         ])
     );
-    const volverAConfiguracionGestacion = () => {
-        navigation.navigate("ConfiguracionGestacion");
-    };
+
     const enviarRegistro = React.useCallback(async (crotalForzado?: string) => {
         if (!pantallaActivaRef.current) return;
 
@@ -934,7 +916,6 @@ export const LectorGestacionScreen = () => {
             return;
         }
 
-        const requiereCorral = esEntrada;
         const corralTxt = corralInput.trim();
         const crotalTxt = (crotalForzado ?? crotalLeido ?? "").trim();
 
@@ -961,6 +942,7 @@ export const LectorGestacionScreen = () => {
                 setEstaEnviando(true);
 
                 const respuesta = await obtenerLecturaEspada(String(crotalNum));
+
                 if (!respuesta.ok) {
                     if (respuesta.status === 404) {
                         mostrarIdTemporal("—", "error");
@@ -979,7 +961,8 @@ export const LectorGestacionScreen = () => {
                         t("gestationReader_alertReadErrorTitle"),
                         limpiarMensajeBackend(String(detalle)),
                         "error"
-                    ); return;
+                    );
+                    return;
                 }
 
                 const animal = respuesta.data ?? {};
@@ -990,6 +973,7 @@ export const LectorGestacionScreen = () => {
                         String(animal.animalId).trim() !== ""
                         ? String(animal.animalId)
                         : "—";
+
                 const esIdDesconocido = idBackendTexto === "0";
 
                 const crotalTexto =
@@ -1056,6 +1040,7 @@ export const LectorGestacionScreen = () => {
                 setEstaEnviando(false);
             }
         }
+
         if (requiereCorral && !corralTxt) {
             Alert.alert(
                 t("gestationReader_alertMissingCorralTitle"),
@@ -1144,7 +1129,10 @@ export const LectorGestacionScreen = () => {
 
             if (esIdDesconocido) {
                 mostrarIdTemporal("0", "error");
-                abrirActualizacionId(String(crotalNum), corralNum !== null ? String(corralNum) : "—");
+                abrirActualizacionId(
+                    String(crotalNum),
+                    corralNum !== null ? String(corralNum) : "—"
+                );
             } else if (idBackendTexto !== "—") {
                 mostrarIdTemporal(idBackendTexto, "success");
                 cerrarActualizacionId();
@@ -1172,7 +1160,20 @@ export const LectorGestacionScreen = () => {
         } finally {
             setEstaEnviando(false);
         }
-    }, [esEntrada, esLectura, esSalida, corralInput, crotalLeido, limpiarCrotalLeido, mostrarActualizarId, actualizandoId, limpiarAutoEnvioTimer,]);
+    }, [
+        actualizandoId,
+        abrirActualizacionId,
+        cerrarActualizacionId,
+        corralInput,
+        crotalLeido,
+        esLectura,
+        esSalida,
+        limpiarAutoEnvioTimer,
+        limpiarCrotalLeido,
+        mostrarActualizarId,
+        requiereCorral,
+        t,
+    ]);
 
     const onEnviar = () => {
         if (esLectura || !confirmar) return;
@@ -1219,7 +1220,8 @@ export const LectorGestacionScreen = () => {
 
             if (!respuesta.ok) {
                 const detalle =
-                    (respuesta.data && (respuesta.data.message || respuesta.data.error || respuesta.data.mensaje)) ||
+                    (respuesta.data &&
+                        (respuesta.data.message || respuesta.data.error || respuesta.data.mensaje)) ||
                     respuesta.rawText ||
                     `HTTP ${respuesta.status}`;
 
@@ -1227,7 +1229,8 @@ export const LectorGestacionScreen = () => {
                     t("gestationReader_alertUpdateIdErrorTitle"),
                     limpiarMensajeBackend(String(detalle)),
                     "error"
-                ); return;
+                );
+                return;
             }
 
             const idActualizado =
@@ -1264,8 +1267,13 @@ export const LectorGestacionScreen = () => {
         } finally {
             setActualizandoId(false);
         }
-    }, [nuevoIdManual, crotalPendienteId, corralPendienteId, cerrarActualizacionId]);
-
+    }, [
+        nuevoIdManual,
+        crotalPendienteId,
+        corralPendienteId,
+        cerrarActualizacionId,
+        t,
+    ]);
 
     useEffect(() => {
         const crotalActual = (crotalLeido ?? "").trim();
@@ -1327,43 +1335,11 @@ export const LectorGestacionScreen = () => {
         limpiarCrotalLeido,
     ]);
 
-    const estilosCajaId = useMemo(() => {
-        if (estadoIdVisual === "success") {
-            return {
-                backgroundColor: "#ECFDF5",
-                borderColor: "#BBF7D0",
-                colorTexto: SUCCESS,
-                colorSubtexto: "#15803D",
-                icono: "checkmark-circle-outline" as const,
-            };
-        }
-
-        if (estadoIdVisual === "error") {
-            return {
-                backgroundColor: "#FEF2F2",
-                borderColor: "#FECACA",
-                colorTexto: DANGER,
-                colorSubtexto: "#B91C1C",
-                icono: "close-circle-outline" as const,
-            };
-        }
-
-        return {
-            backgroundColor: "#F1F5F9",
-            borderColor: BORDER,
-            colorTexto: TEXT,
-            colorSubtexto: MUTED,
-            icono: "id-card-outline" as const,
-        };
-    }, [estadoIdVisual]);
-
-
     return (
-
         <KeyboardAvoidingView
             style={{ flex: 1, backgroundColor: BG }}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={90}
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
         >
             <Appbar.Header
                 elevated
@@ -1381,7 +1357,10 @@ export const LectorGestacionScreen = () => {
                 ref={scrollRef}
                 contentContainerStyle={{
                     padding: 16,
-                    paddingBottom: 140,
+                    paddingBottom:
+                        mostrarActualizarId && altoTeclado > 0
+                            ? altoTeclado + 180
+                            : 140,
                     gap: 14,
                     flexGrow: 1,
                 }}
@@ -1416,7 +1395,6 @@ export const LectorGestacionScreen = () => {
                         </View>
 
                         <View style={{ padding: 14, gap: 14 }}>
-                            {/* Bloque principal */}
                             <View
                                 style={{
                                     backgroundColor: "#EEF2FF",
@@ -1427,26 +1405,9 @@ export const LectorGestacionScreen = () => {
                                     gap: 10,
                                 }}
                             >
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "space-between",
-                                    }}
-                                >
-                                    <View
-                                        style={{
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            gap: 8,
-                                        }}
-                                    >
-                                        {/* <Ionicons name="paw-outline" size={18} color={BRAND} /> */}
-                                        <Text style={{ color: BRAND, fontWeight: "900", fontSize: 15 }}>
-                                            {t("gestationReader_animalCardTitle")}
-                                        </Text>
-                                    </View>
-                                </View>
+                                <Text style={{ color: BRAND, fontWeight: "900", fontSize: 15 }}>
+                                    {t("gestationReader_animalCardTitle")}
+                                </Text>
 
                                 <Text
                                     style={{
@@ -1467,26 +1428,8 @@ export const LectorGestacionScreen = () => {
                                 >
                                     {t("gestationReader_animalCrotalLabel")} {formatearCrotalVisual(animalBusqueda?.crotal)}
                                 </Text>
-
-                                {/* <View
-                                    style={{
-                                        alignSelf: "flex-start",
-                                        marginTop: 4,
-                                        paddingHorizontal: 10,
-                                        paddingVertical: 5,
-                                        borderRadius: 999,
-                                        backgroundColor: "#FFFFFF",
-                                        borderWidth: 1,
-                                        borderColor: "#D1D5DB",
-                                    }}
-                                >
-                                    <Text style={{ color: TEXT, fontWeight: "800", fontSize: 12 }}>
-                                        Estado: {String(animalBusqueda?.state ?? "—")}
-                                    </Text>
-                                </View> */}
                             </View>
 
-                            {/* Grid de datos */}
                             <View
                                 style={{
                                     flexDirection: "row",
@@ -1533,7 +1476,7 @@ export const LectorGestacionScreen = () => {
                             </View>
 
                             <TouchableOpacity
-                                onPress={() => navigation.navigate("ConfiguracionGestacion")}
+                                onPress={volverAConfiguracionGestacion}
                                 activeOpacity={0.9}
                                 style={{
                                     marginTop: 4,
@@ -1552,82 +1495,162 @@ export const LectorGestacionScreen = () => {
                     </View>
                 )}
 
-                {/* Resumen */}
                 {!esLectura && !esBusqueda && (
                     <View
                         style={{
                             backgroundColor: CARD,
                             borderRadius: 18,
-                            overflow: "hidden",
                             borderWidth: 1,
                             borderColor: BORDER,
+                            padding: 8,
                             ...SHADOW,
                         }}
                     >
                         <View
                             style={{
-                                backgroundColor: SOFT,
-                                padding: 14,
-                                borderBottomWidth: 1,
-                                borderBottomColor: SOFT_BORDER,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 8,
                             }}
                         >
-                            <Text style={{ color: TEXT, fontSize: 18, fontWeight: "900" }}> {t("gestationReader_summaryTitle")}</Text>
-                            <Text style={{ color: MUTED, marginTop: 4 }}>
-                                {t("gestationReader_summaryDescription")}
-                            </Text>
-                        </View>
+                            {/* Modo + Corral juntos */}
+                            <View
+                                style={{
+                                    flex: 1,
+                                    minHeight: 54,
+                                    borderRadius: 14,
+                                    backgroundColor: "#F8FAFC",
+                                    borderWidth: 1,
+                                    borderColor: BORDER,
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    paddingHorizontal: 10,
+                                }}
+                            >
+                                {/* Modo */}
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Ionicons
+                                        name="swap-horizontal-outline"
+                                        size={18}
+                                        color={BRAND}
+                                    />
 
-                        <View style={{ padding: 14, gap: 12 }}>
-                            <View style={{ flexDirection: "row", gap: 10 }}>
-                                <MiniResumenCard
-                                    icon="swap-horizontal-outline"
-                                    titulo={t("gestationReader_mode")}
-                                    valor={
-                                        tipoMovimiento === "entrada"
-                                            ? t("gestationReader_modeEntry")
-                                            : tipoMovimiento === "salida"
-                                                ? t("gestationReader_modeExit")
-                                                : tipoMovimiento === "lectura"
-                                                    ? t("gestationReader_modeReading")
-                                                    : t("gestationReader_modeSearch")
-                                    }
+                                    <View>
+                                        <Text
+                                            style={{
+                                                color: MUTED,
+                                                fontSize: 10,
+                                                fontWeight: "800",
+                                            }}
+                                        >
+                                            {t("gestationReader_mode")}
+                                        </Text>
+
+                                        <Text
+                                            style={{
+                                                color: TEXT,
+                                                fontSize: 14,
+                                                fontWeight: "900",
+                                                marginTop: 1,
+                                            }}
+                                            numberOfLines={1}
+                                        >
+                                            {tipoMovimiento === "entrada"
+                                                ? t("gestationReader_modeEntry")
+                                                : t("gestationReader_modeExit")}
+                                        </Text>
+                                    </View>
+                                </View>
+
+                                {/* Separador */}
+                                <View
+                                    style={{
+                                        width: 1,
+                                        height: 30,
+                                        backgroundColor: "#E2E8F0",
+                                        marginHorizontal: 8,
+                                    }}
                                 />
 
-                                <MiniResumenCard
-                                    icon="home-outline"
-                                    titulo={t("gestationReader_corral")}
-                                    valor={corralInput || "—"}
-                                />
+                                {/* Corral */}
+                                <View
+                                    style={{
+                                        flex: 0.75,
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    <Ionicons
+                                        name="home-outline"
+                                        size={18}
+                                        color={BRAND}
+                                    />
+
+                                    <View>
+                                        <Text
+                                            style={{
+                                                color: MUTED,
+                                                fontSize: 10,
+                                                fontWeight: "800",
+                                            }}
+                                        >
+                                            {t("gestationReader_corral")}
+                                        </Text>
+
+                                        <Text
+                                            style={{
+                                                color: TEXT,
+                                                fontSize: 14,
+                                                fontWeight: "900",
+                                                marginTop: 1,
+                                            }}
+                                            numberOfLines={1}
+                                        >
+                                            {corralInput || "—"}
+                                        </Text>
+                                    </View>
+                                </View>
                             </View>
 
-                            <View style={{ height: 1, backgroundColor: "#F1F5F9" }} />
-
-                            <SwitchRowReadonly
-                                title={t("gestationReader_detectUnknownTitle")}
-                                description={t("gestationReader_detectUnknownDescription")}
-                                value={detectarDesconocidos}
-                            />
-
-                            <SwitchRowReadonly
-                                title={t("gestationReader_confirmSendTitle")}
-                                description={t("gestationReader_confirmSendDescription")}
-                                value={confirmar}
-                            />
-
+                            {/* Botón cambiar */}
                             <TouchableOpacity
-                                onPress={() => navigation.navigate("ConfiguracionGestacion")}
+                                onPress={volverAConfiguracionGestacion}
                                 activeOpacity={0.9}
                                 style={{
-                                    marginTop: 6,
-                                    height: 42,
-                                    borderRadius: 12,
+                                    height: 54,
+                                    width: 120,
+                                    borderRadius: 14,
                                     alignItems: "center",
                                     justifyContent: "center",
                                     backgroundColor: "#E5E7EB",
+                                    paddingHorizontal: 8,
                                 }}
                             >
-                                <Text style={{ color: TEXT, fontWeight: "900" }}>
+                                <Ionicons
+                                    name="settings-outline"
+                                    size={17}
+                                    color={TEXT}
+                                    style={{ marginBottom: 2 }}
+                                />
+
+                                <Text
+                                    style={{
+                                        color: TEXT,
+                                        fontWeight: "900",
+                                        fontSize: 11,
+                                        textAlign: "center",
+                                    }}
+                                    numberOfLines={1}
+                                    adjustsFontSizeToFit
+                                >
                                     {t("gestationReader_changeSettings")}
                                 </Text>
                             </TouchableOpacity>
@@ -1635,7 +1658,6 @@ export const LectorGestacionScreen = () => {
                     </View>
                 )}
 
-                {/* Card lectura */}
                 {!esLectura && !esBusqueda && (
                     <View
                         style={{
@@ -1667,6 +1689,7 @@ export const LectorGestacionScreen = () => {
                                     {t("gestationReader_currentReadingDescription")}
                                 </Text>
                             </View>
+
                             <View style={{ alignSelf: "flex-start", marginTop: -2 }}>
                                 {lectorConectado ? (
                                     <IndicadorConexionAnimado />
@@ -1692,6 +1715,7 @@ export const LectorGestacionScreen = () => {
                                 )}
                             </View>
                         </View>
+
                         <View style={{ padding: 14, gap: 12 }}>
                             <CajaDatoLectura
                                 icon="barcode-outline"
@@ -1724,13 +1748,17 @@ export const LectorGestacionScreen = () => {
                                         : estadoIdVisual === "error"
                                             ? t("gestationReader_unknownAnimal")
                                             : undefined
-                                } />
+                                }
+                            />
                         </View>
                     </View>
                 )}
 
                 {!esBusqueda && mostrarActualizarId && (
                     <View
+                        onLayout={(event) => {
+                            formularioIdYRef.current = event.nativeEvent.layout.y;
+                        }}
                         style={{
                             backgroundColor: CARD,
                             borderRadius: 18,
@@ -1766,13 +1794,16 @@ export const LectorGestacionScreen = () => {
                                 label={t("gestationReader_newIdLabel")}
                                 value={nuevoIdManual}
                                 onChangeText={setNuevoIdManual}
+                                onFocus={() => {
+                                    setTimeout(() => {
+                                        subirFormularioId();
+                                    }, Platform.OS === "ios" ? 100 : 250);
+                                }}
                                 placeholder={t("gestationReader_newIdPlaceholder")}
                                 autoCapitalize="characters"
                                 autoCorrect={false}
-
                                 outlineColor={DANGER}
                                 activeOutlineColor={DANGER}
-
                                 style={{
                                     backgroundColor: "#FFF7F7",
                                 }}
@@ -1797,7 +1828,8 @@ export const LectorGestacionScreen = () => {
                                 }}
                             >
                                 <Text style={{ color: "white", fontWeight: "900", fontSize: 16 }}>
-                                    {actualizandoId ? t("gestationReader_updatingId")
+                                    {actualizandoId
+                                        ? t("gestationReader_updatingId")
                                         : t("gestationReader_updateId")}
                                 </Text>
                             </TouchableOpacity>
@@ -1805,7 +1837,6 @@ export const LectorGestacionScreen = () => {
                     </View>
                 )}
 
-                {/* Tabla */}
                 {!esBusqueda && (
                     <View
                         style={{
@@ -1966,7 +1997,7 @@ export const LectorGestacionScreen = () => {
                         </View>
 
                         <View style={{ position: "relative" }}>
-                            {!esLectura && !esSalida && (
+                            {hayRegistros && !esLectura && !esSalida && (
                                 <>
                                     <LineaVerticalTabla
                                         left={PADDING_TABLA_X + ANCHO_CORRAL + ESPACIO_CORRAL_ID_ENTRADA / 2}
@@ -1983,7 +2014,7 @@ export const LectorGestacionScreen = () => {
                                 </>
                             )}
 
-                            {esSalida && (
+                            {hayRegistros && esSalida && (
                                 <LineaVerticalTabla
                                     left={PADDING_TABLA_X + ANCHO_ID + ESPACIO_ID_CROTAL_SALIDA / 2}
                                 />
@@ -2048,8 +2079,50 @@ export const LectorGestacionScreen = () => {
                                     </View>
 
                                     {registrosEnviados.length === 0 ? (
-                                        <View style={{ padding: 14 }}>
-                                            <Text style={{ color: MUTED }}>{t("gestationReader_noRecords")}</Text>
+                                        <View
+                                            style={{
+                                                paddingVertical: 24,
+                                                paddingHorizontal: 16,
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                backgroundColor: "#FFFFFF",
+                                            }}
+                                        >
+                                            <View
+                                                style={{
+                                                    width: 42,
+                                                    height: 42,
+                                                    borderRadius: 21,
+                                                    backgroundColor: "#F1F5F9",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    marginBottom: 10,
+                                                }}
+                                            >
+                                                <Ionicons name="file-tray-outline" size={22} color={MUTED} />
+                                            </View>
+
+                                            <Text
+                                                style={{
+                                                    color: TEXT,
+                                                    fontWeight: "900",
+                                                    fontSize: 15,
+                                                    textAlign: "center",
+                                                }}
+                                            >
+                                                {t("gestationReader_noRecords")}
+                                            </Text>
+
+                                            <Text
+                                                style={{
+                                                    color: MUTED,
+                                                    fontSize: 13,
+                                                    marginTop: 4,
+                                                    textAlign: "center",
+                                                }}
+                                            >
+                                                Los animales leídos aparecerán aquí.
+                                            </Text>
                                         </View>
                                     ) : (
                                         itemsPagina.map((r, idx) => (
@@ -2218,9 +2291,8 @@ export const LectorGestacionScreen = () => {
                         </View>
                     </View>
                 )}
-                {/* Enviar */}
-                {!esBusqueda && !esLectura && (
 
+                {!esBusqueda && !esLectura && (
                     <View style={{ marginTop: 12 }}>
                         <TouchableOpacity
                             onPress={onEnviar}
@@ -2260,6 +2332,7 @@ export const LectorGestacionScreen = () => {
                     </View>
                 )}
             </ScrollView>
+
             <Modal
                 visible={avisoVisible}
                 transparent
