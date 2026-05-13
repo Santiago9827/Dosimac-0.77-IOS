@@ -708,6 +708,7 @@ export const LectorMaternidadScreen = () => {
     const [pagina, setPagina] = useState(0);
 
     const totalPaginas = Math.max(1, Math.ceil(registrosEnviados.length / TAM_PAGINA));
+    const totalRegistrosEnviados = registrosEnviados.length;
 
     const pageItems = useMemo(() => {
         const start = pagina * TAM_PAGINA;
@@ -718,27 +719,51 @@ export const LectorMaternidadScreen = () => {
     const usaEnvioAutomatico = !esBusqueda && (esLectura || !confirmar);
     const tiempoAutoEnvioMs = esLectura ? 300 : 1000;
 
-    const abrirActualizacionId = React.useCallback((crotal: string, corral: string) => {
-        if (!detectarDesconocidos) return;
-
-        setMostrarActualizarId(true);
-        setNuevoIdManual("");
-        setCrotalPendienteId(String(crotal));
-        setCorralPendienteId(corral?.trim() ? corral : "—");
-    }, [detectarDesconocidos]);
-
-    const cerrarActualizacionId = React.useCallback(() => {
-        setMostrarActualizarId(false);
-        setNuevoIdManual("");
-        setCrotalPendienteId("");
-        setCorralPendienteId("—");
-    }, []);
     const limpiarAutoEnvioTimer = React.useCallback(() => {
         if (autoEnvioTimerRef.current) {
             clearTimeout(autoEnvioTimerRef.current);
             autoEnvioTimerRef.current = null;
         }
     }, []);
+
+    const abrirActualizacionId = React.useCallback((crotal: string, corral: string) => {
+        if (!detectarDesconocidos) return;
+
+        limpiarAutoEnvioTimer();
+        ultimoCrotalAutoRef.current = null;
+        limpiarCrotalLeido();
+        detenerLectura?.().catch(() => { });
+
+        setMostrarActualizarId(true);
+        setNuevoIdManual("");
+        setCrotalPendienteId(String(crotal));
+        setCorralPendienteId(corral?.trim() ? corral : "—");
+    }, [
+        detectarDesconocidos,
+        limpiarAutoEnvioTimer,
+        limpiarCrotalLeido,
+        detenerLectura,
+    ]);
+
+    const cerrarActualizacionId = React.useCallback(() => {
+        setMostrarActualizarId(false);
+        setNuevoIdManual("");
+        setCrotalPendienteId("");
+        setCorralPendienteId("—");
+
+        limpiarCrotalLeido();
+        ultimoCrotalAutoRef.current = null;
+
+        if (!esBusqueda && idLector) {
+            iniciarLectura?.().catch(() => { });
+        }
+    }, [
+        esBusqueda,
+        idLector,
+        iniciarLectura,
+        limpiarCrotalLeido,
+    ]);
+
 
     //!------Para traducir-------- 
     const traducirEstadosEnMensaje = (
@@ -1705,8 +1730,17 @@ export const LectorMaternidadScreen = () => {
                                 placeholder={t("maternityReader_newIdPlaceholder")}
                                 autoCapitalize="characters"
                                 autoCorrect={false}
-                                outlineColor={BORDER}
-                                activeOutlineColor={BRAND}
+                                outlineColor={DANGER}
+                                activeOutlineColor={DANGER}
+                                style={{
+                                    backgroundColor: "#FFF7F7",
+                                }}
+                                outlineStyle={{
+                                    borderWidth: 2,
+                                    borderRadius: 14,
+                                }}
+                                textColor={TEXT}
+                                placeholderTextColor="#B91C1C"
                             />
 
                             <TouchableOpacity
@@ -1757,9 +1791,40 @@ export const LectorMaternidadScreen = () => {
                             }}
                         >
                             <View style={{ flex: 1 }}>
-                                <Text style={{ color: TEXT, fontSize: 18, fontWeight: "900" }}>
-                                    {t("maternityReader_sentRecordsTitle")}
-                                </Text>
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                        gap: 10,
+                                    }}
+                                >
+                                    <Text style={{ color: TEXT, fontSize: 18, fontWeight: "900" }}>
+                                        {t("maternityReader_sentRecordsTitle")}
+                                    </Text>
+
+                                    <View
+                                        style={{
+                                            minWidth: 36,
+                                            height: 30,
+                                            paddingHorizontal: 10,
+                                            borderRadius: 999,
+                                            backgroundColor: totalRegistrosEnviados > 0 ? BRAND : "#E5E7EB",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                color: totalRegistrosEnviados > 0 ? "#FFFFFF" : MUTED,
+                                                fontWeight: "900",
+                                                fontSize: 14,
+                                            }}
+                                        >
+                                            {totalRegistrosEnviados}
+                                        </Text>
+                                    </View>
+                                </View>
 
                                 {esLectura && !lectorConectado && (
                                     <View
