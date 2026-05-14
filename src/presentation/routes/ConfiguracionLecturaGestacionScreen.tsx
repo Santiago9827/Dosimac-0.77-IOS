@@ -15,7 +15,6 @@ import {
     Appbar,
     Button,
     Card,
-    Divider,
     Switch,
     Text,
     TextInput,
@@ -36,6 +35,17 @@ const BORDER = "#E5E7EB";
 const TEXT = "#0F172A";
 const MUTED = "#64748B";
 const ERROR = "#B91C1C";
+
+const CONFIG_BG = "#F1F5F9";
+const CONFIG_BORDER = "#CBD5E1";
+const CONFIG_DIVIDER = "#CBD5E1";
+
+const CORRAL_BG = "#FFFFFF";
+const CORRAL_BORDER = "#E2E8F0";
+const CORRAL_ICON_BG = "#F8FAFC";
+const CORRAL_ICON_BORDER = "#CBD5E1";
+const CORRAL_ICON_COLOR = "#475569";
+const SWITCH_SCALE = Platform.OS === "ios" ? 0.75 : 0.70;
 
 const SHADOW_CARD = {
     shadowColor: "#0F172A",
@@ -67,6 +77,28 @@ const CARD_STYLE = {
     borderWidth: 1,
     borderColor: "#EEF2F7",
     ...SHADOW_CARD,
+};
+
+const CONFIG_CARD_STYLE = {
+    borderRadius: 18,
+    backgroundColor: CONFIG_BG,
+    borderWidth: 1.5,
+    borderColor: CONFIG_BORDER,
+    ...SHADOW_CARD,
+};
+
+const CORRAL_CARD_STYLE = {
+    borderRadius: 18,
+    backgroundColor: CORRAL_BG,
+    borderWidth: 1.5,
+    borderColor: CORRAL_BORDER,
+    ...SHADOW_CARD,
+};
+
+const SECTION_DIVIDER = {
+    height: 1,
+    backgroundColor: CONFIG_DIVIDER,
+    marginVertical: 14,
 };
 
 function ModoCard({
@@ -198,7 +230,7 @@ function SwitchLine({
                 borderRadius: 14,
                 borderWidth: 1,
                 borderColor: "#E2E8F0",
-                backgroundColor: "#F8FAFC",
+                backgroundColor: "#FFFFFF",
                 paddingVertical: 9,
                 paddingHorizontal: 10,
                 flexDirection: "row",
@@ -231,7 +263,27 @@ function SwitchLine({
                 </Text>
             </View>
 
-            <Switch value={value} onValueChange={onValueChange} />
+            <View
+                style={{
+                    width: 48,
+                    height: 30,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    overflow: "visible",
+                }}
+            >
+                <Switch
+                    value={value}
+                    onValueChange={onValueChange}
+                    color={BRAND}
+                    style={{
+                        transform: [
+                            { scaleX: SWITCH_SCALE },
+                            { scaleY: SWITCH_SCALE },
+                        ],
+                    }}
+                />
+            </View>
         </View>
     );
 }
@@ -750,22 +802,35 @@ export const ConfiguracionGestacionScreen = () => {
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
             >
-                <Card mode="contained" style={CARD_STYLE}>
+                <Card mode="contained" style={CONFIG_CARD_STYLE}>
                     <Card.Content style={{ paddingVertical: 12 }}>
                         <View
                             style={{
                                 flexDirection: "row",
                                 alignItems: "center",
                                 justifyContent: "space-between",
-                                marginBottom: 10,
+                                marginBottom: 12,
                             }}
                         >
                             <View style={{ flex: 1 }}>
                                 <Text
                                     style={{
+                                        color: "#334155",
+                                        fontSize: 13,
+                                        fontWeight: "900",
+                                        textTransform: "uppercase",
+                                        letterSpacing: 0.5,
+                                    }}
+                                >
+                                    Configuración del flujo
+                                </Text>
+
+                                <Text
+                                    style={{
                                         color: TEXT,
                                         fontSize: 18,
                                         fontWeight: "900",
+                                        marginTop: 2,
                                     }}
                                 >
                                     Modo de trabajo
@@ -787,9 +852,9 @@ export const ConfiguracionGestacionScreen = () => {
                                     paddingHorizontal: 10,
                                     paddingVertical: 5,
                                     borderRadius: 999,
-                                    backgroundColor: "#ECFDF5",
+                                    backgroundColor: "#FFFFFF",
                                     borderWidth: 1,
-                                    borderColor: "#CCFBF1",
+                                    borderColor: "#CBD5E1",
                                     ...SHADOW_SOFT,
                                 }}
                             >
@@ -844,115 +909,160 @@ export const ConfiguracionGestacionScreen = () => {
                                 onPress={() => setModo("busqueda")}
                             />
                         </View>
-                    </Card.Content>
-                </Card>
 
-                {(modo === "entrada" || modo === "salida") && (
-                    <Card mode="contained" style={CARD_STYLE}>
-                        <Card.Content style={{ paddingVertical: 12 }}>
-                            <Text style={{ fontSize: 17, fontWeight: "900", color: TEXT }}>
-                                Ajustes del envío
-                            </Text>
+                        {(modo === "entrada" || modo === "salida") && (
+                            <>
+                                <View style={SECTION_DIVIDER} />
 
-                            <Text style={{ marginTop: 4, color: MUTED, lineHeight: 19 }}>
-                                Configura cómo se comporta el flujo al leer animales.
-                            </Text>
-
-                            <View style={{ height: 10 }} />
-
-                            <SwitchLine
-                                title={t("gestacionConfig_detectUnknownTitle")}
-                                description={t("gestacionConfig_detectUnknownDescription")}
-                                value={detectarDesconocidos}
-                                onValueChange={setDetectarDesconocidos}
-                            />
-
-                            <View style={{ height: 8 }} />
-
-                            <SwitchLine
-                                title={t("gestacionConfig_confirmTitle")}
-                                description={t("gestacionConfig_confirmDescription")}
-                                value={confirmar}
-                                onValueChange={setConfirmar}
-                            />
-
-                            {modo === "entrada" && (
-                                <>
-                                    <View style={{ height: 14 }} />
-
-                                    <Divider
+                                <View>
+                                    <Text
                                         style={{
-                                            height: 1,
-                                            backgroundColor: "#E2E8F0",
+                                            fontSize: 17,
+                                            fontWeight: "900",
+                                            color: TEXT,
                                         }}
-                                    />
-
-                                    <View style={{ height: 10 }} />
+                                    >
+                                        Ajustes del envío
+                                    </Text>
 
                                     <Text
                                         style={{
+                                            marginTop: 4,
+                                            color: MUTED,
+                                            lineHeight: 19,
+                                        }}
+                                    >
+                                        Configura cómo se comporta el flujo al leer animales.
+                                    </Text>
+
+                                    <View style={{ height: 10 }} />
+
+                                    <SwitchLine
+                                        title={t("gestacionConfig_detectUnknownTitle")}
+                                        description={t("gestacionConfig_detectUnknownDescription")}
+                                        value={detectarDesconocidos}
+                                        onValueChange={setDetectarDesconocidos}
+                                    />
+
+                                    <View style={{ height: 8 }} />
+
+                                    <SwitchLine
+                                        title={t("gestacionConfig_confirmTitle")}
+                                        description={t("gestacionConfig_confirmDescription")}
+                                        value={confirmar}
+                                        onValueChange={setConfirmar}
+                                    />
+                                </View>
+                            </>
+                        )}
+                    </Card.Content>
+                </Card>
+
+                {modo === "entrada" && (
+                    <Card mode="contained" style={CORRAL_CARD_STYLE}>
+                        <Card.Content style={{ paddingVertical: 12 }}>
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    gap: 10,
+                                    marginBottom: 10,
+                                }}
+                            >
+                                <View
+                                    style={{
+                                        width: 38,
+                                        height: 38,
+                                        borderRadius: 19,
+                                        backgroundColor: corral.trim().length === 0 ? "#FEE2E2" : CORRAL_ICON_BG,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        borderWidth: 1,
+                                        borderColor: corral.trim().length === 0 ? "#FECACA" : CORRAL_ICON_BORDER,
+                                    }}
+                                >
+                                    <Ionicons
+                                        name="home-outline"
+                                        size={21}
+                                        color={corral.trim().length === 0 ? ERROR : CORRAL_ICON_COLOR}
+                                    />
+                                </View>
+
+                                <View style={{ flex: 1 }}>
+                                    <Text
+                                        style={{
                                             color: TEXT,
-                                            fontSize: 16,
+                                            fontSize: 17,
                                             fontWeight: "900",
-                                            marginBottom: 8,
                                         }}
                                     >
                                         Corral de entrada
                                     </Text>
 
-                                    <View
+                                    <Text
                                         style={{
-                                            borderRadius: 12,
-                                            backgroundColor: "#FFFFFF",
-                                            ...(corral.trim().length === 0 ? {} : SHADOW_SOFT),
+                                            color: MUTED,
+                                            marginTop: 2,
+                                            fontSize: 12,
+                                            lineHeight: 16,
                                         }}
                                     >
-                                        <TextInput
-                                            mode="outlined"
-                                            dense
-                                            label={t("gestacionConfig_corralLabel")}
-                                            value={corral}
-                                            onChangeText={setCorral}
-                                            placeholder={t("gestacionConfig_corralPlaceholder")}
-                                            keyboardType="number-pad"
-                                            outlineColor={corral.trim().length === 0 ? ERROR : BORDER}
-                                            activeOutlineColor={corral.trim().length === 0 ? ERROR : BRAND}
-                                            textColor={TEXT}
-                                            style={{
-                                                backgroundColor: "#FFFFFF",
-                                                height: 44,
-                                            }}
-                                            outlineStyle={{
-                                                borderRadius: 12,
-                                                borderWidth: corral.trim().length === 0 ? 2 : 1,
-                                            }}
-                                            contentStyle={{
-                                                fontWeight: "800",
-                                                fontSize: 16,
-                                            }}
-                                            onFocus={() => {
-                                                if (Platform.OS === "android") {
-                                                    setTimeout(() => {
-                                                        scrollRef.current?.scrollToEnd({ animated: true });
-                                                    }, 250);
-                                                }
-                                            }}
-                                        />
-                                    </View>
+                                        Este dato es obligatorio para continuar con el registro.
+                                    </Text>
+                                </View>
+                            </View>
 
-                                    {!puedeContinuar && (
-                                        <Text
-                                            style={{
-                                                color: ERROR,
-                                                fontWeight: "800",
-                                                marginTop: 6,
-                                                fontSize: 13,
-                                            }}
-                                        >
-                                            {t("gestacionConfig_corralRequired")}
-                                        </Text>
-                                    )}
-                                </>
+                            <View
+                                style={{
+                                    borderRadius: 12,
+                                    backgroundColor: "#FFFFFF",
+                                    ...(corral.trim().length === 0 ? {} : SHADOW_SOFT),
+                                }}
+                            >
+                                <TextInput
+                                    mode="outlined"
+                                    dense
+                                    label={t("gestacionConfig_corralLabel")}
+                                    value={corral}
+                                    onChangeText={setCorral}
+                                    placeholder={t("gestacionConfig_corralPlaceholder")}
+                                    keyboardType="number-pad"
+                                    outlineColor={corral.trim().length === 0 ? ERROR : BORDER}
+                                    activeOutlineColor={corral.trim().length === 0 ? ERROR : BRAND}
+                                    textColor={TEXT}
+                                    style={{
+                                        backgroundColor: "#FFFFFF",
+                                        height: 44,
+                                    }}
+                                    outlineStyle={{
+                                        borderRadius: 12,
+                                        borderWidth: corral.trim().length === 0 ? 2 : 1.5,
+                                    }}
+                                    contentStyle={{
+                                        fontWeight: "800",
+                                        fontSize: 16,
+                                    }}
+                                    onFocus={() => {
+                                        if (Platform.OS === "android") {
+                                            setTimeout(() => {
+                                                scrollRef.current?.scrollToEnd({ animated: true });
+                                            }, 250);
+                                        }
+                                    }}
+                                />
+                            </View>
+
+                            {!puedeContinuar && (
+                                <Text
+                                    style={{
+                                        color: ERROR,
+                                        fontWeight: "800",
+                                        marginTop: 6,
+                                        fontSize: 13,
+                                    }}
+                                >
+                                    {t("gestacionConfig_corralRequired")}
+                                </Text>
                             )}
                         </Card.Content>
                     </Card>
