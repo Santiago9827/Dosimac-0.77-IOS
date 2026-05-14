@@ -443,4 +443,40 @@ Reader_labelCorral: "Zagroda",
 Reader_labelHouse: "Budynek",
 Reader_labelState: "Stan",
 Reader_autoReadingBadge: "Odczyt automatyczny", 
+
+gestacionConfig_flowSectionTitle: "Konfiguracja przepływu",
+gestacionConfig_workModeTitle: "Tryb pracy",
+gestacionConfig_workModeDescription: "Wybierz, co ma zrobić czytnik.",
+gestacionConfig_entryDescription: "Zarejestruj wejście",
+gestacionConfig_exitDescription: "Zarejestruj wyjście",
+gestacionConfig_readingDescription: "Tylko odczyt",
+gestacionConfig_searchDescription: "Szukaj zwierzęcia",
+
+gestacionConfig_sendSettingsTitle: "Ustawienia wysyłania",
+gestacionConfig_sendSettingsDescription: "Skonfiguruj zachowanie przepływu podczas odczytu zwierząt.",
+
+gestacionConfig_corralSectionTitle: "Kojec wejściowy",
+gestacionConfig_corralSectionDescription: "To pole jest wymagane, aby kontynuować rejestrację.",
+
+gestacionConfig_alerts_notice: "Powiadomienie",
+gestacionConfig_alerts_invalidCrotalFromBackend: "Backend nie zwrócił prawidłowego kolczyka do porównania.",
+
+common_accept: "Akceptuj",
+
+maternidadConfig_flowSectionTitle: "Konfiguracja przepływu",
+maternidadConfig_workModeTitle: "Tryb pracy",
+maternidadConfig_workModeDescription: "Wybierz, co ma zrobić czytnik.",
+maternidadConfig_entryDescription: "Zarejestruj wejście",
+maternidadConfig_exitDescription: "Zarejestruj wyjście",
+maternidadConfig_readingDescription: "Tylko odczyt",
+maternidadConfig_searchDescription: "Szukaj zwierzęcia",
+
+maternidadConfig_sendSettingsTitle: "Ustawienia wysyłania",
+maternidadConfig_sendSettingsDescription: "Skonfiguruj zachowanie przepływu podczas odczytu zwierząt.",
+
+maternidadConfig_corralSectionTitle: "Kojec wejściowy",
+maternidadConfig_corralSectionDescription: "To pole jest wymagane, aby kontynuować rejestrację.",
+
+maternidadConfig_alert_invalidCrotalFromBackend: "Backend nie zwrócił prawidłowego kolczyka do porównania.",
+
 };

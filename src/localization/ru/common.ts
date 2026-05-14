@@ -444,4 +444,40 @@ Reader_labelHouse: "Корпус",
 Reader_labelState: "Состояние",
 Reader_autoReadingBadge: "Автоматическое считывание",
 
+gestacionConfig_flowSectionTitle: "Настройка процесса",
+gestacionConfig_workModeTitle: "Режим работы",
+gestacionConfig_workModeDescription: "Выберите, что будет делать считыватель.",
+gestacionConfig_entryDescription: "Зарегистрировать вход",
+gestacionConfig_exitDescription: "Зарегистрировать выход",
+gestacionConfig_readingDescription: "Только просмотр",
+gestacionConfig_searchDescription: "Найти животное",
+
+gestacionConfig_sendSettingsTitle: "Настройки отправки",
+gestacionConfig_sendSettingsDescription: "Настройте поведение процесса при считывании животных.",
+
+gestacionConfig_corralSectionTitle: "Загон для входа",
+gestacionConfig_corralSectionDescription: "Это поле обязательно для продолжения регистрации.",
+
+gestacionConfig_alerts_notice: "Уведомление",
+gestacionConfig_alerts_invalidCrotalFromBackend: "Сервер не вернул действительную ушную метку для сравнения.",
+
+common_accept: "Принять",
+
+maternidadConfig_flowSectionTitle: "Настройка процесса",
+maternidadConfig_workModeTitle: "Режим работы",
+maternidadConfig_workModeDescription: "Выберите, что будет делать считыватель.",
+maternidadConfig_entryDescription: "Зарегистрировать вход",
+maternidadConfig_exitDescription: "Зарегистрировать выход",
+maternidadConfig_readingDescription: "Только просмотр",
+maternidadConfig_searchDescription: "Найти животное",
+
+maternidadConfig_sendSettingsTitle: "Настройки отправки",
+maternidadConfig_sendSettingsDescription: "Настройте поведение процесса при считывании животных.",
+
+maternidadConfig_corralSectionTitle: "Загон для входа",
+maternidadConfig_corralSectionDescription: "Это поле обязательно для продолжения регистрации.",
+
+maternidadConfig_alert_invalidCrotalFromBackend: "Сервер не вернул действительную ушную метку для сравнения.",
+
+
 };

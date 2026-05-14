@@ -441,4 +441,40 @@ Reader_labelHouse: "Bâtiment",
 Reader_labelState: "État",
 Reader_autoReadingBadge: "Lecture automatique",
 
+gestacionConfig_flowSectionTitle: "Configuration du flux",
+gestacionConfig_workModeTitle: "Mode de travail",
+gestacionConfig_workModeDescription: "Sélectionnez ce que fera le lecteur.",
+gestacionConfig_entryDescription: "Enregistrer l’entrée",
+gestacionConfig_exitDescription: "Enregistrer la sortie",
+gestacionConfig_readingDescription: "Consultation uniquement",
+gestacionConfig_searchDescription: "Rechercher un animal",
+
+gestacionConfig_sendSettingsTitle: "Paramètres d’envoi",
+gestacionConfig_sendSettingsDescription: "Configurez le comportement du flux lors de la lecture des animaux.",
+
+gestacionConfig_corralSectionTitle: "Enclos d’entrée",
+gestacionConfig_corralSectionDescription: "Cette donnée est obligatoire pour continuer l’enregistrement.",
+
+gestacionConfig_alerts_notice: "Avis",
+gestacionConfig_alerts_invalidCrotalFromBackend: "Le backend n’a pas renvoyé de boucle valide à comparer.",
+
+common_accept: "Accepter",
+
+maternidadConfig_flowSectionTitle: "Configuration du flux",
+maternidadConfig_workModeTitle: "Mode de travail",
+maternidadConfig_workModeDescription: "Sélectionnez ce que fera le lecteur.",
+maternidadConfig_entryDescription: "Enregistrer l’entrée",
+maternidadConfig_exitDescription: "Enregistrer la sortie",
+maternidadConfig_readingDescription: "Consultation uniquement",
+maternidadConfig_searchDescription: "Rechercher un animal",
+
+maternidadConfig_sendSettingsTitle: "Paramètres d’envoi",
+maternidadConfig_sendSettingsDescription: "Configurez le comportement du flux lors de la lecture des animaux.",
+
+maternidadConfig_corralSectionTitle: "Enclos d’entrée",
+maternidadConfig_corralSectionDescription: "Cette donnée est obligatoire pour continuer l’enregistrement.",
+
+maternidadConfig_alert_invalidCrotalFromBackend: "Le backend n’a pas renvoyé de boucle valide à comparer.",
+
+
 };

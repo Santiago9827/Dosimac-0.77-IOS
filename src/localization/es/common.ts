@@ -77,7 +77,7 @@ export default {
    login_button: "Entrar",
    login_loading: "Entrando...",
    login_footer: "Panel de control",
-   
+
 
    login_ipRequiredTitle: "Configuración IP requerida",
    login_ipRequiredMessage: "No has configurado la dirección IP del servidor. Introdúcela para poder iniciar sesión.",
@@ -459,11 +459,48 @@ export default {
    },
 
    Reader_readingTitle: "Lectura Crotales",
-  Reader_labelId: "ID",
-  Reader_labelCrotal: "Crotal",
-  Reader_labelCorral: "Corral",
-  Reader_labelHouse: "Nave",
-  Reader_labelState: "Estado",
-  Reader_autoReadingBadge: "Lectura automática"
+   Reader_labelId: "ID",
+   Reader_labelCrotal: "Crotal",
+   Reader_labelCorral: "Corral",
+   Reader_labelHouse: "Nave",
+   Reader_labelState: "Estado",
+   Reader_autoReadingBadge: "Lectura automática",
+
+
+   gestacionConfig_flowSectionTitle: "Configuración del flujo",
+   gestacionConfig_workModeTitle: "Modo de trabajo",
+   gestacionConfig_workModeDescription: "Selecciona qué hará el lector.",
+   gestacionConfig_entryDescription: "Registrar entrada",
+   gestacionConfig_exitDescription: "Registrar salida",
+   gestacionConfig_readingDescription: "Solo consultar",
+   gestacionConfig_searchDescription: "Buscar animal",
+
+   gestacionConfig_sendSettingsTitle: "Ajustes del envío",
+   gestacionConfig_sendSettingsDescription: "Configura cómo se comporta el flujo al leer animales.",
+
+   gestacionConfig_corralSectionTitle: "Corral de entrada",
+   gestacionConfig_corralSectionDescription: "Este dato es obligatorio para continuar con el registro.",
+
+   gestacionConfig_alerts_notice: "Aviso",
+   gestacionConfig_alerts_invalidCrotalFromBackend: "El backend no devolvió un crotal válido para comparar.",
+
+   common_accept: "Aceptar",
+
+   maternidadConfig_flowSectionTitle: "Configuración del flujo",
+   maternidadConfig_workModeTitle: "Modo de trabajo",
+   maternidadConfig_workModeDescription: "Selecciona qué hará el lector.",
+   maternidadConfig_entryDescription: "Registrar entrada",
+   maternidadConfig_exitDescription: "Registrar salida",
+   maternidadConfig_readingDescription: "Solo consultar",
+   maternidadConfig_searchDescription: "Buscar animal",
+
+   maternidadConfig_sendSettingsTitle: "Ajustes del envío",
+   maternidadConfig_sendSettingsDescription: "Configura cómo se comporta el flujo al leer animales.",
+
+   maternidadConfig_corralSectionTitle: "Corral de entrada",
+   maternidadConfig_corralSectionDescription: "Este dato es obligatorio para continuar con el registro.",
+
+   maternidadConfig_alert_invalidCrotalFromBackend: "El backend no devolvió un crotal válido para comparar.",
+
 
 };

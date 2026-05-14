@@ -461,4 +461,41 @@ Reader_labelCorral: "Pen",
 Reader_labelHouse: "House",
 Reader_labelState: "State",
 Reader_autoReadingBadge: "Automatic reading",
+
+gestacionConfig_flowSectionTitle: "Flow configuration",
+gestacionConfig_workModeTitle: "Work mode",
+gestacionConfig_workModeDescription: "Select what the reader will do.",
+gestacionConfig_entryDescription: "Register entry",
+gestacionConfig_exitDescription: "Register exit",
+gestacionConfig_readingDescription: "Read only",
+gestacionConfig_searchDescription: "Search animal",
+
+gestacionConfig_sendSettingsTitle: "Sending settings",
+gestacionConfig_sendSettingsDescription: "Configure how the flow behaves when reading animals.",
+
+gestacionConfig_corralSectionTitle: "Entry pen",
+gestacionConfig_corralSectionDescription: "This field is required to continue with the record.",
+
+gestacionConfig_alerts_notice: "Notice",
+gestacionConfig_alerts_invalidCrotalFromBackend: "The backend did not return a valid ear tag to compare.",
+
+common_accept: "Accept",
+
+maternidadConfig_flowSectionTitle: "Flow configuration",
+maternidadConfig_workModeTitle: "Work mode",
+maternidadConfig_workModeDescription: "Select what the reader will do.",
+maternidadConfig_entryDescription: "Register entry",
+maternidadConfig_exitDescription: "Register exit",
+maternidadConfig_readingDescription: "Read only",
+maternidadConfig_searchDescription: "Search animal",
+
+maternidadConfig_sendSettingsTitle: "Sending settings",
+maternidadConfig_sendSettingsDescription: "Configure how the flow behaves when reading animals.",
+
+maternidadConfig_corralSectionTitle: "Entry pen",
+maternidadConfig_corralSectionDescription: "This field is required to continue with the record.",
+
+maternidadConfig_alert_invalidCrotalFromBackend: "The backend did not return a valid ear tag to compare.",
+
+
 };

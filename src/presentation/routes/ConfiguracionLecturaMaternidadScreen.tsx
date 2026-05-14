@@ -438,7 +438,11 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                 : "";
 
         if (!crotalAnimal) {
-            mostrarAviso("Error", "El backend no devolvió un crotal válido para comparar.", "error");
+            mostrarAviso(
+                t("maternidadConfig_alert_error"),
+                t("maternidadConfig_alert_invalidCrotalFromBackend"),
+                "error"
+            );
             return false;
         }
 
@@ -832,7 +836,7 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                                         letterSpacing: 0.5,
                                     }}
                                 >
-                                    Configuración del flujo
+                                    {t("maternidadConfig_flowSectionTitle")}
                                 </Text>
 
                                 <Text
@@ -843,7 +847,7 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                                         marginTop: 2,
                                     }}
                                 >
-                                    Modo de trabajo
+                                    {t("maternidadConfig_workModeTitle")}
                                 </Text>
 
                                 <Text
@@ -853,7 +857,7 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                                         lineHeight: 19,
                                     }}
                                 >
-                                    Selecciona qué hará el lector.
+                                    {t("maternidadConfig_workModeDescription")}
                                 </Text>
                             </View>
 
@@ -889,14 +893,14 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                         <View style={{ flexDirection: "row", gap: 10 }}>
                             <ModoCard
                                 titulo={t("maternidadConfig_entry")}
-                                descripcion="Registrar entrada"
+                                descripcion={t("maternidadConfig_entryDescription")}
                                 active={modo === "entrada"}
                                 onPress={() => setModo("entrada")}
                             />
 
                             <ModoCard
                                 titulo={t("maternidadConfig_exit")}
-                                descripcion="Registrar salida"
+                                descripcion={t("maternidadConfig_exitDescription")}
                                 active={modo === "salida"}
                                 onPress={() => setModo("salida")}
                             />
@@ -907,14 +911,14 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                         <View style={{ flexDirection: "row", gap: 10 }}>
                             <ModoCard
                                 titulo={t("maternidadConfig_reading")}
-                                descripcion="Solo consultar"
+                                descripcion={t("maternidadConfig_readingDescription")}
                                 active={modo === "lectura"}
                                 onPress={() => setModo("lectura")}
                             />
 
                             <ModoCard
                                 titulo={t("maternidadConfig_search")}
-                                descripcion="Buscar animal"
+                                descripcion={t("maternidadConfig_searchDescription")}
                                 active={modo === "busqueda"}
                                 onPress={() => setModo("busqueda")}
                             />
@@ -932,7 +936,7 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                                             color: TEXT,
                                         }}
                                     >
-                                        Ajustes del envío
+                                        {t("maternidadConfig_sendSettingsTitle")}
                                     </Text>
 
                                     <Text
@@ -942,7 +946,7 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                                             lineHeight: 19,
                                         }}
                                     >
-                                        Configura cómo se comporta el flujo al leer animales.
+                                        {t("maternidadConfig_sendSettingsDescription")}
                                     </Text>
 
                                     <View style={{ height: 10 }} />
@@ -957,7 +961,7 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                                     <View style={{ height: 8 }} />
 
                                     <SwitchLine
-                                        title={t("maternidadConfig_confirmTitle") || "Confirmar envío"}
+                                        title={t("maternidadConfig_confirmTitle")}
                                         description={t("maternidadConfig_confirmDescription")}
                                         value={confirmar}
                                         onValueChange={setConfirmar}
@@ -1006,7 +1010,7 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                                             fontWeight: "900",
                                         }}
                                     >
-                                        Corral de entrada
+                                        {t("maternidadConfig_corralSectionTitle")}
                                     </Text>
 
                                     <Text
@@ -1017,7 +1021,7 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                                             lineHeight: 16,
                                         }}
                                     >
-                                        Este dato es obligatorio para continuar con el registro.
+                                        {t("maternidadConfig_corralSectionDescription")}
                                     </Text>
                                 </View>
                             </View>
@@ -1035,7 +1039,7 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                                     label={t("maternidadConfig_corralLabel")}
                                     value={corral}
                                     onChangeText={setCorral}
-                                    placeholder="Ej: 1"
+                                    placeholder={t("maternidadConfig_corralPlaceholder")}
                                     keyboardType="number-pad"
                                     outlineColor={corral.trim().length === 0 ? ERROR : BORDER}
                                     activeOutlineColor={corral.trim().length === 0 ? ERROR : BRAND}
@@ -1448,7 +1452,7 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                             }}
                         >
                             <Text style={{ color: "white", fontWeight: "900", fontSize: 15 }}>
-                                {t("Aceptar")}
+                                {t("common_accept")}
                             </Text>
                         </TouchableOpacity>
                     </View>

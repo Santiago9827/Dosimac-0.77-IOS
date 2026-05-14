@@ -432,7 +432,11 @@ export const ConfiguracionGestacionScreen = () => {
                 : "";
 
         if (!crotalAnimal) {
-            mostrarAviso("Aviso", "El backend no devolvió un crotal válido para comparar.", "warning");
+            mostrarAviso(
+                t("gestacionConfig_alerts_notice"),
+                t("gestacionConfig_alerts_invalidCrotalFromBackend"),
+                "warning"
+            );
             return false;
         }
 
@@ -505,7 +509,7 @@ export const ConfiguracionGestacionScreen = () => {
 
                 if (!valor) {
                     mostrarAviso(
-                        "Aviso",
+                        t("gestacionConfig_alerts_notice"),
                         tipoBusqueda === "crotal"
                             ? t("gestacionConfig_alerts_writeCrotalToSearch")
                             : t("gestacionConfig_alerts_writeIdToSearch"),
@@ -822,7 +826,7 @@ export const ConfiguracionGestacionScreen = () => {
                                         letterSpacing: 0.5,
                                     }}
                                 >
-                                    Configuración del flujo
+                                    {t("gestacionConfig_flowSectionTitle")}
                                 </Text>
 
                                 <Text
@@ -833,7 +837,7 @@ export const ConfiguracionGestacionScreen = () => {
                                         marginTop: 2,
                                     }}
                                 >
-                                    Modo de trabajo
+                                    {t("gestacionConfig_workModeTitle")}
                                 </Text>
 
                                 <Text
@@ -843,7 +847,7 @@ export const ConfiguracionGestacionScreen = () => {
                                         lineHeight: 19,
                                     }}
                                 >
-                                    Selecciona qué hará el lector.
+                                    {t("gestacionConfig_workModeDescription")}
                                 </Text>
                             </View>
 
@@ -866,12 +870,12 @@ export const ConfiguracionGestacionScreen = () => {
                                     }}
                                 >
                                     {modo === "entrada"
-                                        ? "Entrada"
+                                        ? t("gestacionConfig_entry")
                                         : modo === "salida"
-                                            ? "Salida"
+                                            ? t("gestacionConfig_exit")
                                             : modo === "lectura"
-                                                ? "Lectura"
-                                                : "Búsqueda"}
+                                                ? t("gestacionConfig_reading")
+                                                : t("gestacionConfig_search")}
                                 </Text>
                             </View>
                         </View>
@@ -879,14 +883,14 @@ export const ConfiguracionGestacionScreen = () => {
                         <View style={{ flexDirection: "row", gap: 10 }}>
                             <ModoCard
                                 titulo={t("gestacionConfig_entry")}
-                                descripcion="Registrar entrada"
+                                descripcion={t("gestacionConfig_entryDescription")}
                                 active={modo === "entrada"}
                                 onPress={() => setModo("entrada")}
                             />
 
                             <ModoCard
                                 titulo={t("gestacionConfig_exit")}
-                                descripcion="Registrar salida"
+                                descripcion={t("gestacionConfig_exitDescription")}
                                 active={modo === "salida"}
                                 onPress={() => setModo("salida")}
                             />
@@ -897,14 +901,14 @@ export const ConfiguracionGestacionScreen = () => {
                         <View style={{ flexDirection: "row", gap: 10 }}>
                             <ModoCard
                                 titulo={t("gestacionConfig_reading")}
-                                descripcion="Solo consultar"
+                                descripcion={t("gestacionConfig_readingDescription")}
                                 active={modo === "lectura"}
                                 onPress={() => setModo("lectura")}
                             />
 
                             <ModoCard
                                 titulo={t("gestacionConfig_search")}
-                                descripcion="Buscar animal"
+                                descripcion={t("gestacionConfig_searchDescription")}
                                 active={modo === "busqueda"}
                                 onPress={() => setModo("busqueda")}
                             />
@@ -922,7 +926,7 @@ export const ConfiguracionGestacionScreen = () => {
                                             color: TEXT,
                                         }}
                                     >
-                                        Ajustes del envío
+                                        {t("gestacionConfig_sendSettingsTitle")}
                                     </Text>
 
                                     <Text
@@ -932,7 +936,7 @@ export const ConfiguracionGestacionScreen = () => {
                                             lineHeight: 19,
                                         }}
                                     >
-                                        Configura cómo se comporta el flujo al leer animales.
+                                        {t("gestacionConfig_sendSettingsDescription")}
                                     </Text>
 
                                     <View style={{ height: 10 }} />
@@ -996,7 +1000,7 @@ export const ConfiguracionGestacionScreen = () => {
                                             fontWeight: "900",
                                         }}
                                     >
-                                        Corral de entrada
+                                        {t("gestacionConfig_corralSectionTitle")}
                                     </Text>
 
                                     <Text
@@ -1007,7 +1011,7 @@ export const ConfiguracionGestacionScreen = () => {
                                             lineHeight: 16,
                                         }}
                                     >
-                                        Este dato es obligatorio para continuar con el registro.
+                                        {t("gestacionConfig_corralSectionDescription")}
                                     </Text>
                                 </View>
                             </View>
@@ -1134,7 +1138,11 @@ export const ConfiguracionGestacionScreen = () => {
                                     <View style={{ borderRadius: 12, backgroundColor: "#FFFFFF", ...SHADOW_SOFT }}>
                                         <TextInput
                                             mode="outlined"
-                                            label={tipoBusqueda === "crotal" ? "Crotal" : "ID"}
+                                            label={
+                                                tipoBusqueda === "crotal"
+                                                    ? t("gestacionConfig_crotalLabelSearch")
+                                                    : t("gestacionConfig_idLabelSearch")
+                                            }
                                             value={valorBusqueda}
                                             onChangeText={setValorBusqueda}
                                             placeholder={
@@ -1440,7 +1448,7 @@ export const ConfiguracionGestacionScreen = () => {
                             }}
                         >
                             <Text style={{ color: "white", fontWeight: "900", fontSize: 15 }}>
-                                {t("Aceptar")}
+                                {t("common_accept")}
                             </Text>
                         </TouchableOpacity>
                     </View>

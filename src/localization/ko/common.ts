@@ -439,4 +439,40 @@ export default {
     Reader_labelState: "상태",
     Reader_autoReadingBadge: "자동 판독",
 
+    gestacionConfig_flowSectionTitle: "흐름 설정",
+gestacionConfig_workModeTitle: "작업 모드",
+gestacionConfig_workModeDescription: "리더기가 수행할 작업을 선택하세요.",
+gestacionConfig_entryDescription: "입장 등록",
+gestacionConfig_exitDescription: "퇴장 등록",
+gestacionConfig_readingDescription: "조회만 하기",
+gestacionConfig_searchDescription: "동물 검색",
+
+gestacionConfig_sendSettingsTitle: "전송 설정",
+gestacionConfig_sendSettingsDescription: "동물을 읽을 때 흐름이 어떻게 동작할지 설정하세요.",
+
+gestacionConfig_corralSectionTitle: "입장 우리",
+gestacionConfig_corralSectionDescription: "등록을 계속하려면 이 정보가 필요합니다.",
+
+gestacionConfig_alerts_notice: "알림",
+gestacionConfig_alerts_invalidCrotalFromBackend: "백엔드에서 비교할 유효한 귀표 번호를 반환하지 않았습니다.",
+
+common_accept: "확인",  
+
+maternidadConfig_flowSectionTitle: "흐름 설정",
+maternidadConfig_workModeTitle: "작업 모드",
+maternidadConfig_workModeDescription: "리더기가 수행할 작업을 선택하세요.",
+maternidadConfig_entryDescription: "입장 등록",
+maternidadConfig_exitDescription: "퇴장 등록",
+maternidadConfig_readingDescription: "조회만 하기",
+maternidadConfig_searchDescription: "동물 검색",
+
+maternidadConfig_sendSettingsTitle: "전송 설정",
+maternidadConfig_sendSettingsDescription: "동물을 읽을 때 흐름이 어떻게 동작할지 설정하세요.",
+
+maternidadConfig_corralSectionTitle: "입장 우리",
+maternidadConfig_corralSectionDescription: "등록을 계속하려면 이 정보가 필요합니다.",
+
+maternidadConfig_alert_invalidCrotalFromBackend: "백엔드에서 비교할 유효한 귀표 번호를 반환하지 않았습니다.",
+
+
 };

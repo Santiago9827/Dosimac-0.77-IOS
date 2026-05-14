@@ -445,4 +445,39 @@ Reader_labelCorral: "Recinto",
 Reader_labelHouse: "Capannone",
 Reader_labelState: "Stato",
 Reader_autoReadingBadge: "Lettura automatica",
+gestacionConfig_flowSectionTitle: "Configurazione del flusso",
+gestacionConfig_workModeTitle: "Modalità di lavoro",
+gestacionConfig_workModeDescription: "Seleziona cosa farà il lettore.",
+gestacionConfig_entryDescription: "Registra entrata",
+gestacionConfig_exitDescription: "Registra uscita",
+gestacionConfig_readingDescription: "Solo consultazione",
+gestacionConfig_searchDescription: "Cerca animale",
+
+gestacionConfig_sendSettingsTitle: "Impostazioni di invio",
+gestacionConfig_sendSettingsDescription: "Configura il comportamento del flusso durante la lettura degli animali.",
+
+gestacionConfig_corralSectionTitle: "Recinto di entrata",
+gestacionConfig_corralSectionDescription: "Questo dato è obbligatorio per continuare con la registrazione.",
+
+gestacionConfig_alerts_notice: "Avviso",
+gestacionConfig_alerts_invalidCrotalFromBackend: "Il backend non ha restituito una marca auricolare valida da confrontare.",
+
+common_accept: "Accetta",
+
+maternidadConfig_flowSectionTitle: "Configurazione del flusso",
+maternidadConfig_workModeTitle: "Modalità di lavoro",
+maternidadConfig_workModeDescription: "Seleziona cosa farà il lettore.",
+maternidadConfig_entryDescription: "Registra entrata",
+maternidadConfig_exitDescription: "Registra uscita",
+maternidadConfig_readingDescription: "Solo consultazione",
+maternidadConfig_searchDescription: "Cerca animale",
+
+maternidadConfig_sendSettingsTitle: "Impostazioni di invio",
+maternidadConfig_sendSettingsDescription: "Configura il comportamento del flusso durante la lettura degli animali.",
+
+maternidadConfig_corralSectionTitle: "Recinto di entrata",
+maternidadConfig_corralSectionDescription: "Questo dato è obbligatorio per continuare con la registrazione.",
+
+maternidadConfig_alert_invalidCrotalFromBackend: "Il backend non ha restituito una marca auricolare valida da confrontare.",
+
 };

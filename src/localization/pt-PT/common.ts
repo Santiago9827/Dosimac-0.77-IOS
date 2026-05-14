@@ -439,4 +439,40 @@ Reader_labelCorral: "Curral",
 Reader_labelHouse: "Pavilhão",
 Reader_labelState: "Estado",
 Reader_autoReadingBadge: "Leitura automática",
+
+gestacionConfig_flowSectionTitle: "Configuração do fluxo",
+gestacionConfig_workModeTitle: "Modo de trabalho",
+gestacionConfig_workModeDescription: "Selecione o que o leitor irá fazer.",
+gestacionConfig_entryDescription: "Registrar entrada",
+gestacionConfig_exitDescription: "Registrar saída",
+gestacionConfig_readingDescription: "Apenas consultar",
+gestacionConfig_searchDescription: "Buscar animal",
+
+gestacionConfig_sendSettingsTitle: "Configurações de envio",
+gestacionConfig_sendSettingsDescription: "Configure como o fluxo se comporta ao ler animais.",
+
+gestacionConfig_corralSectionTitle: "Curral de entrada",
+gestacionConfig_corralSectionDescription: "Este dado é obrigatório para continuar com o registro.",
+
+gestacionConfig_alerts_notice: "Aviso",
+gestacionConfig_alerts_invalidCrotalFromBackend: "O backend não retornou uma identificação auricular válida para comparar.",
+
+common_accept: "Aceitar",
+
+maternidadConfig_flowSectionTitle: "Configuração do fluxo",
+maternidadConfig_workModeTitle: "Modo de trabalho",
+maternidadConfig_workModeDescription: "Selecione o que o leitor irá fazer.",
+maternidadConfig_entryDescription: "Registrar entrada",
+maternidadConfig_exitDescription: "Registrar saída",
+maternidadConfig_readingDescription: "Apenas consultar",
+maternidadConfig_searchDescription: "Buscar animal",
+
+maternidadConfig_sendSettingsTitle: "Configurações de envio",
+maternidadConfig_sendSettingsDescription: "Configure como o fluxo se comporta ao ler animais.",
+
+maternidadConfig_corralSectionTitle: "Curral de entrada",
+maternidadConfig_corralSectionDescription: "Este dado é obrigatório para continuar com o registro.",
+
+maternidadConfig_alert_invalidCrotalFromBackend: "O backend não retornou uma identificação auricular válida para comparar.",
+
 }

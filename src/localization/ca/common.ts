@@ -445,4 +445,40 @@ Reader_labelCorral: "Corral",
 Reader_labelHouse: "Nau",
 Reader_labelState: "Estat",
 Reader_autoReadingBadge: "Lectura automàtica",
+
+gestacionConfig_flowSectionTitle: "Configuració del flux",
+gestacionConfig_workModeTitle: "Mode de treball",
+gestacionConfig_workModeDescription: "Selecciona què farà el lector.",
+gestacionConfig_entryDescription: "Registrar entrada",
+gestacionConfig_exitDescription: "Registrar sortida",
+gestacionConfig_readingDescription: "Només consultar",
+gestacionConfig_searchDescription: "Buscar animal",
+
+gestacionConfig_sendSettingsTitle: "Ajustos de l’enviament",
+gestacionConfig_sendSettingsDescription: "Configura com es comporta el flux en llegir animals.",
+
+gestacionConfig_corralSectionTitle: "Corral d’entrada",
+gestacionConfig_corralSectionDescription: "Aquesta dada és obligatòria per continuar amb el registre.",
+
+gestacionConfig_alerts_notice: "Avís",
+gestacionConfig_alerts_invalidCrotalFromBackend: "El backend no ha retornat un cròtal vàlid per comparar.",
+
+common_accept: "Acceptar",
+
+maternidadConfig_flowSectionTitle: "Configuració del flux",
+maternidadConfig_workModeTitle: "Mode de treball",
+maternidadConfig_workModeDescription: "Selecciona què farà el lector.",
+maternidadConfig_entryDescription: "Registrar entrada",
+maternidadConfig_exitDescription: "Registrar sortida",
+maternidadConfig_readingDescription: "Només consultar",
+maternidadConfig_searchDescription: "Buscar animal",
+
+maternidadConfig_sendSettingsTitle: "Ajustos de l’enviament",
+maternidadConfig_sendSettingsDescription: "Configura com es comporta el flux en llegir animals.",
+
+maternidadConfig_corralSectionTitle: "Corral d’entrada",
+maternidadConfig_corralSectionDescription: "Aquesta dada és obligatòria per continuar amb el registre.",
+
+maternidadConfig_alert_invalidCrotalFromBackend: "El backend no ha retornat un cròtal vàlid per comparar.",
+
 };

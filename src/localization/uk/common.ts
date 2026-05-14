@@ -444,5 +444,41 @@ Reader_labelCorral: "Загін",
 Reader_labelHouse: "Корпус",
 Reader_labelState: "Стан",
 Reader_autoReadingBadge: "Автоматичне зчитування",
+
+gestacionConfig_flowSectionTitle: "Налаштування процесу",
+gestacionConfig_workModeTitle: "Режим роботи",
+gestacionConfig_workModeDescription: "Виберіть, що робитиме зчитувач.",
+gestacionConfig_entryDescription: "Зареєструвати вхід",
+gestacionConfig_exitDescription: "Зареєструвати вихід",
+gestacionConfig_readingDescription: "Лише перегляд",
+gestacionConfig_searchDescription: "Пошук тварини",
+
+gestacionConfig_sendSettingsTitle: "Налаштування надсилання",
+gestacionConfig_sendSettingsDescription: "Налаштуйте поведінку процесу під час зчитування тварин.",
+
+gestacionConfig_corralSectionTitle: "Загін для входу",
+gestacionConfig_corralSectionDescription: "Це поле є обов’язковим для продовження реєстрації.",
+
+gestacionConfig_alerts_notice: "Повідомлення",
+gestacionConfig_alerts_invalidCrotalFromBackend: "Сервер не повернув дійсну вушну мітку для порівняння.",
+
+common_accept: "Прийняти",
+
+maternidadConfig_flowSectionTitle: "Налаштування процесу",
+maternidadConfig_workModeTitle: "Режим роботи",
+maternidadConfig_workModeDescription: "Виберіть, що робитиме зчитувач.",
+maternidadConfig_entryDescription: "Зареєструвати вхід",
+maternidadConfig_exitDescription: "Зареєструвати вихід",
+maternidadConfig_readingDescription: "Лише перегляд",
+maternidadConfig_searchDescription: "Пошук тварини",
+
+maternidadConfig_sendSettingsTitle: "Налаштування надсилання",
+maternidadConfig_sendSettingsDescription: "Налаштуйте поведінку процесу під час зчитування тварин.",
+
+maternidadConfig_corralSectionTitle: "Загін для входу",
+maternidadConfig_corralSectionDescription: "Це поле є обов’язковим для продовження реєстрації.",
+
+maternidadConfig_alert_invalidCrotalFromBackend: "Сервер не повернув дійсну вушну мітку для порівняння.",
+
  
 };
