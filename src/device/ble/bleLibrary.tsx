@@ -40,7 +40,7 @@ export interface BlePeripheral {
 export let devices: BlePeripheral[];
 export let conectedDevices: BlePeripheral[];
 let notifsReady = false;
-
+let notifyListenerSubscription: any = null;
 let notifyListenerAttached = false;
 
 let writeServiceUUIDIOS: string | null = null;
@@ -69,7 +69,7 @@ function extractAdvBytesIOS(adv: any): number[] | null {
   if (typeof adv.kCBAdvDataManufacturerData === 'string') {
     try {
       return Array.from(Buffer.from(adv.kCBAdvDataManufacturerData, 'base64'));
-    } catch {}
+    } catch { }
   }
 
   // 2) manufacturerData como objeto (a veces librerías lo exponen así)
@@ -78,7 +78,7 @@ function extractAdvBytesIOS(adv: any): number[] | null {
       const v = adv.manufacturerData[k];
       if (Array.isArray(v)) return v;
       if (typeof v === 'string') {
-        try { return Array.from(Buffer.from(v, 'base64')); } catch {}
+        try { return Array.from(Buffer.from(v, 'base64')); } catch { }
       }
     }
   }
@@ -89,7 +89,7 @@ function extractAdvBytesIOS(adv: any): number[] | null {
       const v = adv.kCBAdvDataServiceData[k];
       if (Array.isArray(v)) return v;
       if (typeof v === 'string') {
-        try { return Array.from(Buffer.from(v, 'base64')); } catch {}
+        try { return Array.from(Buffer.from(v, 'base64')); } catch { }
       }
     }
   }
@@ -120,19 +120,35 @@ export const BleStart = async () => {
   await BleManager.start({ showAlert: false });
 };
 
+let discoverListenerSubscription: any = null;
+
 export const bleAddListener = () => {
-  bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral);
-}
+  if (discoverListenerSubscription) {
+    console.log('Discover listener ya estaba añadido');
+    return;
+  }
+
+  discoverListenerSubscription = bleManagerEmitter.addListener(
+    'BleManagerDiscoverPeripheral',
+    handleDiscoverPeripheral
+  );
+};
 
 export const bleRemoveListener = () => {
-  bleManagerEmitter.removeAllListeners('BleManagerDiscoverPeripheral');
-}
+  try {
+    discoverListenerSubscription?.remove?.();
+  } catch (error) {
+    console.log('Error eliminando discover listener:', error);
+  }
+
+  discoverListenerSubscription = null;
+};
 
 export const startScanning = async () => {
   await BleStart();   // ✅ garantiza init 1 vez
   clearDevices();
   console.log('Start Scanning...');
-  await BleManager.scan([], 3, false, { matchMode: 2 });
+  await BleManager.scan([], 5, false, { matchMode: 2 });
 };
 
 const handleDiscoverPeripheral = (p: any) => {
@@ -149,14 +165,14 @@ const handleDiscoverPeripheral = (p: any) => {
   let advBytes: number[] | undefined;
   // iOS
   if (typeof adv?.kCBAdvDataManufacturerData === 'string') {
-    try { advBytes = Array.from(Buffer.from(adv.kCBAdvDataManufacturerData, 'base64')); } catch {}
+    try { advBytes = Array.from(Buffer.from(adv.kCBAdvDataManufacturerData, 'base64')); } catch { }
   }
   if (!advBytes && adv?.manufacturerData && typeof adv.manufacturerData === 'object') {
     const k = Object.keys(adv.manufacturerData)[0];
     const v = k ? adv.manufacturerData[k] : undefined;
     if (Array.isArray(v)) advBytes = v;
     else if (typeof v === 'string') {
-      try { advBytes = Array.from(Buffer.from(v, 'base64')); } catch {}
+      try { advBytes = Array.from(Buffer.from(v, 'base64')); } catch { }
     }
   }
   if (!advBytes && adv?.serviceData && typeof adv.serviceData === 'object') {
@@ -181,11 +197,15 @@ const handleDiscoverPeripheral = (p: any) => {
 };
 
 
-export const stopScanning = () => {
+export const stopScanning = async () => {
   console.log("Trying to stopped scanning...");
-  BleManager.stopScan().then(() => {
+
+  try {
+    await BleManager.stopScan();
     console.log("Scan stopped");
-  });
+  } catch (error) {
+    console.log("stopScanning error:", error);
+  }
 };
 
 const clearDevices = () => {
@@ -224,7 +244,7 @@ export const bleConnection = async (id: string) => {
 
   try {
     // iOS: parar escaneo antes de conectar
-    try { await BleManager.stopScan(); } catch {}
+    try { await BleManager.stopScan(); } catch { }
 
     await BleManager.connect(id);
     console.log('Connected to ' + id);
@@ -275,19 +295,84 @@ export const bleDosimacWrite = async (request: Buffer) => {
 };
 
 
-export const bleDisconnection = (id: string) => {
-  if (!id) { console.log('bleDisconnection: No device selected'); return; }
+export const bleDisconnection = async (id: string) => {
+  if (!id) {
+    console.log('bleDisconnection: No device selected');
+    return;
+  }
 
-  BleManager.disconnect(id)
-    .then(() => {
+  try {
+    if (selectedDevice && notifySvcUUID && notifyCharUUID) {
+      try {
+        await BleManager.stopNotification(selectedDevice, notifySvcUUID, notifyCharUUID);
+        console.log('Characteristic stopped notifying');
+      } catch (error) {
+        console.log('stopNotification error:', error);
+      }
+    }
+
+    try {
+      notifyListenerSubscription?.remove?.();
+    } catch (error) {
+      console.log('remove notify listener error:', error);
+    }
+
+    notifyListenerSubscription = null;
+    notifyListenerAttached = false;
+    notifsReady = false;
+
+    const isConnected = await BleManager.isPeripheralConnected(id, []);
+
+    if (isConnected) {
+      console.log('Disconnecting from peripheral with UUID:', id);
+      await BleManager.disconnect(id);
       console.log('Disconected ' + id);
-      selectedDevice = null;
-      notifsReady = false;              // <--- CLAVE
-      notifyListenerAttached = false;   // (opcional) si quieres re-adjuntar en la próxima
-    })
-    .catch((error) => {
-      console.log('Disconnection error ....', error);
-    })
+    }
+
+    selectedDevice = null;
+    writeSvcUUID = null;
+    writeCharUUID = null;
+    notifySvcUUID = null;
+    notifyCharUUID = null;
+
+  } catch (error) {
+    console.log('Disconnection error ....', error);
+  }
+};
+
+export const resetBleSession = async () => {
+  console.log('resetBleSession...');
+
+  try {
+    await stopScanning();
+  } catch (error) {
+    console.log('resetBleSession stopScanning error:', error);
+  }
+
+  try {
+    if (selectedDevice) {
+      await bleDisconnection(selectedDevice);
+    }
+  } catch (error) {
+    console.log('resetBleSession disconnect error:', error);
+  }
+
+  try {
+    notifyListenerSubscription?.remove?.();
+  } catch (error) {
+    console.log('resetBleSession remove notify listener error:', error);
+  }
+
+  notifyListenerSubscription = null;
+  notifyListenerAttached = false;
+  notifsReady = false;
+
+  devices = [];
+  selectedDevice = null;
+  writeSvcUUID = null;
+  writeCharUUID = null;
+  notifySvcUUID = null;
+  notifyCharUUID = null;
 };
 
 
@@ -325,19 +410,17 @@ export const bleSubscribeNotify = async () => {
     writeCharUUID = cff1.characteristic;
 
     // listener (una vez)
-    if (!notifyListenerAttached) {
-      bleManagerEmitter.addListener(
-        'BleManagerDidUpdateValueForCharacteristic',
-        ({ value, characteristic, service }) => {
-          // Útil para confirmar que viene de CFF5:
-          // console.log('NOTIFY de', service, characteristic, 'len=', value?.length);
-          const buff = Buffer.from(value);
-          pcomProccessResponse(buff, buff.length);
-        }
-      );
-      notifyListenerAttached = true;
+   if (!notifyListenerAttached) {
+  notifyListenerSubscription = bleManagerEmitter.addListener(
+    'BleManagerDidUpdateValueForCharacteristic',
+    ({ value, characteristic, service }) => {
+      const buff = Buffer.from(value);
+      pcomProccessResponse(buff, buff.length);
     }
+  );
 
+  notifyListenerAttached = true;
+}
     // activar notificación en CFF5 (NO en CFF1)
     notifySvcUUID = cff5.service;
     notifyCharUUID = cff5.characteristic;

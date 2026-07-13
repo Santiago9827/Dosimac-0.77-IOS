@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, Appbar, Text, Button, Portal, Dialog } from 'react-native-paper';
-import { MainButton } from '../../components/shared/MainButton ';
 import { useTranslation } from 'react-i18next';
 import * as ble from '../../../device/ble/bleLibrary';
 import { BlePeripheral } from '../../../device/ble/bleLibrary';
 import { SevenSegButton } from '../../components/shared/SevenSeg';
-
-
 
 type Props = {
   navigation: any;
@@ -18,6 +15,7 @@ type Props = {
    Helpers comunes (ASCII)
    ========================= */
 const ASCII = (s: string) => s.split('').map(c => c.charCodeAt(0));
+
 const bytesToAscii = (bytes: number[]) =>
   String.fromCharCode(...bytes.map(b => b & 0xff));
 
@@ -55,23 +53,31 @@ function getAdvBytes(d: BlePeripheral): number[] | null {
 function isOursIOS(d: BlePeripheral, operacion?: number): boolean {
   const needles = getNeedles(operacion);
 
-  // 1) Nombre/localName (iOS suele traerlo), sin distinción de mayúsc/minúsc
+  // 1) Nombre/localName
   const n = (d.name || '').toUpperCase();
+
   if (n) {
     if (needles.some(x => n.includes(x))) return true;
-    if (needles.length === 1 && needles[0] === 'DOSIMAC' && n.includes('DOSIMAC')) return true;
+
+    if (needles.length === 1 && needles[0] === 'DOSIMAC' && n.includes('DOSIMAC')) {
+      return true;
+    }
   }
 
-  // 2) Manufacturer/Service data: buscar en TODO el payload (no asumir offset=2)
+  // 2) Advertising bytes
   const bytes = getAdvBytes(d);
+
   if (bytes) {
     const s = bytesToAscii(bytes);
+
     if (needles.some(x => s.includes(x))) return true;
 
-    // Genérico: por si el equipo emite "DOSIMAC" sin sufijo
     if (needles.length === 1 && needles[0] === 'DOSIMAC') {
       const DOSIMAC_ASCII = ASCII('DOSIMAC');
-      if (includesSubsequence(bytes, DOSIMAC_ASCII)) return true;
+
+      if (includesSubsequence(bytes, DOSIMAC_ASCII)) {
+        return true;
+      }
     }
   }
 
@@ -79,58 +85,49 @@ function isOursIOS(d: BlePeripheral, operacion?: number): boolean {
 }
 
 /* ==========================================
-   Etiqueta de botón (bonita y estable)
+   Etiqueta de botón
    ========================================== */
 function isPrintableAscii(b: number) {
   const x = b & 0xff;
   return x >= 0x20 && x <= 0x7e;
 }
+
 function hex2(b: number) {
   return (b & 0xff).toString(16).padStart(2, '0');
 }
+
 function getDeviceLabel(d: BlePeripheral): string {
-  // Preferimos derivarla del payload de advertising (últimos 4 bytes si son ASCII)
   const adv = getAdvBytes(d);
+
   if (adv && adv.length >= 4) {
     const tail4 = adv.slice(-4);
+
     if (tail4.every(isPrintableAscii)) {
       return tail4.map(b => String.fromCharCode(b)).join('');
     }
-    // Si no son ASCII, usar los últimos 2 bytes en HEX (p.ej. "BF8E")
+
     const tail2 = adv.slice(-2);
+
     if (tail2.length === 2) {
       return tail2.map(hex2).join('');
     }
   }
 
-  // Fallback: últimas 4 letras del nombre, si existe
   const n = (d.name || '').trim();
+
   if (n) return n.slice(-4);
 
-  // Último recurso: cola del UUID
   return (d.id || '').replace(/-/g, '').slice(-5);
-}
-
-// Solo A/C/E/F -> mayúscula, b/d -> minúscula. Lo demás se deja igual.
-function prettifySegments(s: string): string {
-  return (s || '')
-    .split('')
-    .map(ch => {
-      const lower = ch.toLowerCase();
-      if (['a', 'c', 'e', 'f'].includes(lower)) return lower.toUpperCase(); // A C E F
-      if (['b', 'd'].includes(lower)) return lower;                         // b d
-      return ch; // números u otras letras sin cambio
-    })
-    .join('');
 }
 
 export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
   const { t } = useTranslation();
 
   const [scanning, setScanning] = useState(true);
-  const [startState, setStartState] = useState(0);
   const [hasDevices, setHasDevices] = useState(false);
   const [visible, setVisible] = useState(true);
+
+  const operacion = route?.params?.operacion;
 
   const dohideDialog = () => {
     setVisible(false);
@@ -138,59 +135,123 @@ export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    // Inicio BLE
-    ble.BleStart();
-    ble.bleAddListener();
+    let pantallaActiva = true;
+    let escaneoFinalizado = false;
+
+    let intervaloEscaneo: ReturnType<typeof setInterval> | null = null;
+    let timeoutEscaneo: ReturnType<typeof setTimeout> | null = null;
+
+    const finalizarEscaneo = async () => {
+      if (escaneoFinalizado) return;
+
+      escaneoFinalizado = true;
+
+      if (intervaloEscaneo) {
+        clearInterval(intervaloEscaneo);
+        intervaloEscaneo = null;
+      }
+
+      if (timeoutEscaneo) {
+        clearTimeout(timeoutEscaneo);
+        timeoutEscaneo = null;
+      }
+
+      try {
+        await ble.stopScanning();
+      } catch (error) {
+        console.log('Error parando escaneo:', error);
+      }
+
+      const dispositivosDosimac = ble.devices.filter(d =>
+        isOursIOS(d, operacion)
+      );
+
+      dispositivosDosimac.forEach((d, i) => {
+        const adv = getAdvBytes(d);
+
+        console.log(`DOSIMAC encontrado ${i + 1}`);
+        console.log('ID:', d.id, 'NAME:', d.name ?? 'null');
+        console.log('advBytes length:', Array.isArray(adv) ? adv.length : 0);
+      });
+
+      console.log('Total devices BLE:', ble.devices.length);
+      console.log('Total DOSIMAC filtrados:', dispositivosDosimac.length);
+
+      if (!pantallaActiva) return;
+
+      setHasDevices(dispositivosDosimac.length > 0);
+      setScanning(false);
+    };
+
+    const iniciarEscaneo = async () => {
+      try {
+        setScanning(true);
+        setHasDevices(false);
+        setVisible(true);
+
+        // Limpia escaneos/conexiones anteriores
+        await ble.resetBleSession();
+
+        // Arranca BLE y listener de discovery
+        ble.BleStart();
+        ble.bleAddListener();
+
+        // Empieza a escanear
+        await ble.startScanning();
+
+        // Cada 400ms miramos si ya apareció un DOSIMAC válido.
+        // Si aparece, paramos antes para no esperar siempre todo el tiempo.
+        intervaloEscaneo = setInterval(() => {
+          const found = ble.devices.some(d =>
+            isOursIOS(d, operacion)
+          );
+
+          if (found) {
+            finalizarEscaneo();
+          }
+        }, 400);
+
+        // Máximo tiempo de espera.
+        timeoutEscaneo = setTimeout(() => {
+          finalizarEscaneo();
+        }, 6000);
+
+      } catch (error) {
+        console.log('Error iniciando escaneo:', error);
+
+        if (!pantallaActiva) return;
+
+        setHasDevices(false);
+        setScanning(false);
+      }
+    };
+
+    iniciarEscaneo();
+
     return () => {
+      pantallaActiva = false;
+      escaneoFinalizado = true;
+
+      if (intervaloEscaneo) {
+        clearInterval(intervaloEscaneo);
+      }
+
+      if (timeoutEscaneo) {
+        clearTimeout(timeoutEscaneo);
+      }
+
+      try {
+        ble.stopScanning();
+      } catch {}
+
       ble.bleRemoveListener();
     };
-  }, []);
-
-  // Máquina de estados para el escaneo inicial
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (startState < 2) {
-        setStartState(s => s + 1);
-      } else {
-        setScanning(false);
-
-        // ¿hay algún DOSIMAC del tipo solicitado?
-        const found = ble.devices.some(d => isOursIOS(d, route?.params?.operacion));
-        setHasDevices(found);
-
-        // (opcional) logs de depuración
-        ble.devices.forEach((d, i) => {
-          const adv = getAdvBytes(d);
-          console.log(`-----: ${i + 1}`);
-          console.log('ID:', d.id, 'NAME:', d.name ?? 'null');
-          console.log('advBytes length:', Array.isArray(adv) ? adv.length : 0);
-        });
-        console.log('Total devices:', ble.devices.length);
-      }
-    }, startBleStateMachine());
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startState]);
-
-  const startBleStateMachine = (): number => {
-    switch (startState) {
-      case 0:
-        return 500;
-      case 1:
-        // En iOS es útil ampliar a 5–6s si los anuncios son lentos
-        ble.startScanning(); // tu bleLibrary puede ajustar la duración si lo deseas
-        return 3000;
-      case 2:
-        ble.stopScanning();
-        return 100;
-      default:
-        return 0;
-    }
-  };
+  }, [operacion]);
 
   const RenderIsScanning = () => (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <ActivityIndicator size="large" />
+
       <View>
         <Text style={{ fontFamily: 'Roboto-Light', fontSize: 20 }}>
           {t('common:SearchingDevices') ?? 'Buscando equipos...'}
@@ -204,41 +265,61 @@ export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
       <Portal>
         <Dialog visible={visible} onDismiss={dohideDialog}>
           <Dialog.Icon icon="warning" color="red" size={60} />
-          <Dialog.Title style={{ color: 'red' }}>{t('common:Aviso') ?? 'Aviso'}</Dialog.Title>
+
+          <Dialog.Title style={{ color: 'red' }}>
+            {t('common:Aviso') ?? 'Aviso'}
+          </Dialog.Title>
+
           <Dialog.Content>
-            <Text variant="bodyLarge">{t('common:No_hay_dispositivos') ?? 'No hay dispositivos'}</Text>
+            <Text variant="bodyLarge">
+              {t('common:No_hay_dispositivos') ?? 'No hay dispositivos'}
+            </Text>
           </Dialog.Content>
+
           <Dialog.Actions>
-            <Button onPress={dohideDialog}>{t('common:Aceptar') ?? 'Aceptar'}</Button>
+            <Button onPress={dohideDialog}>
+              {t('common:Aceptar') ?? 'Aceptar'}
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
     </View>
   );
 
+  const irASetup = async (device: BlePeripheral) => {
+    try {
+      await ble.stopScanning();
+      ble.bleRemoveListener();
+    } catch (error) {
+      console.log('Error limpiando antes de ir a DR-SETUP:', error);
+    }
 
-const renderDevice = (device: BlePeripheral) => {
-  if (!isOursIOS(device, route?.params?.operacion)) return null;
-  const label = getDeviceLabel(device); // déjalo tal cual
-  return (
-    <View key={device.id} style={{ marginTop: 15 }}>
-  <SevenSegButton
-  text={label}
-  onPress={() => navigation.navigate('DR-SETUP', { id: device.id, operacion: route?.params?.operacion })}
-  // ↓↓↓ AJUSTES DE TAMAÑO Y ESPACIADO ↓↓↓
-  size={28}            // antes 40 → más pequeño (alto “media celda”)
-  thickness={6}        // antes 8 → segmentos menos gruesos
-  letterSpacing={18}   // antes 10 → más separación entre caracteres
-  containerPadding={14}// antes 18 → menos padding del botón
-  borderRadius={22}    // opcional: botón ligeramente menos “ovalado”
-  backgroundColor="#006d75"
-/>
+    navigation.navigate('DR-SETUP', {
+      id: device.id,
+      operacion,
+    });
+  };
 
-    </View>
-  );
-};
+  const renderDevice = (device: BlePeripheral) => {
+    if (!isOursIOS(device, operacion)) return null;
 
+    const label = getDeviceLabel(device);
 
+    return (
+      <View key={device.id} style={{ marginTop: 15 }}>
+        <SevenSegButton
+          text={label}
+          onPress={() => irASetup(device)}
+          size={28}
+          thickness={6}
+          letterSpacing={18}
+          containerPadding={14}
+          borderRadius={22}
+          backgroundColor="#006d75"
+        />
+      </View>
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>

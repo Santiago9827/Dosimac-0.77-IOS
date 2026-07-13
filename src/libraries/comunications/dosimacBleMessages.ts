@@ -176,54 +176,54 @@ export const pcomDosimacSetup = () => {
 // -----versión con corral32 ------------------
 
 const payloadSetup = (): Buffer => {
-  console.log("Inside payloadSetup");
+   console.log("Inside payloadSetup");
 
-  const isI = dosimacSetup.deviceType === 200;
-  const isG = dosimacSetup.deviceType === 203;
-  const sw = dosimacInfo.swVersion || 0;
-  const allowUint32 = (isI && sw >= 155) || (isG && sw >= 134);
+   const isI = dosimacSetup.deviceType === 200;
+   const isG = dosimacSetup.deviceType === 203;
+   const sw = dosimacInfo.swVersion || 0;
+   const allowUint32 = (isI && sw >= 155) || (isG && sw >= 134);
 
-  const baseLen = 148;                 // payload clásico
-  const extraLen = allowUint32 ? 4 : 0;// +4 si enviamos corral32
-  const payLoad = Buffer.alloc(baseLen + extraLen);
+   const baseLen = 148;                 // payload clásico
+   const extraLen = allowUint32 ? 4 : 0;// +4 si enviamos corral32
+   const payLoad = Buffer.alloc(baseLen + extraLen);
 
-  // Cabecera
-  payLoad.writeUInt16LE(1, 0);  // Version
-  payLoad.writeUInt16LE(1, 2);  // Setup configuration
+   // Cabecera
+   payLoad.writeUInt16LE(1, 0);  // Version
+   payLoad.writeUInt16LE(1, 2);  // Setup configuration
 
-  // Cadenas
-  payLoad.write(dosimacSetup.ssid,         4,   32, 'utf16le'); // 4..67
-  payLoad.write(dosimacSetup.wifiPassword, 68,  32, 'ascii');   // 68..99
-  payLoad.write(dosimacSetup.serverIp,     100, 32, 'ascii');   // 100..131
+   // Cadenas
+   payLoad.write(dosimacSetup.ssid, 4, 32, 'utf16le'); // 4..67
+   payLoad.write(dosimacSetup.wifiPassword, 68, 32, 'ascii');   // 68..99
+   payLoad.write(dosimacSetup.serverIp, 100, 32, 'ascii');   // 100..131
 
-  // Campos fijos
-  payLoad.writeUInt16LE(dosimacSetup.deviceType, 132);
-  payLoad.writeUInt8(dosimacSetup.phase,         134);
-  payLoad.writeUInt8(dosimacSetup.deviceNumber,  135);
+   // Campos fijos
+   payLoad.writeUInt16LE(dosimacSetup.deviceType, 132);
+   payLoad.writeUInt8(dosimacSetup.phase, 134);
+   payLoad.writeUInt8(dosimacSetup.deviceNumber, 135);
 
-  // 136..143 = NFC (no tocar: queda a 0s si no se usa)
+   // 136..143 = NFC (no tocar: queda a 0s si no se usa)
 
-  // Corral 16-bit legado (144..145). Si usamos 32-bit, va 0.
-  payLoad.writeUInt16LE(allowUint32 ? 0 : dosimacSetup.corral, 144);
+   // Corral 16-bit legado (144..145). Si usamos 32-bit, va 0.
+   payLoad.writeUInt16LE(allowUint32 ? 0 : dosimacSetup.corral, 144);
 
-  // Reserva (146..147)
-  payLoad.writeUInt16LE(9, 146);
+   // Reserva (146..147)
+   payLoad.writeUInt16LE(9, 146);
 
-  // Corral 32-bit al FINAL (148..151) solo si procede
-  if (allowUint32) {
-    const c32 = (dosimacSetup as any).corral32 ?? 0;
-    payLoad.writeUInt32LE(c32, 148);
-  }
+   // Corral 32-bit al FINAL (148..151) solo si procede
+   if (allowUint32) {
+      const c32 = (dosimacSetup as any).corral32 ?? 0;
+      payLoad.writeUInt32LE(c32, 148);
+   }
 
-  console.log(
-    `[DOSIMAC][SETUP] ${new Date().toISOString()} ` +
-    `build payload: len=${payLoad.length}, sw=${sw}, type=${dosimacSetup.deviceType}, ` +
-    `allowUint32=${allowUint32}, corral16=${allowUint32 ? 0 : dosimacSetup.corral}, ` +
-    `corral32=${(dosimacSetup as any).corral32 ?? 0}`
-  );
+   console.log(
+      `[DOSIMAC][SETUP] ${new Date().toISOString()} ` +
+      `build payload: len=${payLoad.length}, sw=${sw}, type=${dosimacSetup.deviceType}, ` +
+      `allowUint32=${allowUint32}, corral16=${allowUint32 ? 0 : dosimacSetup.corral}, ` +
+      `corral32=${(dosimacSetup as any).corral32 ?? 0}`
+   );
 
-  console.log("End payloadSetup");
-  return payLoad;
+   console.log("End payloadSetup");
+   return payLoad;
 };
 
 
@@ -243,8 +243,15 @@ export const pcomResponseClassifier = () => {
       switch (parser.msgType) {
          case 0x01:
             console.log("--- El movil puede enviar datos al dispositivo ---")
-            requestState.responseRecieved = 1;
-            setupState.responseRecieved = 1;
+
+            if (masterState.actualJob === 1) {
+               requestState.responseRecieved = 1;
+            }
+
+            if (masterState.actualJob === 2) {
+               setupState.responseRecieved = 1;
+            }
+
             break;
          case 0x02:
             console.log("--- Recibida trama de configuración ---")
@@ -264,13 +271,24 @@ export const pcomResponseClassifier = () => {
 }
 
 const pcomresponseStatus = () => {
-   requestState.responseRecieved = parser.payLoad.readUint16LE(2);
-   setupState.responseRecieved = requestState.responseRecieved;
-   console.log("(pcomresponseStatus): " + requestState.responseRecieved)
+   const tipoRespuesta = parser.payLoad.readUInt16LE(2);
 
-   if (requestState.responseRecieved === 2) {
-      console.log("ES UNA TRAMA DE RESPUESTRA (pcomresponseStatus): " + requestState.responseRecieved)
+   console.log("(pcomresponseStatus): " + tipoRespuesta);
+
+   if (tipoRespuesta === 2) {
+      console.log("ES UNA TRAMA DE RESPUESTA SETUP ACK: " + tipoRespuesta);
+
+      if (masterState.actualJob === 2) {
+         setupState.responseRecieved = 2;
+      }
+
       return;
+   }
+
+   if (tipoRespuesta === 4) {
+      if (masterState.actualJob === 1) {
+         requestState.responseRecieved = 4;
+      }
    }
 
    dosimacInfo.deviceIp = parser.payLoad.toString('ascii', 132, 164);
@@ -292,26 +310,26 @@ const pcomresponseStatus = () => {
    dosimacInfo.swVersion = parser.payLoad.readUint16LE(256)
    dosimacInfo.hwVersion = parser.payLoad.readUint16LE(258)
 
-const corral16 = parser.payLoad.readUInt16LE(240);   // 16-bit legado
-const corral32 = parser.payLoad.readUInt32LE(136);   // 32-bit nuevo
+   const corral16 = parser.payLoad.readUInt16LE(240);   // 16-bit legado
+   const corral32 = parser.payLoad.readUInt32LE(136);   // 32-bit nuevo
 
-// Reglas por versión/tipo
-const isI = dosimacInfo.deviceType === 200;
-const isG = dosimacInfo.deviceType === 203;
-const allowUint32 = (isI && dosimacInfo.swVersion >= 155) || (isG && dosimacInfo.swVersion >= 134);
+   // Reglas por versión/tipo
+   const isI = dosimacInfo.deviceType === 200;
+   const isG = dosimacInfo.deviceType === 203;
+   const allowUint32 = (isI && dosimacInfo.swVersion >= 155) || (isG && dosimacInfo.swVersion >= 134);
 
-// Selecciona el “corral efectivo” para mostrar/usar en la app
-const corralEfectivo = allowUint32 ? (corral16 === 0 ? corral32 : corral16) : corral16;
+   // Selecciona el “corral efectivo” para mostrar/usar en la app
+   const corralEfectivo = allowUint32 ? (corral16 === 0 ? corral32 : corral16) : corral16;
    // ⬇️ log siempre visible con marca de tiempo y tipo de equipo
    console.log(
-  `[DOSIMAC][STATUS] v=${dosimacInfo.swVersion} type=${dosimacInfo.deviceType} ` +
-  `allow32=${allowUint32} corral16=${corral16} corral32=${corral32} => efectivo=${corralEfectivo}`
-);
-console.log(
-  `[DOSIMAC][STATUS] ${new Date().toISOString()} ` +
-  `swVersion=${dosimacInfo.swVersion} hwVersion=${dosimacInfo.hwVersion} ` +
-  `deviceType=${dosimacInfo.deviceType}`
-);
+      `[DOSIMAC][STATUS] v=${dosimacInfo.swVersion} type=${dosimacInfo.deviceType} ` +
+      `allow32=${allowUint32} corral16=${corral16} corral32=${corral32} => efectivo=${corralEfectivo}`
+   );
+   console.log(
+      `[DOSIMAC][STATUS] ${new Date().toISOString()} ` +
+      `swVersion=${dosimacInfo.swVersion} hwVersion=${dosimacInfo.hwVersion} ` +
+      `deviceType=${dosimacInfo.deviceType}`
+   );
 
    masterState.dInfoComState = dosimacInfo.connectionState;
    masterState.dInfomanState = dosimacInfo.deviceState;
@@ -457,11 +475,11 @@ const inicialStateMachine = (): number => {
          return 300;
       case 2:
          if (!canWrite()) {
-           if ((++inicialState.waitRetries % 5) === 0) {
-             console.log('[init] Reintentando startNotification…');
-             bleSubscribeNotify();
-           }
-           return 200;
+            if ((++inicialState.waitRetries % 5) === 0) {
+               console.log('[init] Reintentando startNotification…');
+               bleSubscribeNotify();
+            }
+            return 200;
          }
          inicialState.waitRetries = 0;
          inicialState.state++;
@@ -476,66 +494,66 @@ const inicialStateMachine = (): number => {
 }
 
 export const stateMachineRequestState = (): number => {
-  console.log("stateMachineRequestState REQUEST: ", requestState.state, requestState.responseRecieved);
+   console.log("stateMachineRequestState REQUEST: ", requestState.state, requestState.responseRecieved);
 
-  switch (requestState.state) {
-    case 0: {
-      if (!canWrite()) return 150;
-      requestState.responseRecieved = 0;
-      requestState.waitRetries = 0;
-      pcomSendB();
-      requestState.state = 1;
-      return 200;
-    }
-    case 1: {
-      if (requestState.responseRecieved === 0) {
-        if (++requestState.waitRetries > 60) {
-          requestState.waitRetries = 0;
-          if (requestState.stateRetries++ < 3) {
-            requestState.state = 0;
-          } else {
+   switch (requestState.state) {
+      case 0: {
+         if (!canWrite()) return 150;
+         requestState.responseRecieved = 0;
+         requestState.waitRetries = 0;
+         pcomSendB();
+         requestState.state = 1;
+         return 200;
+      }
+      case 1: {
+         if (requestState.responseRecieved === 0) {
+            if (++requestState.waitRetries > 60) {
+               requestState.waitRetries = 0;
+               if (requestState.stateRetries++ < 3) {
+                  requestState.state = 0;
+               } else {
+                  requestState.stateRetries = 0;
+                  masterState.unControlError = true;
+                  return 500;
+               }
+            }
+            return 200;
+         }
+         if (requestState.responseRecieved === 1) {
+            requestState.responseRecieved = 0;
+            requestState.waitRetries = 0;
             requestState.stateRetries = 0;
-            masterState.unControlError = true;
-            return 500;
-          }
-        }
-        return 200;
-      }
-      if (requestState.responseRecieved === 1) {
-        requestState.responseRecieved = 0;
-        requestState.waitRetries = 0;
-        requestState.stateRetries = 0;
-        pcomRequestDosimacStatus();
-        requestState.state = 2;
-        return 300;
-      }
-      requestState.state = 2;
-      return 0;
-    }
-    case 2: {
-      if (requestState.responseRecieved === 0) {
-        if (++requestState.waitRetries > 60) {
-          requestState.waitRetries = 0;
-          if (requestState.stateRetries++ < 3) {
             pcomRequestDosimacStatus();
+            requestState.state = 2;
             return 300;
-          } else {
-            requestState.stateRetries = 0;
-            requestState.state = 0;
-            return 300;
-          }
-        }
-        return 200;
+         }
+         requestState.state = 2;
+         return 0;
       }
-      requestState.responseRecieved = 0;
-      requestState.waitRetries = 0;
-      requestState.stateRetries = 0;
-      requestState.state = 1;
-      return 2000;
-    }
-    default:
-      return 0;
-  }
+      case 2: {
+         if (requestState.responseRecieved === 0) {
+            if (++requestState.waitRetries > 60) {
+               requestState.waitRetries = 0;
+               if (requestState.stateRetries++ < 3) {
+                  pcomRequestDosimacStatus();
+                  return 300;
+               } else {
+                  requestState.stateRetries = 0;
+                  requestState.state = 0;
+                  return 300;
+               }
+            }
+            return 200;
+         }
+         requestState.responseRecieved = 0;
+         requestState.waitRetries = 0;
+         requestState.stateRetries = 0;
+         requestState.state = 1;
+         return 2000;
+      }
+      default:
+         return 0;
+   }
 };
 
 export const stateMachineSetupConfiguration = (): number => {

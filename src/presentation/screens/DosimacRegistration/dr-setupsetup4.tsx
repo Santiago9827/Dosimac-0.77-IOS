@@ -67,14 +67,14 @@ export const DRSetup = ({ navigation, route }) => {
   const sfarm = farmStore((state) => state.farm);
 
   // Listener de salida de pantalla: parar FSM
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('transitionStart', (e) => {
-      if (e.data.closing) {
-        pcomStopStateMachine();
-      }
-    });
-    return unsubscribe;
-  }, [navigation]);
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('transitionStart', (e) => {
+  //     if (e.data.closing) {
+  //       pcomStopStateMachine();
+  //     }
+  //   });
+  //   return unsubscribe;
+  // }, [navigation]);
 
   // Arranque: setear deviceId y arrancar la FSM de request si está idle
   useEffect(() => {
@@ -174,10 +174,10 @@ export const DRSetup = ({ navigation, route }) => {
 
     const allowUint32 = (isI && sw >= 155) || (isG && sw >= 134);
     console.log(
-  `[DOSIMAC][UI] ${new Date().toISOString()} Enviar: ` +
-  `sw=${sw}, intendedDeviceType=${intendedDeviceType} (I=${isI}, G=${isG}), ` +
-  `allowUint32=${allowUint32}, corralIntroducido=${corralNum}`
-);
+      `[DOSIMAC][UI] ${new Date().toISOString()} Enviar: ` +
+      `sw=${sw}, intendedDeviceType=${intendedDeviceType} (I=${isI}, G=${isG}), ` +
+      `allowUint32=${allowUint32}, corralIntroducido=${corralNum}`
+    );
 
     // Rango permitido
     if (!allowUint32 && corralNum > 65000) {
@@ -208,15 +208,9 @@ export const DRSetup = ({ navigation, route }) => {
     dosimacSetup.nfcTag = nfcTag || '';
 
     // Asignación dual corral16/corral32
-    if (allowUint32) {
-      dosimacSetup.corral = 0;                                   // en 16-bit va 0
-      (dosimacSetup as any).corral32 = corralNum;                // nuevo 32-bit
-    } else {
-      dosimacSetup.corral = corralNum;                           // 16-bit normal
-      (dosimacSetup as any).corral32 = 0;                        // 0 en 32-bit
-    }
+    dosimacSetup.corral = corralNum;
+    (dosimacSetup as any).corral32 = corralNum;
 
-    
 
     // Reset UI y lanzar FSM de setup
     setWaitingSetting(true);
@@ -308,17 +302,16 @@ export const DRSetup = ({ navigation, route }) => {
               {!sendHasError && (
                 <>
                   <Text
-                    className={`text-center text-xl text-black ${
-                      configState === 2 ? (dInfoComState === 2 ? 'text-blue-600' : 'text-red-600') : 'text-back'
-                    }`}
+                    className={`text-center text-xl text-black ${configState === 2 ? (dInfoComState === 2 ? 'text-blue-600' : 'text-red-600') : 'text-back'
+                      }`}
                   >
                     {configState === 0
                       ? t("InicioConfiguracion")
                       : configState === 1
-                      ? t("ConfiguracionWifi")
-                      : dInfoComState === 0
-                      ? `${t("ErrorConfiguracion")} (${dInfomanState})`
-                      : t("ConfiguracionServidor")}
+                        ? t("ConfiguracionWifi")
+                        : dInfoComState === 0
+                          ? `${t("ErrorConfiguracion")} (${dInfomanState})`
+                          : t("ConfiguracionServidor")}
                   </Text>
 
                   {configState === 2 && dInfoComState === 2 ? (
@@ -326,7 +319,7 @@ export const DRSetup = ({ navigation, route }) => {
                       className="flex-row mt-8 w-auto h-12 rounded-lg bg-green-700 items-center justify-center"
                       onPress={() => {
                         dohideDialogSendConfiguration(1);
-                        pcomStopStateMachine();
+                        //pcomStopStateMachine();
                         navigation.navigate('DR-NEWUPDATE', { operacion: route.params.operacion });
                       }}
                     >
@@ -440,7 +433,7 @@ export const DRSetup = ({ navigation, route }) => {
           android_ripple={{ color: 'blue' }}
           style={{ ...styles.boton, backgroundColor: 'darkred' }}
           onPress={() => {
-            pcomStopStateMachine();
+            // pcomStopStateMachine();
             navigation.navigate('DR-NEWUPDATE', { operacion: route.params.operacion });
           }}
         >
