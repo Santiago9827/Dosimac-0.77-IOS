@@ -21,6 +21,7 @@ import { vglobal } from '../../../sharedTypes/globlaVars';
 import { farmStore } from '../../../stores/store';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { IonIcon } from '../../components/shared/IonIcon';
+import { guardarBaseUrlDesdeServerIp, validarInstalacionActiva } from "../../../stores/ipConfig";
 
 
 export const FarmScreen = ({ navigation, route }) => {
@@ -89,29 +90,77 @@ export const FarmScreen = ({ navigation, route }) => {
     React.useCallback(() => {
       if (route.params.isNewFarm) Inicilizefarmdata();
       else fetchFarmData(route.params.id);
-      return () => {};
+      return () => { };
     }, [])
   );
+  const submitData = async () => {
+    const serverIpLimpia = serverIp.trim();
 
-  const submitData = () => {
-    fillFarmData2();
-
-    if (route.params.isNewFarm) {
-      InsertFarmData(farmData2);
-    } else {
-      UpdateFarmData(farmData2);
+    if (!serverIpLimpia) {
+      Alert.alert(
+        "IP no configurada",
+        "Introduce la Dirección IP del Servidor."
+      );
+      return;
     }
-    UsesetFarmDataChange();
 
-    if (route.params.id === 0) {
-      if (!sfarm) {
-        UseSetNewFarm(1);
+    try {
+      /**
+       * 1. Guardamos la IP activa para que la usen los endpoints.
+       */
+      await guardarBaseUrlDesdeServerIp(serverIpLimpia);
+
+      /**
+       * 2. Comprobamos si la instalación responde.
+       * Si no responde, NO bloqueamos el guardado.
+       */
+      const disponibilidad = await validarInstalacionActiva();
+
+      fillFarmData2();
+
+      /**
+       * 3. Guardamos la instalación en la base local.
+       */
+      if (route.params.isNewFarm) {
+        await InsertFarmData(farmData2);
+      } else {
+        await UpdateFarmData(farmData2);
       }
-    } else if (sfarm && route.params.id === sfarm.id) {
-      UseSetNewFarm(route.params.id);
+
+      UsesetFarmDataChange();
+
+      if (route.params.id === 0) {
+        if (!sfarm) {
+          UseSetNewFarm(1);
+        }
+      } else if (sfarm && route.params.id === sfarm.id) {
+        UseSetNewFarm(route.params.id);
+      }
+
+      if (!disponibilidad.ok) {
+        Alert.alert(
+          "Instalación guardada sin conexión",
+          disponibilidad.mensaje ||
+          "La instalación se ha guardado, pero no se ha podido conectar con el servidor."
+        );
+
+        navigation.goBack();
+        return;
+      }
+
+      Alert.alert(
+        "Instalación guardada",
+        "La instalación se ha guardado correctamente."
+      );
+
+      navigation.goBack();
+    } catch (error: any) {
+      Alert.alert(
+        "Error",
+        error?.message || "No se pudo guardar la instalación."
+      );
     }
   };
-
   const deleteFarm = async () => {
     vglobal.coinciden = false;
     if (route.params.isNewFarm) {
@@ -143,7 +192,7 @@ export const FarmScreen = ({ navigation, route }) => {
             <MaterialCommunityIcons name="delete" size={props.size} color={props.color} />
           )}
           onPress={() => {
-         Alert.alert(
+            Alert.alert(
               t('BorrarGranja'),
               t('Deseaborrarlagranja'),
               [
@@ -211,7 +260,7 @@ export const FarmScreen = ({ navigation, route }) => {
             />
 
             <TextInput
-              keyboardType="default"        
+              keyboardType="default"
               label={t("Server")}
               mode="outlined"
               placeholder="IP Servidor"
@@ -228,10 +277,7 @@ export const FarmScreen = ({ navigation, route }) => {
             <Pressable
               android_ripple={{ color: 'blue' }}
               style={styles.boton}
-              onPress={() => {
-                submitData();
-                navigation.goBack();
-              }}
+              onPress={submitData}
             >
               <Text style={styles.texto}>{t('common:Guardar')}</Text>
             </Pressable>

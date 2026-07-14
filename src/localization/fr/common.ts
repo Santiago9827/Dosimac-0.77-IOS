@@ -476,5 +476,13 @@ maternidadConfig_corralSectionDescription: "Cette donnée est obligatoire pour c
 
 maternidadConfig_alert_invalidCrotalFromBackend: "Le backend n’a pas renvoyé de boucle valide à comparer.",
 
+  ajustesEnvioMaternidad: {
+    headerTitle: "Paramètres d'envoi",
+    headerSubtitle: "Configurez le comportement du flux lors de la lecture des animaux.",
+    cardTitle: "Envoi des enregistrements",
+    cardSubtitle: "Ces paramètres s'appliquent lors de la poursuite de la lecture."
+  },
+
+
 
 };

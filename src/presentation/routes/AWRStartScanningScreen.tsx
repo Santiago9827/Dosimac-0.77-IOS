@@ -37,7 +37,7 @@ export const AWRStartScanningScreen = ({ navigation }) => {
     <View>
       <Appbar.Header elevated>
         <Appbar.BackAction onPress={navigation.goBack} />
-        <Appbar.Content title={t("awrStartScan_title")} />
+        <Appbar.Content title="Conexión directa" />
       </Appbar.Header>
 
       <View style={{ marginHorizontal: 30, marginTop: 40, borderWidth: 1, borderRadius: 10, borderColor: 'lightgrey' }}>

@@ -474,5 +474,13 @@ maternidadConfig_corralSectionDescription: "등록을 계속하려면 이 정보
 
 maternidadConfig_alert_invalidCrotalFromBackend: "백엔드에서 비교할 유효한 귀표 번호를 반환하지 않았습니다.",
 
+ ajustesEnvioMaternidad: {
+    headerTitle: "전송 설정",
+    headerSubtitle: "동물을 읽을 때 흐름이 어떻게 동작할지 설정합니다.",
+    cardTitle: "기록 전송",
+    cardSubtitle: "이 설정은 읽기를 계속할 때 적용됩니다."
+  },
+
+
 
 };

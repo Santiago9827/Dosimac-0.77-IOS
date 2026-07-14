@@ -25,6 +25,7 @@ import { useAwrConn } from "../../stores/awrConnStore";
 import { obtenerLecturaEspada, obtenerAnimalPorId } from "../routes/obtenerLecturaEspada";
 import { useTranslation } from "react-i18next";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useAjustesEnvioGestacionStore } from "../../stores/ajustesEnvioGestacionStore";
 
 type Modo = "entrada" | "salida" | "lectura" | "busqueda";
 
@@ -303,13 +304,24 @@ export const ConfiguracionGestacionScreen = () => {
     const detenerLectura = useAwrConn((s) => s.stopReading);
     const limpiarCrotalLeido = useAwrConn((s) => s.clearLastTag);
 
+    const conectarEspada = useAwrConn((s) => s.connect);
+    const currentAwrId = useAwrConn((s) => s.currentId);
+    const awrConnecting = useAwrConn((s) => s.connecting);
+
     const espadasGuardadas = awrStore((s) => s.devices);
     const hayEspadasGuardadas = espadasGuardadas.length > 0;
 
+    const [modalEspadasVisible, setModalEspadasVisible] = useState(false);
+    const [espadaConectandoId, setEspadaConectandoId] = useState<string | null>(null);
     const [modo, setModo] = useState<Modo>("entrada");
     const [corral, setCorral] = useState("");
-    const [detectarDesconocidos, setDetectarDesconocidos] = useState(true);
-    const [confirmar, setConfirmar] = useState(false);
+    const detectarDesconocidos = useAjustesEnvioGestacionStore(
+        (s) => s.detectarDesconocidos
+    );
+
+    const confirmar = useAjustesEnvioGestacionStore(
+        (s) => s.confirmar
+    );
 
     const [tipoBusqueda, setTipoBusqueda] = useState<"crotal" | "id">("crotal");
     const [origenBusquedaCrotal, setOrigenBusquedaCrotal] = useState<"manual" | "espada">("manual");
@@ -334,7 +346,45 @@ export const ConfiguracionGestacionScreen = () => {
     const requiereBusqueda = modo === "busqueda";
 
     const irAConfiguracionAwr = () => {
-        navigation.navigate(hayEspadasGuardadas ? "AWR-SAVED" : "AWR-STARTSCAN");
+        if (hayEspadasGuardadas) {
+            setModalEspadasVisible(true);
+            return;
+        }
+
+        const topTabsNavigation = navigation.getParent?.();
+        const stackNavigation = topTabsNavigation?.getParent?.();
+
+        if (stackNavigation?.navigate) {
+            stackNavigation.navigate("GeneralAwrStartScan");
+            return;
+        }
+
+        navigation.navigate("GeneralAwrStartScan");
+    };
+
+    const conectarEspadaGuardada = async (id: string) => {
+        try {
+            setEspadaConectandoId(id);
+
+            await conectarEspada(id);
+            await iniciarLectura?.();
+
+            setModalEspadasVisible(false);
+
+            mostrarAviso(
+                "Conectado",
+                "La espada se ha conectado correctamente.",
+                "info"
+            );
+        } catch {
+            mostrarAviso(
+                "Error",
+                "No se pudo conectar con la espada seleccionada.",
+                "error"
+            );
+        } finally {
+            setEspadaConectandoId(null);
+        }
     };
 
     const [lecturaNoCoincidente, setLecturaNoCoincidente] = useState<{
@@ -787,13 +837,6 @@ export const ConfiguracionGestacionScreen = () => {
             behavior={Platform.OS === "ios" ? "padding" : undefined}
             keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
         >
-            <Appbar.Header elevated style={{ backgroundColor: BRAND }}>
-                <Appbar.BackAction color="white" onPress={() => navigation.goBack()} />
-                <Appbar.Content
-                    title={t("gestacionConfig_screenTitle")}
-                    titleStyle={{ color: "white", fontWeight: "700" }}
-                />
-            </Appbar.Header>
 
             <ScrollView
                 ref={scrollRef}
@@ -851,33 +894,37 @@ export const ConfiguracionGestacionScreen = () => {
                                 </Text>
                             </View>
 
-                            <View
+                            <TouchableOpacity
+                                activeOpacity={0.85}
+                                onPress={() => {
+                                    const topTabsNavigation = navigation.getParent?.();
+                                    const stackNavigation = topTabsNavigation?.getParent?.();
+
+                                    if (stackNavigation?.navigate) {
+                                        stackNavigation.navigate("AjustesEnvioGestacion");
+                                        return;
+                                    }
+
+                                    navigation.navigate("AjustesEnvioGestacion");
+                                }}
                                 style={{
-                                    paddingHorizontal: 10,
-                                    paddingVertical: 5,
-                                    borderRadius: 999,
+                                    width: 42,
+                                    height: 42,
+                                    borderRadius: 14,
                                     backgroundColor: "#FFFFFF",
                                     borderWidth: 1,
                                     borderColor: "#CBD5E1",
+                                    alignItems: "center",
+                                    justifyContent: "center",
                                     ...SHADOW_SOFT,
                                 }}
                             >
-                                <Text
-                                    style={{
-                                        color: BRAND,
-                                        fontWeight: "900",
-                                        fontSize: 12,
-                                    }}
-                                >
-                                    {modo === "entrada"
-                                        ? t("gestacionConfig_entry")
-                                        : modo === "salida"
-                                            ? t("gestacionConfig_exit")
-                                            : modo === "lectura"
-                                                ? t("gestacionConfig_reading")
-                                                : t("gestacionConfig_search")}
-                                </Text>
-                            </View>
+                                <Ionicons
+                                    name="settings-outline"
+                                    size={21}
+                                    color={BRAND}
+                                />
+                            </TouchableOpacity>
                         </View>
 
                         <View style={{ flexDirection: "row", gap: 10 }}>
@@ -914,51 +961,7 @@ export const ConfiguracionGestacionScreen = () => {
                             />
                         </View>
 
-                        {(modo === "entrada" || modo === "salida") && (
-                            <>
-                                <View style={SECTION_DIVIDER} />
 
-                                <View>
-                                    <Text
-                                        style={{
-                                            fontSize: 17,
-                                            fontWeight: "900",
-                                            color: TEXT,
-                                        }}
-                                    >
-                                        {t("gestacionConfig_sendSettingsTitle")}
-                                    </Text>
-
-                                    <Text
-                                        style={{
-                                            marginTop: 4,
-                                            color: MUTED,
-                                            lineHeight: 19,
-                                        }}
-                                    >
-                                        {t("gestacionConfig_sendSettingsDescription")}
-                                    </Text>
-
-                                    <View style={{ height: 10 }} />
-
-                                    <SwitchLine
-                                        title={t("gestacionConfig_detectUnknownTitle")}
-                                        description={t("gestacionConfig_detectUnknownDescription")}
-                                        value={detectarDesconocidos}
-                                        onValueChange={setDetectarDesconocidos}
-                                    />
-
-                                    <View style={{ height: 8 }} />
-
-                                    <SwitchLine
-                                        title={t("gestacionConfig_confirmTitle")}
-                                        description={t("gestacionConfig_confirmDescription")}
-                                        value={confirmar}
-                                        onValueChange={setConfirmar}
-                                    />
-                                </View>
-                            </>
-                        )}
                     </Card.Content>
                 </Card>
 
@@ -1338,6 +1341,213 @@ export const ConfiguracionGestacionScreen = () => {
                     </Button>
                 </View>
             </ScrollView>
+
+            <Modal
+                visible={modalEspadasVisible}
+                transparent
+                animationType="fade"
+                onRequestClose={() => setModalEspadasVisible(false)}
+            >
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: "rgba(15, 23, 42, 0.45)",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        paddingHorizontal: 20,
+                    }}
+                >
+                    <View
+                        style={{
+                            width: "100%",
+                            maxWidth: 420,
+                            backgroundColor: "#FFFFFF",
+                            borderRadius: 24,
+                            paddingHorizontal: 18,
+                            paddingVertical: 18,
+                            ...SHADOW_CARD,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 12,
+                                marginBottom: 14,
+                            }}
+                        >
+                            <View
+                                style={{
+                                    width: 54,
+                                    height: 54,
+                                    borderRadius: 27,
+                                    backgroundColor: "#ECFDF5",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <Ionicons
+                                    name="bluetooth-outline"
+                                    size={28}
+                                    color={BRAND}
+                                />
+                            </View>
+
+                            <View style={{ flex: 1 }}>
+                                <Text
+                                    style={{
+                                        fontSize: 24,
+                                        fontWeight: "900",
+                                        color: TEXT,
+                                    }}
+                                >
+                                    Espadas guardadas
+                                </Text>
+
+                                <Text
+                                    style={{
+                                        fontSize: 16,
+                                        color: MUTED,
+                                        marginTop: 2,
+                                        fontWeight: "600",
+                                    }}
+                                >
+                                    Selecciona una espada para conectarla.
+                                </Text>
+                            </View>
+                        </View>
+
+                        <ScrollView
+                            style={{ maxHeight: 320 }}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{ gap: 10 }}
+                        >
+                            {espadasGuardadas.map((item) => {
+                                const titulo = item.name || item.label || item.id;
+
+                                const esActual =
+                                    currentAwrId &&
+                                    currentAwrId.toLowerCase() === item.id.toLowerCase();
+
+                                const conectada = esActual && lectorConectado;
+                                const conectando = espadaConectandoId === item.id || awrConnecting;
+
+                                return (
+                                    <TouchableOpacity
+                                        key={item.id}
+                                        activeOpacity={0.9}
+                                        onPress={() => conectarEspadaGuardada(item.id)}
+                                        disabled={conectando}
+                                        style={{
+                                            borderRadius: 18,
+                                            borderWidth: conectada ? 1.5 : 1,
+                                            borderColor: conectada ? "#86EFAC" : "#E2E8F0",
+                                            backgroundColor: conectada ? "#F0FDF4" : "#F8FAFC",
+                                            padding: 14,
+                                            ...SHADOW_SOFT,
+                                        }}
+                                    >
+                                        <View
+                                            style={{
+                                                flexDirection: "row",
+                                                alignItems: "center",
+                                                gap: 12,
+                                            }}
+                                        >
+                                            <View
+                                                style={{
+                                                    width: 52,
+                                                    height: 52,
+                                                    borderRadius: 26,
+                                                    backgroundColor: conectada ? "#DCFCE7" : "#E5E7EB",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                }}
+                                            >
+                                                <Ionicons
+                                                    name={conectada ? "bluetooth" : "bluetooth-outline"}
+                                                    size={26}
+                                                    color={conectada ? "#16A34A" : "#475569"}
+                                                />
+                                            </View>
+
+                                            <View style={{ flex: 1 }}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 20,
+                                                        fontWeight: "900",
+                                                        color: TEXT,
+                                                    }}
+                                                    numberOfLines={1}
+                                                >
+                                                    {titulo}
+                                                </Text>
+
+                                                <Text
+                                                    style={{
+                                                        fontSize: 14,
+                                                        color: MUTED,
+                                                        marginTop: 2,
+                                                    }}
+                                                    numberOfLines={1}
+                                                >
+                                                    {item.id}
+                                                </Text>
+
+                                                <Text
+                                                    style={{
+                                                        fontSize: 14,
+                                                        fontWeight: "800",
+                                                        color: conectada ? "#166534" : "#64748B",
+                                                        marginTop: 5,
+                                                    }}
+                                                >
+                                                    {conectando
+                                                        ? "Conectando..."
+                                                        : conectada
+                                                            ? "Conectado"
+                                                            : "Toca para conectar"}
+                                                </Text>
+                                            </View>
+
+                                            <Ionicons
+                                                name={conectada ? "checkmark-circle" : "chevron-forward-outline"}
+                                                size={28}
+                                                color={conectada ? "#16A34A" : "#94A3B8"}
+                                            />
+                                        </View>
+                                    </TouchableOpacity>
+                                );
+                            })}
+                        </ScrollView>
+
+                        <View style={{ marginTop: 18 }}>
+                            <TouchableOpacity
+                                activeOpacity={0.9}
+                                onPress={() => setModalEspadasVisible(false)}
+                                style={{
+                                    height: 50,
+                                    borderRadius: 14,
+                                    backgroundColor: BRAND,
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    ...SHADOW_ACTIVE,
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: "#FFFFFF",
+                                        fontWeight: "900",
+                                        fontSize: 17,
+                                    }}
+                                >
+                                    Salir
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
 
             <Modal
                 visible={avisoVisible}

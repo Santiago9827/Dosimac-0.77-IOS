@@ -66,31 +66,41 @@ export default function Drnewupdate() {
       }, [])
    );
 
-//  const goToHome = () => {
-//       const parent = navigation.getParent?.();
+   //  const goToHome = () => {
+   //       const parent = navigation.getParent?.();
 
-//       if (token) {
-//          // ✅ Sesión iniciada -> Drawer privado -> Inicio = Tabs
-//          if (parent?.navigate) parent.navigate('Tabs');
-//          else navigation.navigate('Tabs');
-//       } else {
-//          // ✅ Sin sesión -> Drawer público -> Home pública
-//          if (parent?.navigate) parent.navigate('PublicHome');
-//          else navigation.navigate('PublicHome');
-//       }
-//    };
+   //       if (token) {
+   //          // ✅ Sesión iniciada -> Drawer privado -> Inicio = Tabs
+   //          if (parent?.navigate) parent.navigate('Tabs');
+   //          else navigation.navigate('Tabs');
+   //       } else {
+   //          // ✅ Sin sesión -> Drawer público -> Home pública
+   //          if (parent?.navigate) parent.navigate('PublicHome');
+   //          else navigation.navigate('PublicHome');
+   //       }
+   //    };
 
    //Prueba
    const goToHome = () => {
-      const parent = navigation.getParent?.();
+      const drawerNavigation = navigation.getParent?.('RootDrawer');
 
-      if (token) {
-         if (parent?.navigate) parent.navigate('AltaDispositivosHome');
-         else navigation.navigate('AltaDispositivosHome');
-      } else {
-         if (parent?.navigate) parent.navigate('PublicHome');
-         else navigation.navigate('PublicHome');
+      if (drawerNavigation?.navigate) {
+         drawerNavigation.navigate('MainTabs', {
+            screen: 'AltaDispositivosTab',
+            params: {
+               screen: 'AltaDispositivosHome',
+            },
+         });
+
+         return;
       }
+
+      navigation.navigate('MainTabs', {
+         screen: 'AltaDispositivosTab',
+         params: {
+            screen: 'AltaDispositivosHome',
+         },
+      });
    };
 
    //
@@ -107,7 +117,7 @@ export default function Drnewupdate() {
          <Appbar.Header elevated>
 
             {/* <Appbar.BackAction onPress={navigation.goBack} /> */}
-           <Appbar.BackAction onPress={goToHome} />
+            <Appbar.BackAction onPress={goToHome} />
             <Appbar.Content title={t('common:DosimacRegistration')} />
             {/* <Appbar.Action icon="add" onPress={() => {}} /> */}
          </Appbar.Header>
@@ -144,7 +154,7 @@ export default function Drnewupdate() {
             </View> :
                <View>
                   <Portal>
-                 <Dialog visible={visible} onDismiss={dohideDialog}>
+                     <Dialog visible={visible} onDismiss={dohideDialog}>
                         <Dialog.Icon icon="warning" color="red" size={60} />
                         <Dialog.Title style={{ color: 'red' }}>{t('common:Aviso')}</Dialog.Title>
                         <Dialog.Content>

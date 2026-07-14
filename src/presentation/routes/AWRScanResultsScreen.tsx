@@ -115,41 +115,41 @@ export const AWRScanResultsScreen = ({ navigation }) => {
         return parts.length >= 2 ? parts.slice(-2).join('') : '';
     };
 
-const shortFromAwrName = (name?: string | null) => {
-  if (!name) return '';
-  const up = name.toUpperCase().trim();
+    const shortFromAwrName = (name?: string | null) => {
+        if (!name) return '';
+        const up = name.toUpperCase().trim();
 
-  // Ej: AWR300_011106  -> 011106
-  const m = up.match(/AWR300[_-]?(\d+)/);
-  if (m?.[1]) {
-    const digits = m[1];           // "011106"
-    return digits.slice(-4);       // "1106"
-  }
+        // Ej: AWR300_011106  -> 011106
+        const m = up.match(/AWR300[_-]?(\d+)/);
+        if (m?.[1]) {
+            const digits = m[1];           // "011106"
+            return digits.slice(-4);       // "1106"
+        }
 
-  return '';
-};
+        return '';
+    };
 
-const shortFromUuid = (id?: string | null) => {
-  if (!id) return '';
-  // UUID iOS: c62ee8ee-...-5577 -> 5577
-  const compact = id.replace(/-/g, '').toUpperCase();
-  return compact.slice(-4);
-};
+    const shortFromUuid = (id?: string | null) => {
+        if (!id) return '';
+        // UUID iOS: c62ee8ee-...-5577 -> 5577
+        const compact = id.replace(/-/g, '').toUpperCase();
+        return compact.slice(-4);
+    };
 
-// ✅ ESTE será el label que verá el usuario
-const labelShortFor = (d: BlePeripheral) => {
-  const mac = macSuffix(d.id);
-  if (mac) return `AWR ${mac}`;                 // Android: 1EB9
+    // ✅ ESTE será el label que verá el usuario
+    const labelShortFor = (d: BlePeripheral) => {
+        const mac = macSuffix(d.id);
+        if (mac) return `AWR ${mac}`;                 // Android: 1EB9
 
-  const nm = getLocalName(d);
-  const fromName = shortFromAwrName(nm);
-  if (fromName) return `AWR ${fromName}`;       // iOS: AWR 1106
+        const nm = getLocalName(d);
+        const fromName = shortFromAwrName(nm);
+        if (fromName) return `AWR ${fromName}`;       // iOS: AWR 1106
 
-  const fromUuid = shortFromUuid(d.id);
-  if (fromUuid) return `AWR ${fromUuid}`;       // fallback iOS
+        const fromUuid = shortFromUuid(d.id);
+        if (fromUuid) return `AWR ${fromUuid}`;       // fallback iOS
 
-  return 'AWR';
-};
+        return 'AWR';
+    };
     const labelFor = (d: BlePeripheral) =>
         macSuffix(d.id) || getLocalName(d) || (d.id ?? '').toUpperCase();
 
@@ -201,7 +201,7 @@ const labelShortFor = (d: BlePeripheral) => {
         setErrorMsg('');
         setConnecting(true);
         try {
-           // await ble.bleConnection(device.id);
+            // await ble.bleConnection(device.id);
 
             // GUARDAR EN STORE
             const label = labelShortFor(device);
@@ -244,17 +244,23 @@ const labelShortFor = (d: BlePeripheral) => {
     // ✅ Handler único para ir a Home (Tabs)
     const handleSuccessAccept = () => {
         setSuccessVisible(false);
-        try { ble.stopScanning(); } catch { }
-        const parentNav = navigation.getParent?.();
-        if (parentNav) {
-            parentNav.navigate('Tabs' as never);
-        } else {
-            navigation.navigate('Tabs' as never);
-        }
-        // Si prefieres limpiar historial:
-        // parentNav?.reset({ index: 0, routes: [{ name: 'Tabs' as never }] });
-    };
 
+        try {
+            ble.stopScanning();
+        } catch { }
+
+        const generalStackNavigation = navigation.getParent?.();
+
+        if (generalStackNavigation?.navigate) {
+            generalStackNavigation.navigate('GeneralLecturaAntena' as never, {
+                screen: 'ConfiguracionAwrTab',
+            } as never);
+
+            return;
+        }
+
+        navigation.navigate('AWR-STARTSCAN' as never);
+    };
     // === UI ===
     const RenderIsScanning = () => (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -327,7 +333,9 @@ const labelShortFor = (d: BlePeripheral) => {
                     <Dialog.Title style={{ color: 'green' }}>{t("awrSavedList_connected")}</Dialog.Title>
                     <Dialog.Content>
                         <Text variant="bodyLarge">
-                            {t("awrScanResults_connectedMessage")} {connectedLabel || 'el dispositivo'}.
+                            {t("awrScanResults_connectedMessage", {
+                                device: connectedLabel || 'el dispositivo',
+                            })}
                         </Text>
                     </Dialog.Content>
                     <Dialog.Actions>

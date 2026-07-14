@@ -481,4 +481,13 @@ maternidadConfig_corralSectionDescription: "Aquesta dada és obligatòria per co
 
 maternidadConfig_alert_invalidCrotalFromBackend: "El backend no ha retornat un cròtal vàlid per comparar.",
 
+ajustesEnvioMaternidad: {
+    headerTitle: "Ajustos de l'enviament",
+    headerSubtitle: "Configura com es comporta el flux en llegir animals.",
+    cardTitle: "Enviament de registres",
+    cardSubtitle: "Aquests ajustos s'apliquen en continuar amb la lectura."
+  },
+
+
 };
+

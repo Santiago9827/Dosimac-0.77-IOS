@@ -10,12 +10,12 @@ import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native-gesture-handler';
 import { FarmScreen } from './FarmScreen';
 import { farmFacility } from '../../../sharedTypes/farmInterface';
-import { GetFarmsList, InicialiceFarmDataTable } from '../../../FarmDB/farmsDB';
 import { farmStore } from '../../../stores/store';
 import { vglobal } from '../../../sharedTypes/globlaVars';
 import { useAuthStore } from '../../../stores/authStore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { GetFarmsList, InicialiceFarmDataTable, GetFarmDataById } from '../../../FarmDB/farmsDB';
+import { guardarBaseUrlDesdeServerIp, validarInstalacionActiva } from '../../../stores/ipConfig';
 
 
 
@@ -54,18 +54,17 @@ export const FarmListScreen = ({ navigation, route }) => {
   const UseSetFarmsAmount = farmStore((state) => state.UseSetFarmsAmount);
   const farmsAmount = farmStore((state) => state.farmsAmount);
 
-  const token = useAuthStore((s) => s.token);
+  //const token = useAuthStore((s) => s.token);
 
- const goToHome = () => {
+  const goToHome = () => {
     const parent = navigation.getParent?.();
 
-    if (token) {
-      if (parent?.navigate) parent.navigate('AltaDispositivosHome');
-      else navigation.navigate('AltaDispositivosHome');
-    } else {
-      if (parent?.navigate) parent.navigate('PublicHome');
-      else navigation.navigate('PublicHome');
+    if (parent?.navigate) {
+      parent.navigate('AltaDispositivosHome');
+      return;
     }
+
+    navigation.navigate('AltaDispositivosHome');
   };
 
 
@@ -206,6 +205,48 @@ export const FarmListScreen = ({ navigation, route }) => {
 
   };
 
+  const seleccionarInstalacion = async (item: farmFacility) => {
+    try {
+      setValue(String(item.id));
+      UseSetNewFarm(item.id);
+
+      const instalacionCompleta = await GetFarmDataById(item.id);
+
+      const serverIpLimpia = String(instalacionCompleta?.serverIp ?? '').trim();
+
+      if (!serverIpLimpia) {
+        Alert.alert(
+          "IP no configurada",
+          "La instalación no tiene Server IP configurada."
+        );
+        return;
+      }
+
+      await guardarBaseUrlDesdeServerIp(serverIpLimpia);
+
+      const disponibilidad = await validarInstalacionActiva();
+
+      if (!disponibilidad.ok) {
+        Alert.alert(
+          "No se ha podido conectar",
+          disponibilidad.mensaje ||
+          "No se puede conectar con la instalación seleccionada."
+        );
+        return;
+      }
+
+      Alert.alert(
+        "Conexión exitosa",
+        "La instalación se ha conectado correctamente."
+      );
+    } catch (error: any) {
+      Alert.alert(
+        "Error",
+        error?.message || "Ha ocurrido un error al seleccionar la instalación."
+      );
+    }
+  };
+
   const handleRender2 = (item: farmFacility) => {
     return (
 
@@ -264,7 +305,15 @@ export const FarmListScreen = ({ navigation, route }) => {
 
       <RadioButton.Group
         value={value}
-        onValueChange={nv => { setValue(nv); UseSetNewFarm(Number(nv)); }}
+        onValueChange={(nuevoValor) => {
+          const instalacionSeleccionada = farms.find(
+            (farm) => String(farm.id) === String(nuevoValor)
+          );
+
+          if (instalacionSeleccionada) {
+            seleccionarInstalacion(instalacionSeleccionada);
+          }
+        }}
       >
         {loading ? null : farms.length === 0 ? (
           renderEmptyList()

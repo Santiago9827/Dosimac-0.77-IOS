@@ -480,4 +480,11 @@ maternidadConfig_corralSectionDescription: "Questo dato è obbligatorio per cont
 
 maternidadConfig_alert_invalidCrotalFromBackend: "Il backend non ha restituito una marca auricolare valida da confrontare.",
 
+ ajustesEnvioMaternidad: {
+    headerTitle: "Impostazioni di invio",
+    headerSubtitle: "Configura il comportamento del flusso durante la lettura degli animali.",
+    cardTitle: "Invio dei registri",
+    cardSubtitle: "Queste impostazioni vengono applicate quando si continua con la lettura."
+  },
+
 };

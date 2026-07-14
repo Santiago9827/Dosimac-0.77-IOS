@@ -34,6 +34,7 @@ export function normalizeToUrl(inputRaw: string) {
 
   const hasPort = input.includes(":");
   const base = hasPort ? input : `${input}:${DEFAULT_PORT}`;
+
   return `http://${base}${DEFAULT_PATH}`;
 }
 
@@ -75,7 +76,9 @@ export function extraerOrigin(urlGuardada: string) {
     return new URL(valor).origin;
   } catch {
     const match = valor.match(/^(https?:\/\/[^/]+)/i);
+
     if (match?.[1]) return match[1];
+
     throw new Error("La URL guardada no es válida.");
   }
 }
@@ -86,6 +89,100 @@ export async function obtenerBaseUrlGuardada() {
 
 export async function guardarBaseUrl(input: string) {
   const finalUrl = normalizeToUrl(input);
+
   await AsyncStorage.setItem(STORAGE_KEY, finalUrl);
+
   return finalUrl;
+}
+
+export async function guardarBaseUrlDesdeServerIp(serverIp: string) {
+  const ipLimpia = serverIp.trim();
+
+  if (!ipLimpia) {
+    throw new Error("La instalación no tiene Server IP configurada");
+  }
+
+  return guardarBaseUrl(ipLimpia);
+}
+
+export async function borrarBaseUrlGuardada() {
+  await AsyncStorage.removeItem(STORAGE_KEY);
+}
+
+function construirEndpointValidateTokenDesdeBase(baseUrl: string) {
+  const origin = extraerOrigin(baseUrl);
+
+  return `${origin}/CtiAlimentacionAPI/api/espada/validateToken`;
+}
+
+async function fetchConTimeout(
+  url: string,
+  options: RequestInit,
+  timeoutMs = 4500
+) {
+  const controller = new AbortController();
+
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, timeoutMs);
+
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+export async function validarInstalacionActiva() {
+  const baseUrlGuardada = await obtenerBaseUrlGuardada();
+
+  if (!baseUrlGuardada) {
+    return {
+      ok: false,
+      tipo: "sin_ip" as const,
+      mensaje: "No hay una IP configurada.",
+    };
+  }
+
+  try {
+    const endpoint = construirEndpointValidateTokenDesdeBase(baseUrlGuardada);
+
+    const respuesta = await fetchConTimeout(
+      endpoint,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: "" }),
+      },
+      3500
+    );
+
+    if (respuesta.status === 404) {
+      return {
+        ok: false,
+        tipo: "endpoint_no_disponible" as const,
+        mensaje:
+          "La instalación responde, pero no se encontró el servicio esperado.",
+      };
+    }
+
+    return {
+      ok: true,
+      tipo: "disponible" as const,
+      mensaje: "Instalación disponible.",
+      status: respuesta.status,
+    };
+  } catch {
+    return {
+      ok: false,
+      tipo: "sin_conexion" as const,
+      mensaje:
+        "No se puede conectar con la instalación seleccionada. Comprueba que estás conectado a la red WiFi correcta o revisa la IP del servidor.",
+    };
+  }
 }

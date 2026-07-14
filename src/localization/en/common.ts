@@ -497,5 +497,13 @@ maternidadConfig_corralSectionDescription: "This field is required to continue w
 
 maternidadConfig_alert_invalidCrotalFromBackend: "The backend did not return a valid ear tag to compare.",
 
+ ajustesEnvioMaternidad: {
+    headerTitle: "Sending settings",
+    headerSubtitle: "Configure how the flow behaves when reading animals.",
+    cardTitle: "Record sending",
+    cardSubtitle: "These settings are applied when continuing with the reading."
+  },
+
+
 
 };

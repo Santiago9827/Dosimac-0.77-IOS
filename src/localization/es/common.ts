@@ -151,8 +151,8 @@ export default {
    gestacionConfig_waitingMatchDescription: "Animal localizado. Ahora acerca a la espada el crotal {{crotal}} para confirmar la coincidencia.",
    gestacionConfig_searchingAnimalDescription: "Consultando información del animal en el backend.",
 
-   gestacionConfig_awrDisconnectedTitle: "AWR no conectado",
-   gestacionConfig_awrSavedDescription: "Tienes espadas guardadas. Pulsa para seleccionar una.",
+   gestacionConfig_awrDisconnectedTitle: "Lector no conectado",
+   gestacionConfig_awrSavedDescription: "Tienes espadas guardado. Pulsa para seleccionar una.",
    gestacionConfig_awrNotSavedDescription: "No tienes ninguna espada guardada. Pulsa para escanear una.",
 
    gestacionConfig_scan: "Escanear",
@@ -215,8 +215,8 @@ export default {
    maternidadConfig_readingSwordDescription: "Acerca el crotal al lector para identificar el animal.",
    maternidadConfig_waitingMatchDescription: "Animal localizado. Ahora acerca a la espada el crotal {{crotal}} para confirmar la coincidencia.",
    maternidadConfig_searchingAnimalDescription: "Consultando información del animal en el backend.",
-   maternidadConfig_awrDisconnectedTitle: "AWR no conectado",
-   maternidadConfig_awrSavedDescription: "Tienes AWR guardadas. Pulsa para seleccionar una.",
+   maternidadConfig_awrDisconnectedTitle: "Lector no conectado",
+   maternidadConfig_awrSavedDescription: "Tienes lector guardado. Pulsa para seleccionar una.",
    maternidadConfig_awrNotSavedDescription: "No tienes ninguna AWR guardada. Pulsa para escanear una.",
    maternidadConfig_scan: "Escanear",
    maternidadConfig_continue: "Continuar",
@@ -501,6 +501,13 @@ export default {
    maternidadConfig_corralSectionDescription: "Este dato es obligatorio para continuar con el registro.",
 
    maternidadConfig_alert_invalidCrotalFromBackend: "El backend no devolvió un crotal válido para comparar.",
+
+   ajustesEnvioMaternidad: {
+    headerTitle: "Ajustes del envío",
+    headerSubtitle: "Configura cómo se comporta gestación al leer animales.",
+    cardTitle: "Envío de registros",
+    cardSubtitle: "Estos ajustes se aplican al continuar con la lectura."
+  },
 
 
 };

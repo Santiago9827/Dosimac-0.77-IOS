@@ -1,176 +1,222 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
-import { View, Text, useWindowDimensions, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-
-import { IonIcon } from '../components/shared/IonIcon';
-import { HomeScreen } from '../screens/HomeScreen/HomeScreen';
-//import { MaternityStackNavigator } from './Mat-StackNavigator';
-//import { GestationStackNavigator } from './GestationStackNavigator';
-import { globalColors } from '../theme/theme';
-import { DrawerActions } from "@react-navigation/native";
+import { DrawerActions, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { PortalScreen } from '../screens/HomeScreen/PortalScreen';
-
+import { createStackNavigator } from '@react-navigation/stack';
+import { HomeScreen } from '../screens/HomeScreen/HomeScreen';
+import { FarmListNavigator } from './FarmListNavigator';
+import { GeneralHomeScreen } from './GeneralHomeScreen';
+import { GeneralStackNavigator } from './GeneralStackNavigator';
 
 const Tab = createBottomTabNavigator();
+const AltaDispositivosStack = createStackNavigator();
 
-const ACTIVE_COLOR = '#3F0BAE';
-const INACTIVE_COLOR = '#94A3B8';
+const AltaDispositivosStackNavigator = () => {
+  return (
+    <AltaDispositivosStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <AltaDispositivosStack.Screen
+        name="AltaDispositivosHome"
+        component={HomeScreen}
+      />
 
-function TabStacked({
-  icon,
-  label,
-  color,
-  focused,
-  small,
+      <AltaDispositivosStack.Screen
+        name="FarmList"
+        component={FarmListNavigator}
+      />
+    </AltaDispositivosStack.Navigator>
+  );
+};
+
+const primary = '#4C1D95';
+
+function HeaderMenuButton({ navigation }: any) {
+  return (
+    <Pressable
+      onPress={() => {
+        navigation.getParent()?.dispatch(DrawerActions.toggleDrawer());
+      }}
+      style={{
+        marginLeft: 14,
+        padding: 6,
+      }}
+    >
+      <Ionicons
+        name="menu-outline"
+        size={30}
+        color={primary}
+      />
+    </Pressable>
+  );
+}
+
+function PantallaTemporal({
+  titulo,
+  subtitulo,
+  icono,
 }: {
-  icon: string;
-  label: string;
-  color: string;
-  focused: boolean;
-  small: boolean;
+  titulo: string;
+  subtitulo: string;
+  icono: string;
 }) {
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-      <IonIcon name={icon} color={color} size={small ? 20 : 22} />
-      <Text
-        numberOfLines={1}
-        allowFontScaling={false}
-        style={{
-          marginTop: 2,
-          fontSize: small ? 10 : 11,
-          fontWeight: focused ? '700' : '600',
-          color,
-          includeFontPadding: false,
-        }}
-      >
-        {label}
-      </Text>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: '#F8FAFC',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 24,
+      }}
+    >
       <View
         style={{
-          height: 3,
-          width: 20,
-          borderRadius: 2,
-          marginTop: 6,
-          backgroundColor: focused ? ACTIVE_COLOR : 'transparent',
+          width: 92,
+          height: 92,
+          borderRadius: 32,
+          backgroundColor: '#EEF2FF',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: 20,
         }}
-      />
+      >
+        <Ionicons
+          name={icono}
+          size={46}
+          color={primary}
+        />
+      </View>
+
+      <Text
+        style={{
+          fontSize: 24,
+          fontWeight: '900',
+          color: '#0F172A',
+          textAlign: 'center',
+          marginBottom: 8,
+        }}
+      >
+        {titulo}
+      </Text>
+
+      <Text
+        style={{
+          fontSize: 15,
+          fontWeight: '600',
+          color: '#64748B',
+          textAlign: 'center',
+          lineHeight: 22,
+        }}
+      >
+        {subtitulo}
+      </Text>
     </View>
   );
 }
 
+
+
+function FuncionalidadesScreen() {
+  return (
+    <PantallaTemporal
+      titulo="Funcionalidades"
+      subtitulo="Pantalla provisional para funcionalidades."
+      icono="paw-outline"
+    />
+  );
+}
+
 export const BottomTabNavigator = () => {
-  const insets = useSafeAreaInsets();
-  const { width, fontScale } = useWindowDimensions();
-
-  const isSmall = width < 380;
-  const superTight = width < 360 || fontScale > 1.15;
-
   return (
     <Tab.Navigator
-      sceneContainerStyle={{ backgroundColor: globalColors.background }}
-      screenOptions={({ route }) => {
-        const META: Record<string, { icon: string; label: string }
-        > = {
-          Tab1: { icon: 'home-outline', label: 'Inicio' },
-          MaternidadTab: { icon: 'female-outline', label: 'Maternidad' },
-          GestacionTab: { icon: 'people-outline', label: 'Gestación' },
-          Tab4: { icon: 'globe-outline', label: 'CTIFEED' },
-        };
-        const meta = META[route.name] ?? { icon: 'ellipse-outline', label: route.name };
+      initialRouteName="AltaDispositivosTab"
+      screenOptions={({ route, navigation }) => ({
+        headerShown: true,
+        headerLeft: () => <HeaderMenuButton navigation={navigation} />,
+        headerTitleStyle: {
+          fontWeight: '800',
+          fontSize: 20,
+        },
+        tabBarHideOnKeyboard: true,
+        tabBarActiveTintColor: primary,
+        tabBarInactiveTintColor: '#94A3B8',
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: '700',
+          marginBottom: 2,
+        },
+        tabBarStyle: {
+          height: 72,
+          paddingBottom: 10,
+          paddingTop: 6,
+          borderTopWidth: 1,
+          borderTopColor: '#E5E7EB',
+          backgroundColor: '#FFFFFF',
+        },
+        tabBarIcon: ({ color, size }) => {
+          let iconName = 'ellipse-outline';
 
-        return {
-          headerShown: true,
-          // barra limpia
-          tabBarStyle: {
-            height: 56 + insets.bottom,
-            paddingBottom: Math.max(insets.bottom, superTight ? 4 : 6),
-            borderTopWidth: 1,
-            borderTopColor: '#E5E7EB',
-            backgroundColor: globalColors.background,
-            elevation: 8,
-            shadowColor: 'rgba(0,0,0,0.08)',
-            shadowOpacity: 0.08,
-            shadowRadius: 6,
-            shadowOffset: { width: 0, height: -2 },
-          },
-          tabBarItemStyle: {
-            justifyContent: 'center',
-            alignItems: 'center',
-            minWidth: 0,
-            marginHorizontal: superTight ? 0 : isSmall ? 2 : 4,
-          },
-          // usamos nuestro propio layout (icono+texto en columna)
-          tabBarShowLabel: false,
-          tabBarActiveTintColor: ACTIVE_COLOR,
-          tabBarInactiveTintColor: INACTIVE_COLOR,
-          tabBarIcon: ({ color, focused }) => (
-            <TabStacked
-              icon={meta.icon}
-              label={meta.label}
+          if (route.name === 'AltaDispositivosTab') {
+            iconName = 'add-circle-outline';
+          }
+
+          if (route.name === 'GeneralTab') {
+            iconName = 'grid-outline';
+          }
+
+          if (route.name === 'CapturaAnimalTab') {
+            iconName = 'paw-outline';
+          }
+
+          return (
+            <Ionicons
+              name={iconName}
+              size={size}
               color={color}
-              focused={focused ?? false}
-              small={superTight}
             />
-          ),
-          tabBarHideOnKeyboard: true,
-        };
-      }}
+          );
+        },
+      })}
     >
-      {/* <Tab.Screen
-        name="Tab1"
-        component={HomeScreen}
-        options={{ title: 'Inicio' }}
-      /> */}
-      {/* 
       <Tab.Screen
-        name="MaternidadTab"
-        component={MaternityStackNavigator}
+        name="AltaDispositivosTab"
+        component={AltaDispositivosStackNavigator}
         options={{
-          title: 'Maternidad',
+          title: 'Alta dispositivos',
+          tabBarLabel: 'Alta Dispositivos',
           headerShown: false,
         }}
       />
 
       <Tab.Screen
-        name="GestacionTab"
-        component={GestationStackNavigator}
+        name="GeneralTab"
+        component={GeneralStackNavigator}
         options={({ route }) => {
-          const nested = getFocusedRouteNameFromRoute(route) ?? 'GES-HOME';
-          // si quieres ocultar header en subrutas, ajusta aquí
+          const rutaActual = getFocusedRouteNameFromRoute(route) ?? 'GeneralHome';
+
+          const ocultarHeader =
+            rutaActual === 'LectorMaternidad' ||
+            rutaActual === 'LectorGestacion';
+
           return {
-            title: 'Gestación',
-            headerShown: false,
+            title: 'Movimientos',
+            tabBarLabel: 'Movimientos',
+            headerShown: !ocultarHeader,
           };
         }}
-      /> */}
-
+      />
       <Tab.Screen
-        name="Tab4"
-        component={PortalScreen}
-        options={({ navigation }) => ({
-          title: "CTIFEED",
-
-          // ✅ Botón hamburguesa en el header (NO dentro del WebView)
-          headerLeft: () => (
-            <Pressable
-              onPress={() =>
-                // Si tu Drawer tiene id="RootDrawer", mejor así:
-                navigation.getParent("RootDrawer")?.dispatch(DrawerActions.toggleDrawer())
-                // Si no tienes id, usa esto:
-                // navigation.getParent()?.dispatch(DrawerActions.toggleDrawer())
-              }
-              style={{ marginLeft: 14, padding: 6 }}
-            >
-              <Ionicons name="menu-outline" size={28} color={globalColors.primary} />
-            </Pressable>
-          ),
-
-          // (opcional) si quieres separar un poco el título
-          headerTitleStyle: { fontWeight: "700" },
-        })}
+        name="CapturaAnimalTab"
+        component={FuncionalidadesScreen}
+        options={{
+          title: 'Funcionalidades',
+          tabBarLabel: 'Funcionalidades',
+        }}
       />
     </Tab.Navigator>
   );

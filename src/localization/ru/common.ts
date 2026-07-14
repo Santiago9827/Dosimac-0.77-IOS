@@ -479,5 +479,12 @@ maternidadConfig_corralSectionDescription: "Это поле обязательн
 
 maternidadConfig_alert_invalidCrotalFromBackend: "Сервер не вернул действительную ушную метку для сравнения.",
 
+ ajustesEnvioMaternidad: {
+    headerTitle: "Настройки отправки",
+    headerSubtitle: "Настройте поведение процесса при считывании животных.",
+    cardTitle: "Отправка записей",
+    cardSubtitle: "Эти настройки применяются при продолжении считывания."
+  },
+
 
 };

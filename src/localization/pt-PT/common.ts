@@ -475,4 +475,11 @@ maternidadConfig_corralSectionDescription: "Este dado é obrigatório para conti
 
 maternidadConfig_alert_invalidCrotalFromBackend: "O backend não retornou uma identificação auricular válida para comparar.",
 
+  ajustesEnvioMaternidad: {
+    headerTitle: "Definições de envio",
+    headerSubtitle: "Configure o comportamento do fluxo ao ler animais.",
+    cardTitle: "Envio de registos",
+    cardSubtitle: "Estas definições são aplicadas ao continuar com a leitura."
+  },
+
 }

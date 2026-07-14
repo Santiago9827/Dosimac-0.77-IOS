@@ -479,4 +479,11 @@ maternidadConfig_corralSectionDescription: "To pole jest wymagane, aby kontynuow
 
 maternidadConfig_alert_invalidCrotalFromBackend: "Backend nie zwrócił prawidłowego kolczyka do porównania.",
 
+  ajustesEnvioMaternidad: {
+    headerTitle: "Ustawienia wysyłania",
+    headerSubtitle: "Skonfiguruj zachowanie procesu podczas odczytu zwierząt.",
+    cardTitle: "Wysyłanie rekordów",
+    cardSubtitle: "Te ustawienia są stosowane podczas kontynuowania odczytu."
+  },
+
 };

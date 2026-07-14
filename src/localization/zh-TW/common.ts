@@ -426,7 +426,7 @@ export default {
   Config_lastReadMismatchTitle: "讀取到的動物與搜尋結果不符",
   Config_lastReadMismatchCrotal: "耳標",
   Config_lastReadMismatchId: "ID",
-  awrBluetoothPermissionMessage: "請開啟藍牙並允許權限，才能進行掃描。", 
+  awrBluetoothPermissionMessage: "請開啟藍牙並允許權限，才能進行掃描。",
 
   animalState: {
     gestation: "妊娠",
@@ -436,48 +436,55 @@ export default {
   },
 
 
-gestationReader_readingTitle: "耳標讀取",
-gestationReader_labelId: "ID",
-gestationReader_labelCrotal: "耳標",
-gestationReader_labelCorral: "欄舍",
-gestationReader_labelHouse: "棟舍",
-gestationReader_labelState: "狀態",
-gestationReader_autoReadingBadge: "自動讀取",
+  gestationReader_readingTitle: "耳標讀取",
+  gestationReader_labelId: "ID",
+  gestationReader_labelCrotal: "耳標",
+  gestationReader_labelCorral: "欄舍",
+  gestationReader_labelHouse: "棟舍",
+  gestationReader_labelState: "狀態",
+  gestationReader_autoReadingBadge: "自動讀取",
 
-gestacionConfig_flowSectionTitle: "流程設定",
-gestacionConfig_workModeTitle: "工作模式",
-gestacionConfig_workModeDescription: "選擇讀取器要執行的操作。",
-gestacionConfig_entryDescription: "登記進入",
-gestacionConfig_exitDescription: "登記離開",
-gestacionConfig_readingDescription: "僅查詢",
-gestacionConfig_searchDescription: "搜尋動物",
+  gestacionConfig_flowSectionTitle: "流程設定",
+  gestacionConfig_workModeTitle: "工作模式",
+  gestacionConfig_workModeDescription: "選擇讀取器要執行的操作。",
+  gestacionConfig_entryDescription: "登記進入",
+  gestacionConfig_exitDescription: "登記離開",
+  gestacionConfig_readingDescription: "僅查詢",
+  gestacionConfig_searchDescription: "搜尋動物",
 
-gestacionConfig_sendSettingsTitle: "傳送設定",
-gestacionConfig_sendSettingsDescription: "設定讀取動物時流程的運作方式。",
+  gestacionConfig_sendSettingsTitle: "傳送設定",
+  gestacionConfig_sendSettingsDescription: "設定讀取動物時流程的運作方式。",
 
-gestacionConfig_corralSectionTitle: "進入欄位",
-gestacionConfig_corralSectionDescription: "此資料為必填，才能繼續登記。",
+  gestacionConfig_corralSectionTitle: "進入欄位",
+  gestacionConfig_corralSectionDescription: "此資料為必填，才能繼續登記。",
 
-gestacionConfig_alerts_notice: "通知",
-gestacionConfig_alerts_invalidCrotalFromBackend: "後端沒有回傳可用於比對的有效耳標。",
+  gestacionConfig_alerts_notice: "通知",
+  gestacionConfig_alerts_invalidCrotalFromBackend: "後端沒有回傳可用於比對的有效耳標。",
 
-common_accept: "接受",
+  common_accept: "接受",
 
-maternidadConfig_flowSectionTitle: "流程設定",
-maternidadConfig_workModeTitle: "工作模式",
-maternidadConfig_workModeDescription: "選擇讀取器要執行的操作。",
-maternidadConfig_entryDescription: "登記進入",
-maternidadConfig_exitDescription: "登記離開",
-maternidadConfig_readingDescription: "僅查詢",
-maternidadConfig_searchDescription: "搜尋動物",
+  maternidadConfig_flowSectionTitle: "流程設定",
+  maternidadConfig_workModeTitle: "工作模式",
+  maternidadConfig_workModeDescription: "選擇讀取器要執行的操作。",
+  maternidadConfig_entryDescription: "登記進入",
+  maternidadConfig_exitDescription: "登記離開",
+  maternidadConfig_readingDescription: "僅查詢",
+  maternidadConfig_searchDescription: "搜尋動物",
 
-maternidadConfig_sendSettingsTitle: "傳送設定",
-maternidadConfig_sendSettingsDescription: "設定讀取動物時流程的運作方式。",
+  maternidadConfig_sendSettingsTitle: "傳送設定",
+  maternidadConfig_sendSettingsDescription: "設定讀取動物時流程的運作方式。",
 
-maternidadConfig_corralSectionTitle: "進入欄位",
-maternidadConfig_corralSectionDescription: "此資料為必填，才能繼續登記。",
+  maternidadConfig_corralSectionTitle: "進入欄位",
+  maternidadConfig_corralSectionDescription: "此資料為必填，才能繼續登記。",
 
-maternidadConfig_alert_invalidCrotalFromBackend: "後端沒有回傳可用於比對的有效耳標。",
+  maternidadConfig_alert_invalidCrotalFromBackend: "後端沒有回傳可用於比對的有效耳標。",
+
+  ajustesEnvioMaternidad: {
+    headerTitle: "傳送設定",
+    headerSubtitle: "設定讀取動物時流程的行為方式。",
+    cardTitle: "紀錄傳送",
+    cardSubtitle: "這些設定會在繼續讀取時套用。"
+  },
 
 
 };

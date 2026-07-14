@@ -480,5 +480,13 @@ maternidadConfig_corralSectionDescription: "Це поле є обов’язко
 
 maternidadConfig_alert_invalidCrotalFromBackend: "Сервер не повернув дійсну вушну мітку для порівняння.",
 
+ ajustesEnvioMaternidad: {
+    headerTitle: "Налаштування надсилання",
+    headerSubtitle: "Налаштуйте поведінку процесу під час зчитування тварин.",
+    cardTitle: "Надсилання записів",
+    cardSubtitle: "Ці налаштування застосовуються під час продовження зчитування."
+  },
+
+
  
 };
