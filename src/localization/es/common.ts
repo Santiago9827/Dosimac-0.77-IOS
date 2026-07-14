@@ -235,7 +235,9 @@ export default {
    maternidadConfig_alert_searchError: "Error en la búsqueda",
    maternidadConfig_alert_networkError: "Error de red",
    maternidadConfig_alert_networkErrorMessage: "No se pudo conectar con el servidor.",
-
+   maternidadConfig_readOnlyTitle: "Permiso de solo lectura",
+   maternidadConfig_readOnlyModifySettings: "Este usuario solo tiene permisos de lectura. No puede modificar esta configuración.",
+   maternidadConfig_readOnlyUseFunction: "Este usuario solo tiene permisos de lectura. No puede usar esta función.",
    gestationReader_screenTitle: "Lector Gestación",
 
    gestationReader_animalInfoTitle: "Información del animal",
@@ -503,11 +505,11 @@ export default {
    maternidadConfig_alert_invalidCrotalFromBackend: "El backend no devolvió un crotal válido para comparar.",
 
    ajustesEnvioMaternidad: {
-    headerTitle: "Ajustes del envío",
-    headerSubtitle: "Configura cómo se comporta gestación al leer animales.",
-    cardTitle: "Envío de registros",
-    cardSubtitle: "Estos ajustes se aplican al continuar con la lectura."
-  },
+      headerTitle: "Ajustes del envío",
+      headerSubtitle: "Configura cómo se comporta gestación al leer animales.",
+      cardTitle: "Envío de registros",
+      cardSubtitle: "Estos ajustes se aplican al continuar con la lectura."
+   },
 
 
 };

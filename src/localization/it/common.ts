@@ -479,7 +479,9 @@ maternidadConfig_corralSectionTitle: "Recinto di entrata",
 maternidadConfig_corralSectionDescription: "Questo dato è obbligatorio per continuare con la registrazione.",
 
 maternidadConfig_alert_invalidCrotalFromBackend: "Il backend non ha restituito una marca auricolare valida da confrontare.",
-
+maternidadConfig_readOnlyTitle: "Permesso di sola lettura",
+maternidadConfig_readOnlyModifySettings: "Questo utente dispone solo di permessi di lettura. Non può modificare questa configurazione.",
+maternidadConfig_readOnlyUseFunction: "Questo utente dispone solo di permessi di lettura. Non può usare questa funzione.",
  ajustesEnvioMaternidad: {
     headerTitle: "Impostazioni di invio",
     headerSubtitle: "Configura il comportamento del flusso durante la lettura degli animali.",

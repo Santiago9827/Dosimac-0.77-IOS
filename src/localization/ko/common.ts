@@ -473,6 +473,9 @@ maternidadConfig_corralSectionTitle: "입장 우리",
 maternidadConfig_corralSectionDescription: "등록을 계속하려면 이 정보가 필요합니다.",
 
 maternidadConfig_alert_invalidCrotalFromBackend: "백엔드에서 비교할 유효한 귀표 번호를 반환하지 않았습니다.",
+maternidadConfig_readOnlyTitle: "읽기 전용 권한",
+maternidadConfig_readOnlyModifySettings: "이 사용자는 읽기 전용 권한만 있습니다. 이 설정을 수정할 수 없습니다.",
+maternidadConfig_readOnlyUseFunction: "이 사용자는 읽기 전용 권한만 있습니다. 이 기능을 사용할 수 없습니다.",
 
  ajustesEnvioMaternidad: {
     headerTitle: "전송 설정",

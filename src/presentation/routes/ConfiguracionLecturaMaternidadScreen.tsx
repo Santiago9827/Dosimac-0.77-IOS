@@ -29,6 +29,7 @@ import {
     obtenerAnimalPorId,
     obtenerCorralMaternidad,
 } from "../routes/obtenerLecturaEspada";
+import { useAuthStore } from "../../stores/authStore";
 
 type Modo = "entrada" | "salida" | "lectura" | "busqueda";
 
@@ -353,6 +354,8 @@ const obtenerDetalleCorralOcupado = (respuesta: any, corral: string) => {
 export const ConfiguracionLecturaMaternidadScreen = () => {
     const { t } = useTranslation();
     const navigation = useNavigation<any>();
+    const rol = useAuthStore((s) => s.rol ?? []);
+    const esAdmin = rol.includes("admin");
 
     const lectorConectado = useAwrConn((s) => s.isConnected);
     const crotalLeido = useAwrConn((s) => s.lastTag);
@@ -617,6 +620,16 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
     };
 
     const onContinuar = async () => {
+        if (!esAdmin) {
+            Keyboard.dismiss();
+
+            mostrarAviso(
+                t("maternidadConfig_readOnlyTitle"),
+                t("maternidadConfig_readOnlyUseFunction"),
+                "warning"
+            );
+            return;
+        }
         if (modo === "busqueda") {
             try {
                 setBuscandoAnimal(true);
@@ -1045,6 +1058,15 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                             <TouchableOpacity
                                 activeOpacity={0.85}
                                 onPress={() => {
+                                    if (!esAdmin) {
+                                        mostrarAviso(
+                                            t("maternidadConfig_readOnlyTitle"),
+                                            t("maternidadConfig_readOnlyModifySettings"),
+                                            "warning"
+                                        );
+                                        return;
+                                    }
+
                                     const topTabsNavigation = navigation.getParent?.();
                                     const stackNavigation = topTabsNavigation?.getParent?.();
 

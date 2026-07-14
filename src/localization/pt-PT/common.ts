@@ -475,6 +475,10 @@ maternidadConfig_corralSectionDescription: "Este dado é obrigatório para conti
 
 maternidadConfig_alert_invalidCrotalFromBackend: "O backend não retornou uma identificação auricular válida para comparar.",
 
+  maternidadConfig_readOnlyTitle: "Permissão apenas de leitura",
+maternidadConfig_readOnlyModifySettings: "Este utilizador tem apenas permissões de leitura. Não pode modificar esta configuração.",
+maternidadConfig_readOnlyUseFunction: "Este utilizador tem apenas permissões de leitura. Não pode usar esta função.",
+
   ajustesEnvioMaternidad: {
     headerTitle: "Definições de envio",
     headerSubtitle: "Configure o comportamento do fluxo ao ler animais.",

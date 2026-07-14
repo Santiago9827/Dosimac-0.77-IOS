@@ -497,6 +497,11 @@ maternidadConfig_corralSectionDescription: "This field is required to continue w
 
 maternidadConfig_alert_invalidCrotalFromBackend: "The backend did not return a valid ear tag to compare.",
 
+maternidadConfig_readOnlyTitle: "Read-only permission",
+maternidadConfig_readOnlyModifySettings: "This user only has read-only permissions. They cannot modify this configuration.",
+maternidadConfig_readOnlyUseFunction: "This user only has read-only permissions. They cannot use this function.",
+
+
  ajustesEnvioMaternidad: {
     headerTitle: "Sending settings",
     headerSubtitle: "Configure how the flow behaves when reading animals.",

@@ -478,7 +478,9 @@ export default {
   maternidadConfig_corralSectionDescription: "此資料為必填，才能繼續登記。",
 
   maternidadConfig_alert_invalidCrotalFromBackend: "後端沒有回傳可用於比對的有效耳標。",
-
+  maternidadConfig_readOnlyTitle: "唯讀權限",
+maternidadConfig_readOnlyModifySettings: "此使用者只有唯讀權限，無法修改此設定。",
+maternidadConfig_readOnlyUseFunction: "此使用者只有唯讀權限，無法使用此功能。",
   ajustesEnvioMaternidad: {
     headerTitle: "傳送設定",
     headerSubtitle: "設定讀取動物時流程的行為方式。",

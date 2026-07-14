@@ -9,6 +9,7 @@ import { LectorMaternidadScreen } from '../screens/lector/LectorMaternidadScreen
 import { AWRFlowStackNavigator } from './AWRFlowStackNavigator';
 import { AWRStackNavigator } from './AWRStackNavigator';
 import { MovimientoAnimalScreen } from './MovimientoAnimalScreen';
+import { PortalScreen } from '../screens/HomeScreen/PortalScreen';
 
 
 
@@ -60,6 +61,11 @@ export const GeneralStackNavigator = () => {
             <Stack.Screen
                 name="GeneralAwrSaved"
                 component={AWRStackNavigator}
+            />
+
+            <Stack.Screen
+                name="GeneralPortal"
+                component={PortalScreen}
             />
 
         </Stack.Navigator>

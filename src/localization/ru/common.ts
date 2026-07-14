@@ -479,6 +479,11 @@ maternidadConfig_corralSectionDescription: "Это поле обязательн
 
 maternidadConfig_alert_invalidCrotalFromBackend: "Сервер не вернул действительную ушную метку для сравнения.",
 
+maternidadConfig_readOnlyTitle: "Разрешение только на чтение",
+maternidadConfig_readOnlyModifySettings: "У этого пользователя есть только права на чтение. Он не может изменять эту конфигурацию.",
+maternidadConfig_readOnlyUseFunction: "У этого пользователя есть только права на чтение. Он не может использовать эту функцию.",
+
+
  ajustesEnvioMaternidad: {
     headerTitle: "Настройки отправки",
     headerSubtitle: "Настройте поведение процесса при считывании животных.",

@@ -210,14 +210,14 @@ export const BottomTabNavigator = () => {
           };
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="CapturaAnimalTab"
         component={FuncionalidadesScreen}
         options={{
           title: 'Funcionalidades',
           tabBarLabel: 'Funcionalidades',
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

@@ -480,6 +480,9 @@ maternidadConfig_corralSectionTitle: "Corral d’entrada",
 maternidadConfig_corralSectionDescription: "Aquesta dada és obligatòria per continuar amb el registre.",
 
 maternidadConfig_alert_invalidCrotalFromBackend: "El backend no ha retornat un cròtal vàlid per comparar.",
+maternidadConfig_readOnlyTitle: "Permís de només lectura",
+maternidadConfig_readOnlyModifySettings: "Aquest usuari només té permisos de lectura. No pot modificar aquesta configuració.",
+maternidadConfig_readOnlyUseFunction: "Aquest usuari només té permisos de lectura. No pot utilitzar aquesta funció.",
 
 ajustesEnvioMaternidad: {
     headerTitle: "Ajustos de l'enviament",

@@ -479,6 +479,11 @@ maternidadConfig_corralSectionDescription: "To pole jest wymagane, aby kontynuow
 
 maternidadConfig_alert_invalidCrotalFromBackend: "Backend nie zwrócił prawidłowego kolczyka do porównania.",
 
+
+  maternidadConfig_readOnlyTitle: "Uprawnienia tylko do odczytu",
+maternidadConfig_readOnlyModifySettings: "Ten użytkownik ma tylko uprawnienia do odczytu. Nie może modyfikować tej konfiguracji.",
+maternidadConfig_readOnlyUseFunction: "Ten użytkownik ma tylko uprawnienia do odczytu. Nie może używać tej funkcji.",
+
   ajustesEnvioMaternidad: {
     headerTitle: "Ustawienia wysyłania",
     headerSubtitle: "Skonfiguruj zachowanie procesu podczas odczytu zwierząt.",

@@ -479,6 +479,9 @@ maternidadConfig_corralSectionTitle: "Загін для входу",
 maternidadConfig_corralSectionDescription: "Це поле є обов’язковим для продовження реєстрації.",
 
 maternidadConfig_alert_invalidCrotalFromBackend: "Сервер не повернув дійсну вушну мітку для порівняння.",
+  maternidadConfig_readOnlyTitle: "Дозвіл лише на читання",
+maternidadConfig_readOnlyModifySettings: "Цей користувач має лише права на читання. Він не може змінювати цю конфігурацію.",
+maternidadConfig_readOnlyUseFunction: "Цей користувач має лише права на читання. Він не може використовувати цю функцію.",
 
  ajustesEnvioMaternidad: {
     headerTitle: "Налаштування надсилання",

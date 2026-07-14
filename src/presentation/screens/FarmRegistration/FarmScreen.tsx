@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useRef, useState } from 'react';
@@ -22,7 +21,7 @@ import { farmStore } from '../../../stores/store';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { IonIcon } from '../../components/shared/IonIcon';
 import { guardarBaseUrlDesdeServerIp, validarInstalacionActiva } from "../../../stores/ipConfig";
-
+import { sincronizarSesionInstalacion } from './sincronizarSesionInstalacion';
 
 export const FarmScreen = ({ navigation, route }) => {
   const [name, setName] = useState('');
@@ -93,13 +92,27 @@ export const FarmScreen = ({ navigation, route }) => {
       return () => { };
     }, [])
   );
+
   const submitData = async () => {
     const serverIpLimpia = serverIp.trim();
+    const usernameLimpio = userName.trim();
+    const passwordLimpia = password.trim();
+
+    const tieneUsername = !!usernameLimpio;
+    const tienePassword = !!passwordLimpia;
 
     if (!serverIpLimpia) {
       Alert.alert(
         "IP no configurada",
         "Introduce la Dirección IP del Servidor."
+      );
+      return;
+    }
+
+    if (tieneUsername !== tienePassword) {
+      Alert.alert(
+        "Datos incompletos",
+        "Rellena Username y Clave, o deja ambos campos vacíos."
       );
       return;
     }
@@ -116,15 +129,25 @@ export const FarmScreen = ({ navigation, route }) => {
        */
       const disponibilidad = await validarInstalacionActiva();
 
-      fillFarmData2();
+      const farmDataGuardar: farmFacility = {
+        name,
+        location,
+        province,
+        userName: usernameLimpio,
+        password: passwordLimpia,
+        ssid,
+        wifiPassword,
+        serverIp: serverIpLimpia,
+        id: route.params.id,
+      };
 
       /**
        * 3. Guardamos la instalación en la base local.
        */
       if (route.params.isNewFarm) {
-        await InsertFarmData(farmData2);
+        await InsertFarmData(farmDataGuardar);
       } else {
-        await UpdateFarmData(farmData2);
+        await UpdateFarmData(farmDataGuardar);
       }
 
       UsesetFarmDataChange();
@@ -137,6 +160,10 @@ export const FarmScreen = ({ navigation, route }) => {
         UseSetNewFarm(route.params.id);
       }
 
+      /**
+       * 4. Si no hay conexión, dejamos la instalación guardada,
+       * pero no intentamos login.
+       */
       if (!disponibilidad.ok) {
         Alert.alert(
           "Instalación guardada sin conexión",
@@ -148,9 +175,36 @@ export const FarmScreen = ({ navigation, route }) => {
         return;
       }
 
+      /**
+       * 5. Si la instalación responde, sincronizamos sesión:
+       * IP + login/token si tiene Username y Clave.
+       */
+      const resultadoSesion = await sincronizarSesionInstalacion(farmDataGuardar);
+
+      if (!resultadoSesion.ok) {
+        Alert.alert(
+          "Instalación guardada con aviso",
+          resultadoSesion.mensaje ||
+          "La instalación se ha guardado, pero no se pudo iniciar sesión."
+        );
+
+        navigation.goBack();
+        return;
+      }
+
+      if (resultadoSesion.tipo === "sin_login") {
+        Alert.alert(
+          "Instalación guardada",
+          "La instalación se ha guardado correctamente, pero no tiene Username y Clave."
+        );
+
+        navigation.goBack();
+        return;
+      }
+
       Alert.alert(
         "Instalación guardada",
-        "La instalación se ha guardado correctamente."
+        "La instalación se ha guardado correctamente y la sesión se ha iniciado."
       );
 
       navigation.goBack();
@@ -161,6 +215,8 @@ export const FarmScreen = ({ navigation, route }) => {
       );
     }
   };
+
+
   const deleteFarm = async () => {
     vglobal.coinciden = false;
     if (route.params.isNewFarm) {

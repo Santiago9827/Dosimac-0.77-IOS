@@ -475,6 +475,9 @@ maternidadConfig_corralSectionTitle: "Enclos d’entrée",
 maternidadConfig_corralSectionDescription: "Cette donnée est obligatoire pour continuer l’enregistrement.",
 
 maternidadConfig_alert_invalidCrotalFromBackend: "Le backend n’a pas renvoyé de boucle valide à comparer.",
+  maternidadConfig_readOnlyTitle: "Autorisation en lecture seule",
+maternidadConfig_readOnlyModifySettings: "Cet utilisateur dispose uniquement d’autorisations en lecture seule. Il ne peut pas modifier cette configuration.",
+maternidadConfig_readOnlyUseFunction: "Cet utilisateur dispose uniquement d’autorisations en lecture seule. Il ne peut pas utiliser cette fonction.",
 
   ajustesEnvioMaternidad: {
     headerTitle: "Paramètres d'envoi",

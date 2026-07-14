@@ -3,8 +3,8 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Appbar, Button, Caption, Divider, List, RadioButton, Switch } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { FlatList } from 'react-native-gesture-handler';
@@ -16,7 +16,7 @@ import { useAuthStore } from '../../../stores/authStore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { GetFarmsList, InicialiceFarmDataTable, GetFarmDataById } from '../../../FarmDB/farmsDB';
 import { guardarBaseUrlDesdeServerIp, validarInstalacionActiva } from '../../../stores/ipConfig';
-
+import { sincronizarSesionInstalacion } from './sincronizarSesionInstalacion';
 
 
 // interface farmFacility {
@@ -41,6 +41,50 @@ export const FarmListScreen = ({ navigation, route }) => {
   const [value, setValue] = useState('');
   const [farms, setFarms] = useState<farmFacility[]>([]);
   const [loading, setLoading] = useState(true);
+  const [modalConexionVisible, setModalConexionVisible] = useState(false);
+  const [modalConexionTipo, setModalConexionTipo] = useState<'loading' | 'success' | 'error'>('loading');
+  const [modalConexionTitulo, setModalConexionTitulo] = useState('');
+  const [modalConexionTexto, setModalConexionTexto] = useState('');
+
+  const timerModalConexionRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const mostrarModalConexion = (
+    tipo: 'loading' | 'success' | 'error',
+    titulo: string,
+    texto: string,
+    autocerrar = false
+  ) => {
+    if (timerModalConexionRef.current) {
+      clearTimeout(timerModalConexionRef.current);
+    }
+
+    setModalConexionTipo(tipo);
+    setModalConexionTitulo(titulo);
+    setModalConexionTexto(texto);
+    setModalConexionVisible(true);
+
+    if (autocerrar) {
+      timerModalConexionRef.current = setTimeout(() => {
+        setModalConexionVisible(false);
+      }, 2000);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timerModalConexionRef.current) {
+        clearTimeout(timerModalConexionRef.current);
+      }
+    };
+  }, []);
+
+  const cerrarModalConexion = () => {
+    if (timerModalConexionRef.current) {
+      clearTimeout(timerModalConexionRef.current);
+    }
+
+    setModalConexionVisible(false);
+  };
 
   const sfarm = farmStore((state) => state.farm);
   const sfarmId = farmStore((state) => state.farmId);
@@ -210,14 +254,30 @@ export const FarmListScreen = ({ navigation, route }) => {
       setValue(String(item.id));
       UseSetNewFarm(item.id);
 
+      mostrarModalConexion(
+        'loading',
+        'Conectando',
+        'Estamos conectando con la instalación seleccionada...'
+      );
+
       const instalacionCompleta = await GetFarmDataById(item.id);
 
-      const serverIpLimpia = String(instalacionCompleta?.serverIp ?? '').trim();
+      if (!instalacionCompleta) {
+        mostrarModalConexion(
+          'error',
+          'No se ha podido conectar',
+          'No se han encontrado los datos de esta instalación.'
+        );
+        return;
+      }
+
+      const serverIpLimpia = String(instalacionCompleta.serverIp ?? '').trim();
 
       if (!serverIpLimpia) {
-        Alert.alert(
-          "IP no configurada",
-          "La instalación no tiene Server IP configurada."
+        mostrarModalConexion(
+          'error',
+          'IP no configurada',
+          'La instalación no tiene Server IP configurada.'
         );
         return;
       }
@@ -227,22 +287,54 @@ export const FarmListScreen = ({ navigation, route }) => {
       const disponibilidad = await validarInstalacionActiva();
 
       if (!disponibilidad.ok) {
-        Alert.alert(
-          "No se ha podido conectar",
+        mostrarModalConexion(
+          'error',
+          'No se ha podido conectar',
           disponibilidad.mensaje ||
-          "No se puede conectar con la instalación seleccionada."
+          'No se puede conectar con la instalación seleccionada. Comprueba la red WiFi o la IP del servidor.'
         );
         return;
       }
 
-      Alert.alert(
-        "Conexión exitosa",
-        "La instalación se ha conectado correctamente."
+      const resultadoSesion = await sincronizarSesionInstalacion(instalacionCompleta);
+
+      if (!resultadoSesion.ok) {
+        mostrarModalConexion(
+          'error',
+          'No se ha podido conectar',
+          resultadoSesion.mensaje ||
+          'Revisa la IP, el usuario o la clave de esta instalación.'
+        );
+        return;
+      }
+
+      if (resultadoSesion.tipo === 'sin_login') {
+        mostrarModalConexion(
+          'success',
+          'Instalación seleccionada',
+          'La IP se ha aplicado correctamente, pero esta instalación no tiene Username y Clave.',
+          true
+        );
+        return;
+      }
+
+      mostrarModalConexion(
+        'success',
+        'Conexión exitosa',
+        'La instalación se ha conectado correctamente.',
+        true
       );
+
+      console.log('Instalación activa:', instalacionCompleta.name);
+      console.log('Disponibilidad:', disponibilidad.tipo);
+      console.log('Sesión:', resultadoSesion.tipo);
     } catch (error: any) {
-      Alert.alert(
-        "Error",
-        error?.message || "Ha ocurrido un error al seleccionar la instalación."
+      console.log('Error seleccionando instalación', error);
+
+      mostrarModalConexion(
+        'error',
+        'No se ha podido conectar',
+        error?.message || 'Ha ocurrido un error al conectar con la instalación.'
       );
     }
   };
@@ -266,8 +358,17 @@ export const FarmListScreen = ({ navigation, route }) => {
             />
           </View>
         )}
-        right={() => <RadioButton value={item.id.toString()} />}
-        onPress={() => navigation.navigate('Farm detalils', { id: item.id, isNewFarm: false, SetectedValue: Number(value) })}
+        right={() => (
+          <View style={styles.radioContainer}>
+            <RadioButton.Android
+              value={item.id.toString()}
+              status={value === item.id.toString() ? 'checked' : 'unchecked'}
+              onPress={() => seleccionarInstalacion(item)}
+              color="#0F766E"
+              uncheckedColor="#4B5563"
+            />
+          </View>
+        )} onPress={() => navigation.navigate('Farm detalils', { id: item.id, isNewFarm: false, SetectedValue: Number(value) })}
       />
     );
   };
@@ -328,8 +429,70 @@ export const FarmListScreen = ({ navigation, route }) => {
           </View>
         )}
       </RadioButton.Group>
+      <Modal
+        visible={modalConexionVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={cerrarModalConexion}
+      >
+        <View style={styles.modalConexionOverlay}>
+          <View style={styles.modalConexionCard}>
+            <View
+              style={[
+                styles.modalConexionIconBox,
+                {
+                  backgroundColor:
+                    modalConexionTipo === 'success'
+                      ? '#DCFCE7'
+                      : modalConexionTipo === 'error'
+                        ? '#FEE2E2'
+                        : '#E0F2FE',
+                },
+              ]}
+            >
+              {modalConexionTipo === 'loading' ? (
+                <ActivityIndicator size="large" color="#0891B2" />
+              ) : (
+                <Ionicons
+                  name={
+                    modalConexionTipo === 'success'
+                      ? 'checkmark-circle-outline'
+                      : 'alert-circle-outline'
+                  }
+                  size={44}
+                  color={
+                    modalConexionTipo === 'success'
+                      ? '#16A34A'
+                      : '#DC2626'
+                  }
+                />
+              )}
+            </View>
+
+            <Text style={styles.modalConexionTitulo}>
+              {modalConexionTitulo}
+            </Text>
+
+            <Text style={styles.modalConexionTexto}>
+              {modalConexionTexto}
+            </Text>
+
+            {modalConexionTipo === 'error' && (
+              <Pressable
+                style={styles.modalConexionBotonError}
+                onPress={cerrarModalConexion}
+              >
+                <Text style={styles.modalConexionBotonTexto}>
+                  Aceptar
+                </Text>
+              </Pressable>
+            )}
+          </View>
+        </View>
+      </Modal>
 
     </ScrollView>
+
   );
 };
 
@@ -383,7 +546,73 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 20,
     padding: 30,
-  }
+  },
+  radioContainer: {
+    width: 52,
+    height: 52,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  modalConexionOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(15, 23, 42, 0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+
+  modalConexionCard: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 28,
+    padding: 24,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+
+  modalConexionIconBox: {
+    width: 78,
+    height: 78,
+    borderRadius: 39,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 18,
+  },
+
+  modalConexionTitulo: {
+    color: '#0F172A',
+    fontSize: 23,
+    fontWeight: '900',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+
+  modalConexionTexto: {
+    color: '#64748B',
+    fontSize: 16,
+    fontWeight: '700',
+    textAlign: 'center',
+    lineHeight: 23,
+  },
+
+  modalConexionBotonError: {
+    width: '100%',
+    height: 50,
+    borderRadius: 16,
+    backgroundColor: '#DC2626',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 24,
+  },
+
+  modalConexionBotonTexto: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '900',
+  },
 
 
 });

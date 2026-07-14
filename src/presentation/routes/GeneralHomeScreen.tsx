@@ -1,18 +1,29 @@
-/* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     View,
     Text,
     TouchableOpacity,
     ScrollView,
     StyleSheet,
-    Alert,
+    Modal,
+    ActivityIndicator,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useFocusEffect } from '@react-navigation/native';
+
+import {
+    obtenerBaseUrlGuardada,
+    validarInstalacionActiva,
+} from '../../stores/ipConfig';
+
+import { useAuthStore } from '../../stores/authStore';
 
 const TEXT = '#0F172A';
 const MUTED = '#64748B';
 const BG = '#F6F8FC';
+const BRAND = '#4C1D95';
+
+type TipoBloqueo = 'ip' | 'login' | 'permiso' | 'conexion' | 'sesion';
 
 function GeneralCard({
     titulo,
@@ -21,6 +32,7 @@ function GeneralCard({
     color,
     fondoIcono,
     onPress,
+    disabled = false,
 }: {
     titulo: string;
     descripcion: string;
@@ -28,12 +40,17 @@ function GeneralCard({
     color: string;
     fondoIcono: string;
     onPress: () => void;
+    disabled?: boolean;
 }) {
     return (
         <TouchableOpacity
             activeOpacity={0.9}
             onPress={onPress}
-            style={styles.card}
+            disabled={disabled}
+            style={[
+                styles.card,
+                disabled && styles.cardDisabled,
+            ]}
         >
             <View style={[styles.cardTopLine, { backgroundColor: color }]} />
 
@@ -54,12 +71,133 @@ function GeneralCard({
 }
 
 export const GeneralHomeScreen = ({ navigation }: any) => {
-    const avisoProvisional = (pantalla: string) => {
-        Alert.alert(
-            'Pantalla pendiente',
-            `Después conectaremos esta card con: ${pantalla}`
-        );
+    const [validandoConexion, setValidandoConexion] = useState(false);
+    const [hayIpConfigurada, setHayIpConfigurada] = useState(false);
+
+    const [modalIpVisible, setModalIpVisible] = useState(false);
+    const [tipoBloqueo, setTipoBloqueo] = useState<TipoBloqueo>('ip');
+
+    const [mostrarConectando, setMostrarConectando] = useState(false);
+    const timeoutConectandoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const token = useAuthStore((s) => s.token);
+    const isHydrated = useAuthStore((s) => s.isHydrated);
+    const rol = useAuthStore((s) => s.rol ?? []);
+
+    const esAdmin = rol.includes('admin');
+
+    const comprobarIpConfigurada = useCallback(async () => {
+        const baseUrlGuardada = await obtenerBaseUrlGuardada();
+        const existeIp = !!baseUrlGuardada;
+
+        setHayIpConfigurada(existeIp);
+
+        return existeIp;
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            comprobarIpConfigurada();
+        }, [comprobarIpConfigurada])
+    );
+
+    useEffect(() => {
+        return () => {
+            if (timeoutConectandoRef.current) {
+                clearTimeout(timeoutConectandoRef.current);
+            }
+        };
+    }, []);
+
+    const abrirModalBloqueo = (tipo: TipoBloqueo) => {
+        setTipoBloqueo(tipo);
+        setModalIpVisible(true);
     };
+
+    const navegarSiHayIp = async (
+        pantalla: string,
+        requiereAdmin = false
+    ) => {
+        if (validandoConexion) return;
+
+        const existeIp = await comprobarIpConfigurada();
+
+        if (!existeIp) {
+            abrirModalBloqueo('ip');
+            return;
+        }
+
+        try {
+            setValidandoConexion(true);
+
+            timeoutConectandoRef.current = setTimeout(() => {
+                setMostrarConectando(true);
+            }, 700);
+
+            const conexion = await validarInstalacionActiva();
+
+            if (!conexion.ok) {
+                abrirModalBloqueo('conexion');
+                return;
+            }
+
+            if (!isHydrated) {
+                abrirModalBloqueo('sesion');
+                return;
+            }
+
+            if (!token) {
+                abrirModalBloqueo('login');
+                return;
+            }
+
+            if (requiereAdmin && !esAdmin) {
+                abrirModalBloqueo('permiso');
+                return;
+            }
+
+            navigation.navigate(pantalla);
+        } catch (error: any) {
+            abrirModalBloqueo('conexion');
+        } finally {
+            if (timeoutConectandoRef.current) {
+                clearTimeout(timeoutConectandoRef.current);
+                timeoutConectandoRef.current = null;
+            }
+
+            setMostrarConectando(false);
+            setValidandoConexion(false);
+        }
+    };
+
+    const tituloModal =
+        tipoBloqueo === 'ip'
+            ? 'Aplicación no configurada'
+            : tipoBloqueo === 'login'
+                ? 'Sesión no iniciada'
+                : tipoBloqueo === 'conexion'
+                    ? 'Instalación no disponible'
+                    : tipoBloqueo === 'sesion'
+                        ? 'Preparando sesión'
+                        : 'Permiso solo lectura';
+
+    const textoModal =
+        tipoBloqueo === 'ip'
+            ? 'No hay ninguna instalación configurada. Ve a Instalaciones y selecciona una.'
+            : tipoBloqueo === 'login'
+                ? 'La instalación tiene IP, pero no hay sesión iniciada. Revisa el Username y la Clave en Instalaciones.'
+                : tipoBloqueo === 'conexion'
+                    ? 'No se puede conectar con la instalación seleccionada. Comprueba que estás conectado a la red WiFi correcta o revisa la IP del servidor.'
+                    : tipoBloqueo === 'sesion'
+                        ? 'La sesión todavía se está cargando. Inténtalo de nuevo en unos segundos.'
+                        : 'Tu usuario no tiene permisos de administrador para acceder a esta funcionalidad.';
+
+    const iconoModal =
+        tipoBloqueo === 'permiso'
+            ? 'warning-outline'
+            : tipoBloqueo === 'login'
+                ? 'person-circle-outline'
+                : 'business-outline';
 
     return (
         <View style={styles.container}>
@@ -74,15 +212,18 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                         icono="radio-outline"
                         color="#0F766E"
                         fondoIcono="#DDF3EF"
-                        onPress={() => navigation.navigate('GeneralLecturaAntena')}
+                        disabled={validandoConexion}
+                        onPress={() => navegarSiHayIp('GeneralLecturaAntena')}
                     />
+
                     <GeneralCard
                         titulo="Movimiento animal"
                         descripcion="Teclado"
                         icono="swap-horizontal-outline"
                         color="#4338CA"
                         fondoIcono="#E0E7FF"
-                        onPress={() => navigation.navigate('MovimientoAnimal')}
+                        disabled={validandoConexion}
+                        onPress={() => navegarSiHayIp('MovimientoAnimal', true)}
                     />
 
                     <GeneralCard
@@ -91,10 +232,68 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                         icono="enter-outline"
                         color="#2F6BFF"
                         fondoIcono="#DCE8FF"
-                        onPress={() => avisoProvisional('GeneralPortal')}
+                        disabled={validandoConexion}
+                        onPress={() => navegarSiHayIp('GeneralPortal')}
                     />
                 </View>
             </ScrollView>
+
+            <Modal
+                visible={modalIpVisible}
+                transparent
+                animationType="fade"
+                onRequestClose={() => setModalIpVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalCard}>
+                        <View style={styles.modalIconCircle}>
+                            <Ionicons
+                                name={iconoModal}
+                                size={34}
+                                color={BRAND}
+                            />
+                        </View>
+
+                        <Text style={styles.modalTitle}>
+                            {tituloModal}
+                        </Text>
+
+                        <Text style={styles.modalText}>
+                            {textoModal}
+                        </Text>
+
+                        <TouchableOpacity
+                            activeOpacity={0.9}
+                            style={styles.modalButton}
+                            onPress={() => setModalIpVisible(false)}
+                        >
+                            <Text style={styles.modalButtonText}>
+                                Aceptar
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                visible={mostrarConectando}
+                transparent
+                animationType="fade"
+            >
+                <View style={styles.loadingOverlay}>
+                    <View style={styles.loadingCard}>
+                        <ActivityIndicator size="large" color={BRAND} />
+
+                        <Text style={styles.loadingTitle}>
+                            Conectando...
+                        </Text>
+
+                        <Text style={styles.loadingText}>
+                            Comprobando conexión con la instalación seleccionada.
+                        </Text>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -130,6 +329,10 @@ const styles = StyleSheet.create({
         borderColor: '#E5E7EB',
     },
 
+    cardDisabled: {
+        opacity: 0.65,
+    },
+
     cardTopLine: {
         height: 6,
     },
@@ -163,5 +366,107 @@ const styles = StyleSheet.create({
         color: MUTED,
         textAlign: 'center',
         lineHeight: 23,
+    },
+
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(15, 23, 42, 0.45)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 24,
+    },
+
+    modalCard: {
+        width: '100%',
+        maxWidth: 390,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 28,
+        paddingHorizontal: 22,
+        paddingVertical: 28,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.12,
+        shadowRadius: 14,
+        shadowOffset: { width: 0, height: 6 },
+        elevation: 5,
+    },
+
+    modalIconCircle: {
+        width: 78,
+        height: 78,
+        borderRadius: 39,
+        backgroundColor: '#F1EAFE',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 18,
+    },
+
+    modalTitle: {
+        fontSize: 27,
+        fontWeight: '900',
+        color: TEXT,
+        textAlign: 'center',
+        marginBottom: 12,
+    },
+
+    modalText: {
+        fontSize: 17,
+        lineHeight: 25,
+        fontWeight: '700',
+        color: MUTED,
+        textAlign: 'center',
+        marginBottom: 24,
+    },
+
+    modalButton: {
+        width: '100%',
+        height: 52,
+        borderRadius: 16,
+        backgroundColor: '#2563EB',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    modalButtonText: {
+        color: '#FFFFFF',
+        fontSize: 17,
+        fontWeight: '900',
+    },
+
+    loadingOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(15, 23, 42, 0.45)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 24,
+    },
+
+    loadingCard: {
+        width: '100%',
+        maxWidth: 320,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 26,
+        paddingHorizontal: 24,
+        paddingVertical: 28,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
+    },
+
+    loadingTitle: {
+        marginTop: 16,
+        fontSize: 23,
+        fontWeight: '900',
+        color: TEXT,
+        textAlign: 'center',
+    },
+
+    loadingText: {
+        marginTop: 8,
+        fontSize: 15,
+        fontWeight: '700',
+        color: MUTED,
+        textAlign: 'center',
+        lineHeight: 21,
     },
 });
