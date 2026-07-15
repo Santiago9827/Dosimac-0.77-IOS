@@ -32,6 +32,7 @@ export const FarmScreen = ({ navigation, route }) => {
   const [userName, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [serverIp, setServerIp] = useState('');
+  const [guardando, setGuardando] = useState(false);
 
   const sfarm = farmStore((state) => state.farm);
   const UseSetNewFarm = farmStore((state) => state.UseSetNewFarm);
@@ -93,6 +94,20 @@ export const FarmScreen = ({ navigation, route }) => {
     }, [])
   );
 
+  const volverConAviso = (titulo: string, mensaje: string) => {
+    Alert.alert(
+      titulo,
+      mensaje,
+      [
+        {
+          text: 'OK',
+          onPress: () => navigation.goBack(),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   const submitData = async () => {
     const serverIpLimpia = serverIp.trim();
     const usernameLimpio = userName.trim();
@@ -118,6 +133,7 @@ export const FarmScreen = ({ navigation, route }) => {
     }
 
     try {
+      setGuardando(true);
       /**
        * 1. Guardamos la IP activa para que la usen los endpoints.
        */
@@ -142,23 +158,33 @@ export const FarmScreen = ({ navigation, route }) => {
       };
 
       /**
-       * 3. Guardamos la instalación en la base local.
-       */
+   * 3. Guardamos la instalación en la base local.
+   * Importante: si es nueva, guardamos el ID real que devuelve InsertFarmData.
+   */
+      let idInstalacionGuardada = Number(route.params.id);
+
       if (route.params.isNewFarm) {
-        await InsertFarmData(farmDataGuardar);
+        const newId = await InsertFarmData(farmDataGuardar);
+        const newIdNumero = Number(newId);
+
+        console.log("Instalación nueva guardada con ID:", newId);
+
+        if (Number.isFinite(newIdNumero) && newIdNumero > 0) {
+          idInstalacionGuardada = newIdNumero;
+          UseSetNewFarm(idInstalacionGuardada);
+        } else {
+          console.log("No se pudo seleccionar automáticamente la instalación. ID recibido:", newId);
+        }
       } else {
         await UpdateFarmData(farmDataGuardar);
+        idInstalacionGuardada = Number(route.params.id);
+
+        if (Number.isFinite(idInstalacionGuardada) && idInstalacionGuardada > 0) {
+          UseSetNewFarm(idInstalacionGuardada);
+        }
       }
 
       UsesetFarmDataChange();
-
-      if (route.params.id === 0) {
-        if (!sfarm) {
-          UseSetNewFarm(1);
-        }
-      } else if (sfarm && route.params.id === sfarm.id) {
-        UseSetNewFarm(route.params.id);
-      }
 
       /**
        * 4. Si no hay conexión, dejamos la instalación guardada,
@@ -213,9 +239,10 @@ export const FarmScreen = ({ navigation, route }) => {
         "Error",
         error?.message || "No se pudo guardar la instalación."
       );
+    } finally {
+      setGuardando(false);
     }
   };
-
 
   const deleteFarm = async () => {
     vglobal.coinciden = false;
@@ -278,41 +305,28 @@ export const FarmScreen = ({ navigation, route }) => {
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 140 }}
         >
           <View style={{ marginTop: 20, gap: 10, marginHorizontal: 10, paddingHorizontal: 10 }}>
-            <TextInput label={t("NombreGranja")} mode="outlined" placeholder="Nombre de la granja" value={name} onChangeText={setName} />
-            <TextInput label={t("Localidad")} mode="outlined" placeholder="Población" value={location} onChangeText={setLocation} />
-            <TextInput label={t("Provincia")} mode="outlined" placeholder="Provincia" value={province} onChangeText={setProvince} />
-            <TextInput label={t("NombreWifi")} mode="outlined" placeholder="Nombre red WIFI" value={ssid} onChangeText={setSsid} />
             <TextInput
-              label={t("PasswordWifi")}
+              label={t("NombreGranja")}
               mode="outlined"
-              placeholder="Wifi Password"
-              value={wifiPassword}
-              onChangeText={setWifiPassword}
-              secureTextEntry={flatTextSecureEntry}
-              right={
-                <TextInput.Icon
-                  icon={() => <IonIcon name={flatTextSecureEntry ? 'eye-outline' : 'eye-off-outline'} size={24} color="black" />}
-                  onPress={() => setFlatTextSecurityEntry(!flatTextSecureEntry)}
-                  forceTextInputFocus={false}
-                />
-              }
+              placeholder="Nombre de la granja"
+              value={name}
+              onChangeText={setName}
             />
 
-            <TextInput label={t("username")} mode="outlined" placeholder="Nombre usuario" value={userName} onChangeText={setUsername} />
             <TextInput
-              label={t("password")}
+              label={t("Localidad")}
               mode="outlined"
-              placeholder="Password usuario"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={UserSecureEntry}
-              right={
-                <TextInput.Icon
-                  icon={() => <IonIcon name={UserSecureEntry ? 'eye-outline' : 'eye-off-outline'} size={24} color="black" />}
-                  onPress={() => setUserSecurityEntry(!UserSecureEntry)}
-                  forceTextInputFocus={false}
-                />
-              }
+              placeholder="Población"
+              value={location}
+              onChangeText={setLocation}
+            />
+
+            <TextInput
+              label={t("Provincia")}
+              mode="outlined"
+              placeholder="Provincia"
+              value={province}
+              onChangeText={setProvince}
             />
 
             <TextInput
@@ -322,20 +336,80 @@ export const FarmScreen = ({ navigation, route }) => {
               placeholder="IP Servidor"
               value={serverIp}
               onChangeText={setServerIp}
-              onFocus={() => {
-                // Al enfocar el último campo, desplaza al final para evitar solape
-                requestAnimationFrame(() => {
-                  scrollRef.current?.scrollToEnd({ animated: true });
-                });
-              }}
+            />
+
+            <TextInput
+              label={t("username")}
+              mode="outlined"
+              placeholder="Nombre usuario"
+              value={userName}
+              onChangeText={setUsername}
+            />
+
+            <TextInput
+              label={t("password")}
+              mode="outlined"
+              placeholder="Password usuario"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={UserSecureEntry}
+              right={
+                <TextInput.Icon
+                  icon={() => (
+                    <IonIcon
+                      name={UserSecureEntry ? 'eye-outline' : 'eye-off-outline'}
+                      size={24}
+                      color="black"
+                    />
+                  )}
+                  onPress={() => setUserSecurityEntry(!UserSecureEntry)}
+                  forceTextInputFocus={false}
+                />
+              }
+            />
+
+            <TextInput
+              label={t("NombreWifi")}
+              mode="outlined"
+              placeholder="Nombre red WIFI"
+              value={ssid}
+              onChangeText={setSsid}
+            />
+
+            <TextInput
+              label={t("PasswordWifi")}
+              mode="outlined"
+              placeholder="Wifi Password"
+              value={wifiPassword}
+              onChangeText={setWifiPassword}
+              secureTextEntry={flatTextSecureEntry}
+              right={
+                <TextInput.Icon
+                  icon={() => (
+                    <IonIcon
+                      name={flatTextSecureEntry ? 'eye-outline' : 'eye-off-outline'}
+                      size={24}
+                      color="black"
+                    />
+                  )}
+                  onPress={() => setFlatTextSecurityEntry(!flatTextSecureEntry)}
+                  forceTextInputFocus={false}
+                />
+              }
             />
 
             <Pressable
               android_ripple={{ color: 'blue' }}
-              style={styles.boton}
+              style={[
+                styles.boton,
+                guardando && { backgroundColor: "#94A3B8" },
+              ]}
+              disabled={guardando}
               onPress={submitData}
             >
-              <Text style={styles.texto}>{t('common:Guardar')}</Text>
+              <Text style={styles.texto}>
+                {guardando ? "Guardando..." : t('common:Guardar')}
+              </Text>
             </Pressable>
           </View>
         </ScrollView>

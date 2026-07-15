@@ -7,19 +7,31 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { HamburgerMenu } from "../../components/shared/HamburgerMenu";
 import { farmStore } from "../../../stores/store";
 import { globalColors } from "../../theme/theme"; // ajusta la ruta si cambia
+import { useNavigation } from "@react-navigation/native";
+import { AvisoAplicacionNoConfigurada } from "../../routes/AvisoAplicacionNoConfigurada";
 
 export const HomeScreen = () => {
   const sfarm = farmStore((state) => state.farm);
   const { t } = useTranslation(["common"]);
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<any>();
+
+  const irAInstalaciones = () => {
+    navigation.navigate("FarmList");
+  };
 
   return (
     <View className="flex-1">
       {/* ✅ Botón drawer (inline) */}
-     
-            <View style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 50 }}>
+
+      <View style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 50 }}>
         <HamburgerMenu variant="inline" color={globalColors.primary} size={32} />
-     </View>
+        <AvisoAplicacionNoConfigurada
+          visible={!sfarm}
+          top={insets.top + 70}
+          onPress={irAInstalaciones}
+        />
+      </View>
 
       <View className="flex-1 flex-col justify-center items-center">
         <Text className="text-6xl text-slate-700 font-bold">DOSIMAC</Text>

@@ -110,14 +110,14 @@ function ConfiguracionAwrTemporal({ navigation }: any) {
                     onPress={() => navegarAStack('GeneralAwrSaved')}
                 />
 
-                <CardLector
+                {/* <CardLector
                     color="#0284C7"
                     fondoIcono="#E0F2FE"
                     icono="bluetooth-outline"
                     titulo="Conectar por Bluetooth"
                     descripcion="Conectar con lector Allflex LPR por Bluetooth."
                     onPress={() => avisoPendiente('GeneralAllflexBluetooth')}
-                />
+                /> */}
             </ScrollView>
         </View>
     );

@@ -151,29 +151,27 @@ export const FarmListScreen = ({ navigation, route }) => {
 
 
 
-  useEffect(() => {
-    // const fetchFarms = async () => {
-    //   const farmsList = await GetFarmsList();
-    //   setFarms(farmsList);
-    // };
+  // useEffect(() => {
+  //    const fetchFarms = async () => {
+  //     const farmsList = await GetFarmsList();
+  //      setFarms(farmsList);
+  //   /};
+  //    fetchFarms();
+  //   console.log('reder farmlist', sfarm);
 
+  //  (if farms.length===0)
 
-    // fetchFarms();
-    console.log('reder farmlist', sfarm);
+  //   if (sfarm)
+  //     setValue(sfarm.id.toString());
+  //   else {
+  //     setValue('1');
+  //     if (farms.length > 0)
+  //       UseSetNewFarm(farms[0].id);
+  //   }
 
-    // (if farms.length===0)
+  //   console.log('use efect de farmlist');
 
-    if (sfarm)
-      setValue(sfarm.id.toString());
-    else {
-      setValue('1');
-      if (farms.length > 0)
-        UseSetNewFarm(farms[0].id);
-    }
-
-    console.log('use efect de farmlist');
-
-  }, []);
+  // }, []);
 
   // useFocusEffect(
   //   React.useCallback(() => {
@@ -201,7 +199,7 @@ export const FarmListScreen = ({ navigation, route }) => {
   //       // resetFarm();
 
   //     }
-  //     // if (farmDataChange)
+  //      if (farmDataChange)
   //     // farmsList
   //     //Alert.alert('Screen was focused');
   //     // Do something when the screen is focused
