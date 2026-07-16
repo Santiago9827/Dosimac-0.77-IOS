@@ -9,6 +9,7 @@ import { HomeScreen } from '../screens/HomeScreen/HomeScreen';
 import { FarmListNavigator } from './FarmListNavigator';
 import { GeneralHomeScreen } from './GeneralHomeScreen';
 import { GeneralStackNavigator } from './GeneralStackNavigator';
+import { CapturaAnimalStackNavigator } from './CapturaAnimalStackNavigator';
 
 const Tab = createBottomTabNavigator();
 const AltaDispositivosStack = createStackNavigator();
@@ -55,81 +56,7 @@ function HeaderMenuButton({ navigation }: any) {
   );
 }
 
-function PantallaTemporal({
-  titulo,
-  subtitulo,
-  icono,
-}: {
-  titulo: string;
-  subtitulo: string;
-  icono: string;
-}) {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: '#F8FAFC',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 24,
-      }}
-    >
-      <View
-        style={{
-          width: 92,
-          height: 92,
-          borderRadius: 32,
-          backgroundColor: '#EEF2FF',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: 20,
-        }}
-      >
-        <Ionicons
-          name={icono}
-          size={46}
-          color={primary}
-        />
-      </View>
 
-      <Text
-        style={{
-          fontSize: 24,
-          fontWeight: '900',
-          color: '#0F172A',
-          textAlign: 'center',
-          marginBottom: 8,
-        }}
-      >
-        {titulo}
-      </Text>
-
-      <Text
-        style={{
-          fontSize: 15,
-          fontWeight: '600',
-          color: '#64748B',
-          textAlign: 'center',
-          lineHeight: 22,
-        }}
-      >
-        {subtitulo}
-      </Text>
-    </View>
-  );
-}
-
-
-
-function FuncionalidadesScreen() {
-  return (
-    <PantallaTemporal
-      titulo="Funcionalidades"
-      subtitulo="Pantalla provisional para funcionalidades."
-      icono="paw-outline"
-    />
-  );
-}
 
 export const BottomTabNavigator = () => {
   return (
@@ -210,14 +137,14 @@ export const BottomTabNavigator = () => {
           };
         }}
       />
-      {/* <Tab.Screen
-        name="CapturaAnimalTab"
-        component={FuncionalidadesScreen}
-        options={{
-          title: 'Funcionalidades',
-          tabBarLabel: 'Funcionalidades',
-        }}
-      /> */}
+      <Tab.Screen
+  name="CapturaAnimalTab"
+  component={CapturaAnimalStackNavigator}
+  options={{
+    title: 'Funcionalidades',
+    tabBarLabel: 'Funcionalidades',
+  }}
+/>
     </Tab.Navigator>
   );
 };
