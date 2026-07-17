@@ -557,6 +557,8 @@ capturaAnimalHome: {
   twoFeedsDescription: "낙하구의 사료 변경을 관리합니다.",
   animalStatusTitle: "동물 상태",
 animalStatusDescription: "동물 상태를 확인하거나 업데이트합니다.",
+birthCaptureTitle: "분만 기록",
+birthCaptureDescription: "생존, 사망 및 미라화 자돈을 기록합니다.",
 },
 cambioPiensoMaternidad: {
   error: "오류",
@@ -592,33 +594,386 @@ estadoAnimal: {
   nextScreenPending: "다음 단계에서 동물 정보 화면을 만들겠습니다."
 },
 matCorralDetail: {
+  readOnlyPermission: "읽기 전용 권한",
+readOnlyPermissionText: "이 사용자는 읽기 권한만 있습니다. 동물에 대한 작업을 수행할 수 없습니다.",
   animalStatus: "동물 상태",
   id: "ID",
   earTag: "이표",
   cycle: "주기",
   day: "일",
+
   curve: "곡선",
   correction: "보정",
   entryDate: "입식일",
   farrowingDate: "분만일",
   house: "동",
-  pen: "돈방",
+  pen: "우리",
   lastFeeding: "마지막 급이",
-  presentPiglets: "현재 자돈 수",
+  presentPiglets: "현재 자돈",
   inseminationDate: "수정일",
-  teatsNumber: "젖꼭지 수",
+  teatsNumber: "유두 수",
+
   operations: "작업",
+
   consumption: "섭취량",
-  ofGrams: "{{amount}} gr 중",
+  ofGrams: "{{amount}} g 중",
   oneDayWithoutFeeding: "1일 미급이",
   daysWithoutFeeding: "{{count}}일 미급이",
-  noAnimalData: "동물 데이터가 없습니다",
-  noAnimalDataText: "표시할 정보가 수신되지 않았습니다.",
+
+  noAnimalData: "동물 데이터 없음",
+  noAnimalDataText: "표시할 정보를 받지 못했습니다.",
   back: "뒤로",
   operationsPendingTitle: "작업",
-  operationsPendingText: "다음 단계에서 작업 기능을 추가하겠습니다.",
+  operationsPendingText: "다음 단계에서 작업을 진행합니다.",
   moveToWeaning: "이유 단계로 이동",
+  chooseOption: "이 동물에 대한 작업을 선택하세요.",
+  nextOperation: "다음 작업",
+  insertAnimal: "동물 추가",
+  moveToLactation: "수유 단계로 이동",
+  nextStep: "다음 단계",
+  actions: "작업 목록",
 
-}
+  bodyCondition: "체형 상태",
+  subState: "하위 상태",
+  pigletCapture: "자돈 기록",
+  animalExit: "동물 출하",
+  replaceEarTag: "이표 교체",
+  changePen: "우리 변경",
+  anonymousAnimalId: "익명 동물 식별자",
 
+  cancel: "취소",
+  accept: "확인",
+  saving: "저장 중...",
+  error: "오류",
+
+  operationDone: "작업이 성공적으로 완료되었습니다.",
+  changeStateDone: "하위 상태가 성공적으로 업데이트되었습니다.",
+  changeStateError: "동물 상태를 변경할 수 없습니다.",
+  confirmNextOperation: "다음 작업으로 이동하시겠습니까?",
+  pkidChangeStateNotFound: "동물 내부 식별자를 찾을 수 없습니다.",
+
+  selectExitType: "적용할 출하 유형을 선택하세요.",
+  exitImmediate: "즉시 출하",
+  exitScheduled: "예약 출하",
+  exitScheduledEmptyHopper: "빈 호퍼 예약 출하",
+  cancelScheduledExit: "예약 출하 취소",
+  scheduledDate: "예약 날짜",
+  exitDateLimitText: "오늘 이전 날짜 또는 3일 이후 날짜는 선택할 수 없습니다.",
+  animalExitDone: "동물 출하가 성공적으로 완료되었습니다.",
+  animalExitError: "동물 출하를 완료할 수 없습니다.",
+  pkidExitNotFound: "동물 내부 식별자를 찾을 수 없습니다.",
+
+  selectCurve: "곡선 선택",
+  selectCurveText: "동물의 새 곡선을 선택하세요.",
+  loadingCurves: "곡선 로딩 중...",
+  noCurvesAvailable: "사용 가능한 곡선이 없습니다.",
+  confirmChangeCurve: "곡선을 변경하시겠습니까?",
+  loadCurvesError: "곡선을 불러올 수 없습니다.",
+  pkidChangeCurveNotFound: "동물 내부 식별자를 찾을 수 없습니다.",
+  changeCurveDone: "곡선이 성공적으로 업데이트되었습니다.",
+  changeCurveError: "곡선을 변경할 수 없습니다.",
+
+  selectBodyConditionText: "동물의 새 체형 상태를 선택하세요.",
+  loadingBodyConditions: "체형 상태 로딩 중...",
+  noBodyConditionsAvailable: "사용 가능한 체형 상태가 없습니다.",
+  confirmChangeBodyCondition: "체형 상태를 변경하시겠습니까?",
+  loadBodyConditionsError: "체형 상태를 불러올 수 없습니다.",
+  pkidChangeBodyConditionNotFound: "동물 내부 식별자를 찾을 수 없습니다.",
+  changeBodyConditionDone: "체형 상태가 성공적으로 업데이트되었습니다.",
+  changeBodyConditionError: "체형 상태를 변경할 수 없습니다.",
+
+  selectSubStateText: "동물의 새 하위 상태를 수동으로 선택하세요.",
+  confirmChangeSubState: "하위 상태를 변경하시겠습니까?",
+
+  currentPen: "현재 우리: {{pen}}",
+  newPen: "새 우리",
+  enterNewPen: "새 우리를 입력하세요.",
+  pkidChangePenNotFound: "동물 내부 식별자를 찾을 수 없습니다.",
+  changePenDone: "우리가 성공적으로 업데이트되었습니다.",
+  changePenError: "우리를 변경할 수 없습니다.",
+
+  currentEarTag: "현재 이표: {{earTag}}",
+  newEarTag: "새 이표",
+  enterNewEarTag: "새 이표를 입력하세요.",
+  pkidEarTagNotFound: "동물 내부 식별자를 찾을 수 없습니다.",
+  replaceEarTagDone: "이표가 성공적으로 업데이트되었습니다.",
+  replaceEarTagError: "이표를 교체할 수 없습니다.",
+
+  identifyAnonymousAnimalText: "동물에게 ID 또는 이표를 할당할지 선택하세요.",
+  newId: "새 ID",
+  enterNewId: "새 ID를 입력하세요.",
+  idExample: "예: 1010",
+  earTagExample: "예: 123",
+  notAnonymousAnimalText: "이 동물은 이미 ID 또는 이표가 할당되어 있어 익명 동물이 아닙니다.",
+  pkidIdentifyNotFound: "동물 내부 식별자를 찾을 수 없습니다.",
+  identifyAnonymousAnimalDone: "동물 식별자가 성공적으로 업데이트되었습니다.",
+  identifyAnonymousAnimalError: "익명 동물을 식별할 수 없습니다.",
+
+  livePiglets: "생존",
+  deadPiglets: "사망",
+  mummifiedPiglets: "미라화",
+  totalBornPiglets: "총 출생 수",
+  pigletCaptureText: "생존, 사망 및 미라화 자돈 수를 입력하세요.",
+  captureBeforeLactationText: "수유 단계로 이동하기 전에 출생 자돈을 기록하세요.",
+  weaningPigletsOnlyRead: "이유 단계에서는 자돈을 조회만 할 수 있습니다.",
+  pkidPigletsNotFound: "동물 내부 식별자를 찾을 수 없습니다.",
+  pigletCaptureDone: "자돈 기록이 성공적으로 저장되었습니다.",
+  pigletCaptureError: "자돈 기록을 저장할 수 없습니다.",
+},
+subState: {
+  prepartum: "분만 전",
+  lactation: "수유",
+  weaning: "이유",
+},
+
+capturaParto: {
+  birthDataTitle: "분만 데이터",
+  birthDataSubtitle: "분만을 기록하기 전에 동물 데이터를 확인하세요.",
+  corral: "우리",
+  id: "ID",
+  date: "날짜",
+  subState: "하위 상태",
+
+  dataCollectionTitle: "데이터 수집",
+  dataCollectionSubtitle: "생존, 사망 및 미라화 자돈 수를 입력하세요.",
+  weaningReadOnly: "이유 단계에서는 데이터 조회만 가능합니다.",
+
+  totalBorn: "총 출생 수",
+  live: "생존",
+  dead: "사망",
+  mummified: "미라화",
+
+  prepartum: "분만 전",
+  farrowing: "분만",
+  lactation: "수유",
+  weaning: "이유",
+
+  accept: "확인",
+  cancel: "취소",
+  saving: "저장 중...",
+
+  sentTitle: "기록 전송됨",
+  sentMessage: "분만 기록이 성공적으로 저장되었습니다.",
+
+  errorTitle: "오류",
+  invalidAnimalTitle: "유효하지 않은 동물",
+  invalidAnimalText: "동물 내부 식별자를 찾을 수 없습니다.",
+  reportSendError: "분만 기록을 저장할 수 없습니다.",
+
+  invalidDateTitle: "유효하지 않은 날짜",
+  invalidDateMessage: "분만일은 오늘 이후일 수 없습니다.",
+  changeDate: "날짜 변경",
+
+  selectDateTitle: "날짜 선택",
+  selectDateMessage: "버튼을 사용하여 분만일을 조정하세요.",
+},
+capturaMaternidadEntrada: {
+  title: "분만 기록",
+  description: "분만을 기록하려면 우리 번호 또는 ID로 동물을 검색하세요.",
+  maternityLabel: "분만사",
+
+  corral: "우리",
+  corralDescription: "우리 번호로 동물을 검색합니다.",
+  id: "ID",
+  idDescription: "동물의 식별자로 검색합니다.",
+  animalId: "동물 ID",
+
+  corralExample: "예: 102",
+  idExample: "예: 1234",
+
+  consulting: "검색 중...",
+  continue: "계속",
+  accept: "확인",
+
+  serverConnectionError: "서버에 연결할 수 없습니다.",
+},
+altaBajaStack: {
+  tituloPantalla: "자돈 추가/감소",
+  descripcionPantalla: "자돈 추가 또는 감소를 등록하려면 어미를 우리 번호 또는 ID로 검색하세요.",
+},
+altaBajaLechones: {
+  heroTitle: "자돈 이동",
+  statusAlta: "추가",
+  statusBaja: "감소",
+
+  corralUpper: "우리",
+  idUpper: "ID",
+  dateUpper: "날짜",
+
+  movementType: "이동 유형",
+  movementSubtitle: "자돈 추가 또는 감소를 등록할지 선택하세요.",
+  adoption: "입양",
+  baja: "감소",
+
+  adoptionData: "입양 데이터",
+  donorMother: "공여 모돈",
+  donatesPiglets: "자돈을 제공합니다",
+  id: "ID",
+  transferredPiglets: "이동된 자돈",
+  totalAdopted: "총 입양 수",
+  total: "총계",
+
+  bajaReason: "감소 사유",
+  reasonCrushing: "압사",
+  reasonDiarrhea: "설사",
+  reasonLowViability: "낮은 생존력",
+  reasonDeformities: "기형",
+  reasonOther: "기타",
+
+  piglet: "자돈",
+  piglets: "자돈",
+  description: "설명",
+
+  editReason: "사유 수정",
+  addReason: "사유 추가",
+  reasonModalText: "자돈 수를 입력하고 사유를 설명하세요.",
+
+  saving: "저장 중...",
+  saveAlta: "추가 저장",
+  saveBaja: "감소 저장",
+  accept: "확인",
+  cancel: "취소",
+
+  error: "오류",
+  missingData: "누락된 데이터",
+  saveError: "저장 오류",
+  saveErrorText: "작업을 저장할 수 없습니다.",
+  selectedAnimalPkidNotFound: "선택한 동물의 내부 식별자를 찾을 수 없습니다.",
+
+  enterTransferredPiglets: "이동된 자돈 수를 입력하세요.",
+  invalidTotalTitle: "유효하지 않은 총계",
+  invalidPigletsNumber: "유효한 자돈 수를 입력하세요.",
+
+  missingDescriptionTitle: "설명이 필요합니다",
+  missingDescriptionText: "사유 설명을 입력하세요.",
+  invalidQuantityTitle: "유효하지 않은 수량",
+  invalidPigletQuantity: "유효한 자돈 수량을 입력하세요.",
+
+  selectReasonRequired: "감소 사유를 하나 이상 선택하세요.",
+
+  adoptionSavedTitle: "추가 저장됨",
+  adoptionSavedMessage: "{{count}}마리 자돈이 성공적으로 등록되었습니다.",
+
+  bajasSavedTitle: "감소 저장됨",
+  bajasSavedMessage: "{{piglets}}건의 감소가 {{reasons}}개 사유로 성공적으로 등록되었습니다.",
+},
+avisoAplicacionNoConfigurada: {
+  title: "애플리케이션이 구성되지 않았습니다",
+  text: "서버 IP 주소를 설정하세요",
+  link: "여기를 누르세요",
+},
+generalHome: {
+  movementAnimalTitle: "동물 이동",
+  readerDescription: "이표 리더기.",
+  keyboardDescription: "키보드",
+
+  ctifeedTitle: "CTIFEED",
+  ctifeedDescription: "메인 포털에 접속합니다.",
+
+  modalApplicationNotConfiguredTitle: "애플리케이션이 구성되지 않았습니다",
+  modalNoSessionTitle: "세션이 시작되지 않았습니다",
+  modalInstallationUnavailableTitle: "설치 항목을 사용할 수 없습니다",
+  modalPreparingSessionTitle: "세션 준비 중",
+  modalReadOnlyPermissionTitle: "읽기 전용 권한",
+
+  modalApplicationNotConfiguredText: "구성된 설치 항목이 없습니다. 설치 목록으로 이동하여 하나를 선택하세요.",
+  modalNoSessionText: "설치 항목에 IP는 있지만 활성 세션이 없습니다. 설치 목록에서 사용자 이름과 비밀번호를 확인하세요.",
+  modalInstallationUnavailableText: "선택한 설치 항목에 연결할 수 없습니다. 올바른 WiFi 네트워크에 연결되어 있는지 확인하거나 서버 IP를 확인하세요.",
+  modalPreparingSessionText: "세션이 아직 로딩 중입니다. 몇 초 후 다시 시도하세요.",
+  modalReadOnlyPermissionText: "이 기능에 접근할 관리자 권한이 없습니다.",
+
+  accept: "확인",
+
+  connectingTitle: "연결 중...",
+  connectingText: "선택한 설치 항목과의 연결을 확인하는 중입니다.",
+},
+movimientoAnimalMaternidad: {
+  smallLabel: "이동",
+  title: "분만사",
+  subtitle: "키보드로 수동 입고 및 출고를 수행합니다.",
+
+  movementType: "이동 유형",
+  entry: "입고",
+  exit: "출고",
+
+  searchAnimal: "동물 검색",
+  entryHelper: "목적지 우리와 동물 ID를 입력하세요.",
+  exitHelper: "우리 번호 또는 ID로 출고할지 선택하세요.",
+
+  pen: "우리",
+  animalId: "동물 ID",
+  type: "유형",
+
+  sending: "전송 중...",
+  accept: "확인",
+  cancel: "취소",
+
+  confirmEntry: "입고 확인",
+  confirmExit: "출고 확인",
+  confirmSubtitle: "이동을 전송하기 전에 데이터를 확인하세요.",
+
+  incompleteDataTitle: "데이터가 불완전합니다",
+  entryIncompleteText: "우리 번호와 동물 ID를 입력하세요.",
+  exitPenIncompleteText: "출고할 우리 번호를 입력하세요.",
+  exitIdIncompleteText: "출고할 동물 ID를 입력하세요.",
+
+  invalidPenTitle: "유효하지 않은 우리",
+  invalidPenText: "우리 번호는 0보다 큰 유효한 숫자여야 합니다.",
+
+  sendErrorTitle: "전송 오류",
+  connectionErrorTitle: "연결 오류",
+  noIpConfigured: "설정된 IP가 없습니다.",
+  serverConnectionError: "서버에 연결할 수 없습니다.",
+  serverEmptyResponse: "서버가 메시지를 반환하지 않았습니다. HTTP 코드 {{status}}.",
+
+  entrySentTitle: "입고 전송됨",
+  entrySentText: "입고 이동이 성공적으로 전송되었습니다.",
+
+  exitSentTitle: "출고 전송됨",
+  exitByPenSentText: "우리 기준 출고가 성공적으로 전송되었습니다.",
+  exitByIdSentText: "ID 기준 출고가 성공적으로 전송되었습니다.",
+},
+movimientoAnimalGestacion: {
+  smallLabel: "임신사",
+  title: "동물 이동",
+  subtitle: "키보드로 수동 입고 및 출고를 수행합니다.",
+
+  movementType: "이동 유형",
+  entry: "입고",
+  exit: "출고",
+
+  searchAnimal: "동물 검색",
+  entryHelper: "목적지 우리와 동물 ID를 입력하세요.",
+  exitHelper: "임신사 출고를 위해 동물 ID를 입력하세요.",
+
+  pen: "우리",
+  animalId: "동물 ID",
+  type: "유형",
+
+  sending: "전송 중...",
+  accept: "확인",
+  cancel: "취소",
+
+  confirmEntry: "입고 확인",
+  confirmExit: "출고 확인",
+  confirmSubtitle: "이동을 전송하기 전에 데이터를 확인하세요.",
+
+  incompleteDataTitle: "데이터가 불완전합니다",
+  entryIncompleteText: "우리 번호와 동물 ID를 입력하세요.",
+  exitIdIncompleteText: "출고할 동물 ID를 입력하세요.",
+
+  invalidPenTitle: "유효하지 않은 우리",
+  invalidPenText: "우리 번호는 0보다 큰 유효한 숫자여야 합니다.",
+
+  sendErrorTitle: "전송 오류",
+  noIpConfigured: "설정된 IP가 없습니다.",
+  serverConnectionError: "서버에 연결할 수 없습니다.",
+  serverEmptyResponse: "서버가 메시지를 반환하지 않았습니다. HTTP 코드 {{status}}.",
+
+  entrySentTitle: "입고 전송됨",
+  entrySentText: "임신사 입고 이동이 성공적으로 전송되었습니다.",
+
+  exitSentTitle: "출고 전송됨",
+  exitByIdSentText: "ID 기준 임신사 출고가 성공적으로 전송되었습니다.",
+},
 };

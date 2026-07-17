@@ -559,6 +559,8 @@ capturaAnimalHome: {
   twoFeedsDescription: "Gérer le changement d'alimentation dans les sorties de distribution.",
   animalStatusTitle: "État de l'animal",
 animalStatusDescription: "Consulter ou mettre à jour l'état de l'animal.",
+birthCaptureTitle: "Saisie de mise bas",
+birthCaptureDescription: "Enregistrez les nés vivants, morts et momifiés.",
 },
 cambioPiensoMaternidad: {
   error: "Erreur",
@@ -594,33 +596,389 @@ estadoAnimal: {
   nextScreenPending: "Nous créerons l'écran d'information de l'animal à l'étape suivante."
 },
 matCorralDetail: {
+  readOnlyPermission: "Permission en lecture seule",
+readOnlyPermissionText: "Cet utilisateur dispose uniquement de permissions de lecture. Il ne peut pas effectuer d'opérations sur l'animal.",
   animalStatus: "État de l'animal",
   id: "ID",
   earTag: "Boucle",
   cycle: "Cycle",
   day: "Jour",
+
   curve: "Courbe",
   correction: "Correction",
   entryDate: "Date d'entrée",
   farrowingDate: "Date de mise bas",
   house: "Bâtiment",
-  pen: "Enclos",
+  pen: "Case",
   lastFeeding: "Dernière alimentation",
   presentPiglets: "Porcelets présents",
   inseminationDate: "Date d'insémination",
-  teatsNumber: "Nombre de tétines",
+  teatsNumber: "Nb de tétines",
+
   operations: "Opérations",
+
   consumption: "Consommation",
-  ofGrams: "sur {{amount}} gr",
+  ofGrams: "sur {{amount}} g",
   oneDayWithoutFeeding: "1 jour sans alimentation",
   daysWithoutFeeding: "{{count}} jours sans alimentation",
+
   noAnimalData: "Aucune donnée de l'animal",
   noAnimalDataText: "Aucune information n'a été reçue pour l'affichage.",
   back: "Retour",
   operationsPendingTitle: "Opérations",
-  operationsPendingText: "Nous ajouterons les opérations à l'étape suivante.",
+  operationsPendingText: "Nous effectuerons les opérations à l'étape suivante.",
   moveToWeaning: "Passer au sevrage",
+  chooseOption: "Sélectionnez une opération pour cet animal.",
+  nextOperation: "Opération suivante",
+  insertAnimal: "Insérer un animal",
+  moveToLactation: "Passer en lactation",
+  nextStep: "Étape suivante",
+  actions: "Actions",
 
-}
+  bodyCondition: "État corporel",
+  subState: "Sous-état",
+  pigletCapture: "Saisie des porcelets",
+  animalExit: "Sortie de l'animal",
+  replaceEarTag: "Remplacer la boucle",
+  changePen: "Changer de case",
+  anonymousAnimalId: "Identifiant d'animal anonyme",
+
+  cancel: "Annuler",
+  accept: "Accepter",
+  saving: "Enregistrement...",
+  error: "Erreur",
+
+  operationDone: "Opération réalisée avec succès.",
+  changeStateDone: "Sous-état mis à jour avec succès.",
+  changeStateError: "Impossible de changer l'état de l'animal.",
+  confirmNextOperation: "Voulez-vous vraiment passer à l'opération suivante ?",
+  pkidChangeStateNotFound: "L'identifiant interne de l'animal est introuvable.",
+
+  selectExitType: "Sélectionnez le type de sortie à appliquer.",
+  exitImmediate: "Sortie immédiate",
+  exitScheduled: "Sortie programmée",
+  exitScheduledEmptyHopper: "Sortie programmée avec trémie vide",
+  cancelScheduledExit: "Annuler la sortie programmée",
+  scheduledDate: "Date programmée",
+  exitDateLimitText: "Vous ne pouvez pas sélectionner une date antérieure à aujourd'hui ni supérieure à 3 jours.",
+  animalExitDone: "Sortie de l'animal réalisée avec succès.",
+  animalExitError: "Impossible de réaliser la sortie de l'animal.",
+  pkidExitNotFound: "L'identifiant interne de l'animal est introuvable.",
+
+  selectCurve: "Sélectionner une courbe",
+  selectCurveText: "Sélectionnez la nouvelle courbe de l'animal.",
+  loadingCurves: "Chargement des courbes...",
+  noCurvesAvailable: "Aucune courbe disponible.",
+  confirmChangeCurve: "Voulez-vous vraiment changer la courbe ?",
+  loadCurvesError: "Impossible de charger les courbes.",
+  pkidChangeCurveNotFound: "L'identifiant interne de l'animal est introuvable.",
+  changeCurveDone: "Courbe mise à jour avec succès.",
+  changeCurveError: "Impossible de changer la courbe.",
+
+  selectBodyConditionText: "Sélectionnez le nouvel état corporel de l'animal.",
+  loadingBodyConditions: "Chargement des états corporels...",
+  noBodyConditionsAvailable: "Aucun état corporel disponible.",
+  confirmChangeBodyCondition: "Voulez-vous vraiment changer l'état corporel ?",
+  loadBodyConditionsError: "Impossible de charger les états corporels.",
+  pkidChangeBodyConditionNotFound: "L'identifiant interne de l'animal est introuvable.",
+  changeBodyConditionDone: "État corporel mis à jour avec succès.",
+  changeBodyConditionError: "Impossible de changer l'état corporel.",
+
+  selectSubStateText: "Sélectionnez manuellement le nouveau sous-état de l'animal.",
+  confirmChangeSubState: "Voulez-vous vraiment changer le sous-état ?",
+
+  currentPen: "Case actuelle : {{pen}}",
+  newPen: "Nouvelle case",
+  enterNewPen: "Saisissez la nouvelle case.",
+  pkidChangePenNotFound: "L'identifiant interne de l'animal est introuvable.",
+  changePenDone: "Case mise à jour avec succès.",
+  changePenError: "Impossible de changer la case.",
+
+  currentEarTag: "Boucle actuelle : {{earTag}}",
+  newEarTag: "Nouvelle boucle",
+  enterNewEarTag: "Saisissez la nouvelle boucle.",
+  pkidEarTagNotFound: "L'identifiant interne de l'animal est introuvable.",
+  replaceEarTagDone: "Boucle mise à jour avec succès.",
+  replaceEarTagError: "Impossible de remplacer la boucle.",
+
+  identifyAnonymousAnimalText: "Choisissez si vous voulez attribuer un ID ou une boucle à l'animal.",
+  newId: "Nouvel ID",
+  enterNewId: "Saisissez le nouvel ID.",
+  idExample: "Ex : 1010",
+  earTagExample: "Ex : 123",
+  notAnonymousAnimalText: "Cet animal n'est pas anonyme car il possède déjà un ID ou une boucle.",
+  pkidIdentifyNotFound: "L'identifiant interne de l'animal est introuvable.",
+  identifyAnonymousAnimalDone: "Identifiant de l'animal mis à jour avec succès.",
+  identifyAnonymousAnimalError: "Impossible d'identifier l'animal anonyme.",
+
+  livePiglets: "Vivants",
+  deadPiglets: "Morts",
+  mummifiedPiglets: "Momifiés",
+  totalBornPiglets: "Total nés",
+  pigletCaptureText: "Saisissez les porcelets vivants, morts et momifiés.",
+  captureBeforeLactationText: "Enregistrez les naissances avant de passer en lactation.",
+  weaningPigletsOnlyRead: "Au sevrage, les porcelets peuvent uniquement être consultés.",
+  pkidPigletsNotFound: "L'identifiant interne de l'animal est introuvable.",
+  pigletCaptureDone: "Saisie des porcelets enregistrée avec succès.",
+  pigletCaptureError: "Impossible d'enregistrer la saisie des porcelets.",
+},
+subState: {
+  prepartum: "Pré-partum",
+  lactation: "Lactation",
+  weaning: "Sevrage",
+},
+
+capturaParto: {
+  birthDataTitle: "Données de mise bas",
+  birthDataSubtitle: "Vérifiez les données de l'animal avant d'enregistrer la mise bas.",
+  corral: "Case",
+  id: "ID",
+  date: "Date",
+  subState: "Sous-état",
+
+  dataCollectionTitle: "Collecte des données",
+  dataCollectionSubtitle: "Saisissez les nés vivants, morts et momifiés.",
+  weaningReadOnly: "Au sevrage, les données peuvent uniquement être consultées.",
+
+  totalBorn: "Total nés",
+  live: "Vivants",
+  dead: "Morts",
+  mummified: "Momifiés",
+
+  prepartum: "Pré-partum",
+  farrowing: "Mise bas",
+  lactation: "Lactation",
+  weaning: "Sevrage",
+
+  accept: "Accepter",
+  cancel: "Annuler",
+  saving: "Enregistrement...",
+
+  sentTitle: "Saisie envoyée",
+  sentMessage: "La saisie de mise bas a été enregistrée avec succès.",
+
+  errorTitle: "Erreur",
+  invalidAnimalTitle: "Animal non valide",
+  invalidAnimalText: "L'identifiant interne de l'animal est introuvable.",
+  reportSendError: "Impossible d'enregistrer la saisie de mise bas.",
+
+  invalidDateTitle: "Date non valide",
+  invalidDateMessage: "La date de mise bas ne peut pas être postérieure à aujourd'hui.",
+  changeDate: "Changer la date",
+
+  selectDateTitle: "Sélectionner une date",
+  selectDateMessage: "Ajustez la date de mise bas avec les boutons.",
+},
+
+capturaMaternidadEntrada: {
+  title: "Saisie de mise bas",
+  description: "Recherchez l'animal par case ou par ID pour enregistrer la mise bas.",
+  maternityLabel: "MATERNITÉ",
+
+  corral: "Case",
+  corralDescription: "Recherchez l'animal par numéro de case.",
+  id: "ID",
+  idDescription: "Recherchez l'animal par son identifiant.",
+  animalId: "ID animal",
+
+  corralExample: "Ex : 102",
+  idExample: "Ex : 1234",
+
+  consulting: "Recherche...",
+  continue: "Continuer",
+  accept: "Accepter",
+
+  serverConnectionError: "Impossible de se connecter au serveur.",
+},
+altaBajaStack: {
+  tituloPantalla: "Alta/Baixa de garrins",
+  descripcionPantalla: "Busca la mare per corral o ID per registrar altes o baixes de garrins.",
+},
+altaBajaLechones: {
+  heroTitle: "Mouvement de porcelets",
+  statusAlta: "Entrée",
+  statusBaja: "Sortie",
+
+  corralUpper: "CASE",
+  idUpper: "ID",
+  dateUpper: "DATE",
+
+  movementType: "Type de mouvement",
+  movementSubtitle: "Sélectionnez si vous souhaitez enregistrer une entrée ou une sortie.",
+  adoption: "Adoption",
+  baja: "Sortie",
+
+  adoptionData: "Données d'adoption",
+  donorMother: "Truie donneuse",
+  donatesPiglets: "Donne des porcelets",
+  id: "ID",
+  transferredPiglets: "Porcelets transférés",
+  totalAdopted: "Total adoptés",
+  total: "Total",
+
+  bajaReason: "Motif de sortie",
+  reasonCrushing: "Écrasement",
+  reasonDiarrhea: "Diarrhée",
+  reasonLowViability: "Faible viabilité",
+  reasonDeformities: "Déformations",
+  reasonOther: "Autres",
+
+  piglet: "porcelet",
+  piglets: "porcelets",
+  description: "Description",
+
+  editReason: "Modifier le motif",
+  addReason: "Ajouter un motif",
+  reasonModalText: "Indiquez le nombre de porcelets et décrivez le motif.",
+
+  saving: "Enregistrement...",
+  saveAlta: "Enregistrer l'entrée",
+  saveBaja: "Enregistrer la sortie",
+  accept: "Accepter",
+  cancel: "Annuler",
+
+  error: "Erreur",
+  missingData: "Données manquantes",
+  saveError: "Erreur d'enregistrement",
+  saveErrorText: "Impossible d'enregistrer l'opération.",
+  selectedAnimalPkidNotFound: "L'identifiant interne de l'animal sélectionné est introuvable.",
+
+  enterTransferredPiglets: "Saisissez le nombre de porcelets transférés.",
+  invalidTotalTitle: "Total non valide",
+  invalidPigletsNumber: "Saisissez un nombre valide de porcelets.",
+
+  missingDescriptionTitle: "Description obligatoire",
+  missingDescriptionText: "Saisissez la description du motif.",
+  invalidQuantityTitle: "Quantité non valide",
+  invalidPigletQuantity: "Saisissez une quantité valide de porcelets.",
+
+  selectReasonRequired: "Sélectionnez au moins un motif de sortie.",
+
+  adoptionSavedTitle: "Entrée enregistrée",
+  adoptionSavedMessage: "{{count}} porcelets ont été enregistrés correctement.",
+
+  bajasSavedTitle: "Sorties enregistrées",
+  bajasSavedMessage: "{{piglets}} sorties ont été enregistrées correctement pour {{reasons}} motif(s).",
+},
+avisoAplicacionNoConfigurada: {
+  title: "Application non configurée",
+  text: "Configurez l'adresse IP du serveur",
+  link: "Appuyez ici",
+},
+generalHome: {
+  movementAnimalTitle: "Mouvement animal",
+  readerDescription: "Lecteur de boucles auriculaires.",
+  keyboardDescription: "Clavier",
+
+  ctifeedTitle: "CTIFEED",
+  ctifeedDescription: "Accédez au portail principal.",
+
+  modalApplicationNotConfiguredTitle: "Application non configurée",
+  modalNoSessionTitle: "Session non démarrée",
+  modalInstallationUnavailableTitle: "Installation non disponible",
+  modalPreparingSessionTitle: "Préparation de la session",
+  modalReadOnlyPermissionTitle: "Permission en lecture seule",
+
+  modalApplicationNotConfiguredText: "Aucune installation n'est configurée. Allez dans Installations et sélectionnez-en une.",
+  modalNoSessionText: "L'installation possède une IP, mais aucune session n'est démarrée. Vérifiez le nom d'utilisateur et le mot de passe dans Installations.",
+  modalInstallationUnavailableText: "Impossible de se connecter à l'installation sélectionnée. Vérifiez que vous êtes connecté au bon réseau WiFi ou contrôlez l'IP du serveur.",
+  modalPreparingSessionText: "La session est encore en cours de chargement. Réessayez dans quelques secondes.",
+  modalReadOnlyPermissionText: "Votre utilisateur ne dispose pas des droits administrateur pour accéder à cette fonctionnalité.",
+
+  accept: "Accepter",
+
+  connectingTitle: "Connexion...",
+  connectingText: "Vérification de la connexion avec l'installation sélectionnée.",
+},
+movimientoAnimalMaternidad: {
+  smallLabel: "MOUVEMENT",
+  title: "Maternité",
+  subtitle: "Effectuez des entrées et sorties manuelles au clavier.",
+
+  movementType: "Type de mouvement",
+  entry: "Entrée",
+  exit: "Sortie",
+
+  searchAnimal: "Rechercher animal",
+  entryHelper: "Saisissez la case de destination et l'ID de l'animal.",
+  exitHelper: "Sélectionnez si vous voulez faire la sortie par case ou par ID.",
+
+  pen: "Case",
+  animalId: "ID animal",
+  type: "Type",
+
+  sending: "Envoi...",
+  accept: "Accepter",
+  cancel: "Annuler",
+
+  confirmEntry: "Confirmer l'entrée",
+  confirmExit: "Confirmer la sortie",
+  confirmSubtitle: "Vérifiez les données avant d'envoyer le mouvement.",
+
+  incompleteDataTitle: "Données incomplètes",
+  entryIncompleteText: "Saisissez la case et l'ID de l'animal.",
+  exitPenIncompleteText: "Saisissez la case pour effectuer la sortie.",
+  exitIdIncompleteText: "Saisissez l'ID de l'animal pour effectuer la sortie.",
+
+  invalidPenTitle: "Case non valide",
+  invalidPenText: "La case doit être un nombre valide supérieur à 0.",
+
+  sendErrorTitle: "Erreur d'envoi",
+  connectionErrorTitle: "Erreur de connexion",
+  noIpConfigured: "Aucune IP n'est configurée.",
+  serverConnectionError: "Impossible de se connecter au serveur.",
+  serverEmptyResponse: "Le serveur n'a renvoyé aucun message. Code HTTP {{status}}.",
+
+  entrySentTitle: "Entrée envoyée",
+  entrySentText: "Le mouvement d'entrée a été envoyé correctement.",
+
+  exitSentTitle: "Sortie envoyée",
+  exitByPenSentText: "La sortie par case a été envoyée correctement.",
+  exitByIdSentText: "La sortie par ID a été envoyée correctement.",
+},
+movimientoAnimalGestacion: {
+  smallLabel: "GESTATION",
+  title: "Mouvement animal",
+  subtitle: "Effectuez des entrées et sorties manuelles au clavier.",
+
+  movementType: "Type de mouvement",
+  entry: "Entrée",
+  exit: "Sortie",
+
+  searchAnimal: "Rechercher animal",
+  entryHelper: "Saisissez la case de destination et l'ID de l'animal.",
+  exitHelper: "Saisissez l'ID de l'animal pour effectuer la sortie de gestation.",
+
+  pen: "Case",
+  animalId: "ID animal",
+  type: "Type",
+
+  sending: "Envoi...",
+  accept: "Accepter",
+  cancel: "Annuler",
+
+  confirmEntry: "Confirmer l'entrée",
+  confirmExit: "Confirmer la sortie",
+  confirmSubtitle: "Vérifiez les données avant d'envoyer le mouvement.",
+
+  incompleteDataTitle: "Données incomplètes",
+  entryIncompleteText: "Saisissez la case et l'ID de l'animal.",
+  exitIdIncompleteText: "Saisissez l'ID de l'animal pour effectuer la sortie.",
+
+  invalidPenTitle: "Case non valide",
+  invalidPenText: "La case doit être un nombre valide supérieur à 0.",
+
+  sendErrorTitle: "Erreur d'envoi",
+  noIpConfigured: "Aucune IP n'est configurée.",
+  serverConnectionError: "Impossible de se connecter au serveur.",
+  serverEmptyResponse: "Le serveur n'a renvoyé aucun message. Code HTTP {{status}}.",
+
+  entrySentTitle: "Entrée envoyée",
+  entrySentText: "Le mouvement d'entrée en gestation a été envoyé correctement.",
+
+  exitSentTitle: "Sortie envoyée",
+  exitByIdSentText: "La sortie de gestation par ID a été envoyée correctement.",
+},
+
 
 };

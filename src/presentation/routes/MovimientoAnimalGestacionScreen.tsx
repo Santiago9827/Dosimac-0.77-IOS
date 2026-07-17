@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 type MovimientoTipo = 'entrada' | 'salida';
 
@@ -59,6 +60,8 @@ async function construirEndpointAppV1(ruta: string) {
 }
 
 export const MovimientoAnimalGestacionScreen = () => {
+    const { t } = useTranslation();
+
     const [movimiento, setMovimiento] = useState<MovimientoTipo>('entrada');
     const [enviandoMovimiento, setEnviandoMovimiento] = useState(false);
 
@@ -117,7 +120,9 @@ export const MovimientoAnimalGestacionScreen = () => {
 
     const obtenerMensajeBackend = (texto: string, status: number) => {
         if (!texto || texto.trim() === '') {
-            return `El servidor no devolvió mensaje. Código HTTP ${status}.`;
+            return t('movimientoAnimalGestacion.serverEmptyResponse', {
+                status,
+            });
         }
 
         try {
@@ -218,8 +223,8 @@ export const MovimientoAnimalGestacionScreen = () => {
             if (!idLimpio || !corralLimpio) {
                 mostrarModalMensaje(
                     'error',
-                    'Datos incompletos',
-                    'Introduce el corral y el ID del animal.'
+                    t('movimientoAnimalGestacion.incompleteDataTitle'),
+                    t('movimientoAnimalGestacion.entryIncompleteText')
                 );
                 return;
             }
@@ -227,8 +232,8 @@ export const MovimientoAnimalGestacionScreen = () => {
             if (!Number.isFinite(corralNumero) || corralNumero <= 0) {
                 mostrarModalMensaje(
                     'error',
-                    'Corral inválido',
-                    'El corral debe ser un número válido mayor que 0.'
+                    t('movimientoAnimalGestacion.invalidPenTitle'),
+                    t('movimientoAnimalGestacion.invalidPenText')
                 );
                 return;
             }
@@ -243,8 +248,8 @@ export const MovimientoAnimalGestacionScreen = () => {
 
                 mostrarModalMensaje(
                     'success',
-                    'Entrada enviada',
-                    'El movimiento de entrada en gestación se ha enviado correctamente.'
+                    t('movimientoAnimalGestacion.entrySentTitle'),
+                    t('movimientoAnimalGestacion.entrySentText')
                 );
 
                 setCorralEntrada('');
@@ -252,10 +257,10 @@ export const MovimientoAnimalGestacionScreen = () => {
             } catch (error: any) {
                 mostrarModalMensaje(
                     'error',
-                    'Error al enviar',
+                    t('movimientoAnimalGestacion.sendErrorTitle'),
                     error?.message === 'NO_IP_CONFIGURADA'
-                        ? 'No hay una IP configurada.'
-                        : error?.message || 'No se pudo conectar con el servidor.'
+                        ? t('movimientoAnimalGestacion.noIpConfigured')
+                        : error?.message || t('movimientoAnimalGestacion.serverConnectionError')
                 );
             } finally {
                 setEnviandoMovimiento(false);
@@ -269,8 +274,8 @@ export const MovimientoAnimalGestacionScreen = () => {
         if (!idSalidaLimpio) {
             mostrarModalMensaje(
                 'error',
-                'Datos incompletos',
-                'Introduce el ID del animal para hacer la salida.'
+                t('movimientoAnimalGestacion.incompleteDataTitle'),
+                t('movimientoAnimalGestacion.exitIdIncompleteText')
             );
             return;
         }
@@ -282,18 +287,18 @@ export const MovimientoAnimalGestacionScreen = () => {
 
             mostrarModalMensaje(
                 'success',
-                'Salida enviada',
-                'La salida por ID en gestación se ha enviado correctamente.'
+                t('movimientoAnimalGestacion.exitSentTitle'),
+                t('movimientoAnimalGestacion.exitByIdSentText')
             );
 
             setValorSalida('');
         } catch (error: any) {
             mostrarModalMensaje(
                 'error',
-                'Error al enviar',
+                t('movimientoAnimalGestacion.sendErrorTitle'),
                 error?.message === 'NO_IP_CONFIGURADA'
-                    ? 'No hay una IP configurada.'
-                    : error?.message || 'No se pudo conectar con el servidor.'
+                    ? t('movimientoAnimalGestacion.noIpConfigured')
+                    : error?.message || t('movimientoAnimalGestacion.serverConnectionError')
             );
         } finally {
             setEnviandoMovimiento(false);
@@ -343,15 +348,15 @@ export const MovimientoAnimalGestacionScreen = () => {
 
                             <View style={{ flex: 1 }}>
                                 <Text style={styles.smallLabel}>
-                                    GESTACIÓN
+                                    {t('movimientoAnimalGestacion.smallLabel')}
                                 </Text>
 
                                 <Text style={styles.title}>
-                                    Movimiento animal
+                                    {t('movimientoAnimalGestacion.title')}
                                 </Text>
 
                                 <Text style={styles.subtitle}>
-                                    Realiza entradas y salidas manuales por teclado.
+                                    {t('movimientoAnimalGestacion.subtitle')}
                                 </Text>
                             </View>
                         </View>
@@ -359,7 +364,7 @@ export const MovimientoAnimalGestacionScreen = () => {
 
                     <View style={styles.card}>
                         <Text style={styles.sectionTitle}>
-                            Tipo de movimiento
+                            {t('movimientoAnimalGestacion.movementType')}
                         </Text>
 
                         <View style={styles.segment}>
@@ -388,7 +393,7 @@ export const MovimientoAnimalGestacionScreen = () => {
                                         },
                                     ]}
                                 >
-                                    Entrada
+                                    {t('movimientoAnimalGestacion.entry')}
                                 </Text>
                             </TouchableOpacity>
 
@@ -417,7 +422,7 @@ export const MovimientoAnimalGestacionScreen = () => {
                                         },
                                     ]}
                                 >
-                                    Salida
+                                    {t('movimientoAnimalGestacion.exit')}
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -425,17 +430,19 @@ export const MovimientoAnimalGestacionScreen = () => {
 
                     <View style={styles.card}>
                         <Text style={styles.sectionTitle}>
-                            Buscar animal
+                            {t('movimientoAnimalGestacion.searchAnimal')}
                         </Text>
 
                         {movimiento === 'entrada' ? (
                             <>
                                 <Text style={styles.helperText}>
-                                    Introduce el corral de destino y el ID del animal.
+                                    {t('movimientoAnimalGestacion.entryHelper')}
                                 </Text>
 
                                 <View style={styles.inputGroup}>
-                                    <Text style={styles.inputLabel}>Corral</Text>
+                                    <Text style={styles.inputLabel}>
+                                        {t('movimientoAnimalGestacion.pen')}
+                                    </Text>
 
                                     <View style={styles.inputBox}>
                                         <Ionicons
@@ -458,7 +465,9 @@ export const MovimientoAnimalGestacionScreen = () => {
                                 </View>
 
                                 <View style={styles.inputGroup}>
-                                    <Text style={styles.inputLabel}>ID Animal</Text>
+                                    <Text style={styles.inputLabel}>
+                                        {t('movimientoAnimalGestacion.animalId')}
+                                    </Text>
 
                                     <View style={styles.inputBox}>
                                         <Ionicons
@@ -483,11 +492,13 @@ export const MovimientoAnimalGestacionScreen = () => {
                         ) : (
                             <>
                                 <Text style={styles.helperText}>
-                                    Introduce el ID del animal para hacer la salida de gestación.
+                                    {t('movimientoAnimalGestacion.exitHelper')}
                                 </Text>
 
                                 <View style={styles.inputGroup}>
-                                    <Text style={styles.inputLabel}>ID Animal</Text>
+                                    <Text style={styles.inputLabel}>
+                                        {t('movimientoAnimalGestacion.animalId')}
+                                    </Text>
 
                                     <View style={styles.inputBox}>
                                         <Ionicons
@@ -533,7 +544,9 @@ export const MovimientoAnimalGestacionScreen = () => {
                         />
 
                         <Text style={styles.acceptButtonText}>
-                            {enviandoMovimiento ? 'Enviando...' : 'Aceptar'}
+                            {enviandoMovimiento
+                                ? t('movimientoAnimalGestacion.sending')
+                                : t('movimientoAnimalGestacion.accept')}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -571,21 +584,23 @@ export const MovimientoAnimalGestacionScreen = () => {
 
                         <Text style={styles.modalTitle}>
                             {movimiento === 'entrada'
-                                ? 'Confirmar entrada'
-                                : 'Confirmar salida'}
+                                ? t('movimientoAnimalGestacion.confirmEntry')
+                                : t('movimientoAnimalGestacion.confirmExit')}
                         </Text>
 
                         <Text style={styles.modalSubtitle}>
-                            Revisa los datos antes de enviar el movimiento.
+                            {t('movimientoAnimalGestacion.confirmSubtitle')}
                         </Text>
 
                         <View style={styles.modalInfoBox}>
                             <Text style={styles.modalInfoLabel}>
-                                Tipo
+                                {t('movimientoAnimalGestacion.type')}
                             </Text>
 
                             <Text style={styles.modalInfoValue}>
-                                {movimiento === 'entrada' ? 'Entrada' : 'Salida'}
+                                {movimiento === 'entrada'
+                                    ? t('movimientoAnimalGestacion.entry')
+                                    : t('movimientoAnimalGestacion.exit')}
                             </Text>
                         </View>
 
@@ -593,7 +608,7 @@ export const MovimientoAnimalGestacionScreen = () => {
                             <>
                                 <View style={styles.modalInfoBox}>
                                     <Text style={styles.modalInfoLabel}>
-                                        Corral
+                                        {t('movimientoAnimalGestacion.pen')}
                                     </Text>
 
                                     <Text style={styles.modalInfoValue}>
@@ -603,7 +618,7 @@ export const MovimientoAnimalGestacionScreen = () => {
 
                                 <View style={styles.modalInfoBox}>
                                     <Text style={styles.modalInfoLabel}>
-                                        ID Animal
+                                        {t('movimientoAnimalGestacion.animalId')}
                                     </Text>
 
                                     <Text style={styles.modalInfoValue}>
@@ -614,7 +629,7 @@ export const MovimientoAnimalGestacionScreen = () => {
                         ) : (
                             <View style={styles.modalInfoBox}>
                                 <Text style={styles.modalInfoLabel}>
-                                    ID Animal
+                                    {t('movimientoAnimalGestacion.animalId')}
                                 </Text>
 
                                 <Text style={styles.modalInfoValue}>
@@ -630,7 +645,7 @@ export const MovimientoAnimalGestacionScreen = () => {
                                 style={styles.modalCancelButton}
                             >
                                 <Text style={styles.modalCancelText}>
-                                    Cancelar
+                                    {t('movimientoAnimalGestacion.cancel')}
                                 </Text>
                             </TouchableOpacity>
 
@@ -643,7 +658,7 @@ export const MovimientoAnimalGestacionScreen = () => {
                                 ]}
                             >
                                 <Text style={styles.modalAcceptText}>
-                                    Aceptar
+                                    {t('movimientoAnimalGestacion.accept')}
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -707,7 +722,7 @@ export const MovimientoAnimalGestacionScreen = () => {
                             onPress={() => setModalMensajeVisible(false)}
                         >
                             <Text style={styles.modalMessageButtonText}>
-                                Aceptar
+                                {t('movimientoAnimalGestacion.accept')}
                             </Text>
                         </TouchableOpacity>
                     </View>

@@ -150,6 +150,10 @@ export async function validarInstalacionActiva() {
   try {
     const endpoint = construirEndpointValidateTokenDesdeBase(baseUrlGuardada);
 
+    console.log("========== DEBUG VALIDAR INSTALACION ==========");
+    console.log("baseUrlGuardada:", baseUrlGuardada);
+    console.log("endpoint validateToken:", endpoint);
+
     const respuesta = await fetchConTimeout(
       endpoint,
       {
@@ -161,6 +165,10 @@ export async function validarInstalacionActiva() {
       },
       3500
     );
+
+    console.log("validateToken status:", respuesta.status);
+    console.log("validateToken ok:", respuesta.ok);
+    console.log("==============================================");
 
     if (respuesta.status === 404) {
       return {
@@ -177,7 +185,13 @@ export async function validarInstalacionActiva() {
       mensaje: "Instalación disponible.",
       status: respuesta.status,
     };
-  } catch {
+  } catch (error: any) {
+    console.log("========== ERROR VALIDAR INSTALACION ==========");
+    console.log("error name:", error?.name);
+    console.log("error message:", error?.message);
+    console.log("error completo:", error);
+    console.log("==============================================");
+
     return {
       ok: false,
       tipo: "sin_conexion" as const,

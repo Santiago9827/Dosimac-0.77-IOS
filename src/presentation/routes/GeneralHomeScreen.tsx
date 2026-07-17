@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 import {
     obtenerBaseUrlGuardada,
@@ -71,6 +72,8 @@ function GeneralCard({
 }
 
 export const GeneralHomeScreen = ({ navigation }: any) => {
+    const { t } = useTranslation();
+
     const [validandoConexion, setValidandoConexion] = useState(false);
     const [hayIpConfigurada, setHayIpConfigurada] = useState(false);
 
@@ -172,25 +175,25 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
 
     const tituloModal =
         tipoBloqueo === 'ip'
-            ? 'Aplicación no configurada'
+            ? t('generalHome.modalApplicationNotConfiguredTitle')
             : tipoBloqueo === 'login'
-                ? 'Sesión no iniciada'
+                ? t('generalHome.modalNoSessionTitle')
                 : tipoBloqueo === 'conexion'
-                    ? 'Instalación no disponible'
+                    ? t('generalHome.modalInstallationUnavailableTitle')
                     : tipoBloqueo === 'sesion'
-                        ? 'Preparando sesión'
-                        : 'Permiso solo lectura';
+                        ? t('generalHome.modalPreparingSessionTitle')
+                        : t('generalHome.modalReadOnlyPermissionTitle');
 
     const textoModal =
         tipoBloqueo === 'ip'
-            ? 'No hay ninguna instalación configurada. Ve a Instalaciones y selecciona una.'
+            ? t('generalHome.modalApplicationNotConfiguredText')
             : tipoBloqueo === 'login'
-                ? 'La instalación tiene IP, pero no hay sesión iniciada. Revisa el Username y la Clave en Instalaciones.'
+                ? t('generalHome.modalNoSessionText')
                 : tipoBloqueo === 'conexion'
-                    ? 'No se puede conectar con la instalación seleccionada. Comprueba que estás conectado a la red WiFi correcta o revisa la IP del servidor.'
+                    ? t('generalHome.modalInstallationUnavailableText')
                     : tipoBloqueo === 'sesion'
-                        ? 'La sesión todavía se está cargando. Inténtalo de nuevo en unos segundos.'
-                        : 'Tu usuario no tiene permisos de administrador para acceder a esta funcionalidad.';
+                        ? t('generalHome.modalPreparingSessionText')
+                        : t('generalHome.modalReadOnlyPermissionText');
 
     const iconoModal =
         tipoBloqueo === 'permiso'
@@ -207,8 +210,8 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
             >
                 <View style={styles.cardsWrapper}>
                     <GeneralCard
-                        titulo="Movimiento animal"
-                        descripcion="Lector de crotales."
+                        titulo={t('generalHome.movementAnimalTitle')}
+                        descripcion={t('generalHome.readerDescription')}
                         icono="radio-outline"
                         color="#0F766E"
                         fondoIcono="#DDF3EF"
@@ -217,8 +220,8 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                     />
 
                     <GeneralCard
-                        titulo="Movimiento animal"
-                        descripcion="Teclado"
+                        titulo={t('generalHome.movementAnimalTitle')}
+                        descripcion={t('generalHome.keyboardDescription')}
                         icono="swap-horizontal-outline"
                         color="#4338CA"
                         fondoIcono="#E0E7FF"
@@ -227,8 +230,8 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                     />
 
                     <GeneralCard
-                        titulo="CTIFEED"
-                        descripcion="Accede al portal principal."
+                        titulo={t('generalHome.ctifeedTitle')}
+                        descripcion={t('generalHome.ctifeedDescription')}
                         icono="enter-outline"
                         color="#2F6BFF"
                         fondoIcono="#DCE8FF"
@@ -268,7 +271,7 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                             onPress={() => setModalIpVisible(false)}
                         >
                             <Text style={styles.modalButtonText}>
-                                Aceptar
+                                {t('generalHome.accept')}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -285,11 +288,11 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                         <ActivityIndicator size="large" color={BRAND} />
 
                         <Text style={styles.loadingTitle}>
-                            Conectando...
+                            {t('generalHome.connectingTitle')}
                         </Text>
 
                         <Text style={styles.loadingText}>
-                            Comprobando conexión con la instalación seleccionada.
+                            {t('generalHome.connectingText')}
                         </Text>
                     </View>
                 </View>

@@ -4,11 +4,13 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  Modal,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { consultarNumeroPiensosMaternidad } from '../../stores/apiApp';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { useAuthStore } from '../../stores/authStore';
 
 const MORADO = '#4C1D95';
 const TEXTO = '#0F172A';
@@ -74,7 +76,7 @@ function TarjetaFuncionalidad({
           }}
         >
           <Ionicons
-            name={icono}
+            name={icono as any}
             size={27}
             color={color}
           />
@@ -110,8 +112,15 @@ function TarjetaFuncionalidad({
 
 export const CapturaAnimalHomeScreen = ({ navigation }: any) => {
   const { t } = useTranslation();
+
+  const rol = useAuthStore((s) => s.rol ?? []);
+  const esAdmin = rol.includes('admin');
+
   const [numeroPiensosMaternidad, setNumeroPiensosMaternidad] =
     useState<number | null>(null);
+
+  const [modalPermisoVisible, setModalPermisoVisible] =
+    useState(false);
 
   const cargarNumeroPiensosMaternidad = useCallback(async () => {
     try {
@@ -126,11 +135,22 @@ export const CapturaAnimalHomeScreen = ({ navigation }: any) => {
       setNumeroPiensosMaternidad(null);
     }
   }, []);
+
   useFocusEffect(
     useCallback(() => {
       cargarNumeroPiensosMaternidad();
     }, [cargarNumeroPiensosMaternidad]),
   );
+
+  const bloquearSiNoEsAdmin = () => {
+    if (!esAdmin) {
+      setModalPermisoVisible(true);
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <View
       style={{
@@ -175,6 +195,7 @@ export const CapturaAnimalHomeScreen = ({ navigation }: any) => {
               navigation.navigate('AnimalesNoAlimentados');
             }}
           />
+
           <TarjetaFuncionalidad
             titulo={t('capturaAnimalHome.animalStatusTitle')}
             descripcion={t('capturaAnimalHome.animalStatusDescription')}
@@ -199,6 +220,19 @@ export const CapturaAnimalHomeScreen = ({ navigation }: any) => {
             />
           ) : null}
 
+          <TarjetaFuncionalidad
+            titulo={t('capturaAnimalHome.birthCaptureTitle')}
+            descripcion={t('capturaAnimalHome.birthCaptureDescription')}
+            icono="clipboard-outline"
+            color="#0F766E"
+            fondoIcono="#DDF3EF"
+            onPress={() => {
+              if (bloquearSiNoEsAdmin()) return;
+
+              navigation.navigate('CapturaDatosMaternidad');
+            }}
+          />
+
           <View
             style={{
               marginTop: 12,
@@ -213,7 +247,115 @@ export const CapturaAnimalHomeScreen = ({ navigation }: any) => {
           </View>
         </View>
       </ScrollView>
+
+      <Modal
+        visible={modalPermisoVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalPermisoVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(15, 23, 42, 0.45)',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 24,
+          }}
+        >
+          <View
+            style={{
+              width: '100%',
+              maxWidth: 390,
+              backgroundColor: '#FFFFFF',
+              borderRadius: 24,
+              padding: 22,
+              shadowColor: '#000',
+              shadowOpacity: 0.12,
+              shadowRadius: 10,
+              shadowOffset: { width: 0, height: 5 },
+            }}
+          >
+            <View
+              style={{
+                alignItems: 'center',
+                marginBottom: 16,
+              }}
+            >
+              <View
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: 28,
+                  backgroundColor: '#EEF2FF',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 12,
+                }}
+              >
+                <Ionicons
+                  name="lock-closed-outline"
+                  size={28}
+                  color={MORADO}
+                />
+              </View>
+
+              <Text
+                style={{
+                  fontSize: 23,
+                  fontWeight: '900',
+                  color: TEXTO,
+                  textAlign: 'center',
+                }}
+              >
+                {t('capturaAnimalHome.modalReadOnlyTitle', {
+                  defaultValue: 'Permiso solo lectura',
+                })}
+              </Text>
+            </View>
+
+            <Text
+              style={{
+                fontSize: 16,
+                color: TEXTO_SECUNDARIO,
+                textAlign: 'center',
+                lineHeight: 23,
+                marginBottom: 22,
+                fontWeight: '600',
+              }}
+            >
+              {t('capturaAnimalHome.modalReadOnlyText', {
+                defaultValue:
+                  'Tu usuario no tiene permisos de administrador para acceder a esta funcionalidad.',
+              })}
+            </Text>
+
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => setModalPermisoVisible(false)}
+              style={{
+                height: 44,
+                borderRadius: 14,
+                backgroundColor: MORADO,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Text
+                style={{
+                  color: '#FFFFFF',
+                  fontSize: 15,
+                  fontWeight: '900',
+                }}
+              >
+                {t('capturaAnimalHome.accept', {
+                  defaultValue: 'Aceptar',
+                })}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
-

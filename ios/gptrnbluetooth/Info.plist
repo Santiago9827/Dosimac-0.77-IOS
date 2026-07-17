@@ -25,12 +25,30 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
+<dict>
+	<key>NSAllowsArbitraryLoads</key>
+	<false/>
+
+	<key>NSAllowsLocalNetworking</key>
+	<true/>
+
+	<key>NSAllowsArbitraryLoadsInWebContent</key>
+	<true/>
+
+	<key>NSExceptionDomains</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<false/>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
+		<key>162.19.189.57</key>
+		<dict>
+			<key>NSExceptionAllowsInsecureHTTPLoads</key>
+			<true/>
+			<key>NSIncludesSubdomains</key>
+			<true/>
+		</dict>
 	</dict>
+</dict>
+
+<key>NSLocalNetworkUsageDescription</key>
+<string>La app necesita conectarse al servidor de la instalación configurado por el usuario para validar la instalación, sincronizar datos y mostrar CTIFEED.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Necesitamos Bluetooth para detectar y configurar los dispositivos DOSIMAC.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>

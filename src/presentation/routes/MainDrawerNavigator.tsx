@@ -11,6 +11,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { BottomTabNavigator } from './BottomTabNavigator';
 import { DRStackNavigator } from './dr_StackNavigator';
+import { SettingsStackNavigator } from './SettingsStackNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -50,6 +51,9 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
                 screen: 'GeneralTab',
             });
         }, 120);
+    };
+    const goToAjustes = () => {
+        closeAndNavigate('Settings');
     };
 
     const goToConfiguracionIp = () => {
@@ -306,6 +310,15 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
                     }}
                 />
 
+                {isAltaTab && (
+                    <DrawerButton
+                        label="Ajustes"
+                        icon="settings-outline"
+                        active={activeDrawerRoute === 'Settings'}
+                        onPress={goToAjustes}
+                    />
+                )}
+
                 <Text
                     style={{
                         marginTop: 8,
@@ -346,6 +359,14 @@ export const MainDrawerNavigator = () => {
             <Drawer.Screen
                 name="Register"
                 component={DRStackNavigator}
+                options={{
+                    drawerItemStyle: { height: 0 },
+                    drawerLabel: () => null,
+                }}
+            />
+            <Drawer.Screen
+                name="Settings"
+                component={SettingsStackNavigator}
                 options={{
                     drawerItemStyle: { height: 0 },
                     drawerLabel: () => null,

@@ -563,6 +563,8 @@ capturaAnimalHome: {
   twoFeedsDescription: "Керування зміною корму у випускних отворах.",
   animalStatusTitle: "Стан тварини",
 animalStatusDescription: "Переглянути або оновити стан тварини.",
+birthCaptureTitle: "Реєстрація опоросу",
+birthCaptureDescription: "Зареєструйте живонароджених, мертвих і муміфікованих поросят.",
 },
 cambioPiensoMaternidad: {
   error: "Помилка",
@@ -599,32 +601,383 @@ estadoAnimal: {
 },
 
 matCorralDetail: {
+  readOnlyPermission: "Дозвіл лише на читання",
+readOnlyPermissionText: "Цей користувач має лише права на читання. Він не може виконувати операції з твариною.",
   animalStatus: "Стан тварини",
   id: "ID",
   earTag: "Бирка",
   cycle: "Цикл",
   day: "День",
+
   curve: "Крива",
   correction: "Корекція",
-  entryDate: "Дата входу",
+  entryDate: "Дата надходження",
   farrowingDate: "Дата опоросу",
   house: "Корпус",
-  pen: "Загін",
+  pen: "Станок",
   lastFeeding: "Останнє годування",
-  presentPiglets: "Наявні поросята",
+  presentPiglets: "Поросята на місці",
   inseminationDate: "Дата осіменіння",
-  teatsNumber: "Кількість сосків",
+  teatsNumber: "К-сть сосків",
+
   operations: "Операції",
+
   consumption: "Споживання",
-  ofGrams: "з {{amount}} гр",
+  ofGrams: "з {{amount}} г",
   oneDayWithoutFeeding: "1 день без годування",
   daysWithoutFeeding: "{{count}} днів без годування",
-  noAnimalData: "Немає даних про тварину",
-  noAnimalDataText: "Інформацію для відображення не отримано.",
+
+  noAnimalData: "Немає даних тварини",
+  noAnimalDataText: "Не отримано інформації для відображення.",
   back: "Назад",
   operationsPendingTitle: "Операції",
-  operationsPendingText: "Операції додамо на наступному кроці.",
+  operationsPendingText: "Операції виконаємо на наступному кроці.",
   moveToWeaning: "Перевести на відлучення",
+  chooseOption: "Виберіть операцію для цієї тварини.",
+  nextOperation: "Наступна операція",
+  insertAnimal: "Додати тварину",
+  moveToLactation: "Перевести в лактацію",
+  nextStep: "Наступний крок",
+  actions: "Дії",
 
-}
+  bodyCondition: "Стан вгодованості",
+  subState: "Підстан",
+  pigletCapture: "Реєстрація поросят",
+  animalExit: "Виведення тварини",
+  replaceEarTag: "Замінити бирку",
+  changePen: "Змінити станок",
+  anonymousAnimalId: "Ідентифікатор анонімної тварини",
+
+  cancel: "Скасувати",
+  accept: "Прийняти",
+  saving: "Збереження...",
+  error: "Помилка",
+
+  operationDone: "Операцію успішно виконано.",
+  changeStateDone: "Підстан успішно оновлено.",
+  changeStateError: "Не вдалося змінити стан тварини.",
+  confirmNextOperation: "Ви впевнені, що хочете перейти до наступної операції?",
+  pkidChangeStateNotFound: "Внутрішній ідентифікатор тварини не знайдено.",
+
+  selectExitType: "Виберіть тип виведення, який потрібно застосувати.",
+  exitImmediate: "Негайне виведення",
+  exitScheduled: "Заплановане виведення",
+  exitScheduledEmptyHopper: "Заплановане виведення з порожнім бункером",
+  cancelScheduledExit: "Скасувати заплановане виведення",
+  scheduledDate: "Запланована дата",
+  exitDateLimitText: "Не можна вибрати дату раніше сьогоднішньої або пізніше ніж через 3 дні.",
+  animalExitDone: "Виведення тварини успішно виконано.",
+  animalExitError: "Не вдалося виконати виведення тварини.",
+  pkidExitNotFound: "Внутрішній ідентифікатор тварини не знайдено.",
+
+  selectCurve: "Вибрати криву",
+  selectCurveText: "Виберіть нову криву тварини.",
+  loadingCurves: "Завантаження кривих...",
+  noCurvesAvailable: "Немає доступних кривих.",
+  confirmChangeCurve: "Ви впевнені, що хочете змінити криву?",
+  loadCurvesError: "Не вдалося завантажити криві.",
+  pkidChangeCurveNotFound: "Внутрішній ідентифікатор тварини не знайдено.",
+  changeCurveDone: "Криву успішно оновлено.",
+  changeCurveError: "Не вдалося змінити криву.",
+
+  selectBodyConditionText: "Виберіть новий стан вгодованості тварини.",
+  loadingBodyConditions: "Завантаження станів вгодованості...",
+  noBodyConditionsAvailable: "Немає доступних станів вгодованості.",
+  confirmChangeBodyCondition: "Ви впевнені, що хочете змінити стан вгодованості?",
+  loadBodyConditionsError: "Не вдалося завантажити стани вгодованості.",
+  pkidChangeBodyConditionNotFound: "Внутрішній ідентифікатор тварини не знайдено.",
+  changeBodyConditionDone: "Стан вгодованості успішно оновлено.",
+  changeBodyConditionError: "Не вдалося змінити стан вгодованості.",
+
+  selectSubStateText: "Вручну виберіть новий підстан тварини.",
+  confirmChangeSubState: "Ви впевнені, що хочете змінити підстан?",
+
+  currentPen: "Поточний станок: {{pen}}",
+  newPen: "Новий станок",
+  enterNewPen: "Введіть новий станок.",
+  pkidChangePenNotFound: "Внутрішній ідентифікатор тварини не знайдено.",
+  changePenDone: "Станок успішно оновлено.",
+  changePenError: "Не вдалося змінити станок.",
+
+  currentEarTag: "Поточна бирка: {{earTag}}",
+  newEarTag: "Нова бирка",
+  enterNewEarTag: "Введіть нову бирку.",
+  pkidEarTagNotFound: "Внутрішній ідентифікатор тварини не знайдено.",
+  replaceEarTagDone: "Бирку успішно оновлено.",
+  replaceEarTagError: "Не вдалося замінити бирку.",
+
+  identifyAnonymousAnimalText: "Виберіть, чи потрібно призначити тварині ID або бирку.",
+  newId: "Новий ID",
+  enterNewId: "Введіть новий ID.",
+  idExample: "Напр.: 1010",
+  earTagExample: "Напр.: 123",
+  notAnonymousAnimalText: "Ця тварина не є анонімною, оскільки вже має призначений ID або бирку.",
+  pkidIdentifyNotFound: "Внутрішній ідентифікатор тварини не знайдено.",
+  identifyAnonymousAnimalDone: "Ідентифікатор тварини успішно оновлено.",
+  identifyAnonymousAnimalError: "Не вдалося ідентифікувати анонімну тварину.",
+
+  livePiglets: "Живі",
+  deadPiglets: "Мертві",
+  mummifiedPiglets: "Муміфіковані",
+  totalBornPiglets: "Усього народжено",
+  pigletCaptureText: "Введіть кількість живих, мертвих і муміфікованих поросят.",
+  captureBeforeLactationText: "Зареєструйте народжених поросят перед переходом у лактацію.",
+  weaningPigletsOnlyRead: "На етапі відлучення поросят можна лише переглядати.",
+  pkidPigletsNotFound: "Внутрішній ідентифікатор тварини не знайдено.",
+  pigletCaptureDone: "Реєстрацію поросят успішно збережено.",
+  pigletCaptureError: "Не вдалося зберегти реєстрацію поросят.",
+},
+subState: {
+  prepartum: "Передпологовий період",
+  lactation: "Лактація",
+  weaning: "Відлучення",
+},
+
+capturaParto: {
+  birthDataTitle: "Дані опоросу",
+  birthDataSubtitle: "Перевірте дані тварини перед реєстрацією опоросу.",
+  corral: "Станок",
+  id: "ID",
+  date: "Дата",
+  subState: "Підстан",
+
+  dataCollectionTitle: "Збір даних",
+  dataCollectionSubtitle: "Введіть кількість живонароджених, мертвих і муміфікованих поросят.",
+  weaningReadOnly: "На етапі відлучення дані можна лише переглядати.",
+
+  totalBorn: "Усього народжено",
+  live: "Живі",
+  dead: "Мертві",
+  mummified: "Муміфіковані",
+
+  prepartum: "Передпологовий період",
+  farrowing: "Опорос",
+  lactation: "Лактація",
+  weaning: "Відлучення",
+
+  accept: "Прийняти",
+  cancel: "Скасувати",
+  saving: "Збереження...",
+
+  sentTitle: "Запис надіслано",
+  sentMessage: "Реєстрацію опоросу успішно збережено.",
+
+  errorTitle: "Помилка",
+  invalidAnimalTitle: "Недійсна тварина",
+  invalidAnimalText: "Внутрішній ідентифікатор тварини не знайдено.",
+  reportSendError: "Не вдалося зберегти реєстрацію опоросу.",
+
+  invalidDateTitle: "Недійсна дата",
+  invalidDateMessage: "Дата опоросу не може бути пізнішою за сьогодні.",
+  changeDate: "Змінити дату",
+
+  selectDateTitle: "Вибрати дату",
+  selectDateMessage: "Налаштуйте дату опоросу за допомогою кнопок.",
+},
+
+capturaMaternidadEntrada: {
+  title: "Реєстрація опоросу",
+  description: "Знайдіть тварину за станком або ID, щоб зареєструвати опорос.",
+  maternityLabel: "МАТЕРИНСТВО",
+
+  corral: "Станок",
+  corralDescription: "Знайдіть тварину за номером станка.",
+  id: "ID",
+  idDescription: "Знайдіть тварину за її ідентифікатором.",
+  animalId: "ID тварини",
+
+  corralExample: "Напр.: 102",
+  idExample: "Напр.: 1234",
+
+  consulting: "Пошук...",
+  continue: "Продовжити",
+  accept: "Прийняти",
+
+  serverConnectionError: "Не вдалося підключитися до сервера.",
+},
+altaBajaLechones: {
+  heroTitle: "Переміщення поросят",
+  statusAlta: "Додавання",
+  statusBaja: "Вибуття",
+
+  corralUpper: "СТАНОК",
+  idUpper: "ID",
+  dateUpper: "ДАТА",
+
+  movementType: "Тип переміщення",
+  movementSubtitle: "Виберіть, чи хочете зареєструвати додавання або вибуття.",
+  adoption: "Усиновлення",
+  baja: "Вибуття",
+
+  adoptionData: "Дані усиновлення",
+  donorMother: "Свиноматка-донор",
+  donatesPiglets: "Віддає поросят",
+  id: "ID",
+  transferredPiglets: "Переміщені поросята",
+  totalAdopted: "Усього усиновлено",
+  total: "Усього",
+
+  bajaReason: "Причина вибуття",
+  reasonCrushing: "Задавлювання",
+  reasonDiarrhea: "Діарея",
+  reasonLowViability: "Низька життєздатність",
+  reasonDeformities: "Деформації",
+  reasonOther: "Інше",
+
+  piglet: "порося",
+  piglets: "поросята",
+  description: "Опис",
+
+  editReason: "Редагувати причину",
+  addReason: "Додати причину",
+  reasonModalText: "Вкажіть кількість поросят і опишіть причину.",
+
+  saving: "Збереження...",
+  saveAlta: "Зберегти додавання",
+  saveBaja: "Зберегти вибуття",
+  accept: "Прийняти",
+  cancel: "Скасувати",
+
+  error: "Помилка",
+  missingData: "Бракує даних",
+  saveError: "Помилка збереження",
+  saveErrorText: "Не вдалося зберегти операцію.",
+  selectedAnimalPkidNotFound: "Внутрішній ідентифікатор вибраної тварини не знайдено.",
+
+  enterTransferredPiglets: "Введіть кількість переміщених поросят.",
+  invalidTotalTitle: "Недійсна загальна кількість",
+  invalidPigletsNumber: "Введіть дійсну кількість поросят.",
+
+  missingDescriptionTitle: "Опис обов'язковий",
+  missingDescriptionText: "Введіть опис причини.",
+  invalidQuantityTitle: "Недійсна кількість",
+  invalidPigletQuantity: "Введіть дійсну кількість поросят.",
+
+  selectReasonRequired: "Виберіть хоча б одну причину вибуття.",
+
+  adoptionSavedTitle: "Додавання збережено",
+  adoptionSavedMessage: "{{count}} поросят успішно зареєстровано.",
+
+  bajasSavedTitle: "Вибуття збережено",
+  bajasSavedMessage: "{{piglets}} випадків вибуття успішно зареєстровано за {{reasons}} причиною(ами).",
+},
+avisoAplicacionNoConfigurada: {
+  title: "Застосунок не налаштовано",
+  text: "Налаштуйте IP-адресу сервера",
+  link: "Натисніть тут",
+},
+generalHome: {
+  movementAnimalTitle: "Переміщення тварин",
+  readerDescription: "Зчитувач вушних бирок.",
+  keyboardDescription: "Клавіатура",
+
+  ctifeedTitle: "CTIFEED",
+  ctifeedDescription: "Перейти до головного порталу.",
+
+  modalApplicationNotConfiguredTitle: "Застосунок не налаштовано",
+  modalNoSessionTitle: "Сесію не розпочато",
+  modalInstallationUnavailableTitle: "Установка недоступна",
+  modalPreparingSessionTitle: "Підготовка сесії",
+  modalReadOnlyPermissionTitle: "Дозвіл лише на читання",
+
+  modalApplicationNotConfiguredText: "Немає налаштованої установки. Перейдіть до розділу Установки та виберіть одну.",
+  modalNoSessionText: "Установка має IP-адресу, але сесію не розпочато. Перевірте ім'я користувача та пароль у розділі Установки.",
+  modalInstallationUnavailableText: "Не вдається підключитися до вибраної установки. Перевірте, чи підключені ви до правильної мережі WiFi, або перевірте IP-адресу сервера.",
+  modalPreparingSessionText: "Сесія ще завантажується. Спробуйте ще раз через кілька секунд.",
+  modalReadOnlyPermissionText: "Ваш користувач не має прав адміністратора для доступу до цієї функції.",
+
+  accept: "Прийняти",
+
+  connectingTitle: "Підключення...",
+  connectingText: "Перевірка з'єднання з вибраною установкою.",
+},
+movimientoAnimalMaternidad: {
+  smallLabel: "ПЕРЕМІЩЕННЯ",
+  title: "Материнство",
+  subtitle: "Виконуйте ручні введення та виведення за допомогою клавіатури.",
+
+  movementType: "Тип переміщення",
+  entry: "Введення",
+  exit: "Виведення",
+
+  searchAnimal: "Знайти тварину",
+  entryHelper: "Введіть цільовий станок та ID тварини.",
+  exitHelper: "Виберіть, чи хочете виконати виведення за станком або за ID.",
+
+  pen: "Станок",
+  animalId: "ID тварини",
+  type: "Тип",
+
+  sending: "Надсилання...",
+  accept: "Прийняти",
+  cancel: "Скасувати",
+
+  confirmEntry: "Підтвердити введення",
+  confirmExit: "Підтвердити виведення",
+  confirmSubtitle: "Перевірте дані перед надсиланням переміщення.",
+
+  incompleteDataTitle: "Неповні дані",
+  entryIncompleteText: "Введіть станок та ID тварини.",
+  exitPenIncompleteText: "Введіть станок для виконання виведення.",
+  exitIdIncompleteText: "Введіть ID тварини для виконання виведення.",
+
+  invalidPenTitle: "Недійсний станок",
+  invalidPenText: "Станок має бути дійсним числом більше 0.",
+
+  sendErrorTitle: "Помилка надсилання",
+  connectionErrorTitle: "Помилка з'єднання",
+  noIpConfigured: "IP-адресу не налаштовано.",
+  serverConnectionError: "Не вдалося підключитися до сервера.",
+  serverEmptyResponse: "Сервер не повернув повідомлення. HTTP-код {{status}}.",
+
+  entrySentTitle: "Введення надіслано",
+  entrySentText: "Переміщення введення успішно надіслано.",
+
+  exitSentTitle: "Виведення надіслано",
+  exitByPenSentText: "Виведення за станком успішно надіслано.",
+  exitByIdSentText: "Виведення за ID успішно надіслано.",
+},
+movimientoAnimalGestacion: {
+  smallLabel: "СУПОРОСНІСТЬ",
+  title: "Переміщення тварин",
+  subtitle: "Виконуйте ручні введення та виведення за допомогою клавіатури.",
+
+  movementType: "Тип переміщення",
+  entry: "Введення",
+  exit: "Виведення",
+
+  searchAnimal: "Знайти тварину",
+  entryHelper: "Введіть цільовий станок та ID тварини.",
+  exitHelper: "Введіть ID тварини, щоб виконати виведення із супоросності.",
+
+  pen: "Станок",
+  animalId: "ID тварини",
+  type: "Тип",
+
+  sending: "Надсилання...",
+  accept: "Прийняти",
+  cancel: "Скасувати",
+
+  confirmEntry: "Підтвердити введення",
+  confirmExit: "Підтвердити виведення",
+  confirmSubtitle: "Перевірте дані перед надсиланням переміщення.",
+
+  incompleteDataTitle: "Неповні дані",
+  entryIncompleteText: "Введіть станок та ID тварини.",
+  exitIdIncompleteText: "Введіть ID тварини для виконання виведення.",
+
+  invalidPenTitle: "Недійсний станок",
+  invalidPenText: "Станок має бути дійсним числом більше 0.",
+
+  sendErrorTitle: "Помилка надсилання",
+  noIpConfigured: "IP-адресу не налаштовано.",
+  serverConnectionError: "Не вдалося підключитися до сервера.",
+  serverEmptyResponse: "Сервер не повернув повідомлення. HTTP-код {{status}}.",
+
+  entrySentTitle: "Введення надіслано",
+  entrySentText: "Переміщення введення в супоросності успішно надіслано.",
+
+  exitSentTitle: "Виведення надіслано",
+  exitByIdSentText: "Виведення із супоросності за ID успішно надіслано.",
+},
 };

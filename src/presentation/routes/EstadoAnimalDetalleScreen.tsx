@@ -18,8 +18,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
 import {
     ejecutarOperacionMaternidad, consultarCurvas, consultarCondicionesCorporales, enviarReporteNacidos,
-    consultarMaternidadPorPkid,
+    consultarMaternidadPorPkid, consultarMaternidadPorCorral
 } from '../../stores/apiApp';
+import { useAuthStore } from '../../stores/authStore';
 
 const BG = '#F1F5F9';
 const TEXT = '#0F172A';
@@ -313,6 +314,13 @@ export const EstadoAnimalDetalleScreen = ({
 }: any) => {
     const { t } = useTranslation();
     const route = useRoute<any>();
+    const rol = useAuthStore((s) => s.rol ?? []);
+    const esAdmin = Array.isArray(rol)
+        ? rol.includes('admin')
+        : String(rol).includes('admin');
+
+    const [modalSoloLecturaVisible, setModalSoloLecturaVisible] =
+        useState(false);
 
     const params = route.params ?? {};
     const corralId = params.corralId;
@@ -366,13 +374,16 @@ export const EstadoAnimalDetalleScreen = ({
     const [guardandoOperacion, setGuardandoOperacion] =
         useState(false);
 
-    const pkidAnimalOperacion = Number(
-        datosMaternidad?.animal?.id ??
-        datosMaternidad?.id ??
-        mockData?.datosOriginales?.animal?.id ??
-        mockData?.datosOriginales?.id ??
-        0,
-    );
+    const [pkidAnimalOperacion, setPkidAnimalOperacion] =
+        useState(() =>
+            Number(
+                datosMaternidad?.animal?.id ??
+                datosMaternidad?.id ??
+                mockData?.datosOriginales?.animal?.id ??
+                mockData?.datosOriginales?.id ??
+                0,
+            ),
+        );
 
     const pkidValido =
         Number.isFinite(pkidAnimalOperacion) &&
@@ -624,6 +635,14 @@ export const EstadoAnimalDetalleScreen = ({
 
     const cerrarOperaciones = () => {
         setModalOperacionesVisible(false);
+    };
+    const abrirOperaciones = () => {
+        if (!esAdmin) {
+            setModalSoloLecturaVisible(true);
+            return;
+        }
+
+        setModalOperacionesVisible(true);
     };
     const abrirModalSalidaAnimal = () => {
         cerrarOperaciones();
@@ -1344,7 +1363,102 @@ export const EstadoAnimalDetalleScreen = ({
             setModalIdentificadorAnonimoVisible(true);
         }, 200);
     };
+    const refrescarAnimalPorCorral = async () => {
+        const corralActual = String(corralVisual ?? '').trim();
 
+        if (!corralActual || corralActual === '—') {
+            return;
+        }
+
+        try {
+            const datosActualizados = await consultarMaternidadPorCorral(
+                corralActual,
+            );
+
+            console.log('===== ANIMAL REFRESCADO POR CORRAL =====');
+            console.log(
+                JSON.stringify(datosActualizados?.animal, null, 2),
+            );
+
+            const animalActualizado = datosActualizados?.animal ?? {};
+            const pkidActualizado = Number(
+                animalActualizado?.id ??
+                datosActualizados?.animal?.id ??
+                datosActualizados?.id ??
+                0,
+            );
+
+            console.log('PKID ACTUALIZADO POR CORRAL:', pkidActualizado);
+
+            if (
+                Number.isFinite(pkidActualizado) &&
+                pkidActualizado > 0
+            ) {
+                setPkidAnimalOperacion(pkidActualizado);
+            }
+
+            setIdVisual(
+                animalActualizado?.animalId !== null &&
+                    animalActualizado?.animalId !== undefined
+                    ? String(animalActualizado.animalId)
+                    : '—',
+            );
+
+            setCrotalVisual(
+                animalActualizado?.crotal !== null &&
+                    animalActualizado?.crotal !== undefined
+                    ? String(animalActualizado.crotal)
+                    : '—',
+            );
+
+            setCorralVisual(
+                animalActualizado?.corralName !== null &&
+                    animalActualizado?.corralName !== undefined
+                    ? String(animalActualizado.corralName)
+                    : corralActual,
+            );
+
+            if (animalActualizado?.bodyConditionCorrection !== undefined) {
+                setCondicionVisual(
+                    String(animalActualizado.bodyConditionCorrection),
+                );
+            }
+
+            const subStateBackend =
+                animalActualizado?.subState ??
+                datosActualizados?.subState;
+
+            if (subStateBackend) {
+                setSubEstadoVisual(
+                    obtenerTextoSubEstado(
+                        normalizarSubEstado(subStateBackend),
+                    ),
+                );
+            }
+
+            const lechonesPresentesBackend = Number(
+                datosActualizados?.totalPigletsPresent ??
+                animalActualizado?.totalPigletsPresent,
+            );
+
+            if (Number.isFinite(lechonesPresentesBackend)) {
+                setLechonesPresentesVisual(lechonesPresentesBackend);
+            }
+
+            if (datosActualizados?.farrowingDate) {
+                setFechaPartoVisual(
+                    formatearFechaDDMMYYYY(
+                        parsearFechaLocal(datosActualizados.farrowingDate),
+                    ),
+                );
+            }
+        } catch (error) {
+            console.log(
+                'No se pudo refrescar el animal por corral:',
+                error,
+            );
+        }
+    };
     const aplicarIdentificadorAnonimo = async () => {
         const valorLimpio = valorIdentificadorAnonimo.trim();
 
@@ -1407,11 +1521,7 @@ export const EstadoAnimalDetalleScreen = ({
 
             await ejecutarOperacionMaternidad(payloadIdentificadorAnonimo);
 
-            if (tipoIdentificadorAnonimo === 'id') {
-                setIdVisual(valorLimpio);
-            } else {
-                setCrotalVisual(valorLimpio);
-            }
+            await refrescarAnimalPorCorral();
 
             setModalIdentificadorAnonimoVisible(false);
 
@@ -1864,9 +1974,7 @@ export const EstadoAnimalDetalleScreen = ({
 
             <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => {
-                    setModalOperacionesVisible(true);
-                }}
+                onPress={abrirOperaciones}
                 style={styles.fab}
             >
                 <Text style={styles.fabText}>
@@ -1875,6 +1983,114 @@ export const EstadoAnimalDetalleScreen = ({
                     })}
                 </Text>
             </TouchableOpacity>
+            <Modal
+                visible={modalSoloLecturaVisible}
+                transparent
+                animationType="fade"
+                onRequestClose={() => setModalSoloLecturaVisible(false)}
+            >
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: 'rgba(15, 23, 42, 0.45)',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingHorizontal: 24,
+                    }}
+                >
+                    <View
+                        style={{
+                            width: '100%',
+                            maxWidth: 390,
+                            backgroundColor: '#FFFFFF',
+                            borderRadius: 28,
+                            paddingHorizontal: 22,
+                            paddingVertical: 28,
+                            alignItems: 'center',
+                            shadowColor: '#000',
+                            shadowOpacity: 0.12,
+                            shadowRadius: 14,
+                            shadowOffset: {
+                                width: 0,
+                                height: 6,
+                            },
+                        }}
+                    >
+                        <View
+                            style={{
+                                width: 78,
+                                height: 78,
+                                borderRadius: 39,
+                                backgroundColor: '#FFF7ED',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginBottom: 18,
+                            }}
+                        >
+                            <Ionicons
+                                name="lock-closed-outline"
+                                size={34}
+                                color="#EA580C"
+                            />
+                        </View>
+
+                        <Text
+                            style={{
+                                fontSize: 27,
+                                fontWeight: '900',
+                                color: TEXT,
+                                textAlign: 'center',
+                                marginBottom: 12,
+                            }}
+                        >
+                            {t('matCorralDetail.readOnlyPermission', {
+                                defaultValue: 'Permiso de solo lectura',
+                            })}
+                        </Text>
+
+                        <Text
+                            style={{
+                                fontSize: 17,
+                                lineHeight: 25,
+                                fontWeight: '700',
+                                color: MUTED,
+                                textAlign: 'center',
+                                marginBottom: 24,
+                            }}
+                        >
+                            {t('matCorralDetail.readOnlyPermissionText', {
+                                defaultValue:
+                                    'Este usuario solo tiene permisos de lectura. No puede realizar operaciones sobre el animal.',
+                            })}
+                        </Text>
+
+                        <TouchableOpacity
+                            activeOpacity={0.9}
+                            onPress={() => setModalSoloLecturaVisible(false)}
+                            style={{
+                                width: '100%',
+                                height: 52,
+                                borderRadius: 16,
+                                backgroundColor: '#2563EB',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: '#FFFFFF',
+                                    fontSize: 17,
+                                    fontWeight: '900',
+                                }}
+                            >
+                                {t('matCorralDetail.accept', {
+                                    defaultValue: 'Aceptar',
+                                })}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
             <Modal
                 visible={modalOperacionesVisible}
                 transparent

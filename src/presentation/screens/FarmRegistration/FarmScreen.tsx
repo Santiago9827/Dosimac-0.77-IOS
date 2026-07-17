@@ -137,13 +137,24 @@ export const FarmScreen = ({ navigation, route }) => {
       /**
        * 1. Guardamos la IP activa para que la usen los endpoints.
        */
-      await guardarBaseUrlDesdeServerIp(serverIpLimpia);
+     console.log("========== DEBUG GUARDAR INSTALACION ==========");
+console.log("serverIp escrito:", serverIp);
+console.log("serverIpLimpia:", serverIpLimpia);
+console.log("usernameLimpio:", usernameLimpio);
+console.log("tienePassword:", !!passwordLimpia);
 
-      /**
-       * 2. Comprobamos si la instalación responde.
-       * Si no responde, NO bloqueamos el guardado.
-       */
-      const disponibilidad = await validarInstalacionActiva();
+const baseUrlGuardada = await guardarBaseUrlDesdeServerIp(serverIpLimpia);
+
+console.log("baseUrlGuardada después de guardar:", baseUrlGuardada);
+
+/**
+ * 2. Comprobamos si la instalación responde.
+ * Si no responde, NO bloqueamos el guardado.
+ */
+const disponibilidad = await validarInstalacionActiva();
+
+console.log("resultado validarInstalacionActiva:", disponibilidad);
+console.log("==============================================");
 
       const farmDataGuardar: farmFacility = {
         name,

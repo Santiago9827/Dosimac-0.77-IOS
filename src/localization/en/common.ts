@@ -583,6 +583,8 @@ capturaAnimalHome: {
   twoFeedsDescription: "Manage feed changes in the drop outlets.",
   animalStatusTitle: "Animal status",
 animalStatusDescription: "Check or update the animal status.",
+birthCaptureTitle: "Birth capture",
+birthCaptureDescription: "Register live, dead and mummified piglets.",
 },
 cambioPiensoMaternidad: {
   error: "Error",
@@ -618,11 +620,14 @@ estadoAnimal: {
   nextScreenPending: "We will create the animal information screen in the next step."
 },
 matCorralDetail: {
+  readOnlyPermission: "Read-only permission",
+readOnlyPermissionText: "This user only has read permissions. They cannot perform operations on the animal.",
   animalStatus: "Animal status",
   id: "ID",
   earTag: "Ear tag",
   cycle: "Cycle",
   day: "Day",
+
   curve: "Curve",
   correction: "Correction",
   entryDate: "Entry date",
@@ -633,19 +638,371 @@ matCorralDetail: {
   presentPiglets: "Present piglets",
   inseminationDate: "Insemination date",
   teatsNumber: "No. of teats",
+
   operations: "Operations",
+
   consumption: "Consumption",
-  ofGrams: "of {{amount}} gr",
+  ofGrams: "of {{amount}} g",
   oneDayWithoutFeeding: "1 day without feeding",
   daysWithoutFeeding: "{{count}} days without feeding",
+
   noAnimalData: "No animal data",
   noAnimalDataText: "No information has been received to display.",
   back: "Back",
   operationsPendingTitle: "Operations",
-  operationsPendingText: "We will add the operations in the next step.",
+  operationsPendingText: "We will do the operations in the next step.",
   moveToWeaning: "Move to weaning",
+  chooseOption: "Select an operation for this animal.",
+  nextOperation: "Next operation",
+  insertAnimal: "Insert animal",
+  moveToLactation: "Move to lactation",
+  nextStep: "Next step",
+  actions: "Actions",
 
-}
+  bodyCondition: "Body condition",
+  subState: "Sub-state",
+  pigletCapture: "Piglet capture",
+  animalExit: "Animal exit",
+  replaceEarTag: "Replace ear tag",
+  changePen: "Change pen",
+  anonymousAnimalId: "Anonymous animal identifier",
 
+  cancel: "Cancel",
+  accept: "Accept",
+  saving: "Saving...",
+  error: "Error",
+
+  operationDone: "Operation completed successfully.",
+  changeStateDone: "Sub-state updated successfully.",
+  changeStateError: "The animal state could not be changed.",
+  confirmNextOperation: "Are you sure you want to move to the next operation?",
+  pkidChangeStateNotFound: "The animal internal identifier was not found.",
+
+  selectExitType: "Select the exit type you want to apply.",
+  exitImmediate: "Immediate exit",
+  exitScheduled: "Scheduled exit",
+  exitScheduledEmptyHopper: "Scheduled exit with empty hopper",
+  cancelScheduledExit: "Cancel scheduled exit",
+  scheduledDate: "Scheduled date",
+  exitDateLimitText: "You cannot select a date earlier than today or later than 3 days.",
+  animalExitDone: "Animal exit completed successfully.",
+  animalExitError: "The animal exit could not be completed.",
+  pkidExitNotFound: "The animal internal identifier was not found.",
+
+  selectCurve: "Select curve",
+  selectCurveText: "Select the animal's new curve.",
+  loadingCurves: "Loading curves...",
+  noCurvesAvailable: "No curves available.",
+  confirmChangeCurve: "Are you sure you want to change the curve?",
+  loadCurvesError: "The curves could not be loaded.",
+  pkidChangeCurveNotFound: "The animal internal identifier was not found.",
+  changeCurveDone: "Curve updated successfully.",
+  changeCurveError: "The curve could not be changed.",
+
+  selectBodyConditionText: "Select the animal's new body condition.",
+  loadingBodyConditions: "Loading body conditions...",
+  noBodyConditionsAvailable: "No body conditions available.",
+  confirmChangeBodyCondition: "Are you sure you want to change the body condition?",
+  loadBodyConditionsError: "The body conditions could not be loaded.",
+  pkidChangeBodyConditionNotFound: "The animal internal identifier was not found.",
+  changeBodyConditionDone: "Body condition updated successfully.",
+  changeBodyConditionError: "The body condition could not be changed.",
+
+  selectSubStateText: "Manually select the animal's new sub-state.",
+  confirmChangeSubState: "Are you sure you want to change the sub-state?",
+
+  currentPen: "Current pen: {{pen}}",
+  newPen: "New pen",
+  enterNewPen: "Enter the new pen.",
+  pkidChangePenNotFound: "The animal internal identifier was not found.",
+  changePenDone: "Pen updated successfully.",
+  changePenError: "The pen could not be changed.",
+
+  currentEarTag: "Current ear tag: {{earTag}}",
+  newEarTag: "New ear tag",
+  enterNewEarTag: "Enter the new ear tag.",
+  pkidEarTagNotFound: "The animal internal identifier was not found.",
+  replaceEarTagDone: "Ear tag updated successfully.",
+  replaceEarTagError: "The ear tag could not be replaced.",
+
+  identifyAnonymousAnimalText: "Choose whether you want to assign an ID or an ear tag to the animal.",
+  newId: "New ID",
+  enterNewId: "Enter the new ID.",
+  idExample: "Ex: 1010",
+  earTagExample: "Ex: 123",
+  notAnonymousAnimalText: "This animal is not anonymous because it already has an ID or ear tag assigned.",
+  pkidIdentifyNotFound: "The animal internal identifier was not found.",
+  identifyAnonymousAnimalDone: "Animal identifier updated successfully.",
+  identifyAnonymousAnimalError: "The anonymous animal could not be identified.",
+
+  livePiglets: "Live",
+  deadPiglets: "Dead",
+  mummifiedPiglets: "Mummified",
+  totalBornPiglets: "Total born",
+  pigletCaptureText: "Enter the live, dead and mummified piglets.",
+  captureBeforeLactationText: "Register the born piglets before moving to lactation.",
+  weaningPigletsOnlyRead: "In weaning, piglets can only be viewed.",
+  pkidPigletsNotFound: "The animal internal identifier was not found.",
+  pigletCaptureDone: "Piglet capture saved successfully.",
+  pigletCaptureError: "The piglet capture could not be saved.",
+},
+subState: {
+  prepartum: "Prepartum",
+  lactation: "Lactation",
+  weaning: "Weaning",
+},
+
+capturaParto: {
+  birthDataTitle: "Birth data",
+  birthDataSubtitle: "Review the animal data before registering the birth.",
+  corral: "Pen",
+  id: "ID",
+  date: "Date",
+  subState: "Sub-state",
+
+  dataCollectionTitle: "Data collection",
+  dataCollectionSubtitle: "Enter the live, dead and mummified piglets.",
+  weaningReadOnly: "In weaning, the data can only be viewed.",
+
+  totalBorn: "Total born",
+  live: "Live",
+  dead: "Dead",
+  mummified: "Mummified",
+
+  prepartum: "Prepartum",
+  farrowing: "Farrowing",
+  lactation: "Lactation",
+  weaning: "Weaning",
+
+  accept: "Accept",
+  cancel: "Cancel",
+  saving: "Saving...",
+
+  sentTitle: "Capture sent",
+  sentMessage: "The birth capture has been saved successfully.",
+
+  errorTitle: "Error",
+  invalidAnimalTitle: "Invalid animal",
+  invalidAnimalText: "The animal internal identifier was not found.",
+  reportSendError: "The birth capture could not be saved.",
+
+  invalidDateTitle: "Invalid date",
+  invalidDateMessage: "The farrowing date cannot be later than today.",
+  changeDate: "Change date",
+
+  selectDateTitle: "Select date",
+  selectDateMessage: "Adjust the farrowing date using the buttons.",
+},
+
+capturaMaternidadEntrada: {
+  title: "Birth capture",
+  description: "Search for the animal by pen or ID to register the birth.",
+  maternityLabel: "MATERNITY",
+
+  corral: "Pen",
+  corralDescription: "Search for the animal by pen number.",
+  id: "ID",
+  idDescription: "Search for the animal by its identifier.",
+  animalId: "Animal ID",
+
+  corralExample: "Ex: 102",
+  idExample: "Ex: 1234",
+
+  consulting: "Searching...",
+  continue: "Continue",
+  accept: "Accept",
+
+  serverConnectionError: "Could not connect to the server.",
+},
+altaBajaStack: {
+  tituloPantalla: "Piglet add/remove",
+  descripcionPantalla: "Search for the sow by pen or ID to register piglet additions or removals.",
+},
+altaBajaLechones: {
+  heroTitle: "Piglet movement",
+  statusAlta: "Addition",
+  statusBaja: "Removal",
+
+  corralUpper: "PEN",
+  idUpper: "ID",
+  dateUpper: "DATE",
+
+  movementType: "Movement type",
+  movementSubtitle: "Select whether you want to register an addition or a removal.",
+  adoption: "Adoption",
+  baja: "Removal",
+
+  adoptionData: "Adoption data",
+  donorMother: "Donor sow",
+  donatesPiglets: "Donates piglets",
+  id: "ID",
+  transferredPiglets: "Transferred piglets",
+  totalAdopted: "Total adopted",
+  total: "Total",
+
+  bajaReason: "Removal reason",
+  reasonCrushing: "Crushing",
+  reasonDiarrhea: "Diarrhea",
+  reasonLowViability: "Low viability",
+  reasonDeformities: "Deformities",
+  reasonOther: "Other",
+
+  piglet: "piglet",
+  piglets: "piglets",
+  description: "Description",
+
+  editReason: "Edit reason",
+  addReason: "Add reason",
+  reasonModalText: "Enter the number of piglets and describe the reason.",
+
+  saving: "Saving...",
+  saveAlta: "Save addition",
+  saveBaja: "Save removal",
+  accept: "Accept",
+  cancel: "Cancel",
+
+  error: "Error",
+  missingData: "Missing data",
+  saveError: "Save error",
+  saveErrorText: "The operation could not be saved.",
+  selectedAnimalPkidNotFound: "The internal identifier of the selected animal was not found.",
+
+  enterTransferredPiglets: "Enter the number of transferred piglets.",
+  invalidTotalTitle: "Invalid total",
+  invalidPigletsNumber: "Enter a valid number of piglets.",
+
+  missingDescriptionTitle: "Description required",
+  missingDescriptionText: "Enter the reason description.",
+  invalidQuantityTitle: "Invalid quantity",
+  invalidPigletQuantity: "Enter a valid piglet quantity.",
+
+  selectReasonRequired: "Select at least one removal reason.",
+
+  adoptionSavedTitle: "Addition saved",
+  adoptionSavedMessage: "{{count}} piglets have been registered successfully.",
+
+  bajasSavedTitle: "Removals saved",
+  bajasSavedMessage: "{{piglets}} removals have been registered successfully for {{reasons}} reason(s).",
+},
+avisoAplicacionNoConfigurada: {
+  title: "Application not configured",
+  text: "Configure the Server IP Address",
+  link: "Tap here",
+},
+generalHome: {
+  movementAnimalTitle: "Animal movement",
+  readerDescription: "Ear tag reader.",
+  keyboardDescription: "Keyboard",
+
+  ctifeedTitle: "CTIFEED",
+  ctifeedDescription: "Access the main portal.",
+
+  modalApplicationNotConfiguredTitle: "Application not configured",
+  modalNoSessionTitle: "Session not started",
+  modalInstallationUnavailableTitle: "Installation unavailable",
+  modalPreparingSessionTitle: "Preparing session",
+  modalReadOnlyPermissionTitle: "Read-only permission",
+
+  modalApplicationNotConfiguredText: "No installation is configured. Go to Installations and select one.",
+  modalNoSessionText: "The installation has an IP address, but there is no active session. Check the Username and Password in Installations.",
+  modalInstallationUnavailableText: "Cannot connect to the selected installation. Check that you are connected to the correct WiFi network or review the server IP.",
+  modalPreparingSessionText: "The session is still loading. Try again in a few seconds.",
+  modalReadOnlyPermissionText: "Your user does not have administrator permissions to access this feature.",
+
+  accept: "Accept",
+
+  connectingTitle: "Connecting...",
+  connectingText: "Checking connection with the selected installation.",
+},
+
+movimientoAnimalMaternidad: {
+  smallLabel: "MOVEMENT",
+  title: "Maternity",
+  subtitle: "Perform manual entries and exits using the keyboard.",
+
+  movementType: "Movement type",
+  entry: "Entry",
+  exit: "Exit",
+
+  searchAnimal: "Search animal",
+  entryHelper: "Enter the destination pen and the animal ID.",
+  exitHelper: "Select whether you want to exit by pen or by ID.",
+
+  pen: "Pen",
+  animalId: "Animal ID",
+  type: "Type",
+
+  sending: "Sending...",
+  accept: "Accept",
+  cancel: "Cancel",
+
+  confirmEntry: "Confirm entry",
+  confirmExit: "Confirm exit",
+  confirmSubtitle: "Review the data before sending the movement.",
+
+  incompleteDataTitle: "Incomplete data",
+  entryIncompleteText: "Enter the pen and the animal ID.",
+  exitPenIncompleteText: "Enter the pen to perform the exit.",
+  exitIdIncompleteText: "Enter the animal ID to perform the exit.",
+
+  invalidPenTitle: "Invalid pen",
+  invalidPenText: "The pen must be a valid number greater than 0.",
+
+  sendErrorTitle: "Send error",
+  connectionErrorTitle: "Connection error",
+  noIpConfigured: "No IP address is configured.",
+  serverConnectionError: "Could not connect to the server.",
+  serverEmptyResponse: "The server did not return a message. HTTP code {{status}}.",
+
+  entrySentTitle: "Entry sent",
+  entrySentText: "The entry movement has been sent successfully.",
+
+  exitSentTitle: "Exit sent",
+  exitByPenSentText: "The exit by pen has been sent successfully.",
+  exitByIdSentText: "The exit by ID has been sent successfully.",
+},
+movimientoAnimalGestacion: {
+  smallLabel: "GESTATION",
+  title: "Animal movement",
+  subtitle: "Perform manual entries and exits using the keyboard.",
+
+  movementType: "Movement type",
+  entry: "Entry",
+  exit: "Exit",
+
+  searchAnimal: "Search animal",
+  entryHelper: "Enter the destination pen and the animal ID.",
+  exitHelper: "Enter the animal ID to perform the gestation exit.",
+
+  pen: "Pen",
+  animalId: "Animal ID",
+  type: "Type",
+
+  sending: "Sending...",
+  accept: "Accept",
+  cancel: "Cancel",
+
+  confirmEntry: "Confirm entry",
+  confirmExit: "Confirm exit",
+  confirmSubtitle: "Review the data before sending the movement.",
+
+  incompleteDataTitle: "Incomplete data",
+  entryIncompleteText: "Enter the pen and the animal ID.",
+  exitIdIncompleteText: "Enter the animal ID to perform the exit.",
+
+  invalidPenTitle: "Invalid pen",
+  invalidPenText: "The pen must be a valid number greater than 0.",
+
+  sendErrorTitle: "Send error",
+  noIpConfigured: "No IP address is configured.",
+  serverConnectionError: "Could not connect to the server.",
+  serverEmptyResponse: "The server did not return a message. HTTP code {{status}}.",
+
+  entrySentTitle: "Entry sent",
+  entrySentText: "The gestation entry movement has been sent successfully.",
+
+  exitSentTitle: "Exit sent",
+  exitByIdSentText: "The gestation exit by ID has been sent successfully.",
+},
 
 };
