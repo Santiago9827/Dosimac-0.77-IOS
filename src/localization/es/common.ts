@@ -238,6 +238,7 @@ export default {
    maternidadConfig_readOnlyTitle: "Permiso de solo lectura",
    maternidadConfig_readOnlyModifySettings: "Este usuario solo tiene permisos de lectura. No puede modificar esta configuración.",
    maternidadConfig_readOnlyUseFunction: "Este usuario solo tiene permisos de lectura. No puede usar esta función.",
+   
    gestationReader_screenTitle: "Lector Gestación",
 
    gestationReader_animalInfoTitle: "Información del animal",
@@ -318,6 +319,57 @@ export default {
    gestationReader_alertInvalidAssociatedCrotalTitle: "Crotal inválido",
    gestationReader_alertInvalidAssociatedCrotalMessage: "El crotal asociado no es válido.",
    gestationReader_alertUpdateIdErrorTitle: "Error al actualizar ID",
+   gestationReader_readerMode: "Lector",
+gestationReader_keyboardMode: "Teclado",
+
+gestationReader_keyboardEntryTitle: "Entrada por teclado",
+gestationReader_keyboardExitTitle: "Salida por teclado",
+gestationReader_keyboardDescription: "Escribe el dato manualmente con el teclado del teléfono.",
+gestationReader_keyboardId: "ID",
+gestationReader_keyboardCrotal: "Crotal",
+gestationReader_keyboardIdLabel: "ID animal",
+gestationReader_keyboardCrotalLabel: "Crotal",
+gestationReader_keyboardIdPlaceholder: "Escribe el ID",
+gestationReader_keyboardCrotalPlaceholder: "Escribe el crotal",
+gestationReader_keyboardAdd: "Añadir",
+gestationReader_keyboardAdding: "Añadiendo...",
+
+gestationReader_pendingRecordsTitle: "Registros no enviados",
+gestationReader_buttonSendingBatch: "Enviando lote...",
+gestationReader_buttonSendBatch: "Enviar lote",
+gestationReader_buttonSendBatchCount: "Enviar lote ({{count}})",
+
+gestationReader_noPendingRecordsTitle: "Sin registros",
+gestationReader_noPendingRecordsText: "No hay registros pendientes para enviar.",
+gestationReader_batchSentTitle: "Lote enviado",
+gestationReader_batchSentText: "Se han enviado {{count}} registro(s) correctamente.",
+gestationReader_batchWithErrorsTitle: "Lote con errores",
+
+gestationReader_recordSentTitle: "Registro enviado",
+gestationReader_recordSentText: "El movimiento se ha enviado correctamente.",
+
+gestationReader_invalidAnimalId: "El ID del animal no es válido.",
+gestationReader_invalidPenRecord: "El corral del registro no es válido.",
+gestationReader_invalidCrotalRecord: "El crotal del registro no es válido.",
+gestationReader_duplicateIdPending: "El ID {{id}} ya está en la tabla de registros no enviados.",
+gestationReader_duplicateCrotalPending: "El crotal {{crotal}} ya está en la tabla de registros no enviados.",
+gestationReader_keyboardMissingId: "Escribe el ID del animal.",
+gestationReader_keyboardMissingCrotal: "Escribe el crotal del animal.",
+gestationReader_keyboardMissingPen: "Selecciona un corral válido antes de añadir el animal.",
+gestationReader_noAnimalById: "No existe ningún animal con el ID {{id}}.",
+gestationReader_noAnimalByCrotal: "No existe ningún animal con el crotal {{crotal}}.",
+gestationReader_addAnimalError: "No se pudo añadir el animal.",
+
+gestationReader_pendingAnimalHint: "Los animales leídos aparecerán aquí.",
+
+gestationReader_changePenTitle: "Cambiar corral",
+gestationReader_changePenDescription: "Introduce el nuevo corral de entrada.",
+gestationReader_newPenLabel: "Nuevo corral",
+gestationReader_newPenPlaceholder: "Ej: 1",
+gestationReader_cancel: "Cancelar",
+gestationReader_save: "Guardar",
+gestationReader_accept: "Aceptar",
+gestationReader_sentHistoryTitle: "Historial enviados",
 
    maternityReader_screenTitle: "Lector Maternidad",
    maternityReader_alertMissingCrotalTitle: "Falta crotal",
@@ -602,25 +654,34 @@ export default {
       setTo: "Fijar a",
       destination: "Destino"
    },
-   estadoAnimal: {
-      queryLabel: "Consulta",
-      title: "Estado animal",
-      subtitle: "Selecciona cómo quieres identificar el animal.",
-      corral: "Corral",
-      corralDescription: "Introduce el número de corral.",
-      id: "ID",
-      idDescription: "Introduce el identificador del animal.",
-      animalId: "ID animal",
-      requiredData: "Dato requerido",
-      enterCorral: "Introduce el número de corral.",
-      enterId: "Introduce el identificador del animal.",
-      consulting: "Consultando...",
-      continue: "Continuar",
-      accept: "Aceptar",
-      serverConnectionError: "No se pudo conectar con el servidor.",
-      noIpConfigured: "No hay IP configurada.",
-      nextScreenPending: "La pantalla de información del animal la haremos en el siguiente paso."
-   },
+  estadoAnimal: {
+   queryLabel: "Consulta",
+   title: "Estado animal",
+   subtitle: "Selecciona cómo quieres identificar el animal.",
+
+   corral: "Corral",
+   corralDescription: "Introduce el número de corral.",
+   corralMaternityDescription: "Introduce el número del corral de maternidad.",
+
+   id: "ID",
+   idDescription: "Introduce el identificador del animal.",
+   animalId: "ID animal",
+   idAnimalDescription: "Busca el animal en maternidad y gestación.",
+
+   requiredData: "Dato requerido",
+   enterCorral: "Introduce el número de corral.",
+   enterId: "Introduce el identificador del animal.",
+
+   consulting: "Consultando...",
+   continue: "Continuar",
+   accept: "Aceptar",
+
+  animalNotFound: "Animal no encontrado",
+   serverConnectionError: "No se pudo conectar con el servidor.",
+   noIpConfigured: "No hay IP configurada.",
+
+   nextScreenPending: "La pantalla de información del animal la haremos en el siguiente paso.",
+},
    matCorralDetail: {
       readOnlyPermission: "Permiso de solo lectura",
 readOnlyPermissionText: "Este usuario solo tiene permisos de lectura. No puede realizar operaciones sobre el animal.",
@@ -1008,6 +1069,32 @@ movimientoAnimalGestacion: {
 
   exitSentTitle: "Salida enviada",
   exitByIdSentText: "La salida por ID en gestación se ha enviado correctamente.",
+},
+
+gestCorralDetail: {
+    title: "Estado animal gestación",
+    emptyTitle: "No hay animal en este corral",
+
+    id: "ID",
+    crotal: "Crotal",
+    cycle: "Ciclo",
+    day: "Día",
+
+    stateGestation: "Gestación",
+    stateOutOfGestation: "Fuera de gestación",
+
+    curve: "Curva",
+    correction: "Corrección",
+    entryDate: "Fecha entrada",
+    inseminationDate: "Fecha inseminación",
+    house: "Nave",
+    corral: "Corral",
+    estimatedFarrowingDate: "Fecha estimada parto",
+    lastFeeding: "Última alimentación",
+
+    oneDayWithoutFeeding: "1 día sin alimentar",
+    daysWithoutFeeding: "{{count}} días sin alimentar",
+    of: "de",
 },
 
 

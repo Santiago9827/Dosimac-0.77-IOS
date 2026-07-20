@@ -292,6 +292,57 @@ export default {
     gestationReader_alertInvalidAssociatedCrotalTitle: "Crotal invalide",
     gestationReader_alertInvalidAssociatedCrotalMessage: "Le crotal associé n'est pas valide.",
     gestationReader_alertUpdateIdErrorTitle: "Erreur lors de la mise à jour de l'ID",
+    gestationReader_readerMode: "Lecteur",
+gestationReader_keyboardMode: "Clavier",
+
+gestationReader_keyboardEntryTitle: "Entrée au clavier",
+gestationReader_keyboardExitTitle: "Sortie au clavier",
+gestationReader_keyboardDescription: "Saisissez la donnée manuellement avec le clavier du téléphone.",
+gestationReader_keyboardId: "ID",
+gestationReader_keyboardCrotal: "Boucle",
+gestationReader_keyboardIdLabel: "ID animal",
+gestationReader_keyboardCrotalLabel: "Boucle",
+gestationReader_keyboardIdPlaceholder: "Saisissez l'ID",
+gestationReader_keyboardCrotalPlaceholder: "Saisissez la boucle",
+gestationReader_keyboardAdd: "Ajouter",
+gestationReader_keyboardAdding: "Ajout...",
+
+gestationReader_pendingRecordsTitle: "Enregistrements non envoyés",
+gestationReader_buttonSendingBatch: "Envoi du lot...",
+gestationReader_buttonSendBatch: "Envoyer le lot",
+gestationReader_buttonSendBatchCount: "Envoyer le lot ({{count}})",
+
+gestationReader_noPendingRecordsTitle: "Aucun enregistrement",
+gestationReader_noPendingRecordsText: "Il n'y a aucun enregistrement en attente d'envoi.",
+gestationReader_batchSentTitle: "Lot envoyé",
+gestationReader_batchSentText: "{{count}} enregistrement(s) ont été envoyés correctement.",
+gestationReader_batchWithErrorsTitle: "Lot avec erreurs",
+
+gestationReader_recordSentTitle: "Enregistrement envoyé",
+gestationReader_recordSentText: "Le mouvement a été envoyé correctement.",
+
+gestationReader_invalidAnimalId: "L'ID de l'animal n'est pas valide.",
+gestationReader_invalidPenRecord: "La case de l'enregistrement n'est pas valide.",
+gestationReader_invalidCrotalRecord: "La boucle de l'enregistrement n'est pas valide.",
+gestationReader_duplicateIdPending: "L'ID {{id}} est déjà dans le tableau des enregistrements non envoyés.",
+gestationReader_duplicateCrotalPending: "La boucle {{crotal}} est déjà dans le tableau des enregistrements non envoyés.",
+gestationReader_keyboardMissingId: "Saisissez l'ID de l'animal.",
+gestationReader_keyboardMissingCrotal: "Saisissez la boucle de l'animal.",
+gestationReader_keyboardMissingPen: "Sélectionnez une case valide avant d'ajouter l'animal.",
+gestationReader_noAnimalById: "Aucun animal n'existe avec l'ID {{id}}.",
+gestationReader_noAnimalByCrotal: "Aucun animal n'existe avec la boucle {{crotal}}.",
+gestationReader_addAnimalError: "Impossible d'ajouter l'animal.",
+
+gestationReader_pendingAnimalHint: "Les animaux lus apparaîtront ici.",
+
+gestationReader_changePenTitle: "Changer de case",
+gestationReader_changePenDescription: "Saisissez la nouvelle case d'entrée.",
+gestationReader_newPenLabel: "Nouvelle case",
+gestationReader_newPenPlaceholder: "Ex : 1",
+gestationReader_cancel: "Annuler",
+gestationReader_save: "Enregistrer",
+gestationReader_accept: "Accepter",
+gestationReader_sentHistoryTitle: "Historique des envois",
 
     maternityReader_screenTitle: "Lecteur Maternité",
     maternityReader_alertMissingCrotalTitle: "Boucle manquante",
@@ -593,7 +644,10 @@ estadoAnimal: {
   accept: "Accepter",
   serverConnectionError: "Impossible de se connecter au serveur.",
   noIpConfigured: "Aucune IP n'est configurée.",
-  nextScreenPending: "Nous créerons l'écran d'information de l'animal à l'étape suivante."
+  nextScreenPending: "Nous créerons l'écran d'information de l'animal à l'étape suivante.",
+  corralMaternityDescription: "Saisissez le numéro de la case de maternité.",
+idAnimalDescription: "Rechercher l’animal en maternité et en gestation.",
+animalNotFound: "Animal non trouvé",
 },
 matCorralDetail: {
   readOnlyPermission: "Permission en lecture seule",
@@ -979,6 +1033,30 @@ movimientoAnimalGestacion: {
   exitSentTitle: "Sortie envoyée",
   exitByIdSentText: "La sortie de gestation par ID a été envoyée correctement.",
 },
+gestCorralDetail: {
+    title: "État animal gestation",
+    emptyTitle: "Il n’y a pas d’animal dans cette case",
 
+    id: "ID",
+    crotal: "Boucle",
+    cycle: "Cycle",
+    day: "Jour",
+
+    stateGestation: "Gestation",
+    stateOutOfGestation: "Hors gestation",
+
+    curve: "Courbe",
+    correction: "Correction",
+    entryDate: "Date d’entrée",
+    inseminationDate: "Date d’insémination",
+    house: "Bâtiment",
+    corral: "Case",
+    estimatedFarrowingDate: "Date estimée de mise bas",
+    lastFeeding: "Dernière alimentation",
+
+    oneDayWithoutFeeding: "1 jour sans alimentation",
+    daysWithoutFeeding: "{{count}} jours sans alimentation",
+    of: "sur",
+},
 
 };

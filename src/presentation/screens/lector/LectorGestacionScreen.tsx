@@ -15,7 +15,7 @@ import {
 import { useAwrConn } from "../../../stores/awrConnStore";
 import { useFocusEffect, useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import { Appbar, Switch, TextInput } from "react-native-paper";
-import { obtenerLecturaEspada, formatearSoloFecha, postActualizarId } from "../../routes/obtenerLecturaEspada";
+import { obtenerLecturaEspada, formatearSoloFecha, postActualizarId, obtenerAnimalPorId } from "../../routes/obtenerLecturaEspada";
 import { construirEndpointEspada } from "../../../stores/apiConfig";
 import { useTranslation } from "react-i18next";
 import { traducirEstadoAnimal } from "../../hooks/traducirEstadoAnimal";
@@ -23,6 +23,10 @@ import { formatearCrotalVisual } from "../../hooks/formatearCrotalVisual";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import { IndicadorConexionAnimado } from "../../components/IndicadorConexionAnimado";
+import {
+    enviarEntradaGestacion,
+    enviarSalidaGestacionPorId,
+} from "../../../stores/apiApp";
 
 const BG = "#F6F7FB";
 const CARD = "#FFFFFF";
@@ -54,6 +58,9 @@ type RegistroEnviado = {
 
 type TipoMovimiento = "entrada" | "salida" | "lectura" | "busqueda";
 type EstadoIdVisual = "neutro" | "success" | "error";
+type ModoCaptura = "lectura" | "teclado";
+type TipoTeclado = "id" | "crotal";
+type MetodoEnvioGestacion = "crotal" | "id";
 
 // ---------- helpers ----------
 const normalizarClave = (valor: string) =>
@@ -137,6 +144,8 @@ function upsertRegistroPorCrotal(
         ...prev,
     ];
 }
+
+
 
 const CajaDatoLectura = ({
     icon,
@@ -518,8 +527,16 @@ const limpiarMensajeBackend = (mensaje?: string) => {
     return mensaje.replace(/^Error:\s*/i, "").trim();
 };
 
+
 // ---------- componente ----------
 export const LectorGestacionScreen = () => {
+    const parseNumeroSeguro = (txt: string) => {
+        const n = Number(txt);
+        return Number.isFinite(n) ? n : null;
+    };
+    const soloDigitos = (texto: string) =>
+        texto.replace(/[^0-9]/g, "");
+
     const ANCHO_CORRAL = 60;
     const ANCHO_ID = 56;
     const ANCHO_CROTAL_SALIDA = 150;
@@ -542,6 +559,12 @@ export const LectorGestacionScreen = () => {
     const timerIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const autoEnvioTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const ultimoCrotalAutoRef = useRef<string | null>(null);
+    const [modoCaptura, setModoCaptura] = useState<ModoCaptura>("lectura");
+    const [tipoTeclado, setTipoTeclado] = useState<TipoTeclado>("id");
+    const [valorTeclado, setValorTeclado] = useState("");
+    const [errorTeclado, setErrorTeclado] = useState("");
+    const [procesandoTeclado, setProcesandoTeclado] = useState(false);
+    const estaEnModoTeclado = modoCaptura === "teclado";
 
     const [altoTeclado, setAltoTeclado] = useState(0);
 
@@ -561,7 +584,18 @@ export const LectorGestacionScreen = () => {
     const [confirmar, setConfirmar] = useState(true);
 
     const [corralInput, setCorralInput] = useState("");
+    const [modalCorralVisible, setModalCorralVisible] = useState(false);
+    const [corralTemporal, setCorralTemporal] = useState("");
+
     const [tipoMovimiento, setTipoMovimiento] = useState<TipoMovimiento>("entrada");
+    type RegistroPendienteGestacion = RegistroEnviado & {
+        tipoMovimiento: "entrada" | "salida";
+        metodoEnvio: MetodoEnvioGestacion;
+    };
+
+    const [registrosPendientesEnvio, setRegistrosPendientesEnvio] =
+        useState<RegistroPendienteGestacion[]>([]);
+
     const [registrosEnviados, setRegistrosEnviados] = useState<RegistroEnviado[]>([]);
     const [estaEnviando, setEstaEnviando] = useState(false);
 
@@ -601,14 +635,32 @@ export const LectorGestacionScreen = () => {
     const usaEnvioAutomatico = !esBusqueda && (esLectura || !confirmar);
     const tiempoAutoEnvioMs = esLectura ? 300 : 1000;
 
-    const totalPaginas = Math.max(1, Math.ceil(registrosEnviados.length / TAM_PAGINA));
-    const totalRegistrosEnviados = registrosEnviados.length;
-    const hayRegistros = registrosEnviados.length > 0;
+    const mostrandoPendientesEnvio =
+        confirmar &&
+        !esLectura &&
+        !esBusqueda;
+
+    const registrosTabla = mostrandoPendientesEnvio
+        ? registrosPendientesEnvio
+        : registrosEnviados;
+
+    const tituloTablaRegistros = mostrandoPendientesEnvio
+        ? t("gestationReader_pendingRecordsTitle")
+        : !confirmar && !esLectura && !esBusqueda
+            ? t("gestationReader_sentHistoryTitle")
+            : t("gestationReader_sentRecordsTitle");
+    const totalPaginas = Math.max(
+        1,
+        Math.ceil(registrosTabla.length / TAM_PAGINA)
+    );
+
+    const totalRegistrosTabla = registrosTabla.length;
+    const hayRegistros = registrosTabla.length > 0;
 
     const itemsPagina = useMemo(() => {
         const start = pagina * TAM_PAGINA;
-        return registrosEnviados.slice(start, start + TAM_PAGINA);
-    }, [registrosEnviados, pagina]);
+        return registrosTabla.slice(start, start + TAM_PAGINA);
+    }, [registrosTabla, pagina]);
 
     const estilosCajaId = useMemo(() => {
         if (estadoIdVisual === "success") {
@@ -646,6 +698,50 @@ export const LectorGestacionScreen = () => {
             autoEnvioTimerRef.current = null;
         }
     }, []);
+    const cambiarModoCaptura = React.useCallback(
+        (nuevoModo: ModoCaptura) => {
+            if (modoCaptura === nuevoModo) return;
+
+            setModoCaptura(nuevoModo);
+
+            setTipoTeclado("id");
+            setValorTeclado("");
+            setErrorTeclado("");
+            setProcesandoTeclado(false);
+
+            limpiarAutoEnvioTimer();
+            ultimoCrotalAutoRef.current = null;
+
+            limpiarCrotalLeido();
+
+            setIdRecibido("");
+            setEstadoIdVisual("neutro");
+
+            if (timerIdRef.current) {
+                clearTimeout(timerIdRef.current);
+                timerIdRef.current = null;
+            }
+
+            if (nuevoModo === "teclado") {
+                detenerLectura?.().catch(() => { });
+                Keyboard.dismiss();
+                return;
+            }
+
+            if (!esBusqueda && idLector) {
+                iniciarLectura?.().catch(() => { });
+            }
+        },
+        [
+            modoCaptura,
+            esBusqueda,
+            idLector,
+            iniciarLectura,
+            detenerLectura,
+            limpiarCrotalLeido,
+            limpiarAutoEnvioTimer,
+        ]
+    );
 
     const LineaVerticalTabla = ({ left }: { left: number }) => (
         <View
@@ -663,9 +759,13 @@ export const LectorGestacionScreen = () => {
     );
 
     const volverAConfiguracionGestacion = React.useCallback(() => {
-        navigation.navigate("ConfiguracionGestacion");
-    }, [navigation]);
+        if (navigation.canGoBack()) {
+            navigation.goBack();
+            return;
+        }
 
+        navigation.navigate("AjustesEnvioGestacion");
+    }, [navigation]);
     const subirFormularioId = React.useCallback(() => {
         const yFormulario = Math.max(formularioIdYRef.current - 80, 0);
 
@@ -734,6 +834,50 @@ export const LectorGestacionScreen = () => {
         ultimoCrotalAutoRef.current = null;
     };
 
+    const abrirModalCorral = React.useCallback(() => {
+        if (!esEntrada) return;
+
+        Keyboard.dismiss();
+        setCorralTemporal(corralInput);
+        setModalCorralVisible(true);
+    }, [esEntrada, corralInput]);
+
+    const cerrarModalCorral = React.useCallback(() => {
+        setModalCorralVisible(false);
+        setCorralTemporal("");
+    }, []);
+
+    const guardarCorralModal = React.useCallback(() => {
+        const corralLimpio = soloDigitos(corralTemporal);
+        const corralNumero = Number(corralLimpio);
+
+        if (
+            !corralLimpio ||
+            !Number.isFinite(corralNumero) ||
+            corralNumero <= 0
+        ) {
+            mostrarAviso(
+                t("gestationReader_alertMissingCorralTitle"),
+                t("gestationReader_alertMissingCorralMessage"),
+                "warning"
+            );
+            return;
+        }
+
+        setCorralInput(corralLimpio);
+        setModalCorralVisible(false);
+        setCorralTemporal("");
+
+        limpiarAutoEnvioTimer();
+        ultimoCrotalAutoRef.current = null;
+        limpiarCrotalLeido();
+    }, [
+        corralTemporal,
+        limpiarAutoEnvioTimer,
+        limpiarCrotalLeido,
+        t,
+    ]);
+
     const traducirEstadosEnMensaje = (
         mensaje: string,
         tFunction: (clave: string) => string
@@ -745,6 +889,115 @@ export const LectorGestacionScreen = () => {
             (estado) => traducirEstadoAnimal(estado, tFunction)
         );
     };
+    const crearRegistroDesdeAnimal = React.useCallback(
+        (
+            animal: any,
+            idIntroducido: string,
+            metodoEnvio: MetodoEnvioGestacion
+        ): RegistroPendienteGestacion => {
+            const idAnimal =
+                animal?.animalId !== null &&
+                    animal?.animalId !== undefined &&
+                    String(animal.animalId).trim() !== ""
+                    ? String(animal.animalId)
+                    : idIntroducido;
+
+            const crotalAnimal =
+                animal?.crotal !== null &&
+                    animal?.crotal !== undefined &&
+                    String(animal.crotal).trim() !== ""
+                    ? String(animal.crotal)
+                    : "0";
+
+            const corralAnimal =
+                esEntrada
+                    ? corralInput.trim() || "—"
+                    : animal?.corralName !== null &&
+                        animal?.corralName !== undefined &&
+                        String(animal.corralName).trim() !== ""
+                        ? String(animal.corralName)
+                        : "—";
+
+            const estadoAnimal =
+                animal?.state !== null &&
+                    animal?.state !== undefined &&
+                    String(animal.state).trim() !== ""
+                    ? String(animal.state)
+                    : "—";
+
+            const naveAnimal =
+                animal?.houseName !== null &&
+                    animal?.houseName !== undefined &&
+                    String(animal.houseName).trim() !== ""
+                    ? String(animal.houseName)
+                    : "—";
+
+            return {
+                localId: `gestacion_${Date.now()}_${idAnimal}_${crotalAnimal}`,
+                corral: corralAnimal,
+                idBackend: idAnimal,
+                crotal: crotalAnimal,
+                estado: estadoAnimal,
+                nave: naveAnimal,
+                tipoMovimiento: esEntrada ? "entrada" : "salida",
+                metodoEnvio,
+            };
+        },
+        [
+            esEntrada,
+            corralInput,
+        ]
+    );
+
+    const agregarRegistroPendiente = React.useCallback(
+        (registro: RegistroPendienteGestacion) => {
+            setRegistrosPendientesEnvio((anteriores) => {
+                const idRepetido = anteriores.some(
+                    (item) =>
+                        item.idBackend !== "0" &&
+                        normalizarClave(item.idBackend) ===
+                        normalizarClave(registro.idBackend)
+                );
+
+                if (idRepetido) {
+                    setErrorTeclado(
+                        t("gestationReader_duplicateIdPending", {
+                            id: registro.idBackend,
+                        })
+                    );
+
+                    return anteriores;
+                }
+
+                const crotalRepetido =
+                    registro.crotal !== "0" &&
+                    anteriores.some(
+                        (item) =>
+                            item.crotal !== "0" &&
+                            normalizarClave(item.crotal) ===
+                            normalizarClave(registro.crotal)
+                    );
+
+                if (crotalRepetido) {
+                    setErrorTeclado(
+                        t("gestationReader_duplicateCrotalPending", {
+                            crotal: registro.crotal,
+                        })
+                    );
+
+                    return anteriores;
+                }
+
+                return [
+                    registro,
+                    ...anteriores,
+                ];
+            });
+
+            setPagina(0);
+        },
+        [t]
+    );
 
     const mostrarIdTemporal = (valor: string, estado: EstadoIdVisual) => {
         if (timerIdRef.current) {
@@ -807,9 +1060,15 @@ export const LectorGestacionScreen = () => {
     }, [pantallaEnfocada, limpiarAutoEnvioTimer]);
 
     useEffect(() => {
-        const maxPagina = Math.max(0, Math.ceil(registrosEnviados.length / TAM_PAGINA) - 1);
-        if (pagina > maxPagina) setPagina(maxPagina);
-    }, [registrosEnviados.length, pagina]);
+        const maxPagina = Math.max(
+            0,
+            Math.ceil(registrosTabla.length / TAM_PAGINA) - 1
+        );
+
+        if (pagina > maxPagina) {
+            setPagina(maxPagina);
+        }
+    }, [registrosTabla.length, pagina]);
 
     useEffect(() => {
         return () => {
@@ -843,6 +1102,14 @@ export const LectorGestacionScreen = () => {
             let mounted = true;
 
             setRegistrosEnviados([]);
+            setRegistrosPendientesEnvio([]);
+
+            setModoCaptura("lectura");
+            setTipoTeclado("id");
+            setValorTeclado("");
+            setErrorTeclado("");
+            setProcesandoTeclado(false);
+
             limpiarCrotalLeido();
             setDetectarDesconocidos(detectarParam);
             setConfirmar(confirmarParam);
@@ -868,6 +1135,8 @@ export const LectorGestacionScreen = () => {
 
             setTipoMovimiento(mov);
             setCorralInput(mov === "entrada" ? String(corralParam) : "");
+            setModalCorralVisible(false);
+            setCorralTemporal("");
 
             (async () => {
                 if (mov === "busqueda") return;
@@ -1175,10 +1444,517 @@ export const LectorGestacionScreen = () => {
         t,
     ]);
 
+
+    const enviarUnRegistroPendiente = React.useCallback(
+        async (
+            registro: RegistroPendienteGestacion
+        ): Promise<RegistroEnviado> => {
+            const esEntradaRegistro =
+                registro.tipoMovimiento === "entrada";
+
+            const idRegistro = String(registro.idBackend || "").trim();
+            const crotalRegistro = String(registro.crotal || "").trim();
+            const corralRegistro = String(registro.corral || "").trim();
+
+            if (registro.metodoEnvio === "id") {
+                if (
+                    !idRegistro ||
+                    idRegistro === "—" ||
+                    idRegistro === "0"
+                ) {
+                    throw new Error(t("gestationReader_invalidAnimalId"));
+                }
+
+                if (esEntradaRegistro) {
+                    const corralNumero = Number(corralRegistro);
+
+                    if (
+                        !Number.isFinite(corralNumero) ||
+                        corralNumero <= 0
+                    ) {
+                        throw new Error(t("gestationReader_invalidPenRecord"));
+                    }
+
+                    await enviarEntradaGestacion({
+                        id: idRegistro,
+                        corral: corralNumero,
+                    });
+                } else {
+                    await enviarSalidaGestacionPorId(idRegistro);
+                }
+            } else {
+                const crotalNumero = Number(crotalRegistro);
+
+                if (
+                    !Number.isFinite(crotalNumero) ||
+                    crotalNumero <= 0
+                ) {
+                    throw new Error(t("gestationReader_invalidCrotalRecord"));
+                }
+
+                const endpoint = await construirEndpointEspada(
+                    esEntradaRegistro
+                        ? "gestation"
+                        : "gestation/exit"
+                );
+
+                const payload = esEntradaRegistro
+                    ? {
+                        corral: Number(corralRegistro),
+                        crotal: crotalNumero,
+                    }
+                    : {
+                        crotal: crotalNumero,
+                    };
+
+                const respuesta = await postGestation(
+                    endpoint,
+                    payload
+                );
+
+                if (!respuesta.ok) {
+                    const detalle =
+                        respuesta.data?.message ??
+                        respuesta.data?.mensaje ??
+                        respuesta.data?.error ??
+                        respuesta.rawText ??
+                        `HTTP ${respuesta.status}`;
+
+                    throw new Error(
+                        traducirEstadosEnMensaje(
+                            limpiarMensajeBackend(String(detalle)),
+                            t
+                        )
+                    );
+                }
+            }
+
+            return {
+                localId: `enviado_${Date.now()}_${registro.localId}`,
+                corral: registro.corral,
+                idBackend: registro.idBackend,
+                crotal: registro.crotal,
+                estado: registro.estado,
+                nave: registro.nave,
+            };
+        },
+        [t]
+    );
+
+    const enviarLotePendientes = React.useCallback(async () => {
+        if (registrosPendientesEnvio.length === 0) {
+            mostrarAviso(
+                t("gestationReader_noPendingRecordsTitle"),
+                t("gestationReader_noPendingRecordsText"),
+                "info"
+            );
+            return;
+        }
+
+        try {
+            setEstaEnviando(true);
+            setErrorTeclado("");
+
+            const enviadosCorrectamente: RegistroEnviado[] = [];
+            const noEnviados: RegistroPendienteGestacion[] = [];
+            const erroresLote: string[] = [];
+
+            for (const registro of registrosPendientesEnvio) {
+                try {
+                    const registroEnviado =
+                        await enviarUnRegistroPendiente(registro);
+
+                    enviadosCorrectamente.push(registroEnviado);
+                } catch (error: any) {
+                    const mensajeError =
+                        error?.message ||
+                        error?.toString?.() ||
+                        "Error desconocido";
+
+                    console.log("Error enviando registro pendiente:", {
+                        registro,
+                        error,
+                        mensajeError,
+                    });
+
+                    erroresLote.push(
+                        `• Corral ${registro.corral} | ID ${registro.idBackend} | Crotal ${registro.crotal}: ${mensajeError}`
+                    );
+
+                    noEnviados.push(registro);
+                }
+            }
+
+            if (enviadosCorrectamente.length > 0) {
+                setRegistrosEnviados((anteriores) => {
+                    let nuevos = anteriores;
+
+                    enviadosCorrectamente.forEach((registro) => {
+                        nuevos = upsertRegistroPorCrotal(
+                            nuevos,
+                            registro.corral,
+                            registro.crotal,
+                            registro.idBackend,
+                            registro.estado,
+                            registro.nave
+                        );
+                    });
+
+                    return nuevos;
+                });
+            }
+
+            setRegistrosPendientesEnvio(noEnviados);
+            setPagina(0);
+
+            if (erroresLote.length > 0) {
+                mostrarAviso(
+                    t("gestationReader_batchWithErrorsTitle"),
+                    erroresLote.join("\n"),
+                    "warning"
+                );
+                return;
+            }
+
+            mostrarAviso(
+                t("gestationReader_batchSentTitle"),
+                t("gestationReader_batchSentText", {
+                    count: enviadosCorrectamente.length,
+                }),
+                "info"
+            );
+        } catch (error: any) {
+            mostrarAviso(
+                t("gestationReader_alertSendErrorTitle"),
+                error?.message ||
+                t("gestationReader_alertNetworkErrorMessage"),
+                "error"
+            );
+        } finally {
+            setEstaEnviando(false);
+        }
+    }, [
+        registrosPendientesEnvio,
+        enviarUnRegistroPendiente,
+        t,
+    ]);
+
     const onEnviar = () => {
-        if (esLectura || !confirmar) return;
+        if (esLectura) return;
+
+        if (mostrandoPendientesEnvio) {
+            enviarLotePendientes();
+            return;
+        }
+
+        if (!confirmar) return;
+
         enviarRegistro();
     };
+
+    const agregarDesdeTeclado = React.useCallback(async () => {
+        const valorEscrito = soloDigitos(valorTeclado);
+
+        if (!valorEscrito) {
+            setErrorTeclado(
+                tipoTeclado === "id"
+                    ? t("gestationReader_keyboardMissingId")
+                    : t("gestationReader_keyboardMissingCrotal")
+            );
+            return;
+        }
+
+        if (esEntrada) {
+            const corralNumero = Number(corralInput);
+
+            if (
+                !corralInput.trim() ||
+                !Number.isFinite(corralNumero) ||
+                corralNumero <= 0
+            ) {
+                setErrorTeclado(
+                    t("gestationReader_keyboardMissingPen")
+                );
+                return;
+            }
+        }
+
+        try {
+            setProcesandoTeclado(true);
+            setErrorTeclado("");
+
+            let registro: RegistroPendienteGestacion;
+
+            if (tipoTeclado === "id") {
+                const respuestaAnimal =
+                    await obtenerAnimalPorId(valorEscrito);
+
+                if (!respuestaAnimal.ok) {
+                    const detalle =
+                        respuestaAnimal.data?.message ??
+                        respuestaAnimal.data?.mensaje ??
+                        respuestaAnimal.data?.error ??
+                        respuestaAnimal.rawText ??
+                        t("gestationReader_noAnimalById", {
+                            id: valorEscrito,
+                        })
+
+                    setErrorTeclado(
+                        limpiarMensajeBackend(String(detalle))
+                    );
+
+                    return;
+                }
+
+                registro = crearRegistroDesdeAnimal(
+                    respuestaAnimal.data ?? {},
+                    valorEscrito,
+                    "id"
+                );
+            } else {
+                const respuestaAnimal =
+                    await obtenerLecturaEspada(valorEscrito);
+
+                if (!respuestaAnimal.ok) {
+                    const detalle =
+                        respuestaAnimal.data?.message ??
+                        respuestaAnimal.data?.mensaje ??
+                        respuestaAnimal.data?.error ??
+                        respuestaAnimal.rawText ??
+                        t("gestationReader_noAnimalByCrotal", {
+                            crotal: valorEscrito,
+                        })
+
+                    setErrorTeclado(
+                        limpiarMensajeBackend(String(detalle))
+                    );
+
+                    return;
+                }
+
+                const animal = respuestaAnimal.data ?? {};
+
+                const idAnimal =
+                    animal?.animalId !== null &&
+                        animal?.animalId !== undefined &&
+                        String(animal.animalId).trim() !== ""
+                        ? String(animal.animalId)
+                        : "0";
+
+                registro = crearRegistroDesdeAnimal(
+                    animal,
+                    idAnimal,
+                    "crotal"
+                );
+
+                registro = {
+                    ...registro,
+                    crotal:
+                        animal?.crotal !== null &&
+                            animal?.crotal !== undefined &&
+                            String(animal.crotal).trim() !== ""
+                            ? String(animal.crotal)
+                            : valorEscrito,
+                    corral: esEntrada
+                        ? corralInput
+                        : registro.corral,
+                };
+            }
+
+            if (confirmar) {
+                agregarRegistroPendiente(registro);
+
+                setValorTeclado("");
+                setErrorTeclado("");
+
+                mostrarIdTemporal(
+                    registro.idBackend,
+                    registro.idBackend === "0"
+                        ? "error"
+                        : "success"
+                );
+
+                Keyboard.dismiss();
+                return;
+            }
+
+            const registroEnviado = await enviarUnRegistroPendiente(registro);
+
+            setRegistrosEnviados((anteriores) =>
+                upsertRegistroPorCrotal(
+                    anteriores,
+                    registroEnviado.corral,
+                    registroEnviado.crotal,
+                    registroEnviado.idBackend,
+                    registroEnviado.estado,
+                    registroEnviado.nave
+                )
+            );
+
+            setPagina(0);
+            setValorTeclado("");
+            setErrorTeclado("");
+
+            mostrarIdTemporal(
+                registroEnviado.idBackend,
+                registroEnviado.idBackend === "0"
+                    ? "error"
+                    : "success"
+            );
+
+            Keyboard.dismiss();
+
+            mostrarAviso(
+                t("gestationReader_recordSentTitle"),
+                t("gestationReader_recordSentText"),
+                "info"
+            );
+        } catch (error: any) {
+            console.log(
+                "Error añadiendo animal por teclado:",
+                error
+            );
+
+            setErrorTeclado(
+                error?.message ||
+                t("gestationReader_addAnimalError")
+            );
+        } finally {
+            setProcesandoTeclado(false);
+        }
+    }, [
+        valorTeclado,
+        tipoTeclado,
+        esEntrada,
+        corralInput,
+        confirmar,
+        crearRegistroDesdeAnimal,
+        agregarRegistroPendiente,
+        enviarUnRegistroPendiente,
+        t,
+    ]);
+    const agregarDesdeLectorAlLote = React.useCallback(
+        async (crotalActual: string) => {
+            const crotalNumero = Number(crotalActual);
+
+            if (!Number.isFinite(crotalNumero) || crotalNumero <= 0) {
+                mostrarAviso(
+                    t("gestationReader_alertInvalidCrotalTitle"),
+                    t("gestationReader_alertInvalidCrotalMessage"),
+                    "warning"
+                );
+
+                limpiarCrotalLeido();
+                ultimoCrotalAutoRef.current = null;
+                return;
+            }
+
+            if (esEntrada) {
+                const corralNumero = Number(corralInput);
+
+                if (
+                    !corralInput.trim() ||
+                    !Number.isFinite(corralNumero) ||
+                    corralNumero <= 0
+                ) {
+                    mostrarAviso(
+                        t("gestationReader_alertMissingCorralTitle"),
+                        t("gestationReader_alertMissingCorralMessage"),
+                        "warning"
+                    );
+
+                    limpiarCrotalLeido();
+                    ultimoCrotalAutoRef.current = null;
+                    return;
+                }
+            }
+
+            try {
+                setEstaEnviando(true);
+                setErrorTeclado("");
+
+                const respuestaAnimal =
+                    await obtenerLecturaEspada(String(crotalNumero));
+
+                if (!respuestaAnimal.ok) {
+                    const detalle =
+                        respuestaAnimal.data?.message ??
+                        respuestaAnimal.data?.mensaje ??
+                        respuestaAnimal.data?.error ??
+                        respuestaAnimal.rawText ??
+                        `No existe ningún animal con el crotal ${crotalNumero}.`;
+
+                    mostrarAviso(
+                        t("gestationReader_alertReadErrorTitle"),
+                        limpiarMensajeBackend(String(detalle)),
+                        "error"
+                    );
+
+                    limpiarCrotalLeido();
+                    ultimoCrotalAutoRef.current = null;
+                    return;
+                }
+
+                const animal = respuestaAnimal.data ?? {};
+
+                const idAnimal =
+                    animal?.animalId !== null &&
+                        animal?.animalId !== undefined &&
+                        String(animal.animalId).trim() !== ""
+                        ? String(animal.animalId)
+                        : "0";
+
+                let registro = crearRegistroDesdeAnimal(
+                    animal,
+                    idAnimal,
+                    "crotal"
+                );
+
+                registro = {
+                    ...registro,
+                    crotal:
+                        animal?.crotal !== null &&
+                            animal?.crotal !== undefined &&
+                            String(animal.crotal).trim() !== ""
+                            ? String(animal.crotal)
+                            : String(crotalNumero),
+                    corral: esEntrada
+                        ? corralInput.trim()
+                        : registro.corral,
+                };
+
+                agregarRegistroPendiente(registro);
+
+                mostrarIdTemporal(
+                    registro.idBackend,
+                    registro.idBackend === "0"
+                        ? "error"
+                        : "success"
+                );
+
+                limpiarCrotalLeido();
+                ultimoCrotalAutoRef.current = null;
+                setPagina(0);
+            } catch (error: any) {
+                mostrarAviso(
+                    t("gestationReader_alertSendErrorTitle"),
+                    error?.message ||
+                    t("gestationReader_alertNetworkErrorMessage"),
+                    "error"
+                );
+            } finally {
+                setEstaEnviando(false);
+            }
+        },
+        [
+            esEntrada,
+            corralInput,
+            crearRegistroDesdeAnimal,
+            agregarRegistroPendiente,
+            limpiarCrotalLeido,
+            t,
+        ]
+    );
 
     const actualizarIdAnimal = React.useCallback(async () => {
         const idManual = nuevoIdManual.trim();
@@ -1278,6 +2054,17 @@ export const LectorGestacionScreen = () => {
     useEffect(() => {
         const crotalActual = (crotalLeido ?? "").trim();
 
+        if (estaEnModoTeclado) {
+            limpiarAutoEnvioTimer();
+
+            if (crotalActual) {
+                limpiarCrotalLeido();
+            }
+
+            ultimoCrotalAutoRef.current = null;
+            return;
+        }
+
         if (!pantallaEnfocada) {
             limpiarAutoEnvioTimer();
             ultimoCrotalAutoRef.current = null;
@@ -1295,12 +2082,6 @@ export const LectorGestacionScreen = () => {
             return;
         }
 
-        if (!usaEnvioAutomatico) {
-            limpiarAutoEnvioTimer();
-            ultimoCrotalAutoRef.current = null;
-            return;
-        }
-
         if (!crotalActual) {
             limpiarAutoEnvioTimer();
             ultimoCrotalAutoRef.current = null;
@@ -1313,6 +2094,24 @@ export const LectorGestacionScreen = () => {
 
         limpiarAutoEnvioTimer();
         ultimoCrotalAutoRef.current = crotalActual;
+
+        if (confirmar && !esLectura && !esBusqueda) {
+            autoEnvioTimerRef.current = setTimeout(() => {
+                if (!pantallaActivaRef.current) return;
+
+                agregarDesdeLectorAlLote(crotalActual);
+            }, 600);
+
+            return () => {
+                limpiarAutoEnvioTimer();
+            };
+        }
+
+        if (!usaEnvioAutomatico) {
+            limpiarAutoEnvioTimer();
+            ultimoCrotalAutoRef.current = null;
+            return;
+        }
 
         autoEnvioTimerRef.current = setTimeout(() => {
             if (!pantallaActivaRef.current) return;
@@ -1333,6 +2132,11 @@ export const LectorGestacionScreen = () => {
         mostrarActualizarId,
         actualizandoId,
         limpiarCrotalLeido,
+        estaEnModoTeclado,
+        confirmar,
+        esLectura,
+        esBusqueda,
+        agregarDesdeLectorAlLote,
     ]);
 
     return (
@@ -1579,13 +2383,17 @@ export const LectorGestacionScreen = () => {
                                     }}
                                 />
 
-                                {/* Corral */}
-                                <View
+                                {/* Corral editable */}
+                                <TouchableOpacity
+                                    disabled={!esEntrada}
+                                    onPress={abrirModalCorral}
+                                    activeOpacity={0.85}
                                     style={{
                                         flex: 0.75,
                                         flexDirection: "row",
                                         alignItems: "center",
                                         gap: 8,
+                                        opacity: esEntrada ? 1 : 0.65,
                                     }}
                                 >
                                     <Ionicons
@@ -1594,7 +2402,7 @@ export const LectorGestacionScreen = () => {
                                         color={BRAND}
                                     />
 
-                                    <View>
+                                    <View style={{ flex: 1 }}>
                                         <Text
                                             style={{
                                                 color: MUTED,
@@ -1617,48 +2425,92 @@ export const LectorGestacionScreen = () => {
                                             {corralInput || "—"}
                                         </Text>
                                     </View>
-                                </View>
+
+                                    {esEntrada && (
+                                        <Ionicons
+                                            name="create-outline"
+                                            size={15}
+                                            color={MUTED}
+                                        />
+                                    )}
+                                </TouchableOpacity>
                             </View>
 
                             {/* Botón cambiar */}
-                            <TouchableOpacity
-                                onPress={volverAConfiguracionGestacion}
-                                activeOpacity={0.9}
+                            <View
                                 style={{
                                     height: 54,
-                                    width: 120,
+                                    width: 128,
                                     borderRadius: 14,
-                                    alignItems: "center",
-                                    justifyContent: "center",
                                     backgroundColor: "#E5E7EB",
-                                    paddingHorizontal: 8,
+                                    padding: 4,
+                                    flexDirection: "row",
+                                    gap: 4,
                                 }}
                             >
-                                <Ionicons
-                                    name="settings-outline"
-                                    size={17}
-                                    color={TEXT}
-                                    style={{ marginBottom: 2 }}
-                                />
-
-                                <Text
+                                <TouchableOpacity
+                                    onPress={() => cambiarModoCaptura("lectura")}
+                                    activeOpacity={0.9}
                                     style={{
-                                        color: TEXT,
-                                        fontWeight: "900",
-                                        fontSize: 11,
-                                        textAlign: "center",
+                                        flex: 1,
+                                        borderRadius: 11,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        backgroundColor: !estaEnModoTeclado ? BRAND : "transparent",
                                     }}
-                                    numberOfLines={1}
-                                    adjustsFontSizeToFit
                                 >
-                                    {t("gestationReader_changeSettings")}
-                                </Text>
-                            </TouchableOpacity>
+                                    <Ionicons
+                                        name="scan-outline"
+                                        size={15}
+                                        color={!estaEnModoTeclado ? "#FFFFFF" : MUTED}
+                                        style={{ marginBottom: 2 }}
+                                    />
+
+                                    <Text
+                                        style={{
+                                            color: !estaEnModoTeclado ? "#FFFFFF" : TEXT,
+                                            fontWeight: "900",
+                                            fontSize: 10,
+                                        }}
+                                    >
+                                        {t("gestationReader_readerMode")}
+                                    </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    onPress={() => cambiarModoCaptura("teclado")}
+                                    activeOpacity={0.9}
+                                    style={{
+                                        flex: 1,
+                                        borderRadius: 11,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        backgroundColor: estaEnModoTeclado ? BRAND : "transparent",
+                                    }}
+                                >
+                                    <Ionicons
+                                        name="keypad-outline"
+                                        size={15}
+                                        color={estaEnModoTeclado ? "#FFFFFF" : MUTED}
+                                        style={{ marginBottom: 2 }}
+                                    />
+
+                                    <Text
+                                        style={{
+                                            color: estaEnModoTeclado ? "#FFFFFF" : TEXT,
+                                            fontWeight: "900",
+                                            fontSize: 10,
+                                        }}
+                                    >
+                                        {t("gestationReader_keyboardMode")}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 )}
 
-                {!esLectura && !esBusqueda && (
+                {!esLectura && !esBusqueda && !estaEnModoTeclado && (
                     <View
                         style={{
                             backgroundColor: CARD,
@@ -1750,6 +2602,240 @@ export const LectorGestacionScreen = () => {
                                             : undefined
                                 }
                             />
+                        </View>
+                    </View>
+                )}
+
+                {!esLectura && !esBusqueda && estaEnModoTeclado && (
+                    <View
+                        style={{
+                            backgroundColor: CARD,
+                            borderRadius: 18,
+                            overflow: "hidden",
+                            borderWidth: 1,
+                            borderColor: BORDER,
+                            ...SHADOW,
+                        }}
+                    >
+                        <View
+                            style={{
+                                backgroundColor: "#F8FAFF",
+                                padding: 14,
+                                borderBottomWidth: 1,
+                                borderBottomColor: "#E0E7FF",
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: TEXT,
+                                    fontSize: 19,
+                                    fontWeight: "900",
+                                }}
+                            >
+                                {esEntrada
+                                    ? t("gestationReader_keyboardEntryTitle")
+                                    : t("gestationReader_keyboardExitTitle")}
+                            </Text>
+
+                            <Text
+                                style={{
+                                    color: MUTED,
+                                    marginTop: 4,
+                                }}
+                            >
+                                {t("gestationReader_keyboardDescription")}
+                            </Text>
+                        </View>
+
+                        <View
+                            style={{
+                                padding: 14,
+                                gap: 12,
+                            }}
+                        >
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    gap: 10,
+                                }}
+                            >
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setTipoTeclado("id");
+                                        setValorTeclado("");
+                                        setErrorTeclado("");
+                                    }}
+                                    activeOpacity={0.9}
+                                    style={{
+                                        flex: 1,
+                                        height: 44,
+                                        borderRadius: 14,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        flexDirection: "row",
+                                        gap: 8,
+                                        backgroundColor:
+                                            tipoTeclado === "id"
+                                                ? BRAND
+                                                : "#EEF2FF",
+                                        borderWidth: 1,
+                                        borderColor:
+                                            tipoTeclado === "id"
+                                                ? BRAND
+                                                : "#C7D2FE",
+                                    }}
+                                >
+                                    <Ionicons
+                                        name="finger-print-outline"
+                                        size={20}
+                                        color={
+                                            tipoTeclado === "id"
+                                                ? "#FFFFFF"
+                                                : BRAND
+                                        }
+                                    />
+
+                                    <Text
+                                        style={{
+                                            color:
+                                                tipoTeclado === "id"
+                                                    ? "#FFFFFF"
+                                                    : BRAND,
+                                            fontWeight: "900",
+                                            fontSize: 15,
+                                        }}
+                                    >
+                                        {t("gestationReader_keyboardId")}
+                                    </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setTipoTeclado("crotal");
+                                        setValorTeclado("");
+                                        setErrorTeclado("");
+                                    }}
+                                    activeOpacity={0.9}
+                                    style={{
+                                        flex: 1,
+                                        height: 44,
+                                        borderRadius: 14,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        flexDirection: "row",
+                                        gap: 8,
+                                        backgroundColor:
+                                            tipoTeclado === "crotal"
+                                                ? BRAND
+                                                : "#EEF2FF",
+                                        borderWidth: 1,
+                                        borderColor:
+                                            tipoTeclado === "crotal"
+                                                ? BRAND
+                                                : "#C7D2FE",
+                                    }}
+                                >
+                                    <Ionicons
+                                        name="barcode-outline"
+                                        size={20}
+                                        color={
+                                            tipoTeclado === "crotal"
+                                                ? "#FFFFFF"
+                                                : BRAND
+                                        }
+                                    />
+
+                                    <Text
+                                        style={{
+                                            color:
+                                                tipoTeclado === "crotal"
+                                                    ? "#FFFFFF"
+                                                    : BRAND,
+                                            fontWeight: "900",
+                                            fontSize: 15,
+                                        }}
+                                    >
+                                        {t("gestationReader_keyboardCrotal")}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <TextInput
+                                mode="outlined"
+                                label={
+                                    tipoTeclado === "id"
+                                        ? t("gestationReader_keyboardIdLabel")
+                                        : t("gestationReader_keyboardCrotalLabel")
+                                }
+                                value={valorTeclado}
+                                onChangeText={(texto) => {
+                                    setValorTeclado(soloDigitos(texto));
+                                    setErrorTeclado("");
+                                }}
+                                keyboardType="default"
+                                placeholder={
+                                    tipoTeclado === "id"
+                                        ? t("gestationReader_keyboardIdPlaceholder")
+                                        : t("gestationReader_keyboardCrotalPlaceholder")
+                                }
+                                outlineColor={BRAND}
+                                activeOutlineColor={BRAND}
+                                style={{
+                                    backgroundColor: "#FFFFFF",
+                                }}
+                                outlineStyle={{
+                                    borderRadius: 14,
+                                    borderWidth: 2,
+                                }}
+                                textColor={TEXT}
+                                disabled={procesandoTeclado}
+                            />
+
+                            {!!errorTeclado && (
+                                <Text
+                                    style={{
+                                        color: DANGER,
+                                        fontSize: 13,
+                                        lineHeight: 18,
+                                        fontWeight: "800",
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    {errorTeclado}
+                                </Text>
+                            )}
+
+                            <TouchableOpacity
+                                onPress={agregarDesdeTeclado}
+                                disabled={procesandoTeclado}
+                                activeOpacity={0.9}
+                                style={{
+                                    height: 46,
+                                    borderRadius: 14,
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor:
+                                        procesandoTeclado
+                                            ? "#A5B4FC"
+                                            : BRAND,
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: "#FFFFFF",
+                                        fontWeight: "900",
+                                        fontSize: 16,
+                                    }}
+                                >
+                                    {procesandoTeclado
+                                        ? confirmar
+                                            ? t("gestationReader_keyboardAdding")
+                                            : t("gestationReader_buttonSending")
+                                        : confirmar
+                                            ? t("gestationReader_keyboardAdd")
+                                            : t("gestationReader_buttonSend")}
+                                </Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 )}
@@ -1872,7 +2958,7 @@ export const LectorGestacionScreen = () => {
                                     }}
                                 >
                                     <Text style={{ color: TEXT, fontSize: 18, fontWeight: "900" }}>
-                                        {t("gestationReader_sentRecordsTitle")}
+                                        {tituloTablaRegistros}
                                     </Text>
 
                                     <View
@@ -1881,19 +2967,19 @@ export const LectorGestacionScreen = () => {
                                             height: 30,
                                             paddingHorizontal: 10,
                                             borderRadius: 999,
-                                            backgroundColor: totalRegistrosEnviados > 0 ? BRAND : "#E5E7EB",
+                                            backgroundColor: totalRegistrosTabla > 0 ? BRAND : "#E5E7EB",
                                             alignItems: "center",
                                             justifyContent: "center",
                                         }}
                                     >
                                         <Text
                                             style={{
-                                                color: totalRegistrosEnviados > 0 ? "#FFFFFF" : MUTED,
+                                                color: totalRegistrosTabla > 0 ? "#FFFFFF" : MUTED,
                                                 fontWeight: "900",
                                                 fontSize: 14,
                                             }}
                                         >
-                                            {totalRegistrosEnviados}
+                                            {totalRegistrosTabla}
                                         </Text>
                                     </View>
                                 </View>
@@ -1943,7 +3029,7 @@ export const LectorGestacionScreen = () => {
                                         {t("Reader_autoReadingBadge")}
                                     </Text>
                                 </View>
-                            ) : registrosEnviados.length > TAM_PAGINA && (
+                            ) : registrosTabla.length > TAM_PAGINA && (
                                 <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                                     <TouchableOpacity
                                         onPress={() => setPagina((p) => Math.max(0, p - 1))}
@@ -2022,12 +3108,12 @@ export const LectorGestacionScreen = () => {
 
                             {esLectura ? (
                                 <View style={{ padding: 14, gap: 12 }}>
-                                    {registrosEnviados.length === 0 ? (
+                                    {registrosTabla.length === 0 ? (
                                         <Text style={{ color: MUTED }}>
                                             {t("gestationReader_noRecords")}
                                         </Text>
                                     ) : (
-                                        registrosEnviados.map((r) => (
+                                        registrosTabla.map((r) => (
                                             <RegistroLecturaCard
                                                 key={r.localId}
                                                 registro={r}
@@ -2078,7 +3164,7 @@ export const LectorGestacionScreen = () => {
                                         </View>
                                     </View>
 
-                                    {registrosEnviados.length === 0 ? (
+                                    {registrosTabla.length === 0 ? (
                                         <View
                                             style={{
                                                 paddingVertical: 24,
@@ -2121,7 +3207,7 @@ export const LectorGestacionScreen = () => {
                                                     textAlign: "center",
                                                 }}
                                             >
-                                                Los animales leídos aparecerán aquí.
+                                                {t("gestationReader_pendingAnimalHint")}
                                             </Text>
                                         </View>
                                     ) : (
@@ -2225,7 +3311,7 @@ export const LectorGestacionScreen = () => {
                                         </View>
                                     </View>
 
-                                    {registrosEnviados.length === 0 ? (
+                                    {registrosTabla.length === 0 ? (
                                         <View style={{ padding: 14 }}>
                                             <Text style={{ color: MUTED }}>{t("gestationReader_noRecords")}</Text>
                                         </View>
@@ -2292,21 +3378,29 @@ export const LectorGestacionScreen = () => {
                     </View>
                 )}
 
-                {!esBusqueda && !esLectura && (
+                {!esBusqueda && !esLectura && confirmar && (
                     <View style={{ marginTop: 12 }}>
                         <TouchableOpacity
                             onPress={onEnviar}
-                            disabled={estaEnviando || !confirmar || esLectura}
+                            disabled={
+                                estaEnviando ||
+                                esLectura ||
+                                (
+                                    mostrandoPendientesEnvio &&
+                                    registrosPendientesEnvio.length === 0
+                                )
+                            }
                             activeOpacity={0.9}
                             style={{
                                 height: 46,
                                 borderRadius: 14,
                                 backgroundColor: esLectura
                                     ? "#CBD5E1"
-                                    : !confirmar
-                                        ? "#CBD5E1"
-                                        : estaEnviando
-                                            ? "#A5B4FC"
+                                    : estaEnviando
+                                        ? "#A5B4FC"
+                                        : mostrandoPendientesEnvio &&
+                                            registrosPendientesEnvio.length === 0
+                                            ? "#CBD5E1"
                                             : BRAND,
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -2322,16 +3416,172 @@ export const LectorGestacionScreen = () => {
                             <Text style={{ color: "white", fontWeight: "900", fontSize: 16 }}>
                                 {esLectura
                                     ? t("gestationReader_buttonAutoReading")
-                                    : !confirmar
-                                        ? t("gestationReader_buttonAutoSending")
-                                        : estaEnviando
-                                            ? t("gestationReader_buttonSending")
+                                    : estaEnviando
+                                        ? t("gestationReader_buttonSendingBatch")
+                                        : mostrandoPendientesEnvio
+                                            ? registrosPendientesEnvio.length > 0
+                                                ? t("gestationReader_buttonSendBatchCount", {
+                                                    count: registrosPendientesEnvio.length,
+                                                })
+                                                : t("gestationReader_buttonSendBatch")
                                             : t("gestationReader_buttonSend")}
                             </Text>
                         </TouchableOpacity>
                     </View>
                 )}
             </ScrollView>
+            <Modal
+                visible={modalCorralVisible}
+                transparent
+                animationType="fade"
+                onRequestClose={cerrarModalCorral}
+            >
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: "rgba(15, 23, 42, 0.45)",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        paddingHorizontal: 24,
+                    }}
+                >
+                    <View
+                        style={{
+                            width: "100%",
+                            maxWidth: 390,
+                            backgroundColor: "#FFFFFF",
+                            borderRadius: 24,
+                            paddingHorizontal: 20,
+                            paddingVertical: 20,
+                            ...SHADOW,
+                        }}
+                    >
+                        <View
+                            style={{
+                                alignItems: "center",
+                                marginBottom: 16,
+                            }}
+                        >
+                            <View
+                                style={{
+                                    width: 58,
+                                    height: 58,
+                                    borderRadius: 29,
+                                    backgroundColor: "#EEF2FF",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    marginBottom: 12,
+                                }}
+                            >
+                                <Ionicons
+                                    name="home-outline"
+                                    size={28}
+                                    color={BRAND}
+                                />
+                            </View>
+
+                            <Text
+                                style={{
+                                    fontSize: 22,
+                                    fontWeight: "900",
+                                    color: TEXT,
+                                    textAlign: "center",
+                                }}
+                            >
+                                {t("gestationReader_changePenTitle")}
+                            </Text>
+
+                            <Text
+                                style={{
+                                    marginTop: 6,
+                                    fontSize: 15,
+                                    color: MUTED,
+                                    textAlign: "center",
+                                    fontWeight: "700",
+                                    lineHeight: 21,
+                                }}
+                            >
+                                {t("gestationReader_changePenDescription")}
+                            </Text>
+                        </View>
+
+                        <TextInput
+                            mode="outlined"
+                            label={t("gestationReader_newPenLabel")}
+                            value={corralTemporal}
+                            onChangeText={(texto) => {
+                                setCorralTemporal(soloDigitos(texto));
+                            }}
+                            keyboardType="number-pad"
+                            placeholder=""
+                            outlineColor={BRAND}
+                            activeOutlineColor={BRAND}
+                            style={{
+                                backgroundColor: "#FFFFFF",
+                                marginBottom: 18,
+                            }}
+                            outlineStyle={{
+                                borderRadius: 14,
+                                borderWidth: 2,
+                            }}
+                            textColor={TEXT}
+                        />
+
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                gap: 10,
+                            }}
+                        >
+                            <TouchableOpacity
+                                onPress={cerrarModalCorral}
+                                activeOpacity={0.9}
+                                style={{
+                                    flex: 1,
+                                    height: 44,
+                                    borderRadius: 14,
+                                    backgroundColor: "#E5E7EB",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: TEXT,
+                                        fontSize: 15,
+                                        fontWeight: "900",
+                                    }}
+                                >
+                                    {t("gestationReader_cancel")}
+                                </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={guardarCorralModal}
+                                activeOpacity={0.9}
+                                style={{
+                                    flex: 1,
+                                    height: 44,
+                                    borderRadius: 14,
+                                    backgroundColor: BRAND,
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: "#FFFFFF",
+                                        fontSize: 15,
+                                        fontWeight: "900",
+                                    }}
+                                >
+                                    {t("gestationReader_save")}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
 
             <Modal
                 visible={avisoVisible}
@@ -2441,7 +3691,7 @@ export const LectorGestacionScreen = () => {
                             }}
                         >
                             <Text style={{ color: "white", fontWeight: "900", fontSize: 15 }}>
-                                {t("Aceptar")}
+                                {t("gestationReader_accept")}
                             </Text>
                         </TouchableOpacity>
                     </View>

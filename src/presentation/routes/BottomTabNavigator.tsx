@@ -137,13 +137,21 @@ export const BottomTabNavigator = () => {
           };
         }}
       />
-      <Tab.Screen
-  name="CapturaAnimalTab"
-  component={CapturaAnimalStackNavigator}
-  options={{
-    title: 'Funcionalidades',
-    tabBarLabel: 'Funcionalidades',
-  }}
+     <Tab.Screen
+    name="CapturaAnimalTab"
+    component={CapturaAnimalStackNavigator}
+    options={({ route }) => {
+        const routeName =
+            getFocusedRouteNameFromRoute(route) ?? 'CapturaAnimalHome';
+
+        const ocultarHeader =
+            routeName === 'GestCorralDetail';
+
+        return {
+            headerShown: !ocultarHeader,
+            title: 'Funcionalidades',
+        };
+    }}
 />
     </Tab.Navigator>
   );

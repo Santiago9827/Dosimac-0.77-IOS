@@ -295,6 +295,57 @@ export default {
   gestationReader_alertInvalidAssociatedCrotalTitle: "Некорректная бирка",
   gestationReader_alertInvalidAssociatedCrotalMessage: "Связанная бирка недействительна.",
   gestationReader_alertUpdateIdErrorTitle: "Ошибка при обновлении ID",
+  gestationReader_readerMode: "Считыватель",
+gestationReader_keyboardMode: "Клавиатура",
+
+gestationReader_keyboardEntryTitle: "Ввод с клавиатуры",
+gestationReader_keyboardExitTitle: "Вывод с клавиатуры",
+gestationReader_keyboardDescription: "Введите данные вручную с клавиатуры телефона.",
+gestationReader_keyboardId: "ID",
+gestationReader_keyboardCrotal: "Бирка",
+gestationReader_keyboardIdLabel: "ID животного",
+gestationReader_keyboardCrotalLabel: "Бирка",
+gestationReader_keyboardIdPlaceholder: "Введите ID",
+gestationReader_keyboardCrotalPlaceholder: "Введите бирку",
+gestationReader_keyboardAdd: "Добавить",
+gestationReader_keyboardAdding: "Добавление...",
+
+gestationReader_pendingRecordsTitle: "Неотправленные записи",
+gestationReader_buttonSendingBatch: "Отправка партии...",
+gestationReader_buttonSendBatch: "Отправить партию",
+gestationReader_buttonSendBatchCount: "Отправить партию ({{count}})",
+
+gestationReader_noPendingRecordsTitle: "Нет записей",
+gestationReader_noPendingRecordsText: "Нет записей, ожидающих отправки.",
+gestationReader_batchSentTitle: "Партия отправлена",
+gestationReader_batchSentText: "{{count}} запись(ей) успешно отправлено.",
+gestationReader_batchWithErrorsTitle: "Партия с ошибками",
+
+gestationReader_recordSentTitle: "Запись отправлена",
+gestationReader_recordSentText: "Перемещение успешно отправлено.",
+
+gestationReader_invalidAnimalId: "ID животного недействителен.",
+gestationReader_invalidPenRecord: "Станок записи недействителен.",
+gestationReader_invalidCrotalRecord: "Бирка записи недействительна.",
+gestationReader_duplicateIdPending: "ID {{id}} уже есть в таблице неотправленных записей.",
+gestationReader_duplicateCrotalPending: "Бирка {{crotal}} уже есть в таблице неотправленных записей.",
+gestationReader_keyboardMissingId: "Введите ID животного.",
+gestationReader_keyboardMissingCrotal: "Введите бирку животного.",
+gestationReader_keyboardMissingPen: "Выберите действительный станок перед добавлением животного.",
+gestationReader_noAnimalById: "Животного с ID {{id}} не существует.",
+gestationReader_noAnimalByCrotal: "Животного с биркой {{crotal}} не существует.",
+gestationReader_addAnimalError: "Не удалось добавить животное.",
+
+gestationReader_pendingAnimalHint: "Считанные животные появятся здесь.",
+
+gestationReader_changePenTitle: "Изменить станок",
+gestationReader_changePenDescription: "Введите новый станок для ввода.",
+gestationReader_newPenLabel: "Новый станок",
+gestationReader_newPenPlaceholder: "Напр.: 1",
+gestationReader_cancel: "Отмена",
+gestationReader_save: "Сохранить",
+gestationReader_accept: "Принять",
+gestationReader_sentHistoryTitle: "История отправленных",
 
   maternityReader_screenTitle: "Считыватель материнского отделения",
   maternityReader_alertMissingCrotalTitle: "Отсутствует бирка",
@@ -596,7 +647,10 @@ export default {
     accept: "Принять",
     serverConnectionError: "Не удалось подключиться к серверу.",
     noIpConfigured: "IP-адрес не настроен.",
-    nextScreenPending: "Экран информации о животном мы создадим на следующем шаге."
+    nextScreenPending: "Экран информации о животном мы создадим на следующем шаге.",
+    corralMaternityDescription: "Введите номер станка в маточнике.",
+idAnimalDescription: "Поиск животного в маточнике и супоросности.",
+animalNotFound: "Животное не найдено",
   },
   matCorralDetail: {
     readOnlyPermission: "Разрешение только на чтение",
@@ -981,5 +1035,30 @@ movimientoAnimalGestacion: {
 
   exitSentTitle: "Вывод отправлен",
   exitByIdSentText: "Вывод из супоросности по ID успешно отправлен.",
+},
+gestCorralDetail: {
+    title: "Статус животного в супоросности",
+    emptyTitle: "В этом станке нет животного",
+
+    id: "ID",
+    crotal: "Бирка",
+    cycle: "Цикл",
+    day: "День",
+
+    stateGestation: "Супоросность",
+    stateOutOfGestation: "Вне супоросности",
+
+    curve: "Кривая",
+    correction: "Коррекция",
+    entryDate: "Дата входа",
+    inseminationDate: "Дата осеменения",
+    house: "Помещение",
+    corral: "Станок",
+    estimatedFarrowingDate: "Ожидаемая дата опороса",
+    lastFeeding: "Последнее кормление",
+
+    oneDayWithoutFeeding: "1 день без кормления",
+    daysWithoutFeeding: "{{count}} дн. без кормления",
+    of: "из",
 },
 };

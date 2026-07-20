@@ -308,6 +308,57 @@ export default {
   gestationReader_alertInvalidAssociatedCrotalTitle: "Invalid ear tag",
   gestationReader_alertInvalidAssociatedCrotalMessage: "The associated ear tag is not valid.",
   gestationReader_alertUpdateIdErrorTitle: "Error updating ID",
+  gestationReader_readerMode: "Reader",
+gestationReader_keyboardMode: "Keyboard",
+
+gestationReader_keyboardEntryTitle: "Keyboard entry",
+gestationReader_keyboardExitTitle: "Keyboard exit",
+gestationReader_keyboardDescription: "Enter the data manually using the phone keyboard.",
+gestationReader_keyboardId: "ID",
+gestationReader_keyboardCrotal: "Ear tag",
+gestationReader_keyboardIdLabel: "Animal ID",
+gestationReader_keyboardCrotalLabel: "Ear tag",
+gestationReader_keyboardIdPlaceholder: "Enter the ID",
+gestationReader_keyboardCrotalPlaceholder: "Enter the ear tag",
+gestationReader_keyboardAdd: "Add",
+gestationReader_keyboardAdding: "Adding...",
+
+gestationReader_pendingRecordsTitle: "Unsent records",
+gestationReader_buttonSendingBatch: "Sending batch...",
+gestationReader_buttonSendBatch: "Send batch",
+gestationReader_buttonSendBatchCount: "Send batch ({{count}})",
+
+gestationReader_noPendingRecordsTitle: "No records",
+gestationReader_noPendingRecordsText: "There are no pending records to send.",
+gestationReader_batchSentTitle: "Batch sent",
+gestationReader_batchSentText: "{{count}} record(s) have been sent successfully.",
+gestationReader_batchWithErrorsTitle: "Batch with errors",
+
+gestationReader_recordSentTitle: "Record sent",
+gestationReader_recordSentText: "The movement has been sent successfully.",
+
+gestationReader_invalidAnimalId: "The animal ID is not valid.",
+gestationReader_invalidPenRecord: "The record pen is not valid.",
+gestationReader_invalidCrotalRecord: "The record ear tag is not valid.",
+gestationReader_duplicateIdPending: "ID {{id}} is already in the unsent records table.",
+gestationReader_duplicateCrotalPending: "Ear tag {{crotal}} is already in the unsent records table.",
+gestationReader_keyboardMissingId: "Enter the animal ID.",
+gestationReader_keyboardMissingCrotal: "Enter the animal ear tag.",
+gestationReader_keyboardMissingPen: "Select a valid pen before adding the animal.",
+gestationReader_noAnimalById: "No animal exists with ID {{id}}.",
+gestationReader_noAnimalByCrotal: "No animal exists with ear tag {{crotal}}.",
+gestationReader_addAnimalError: "The animal could not be added.",
+
+gestationReader_pendingAnimalHint: "Read animals will appear here.",
+
+gestationReader_changePenTitle: "Change pen",
+gestationReader_changePenDescription: "Enter the new entry pen.",
+gestationReader_newPenLabel: "New pen",
+gestationReader_newPenPlaceholder: "Ex: 1",
+gestationReader_cancel: "Cancel",
+gestationReader_save: "Save",
+gestationReader_accept: "Accept",
+gestationReader_sentHistoryTitle: "Sent history",
 
 
   maternityReader_screenTitle: "Maternity Reader",
@@ -617,7 +668,10 @@ estadoAnimal: {
   accept: "Accept",
   serverConnectionError: "Could not connect to the server.",
   noIpConfigured: "No IP address is configured.",
-  nextScreenPending: "We will create the animal information screen in the next step."
+  nextScreenPending: "We will create the animal information screen in the next step.",
+  corralMaternityDescription: "Enter the maternity pen number.",
+idAnimalDescription: "Search for the animal in maternity and gestation.",
+animalNotFound: "Animal not found",
 },
 matCorralDetail: {
   readOnlyPermission: "Read-only permission",
@@ -1003,6 +1057,32 @@ movimientoAnimalGestacion: {
 
   exitSentTitle: "Exit sent",
   exitByIdSentText: "The gestation exit by ID has been sent successfully.",
+},
+
+gestCorralDetail: {
+    title: "Gestation animal status",
+    emptyTitle: "There is no animal in this pen",
+
+    id: "ID",
+    crotal: "Ear tag",
+    cycle: "Cycle",
+    day: "Day",
+
+    stateGestation: "Gestation",
+    stateOutOfGestation: "Out of gestation",
+
+    curve: "Curve",
+    correction: "Correction",
+    entryDate: "Entry date",
+    inseminationDate: "Insemination date",
+    house: "House",
+    corral: "Pen",
+    estimatedFarrowingDate: "Estimated farrowing date",
+    lastFeeding: "Last feeding",
+
+    oneDayWithoutFeeding: "1 day without feeding",
+    daysWithoutFeeding: "{{count}} days without feeding",
+    of: "of",
 },
 
 };

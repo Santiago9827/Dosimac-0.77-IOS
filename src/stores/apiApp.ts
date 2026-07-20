@@ -561,3 +561,109 @@ export async function consultarCondicionesCorporales() {
 
     return Array.isArray(datosApi) ? datosApi : [];
 }
+
+/* =========================================================
+   MOVIMIENTO ANIMAL — GESTACIÓN
+   ========================================================= */
+
+export type EntradaGestacionPayload = {
+    id: string | number;
+    corral: string | number;
+};
+
+export async function enviarEntradaGestacion(
+    payload: EntradaGestacionPayload,
+): Promise<any> {
+    const endpoint = await construirEndpointAppV1('gestation');
+
+    console.log('===== ENVIAR ENTRADA GESTACIÓN =====');
+    console.log('ENDPOINT:', endpoint);
+    console.log('PAYLOAD:', JSON.stringify(payload, null, 2));
+
+    const respuesta = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: String(payload.id),
+            corral: Number(payload.corral),
+        }),
+    });
+
+    return leerRespuesta(
+        respuesta,
+        'No se pudo enviar la entrada de gestación.',
+    );
+}
+
+export async function enviarSalidaGestacionPorId(
+    animalId: string | number,
+): Promise<any> {
+    const endpoint = await construirEndpointAppV1(
+        `gestation/exitById/${encodeURIComponent(String(animalId))}`,
+    );
+
+    console.log('===== ENVIAR SALIDA GESTACIÓN POR ID =====');
+    console.log('ENDPOINT:', endpoint);
+    console.log('ID:', animalId);
+
+    const respuesta = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    });
+
+    return leerRespuesta(
+        respuesta,
+        'No se pudo enviar la salida de gestación.',
+    );
+}
+
+export async function consultarGestacionPorIdAnimal(
+    animalId: string | number,
+): Promise<any> {
+    const idLimpio = String(animalId ?? '').trim();
+
+    if (!idLimpio) {
+        throw new Error('ID de animal no válido.');
+    }
+
+    const endpoint = await construirEndpointAppV1(
+        `readGestationByIdAnimal/${encodeURIComponent(idLimpio)}`,
+    );
+
+    const respuesta = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+        },
+    });
+
+    const texto = await respuesta.text();
+
+    let datosApi: any = null;
+
+    try {
+        datosApi = texto ? JSON.parse(texto) : null;
+    } catch {
+        datosApi = null;
+    }
+
+    if (!respuesta.ok) {
+        const mensajeBackend =
+            datosApi?.message ??
+            datosApi?.mensaje ??
+            datosApi?.error ??
+            datosApi?.detail ??
+            texto ??
+            'Animal de gestación no encontrado.';
+
+        throw new Error(String(mensajeBackend));
+    }
+
+    return datosApi;
+}

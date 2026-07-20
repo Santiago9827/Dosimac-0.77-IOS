@@ -290,6 +290,57 @@ export default {
   gestationReader_alertInvalidAssociatedCrotalTitle: "유효하지 않은 귀표",
   gestationReader_alertInvalidAssociatedCrotalMessage: "연결된 귀표가 유효하지 않습니다.",
   gestationReader_alertUpdateIdErrorTitle: "ID 업데이트 오류",
+  gestationReader_readerMode: "리더",
+gestationReader_keyboardMode: "키보드",
+
+gestationReader_keyboardEntryTitle: "키보드 입고",
+gestationReader_keyboardExitTitle: "키보드 출고",
+gestationReader_keyboardDescription: "휴대폰 키보드로 데이터를 직접 입력하세요.",
+gestationReader_keyboardId: "ID",
+gestationReader_keyboardCrotal: "이표",
+gestationReader_keyboardIdLabel: "동물 ID",
+gestationReader_keyboardCrotalLabel: "이표",
+gestationReader_keyboardIdPlaceholder: "ID 입력",
+gestationReader_keyboardCrotalPlaceholder: "이표 입력",
+gestationReader_keyboardAdd: "추가",
+gestationReader_keyboardAdding: "추가 중...",
+
+gestationReader_pendingRecordsTitle: "전송되지 않은 기록",
+gestationReader_buttonSendingBatch: "일괄 전송 중...",
+gestationReader_buttonSendBatch: "일괄 전송",
+gestationReader_buttonSendBatchCount: "일괄 전송 ({{count}})",
+
+gestationReader_noPendingRecordsTitle: "기록 없음",
+gestationReader_noPendingRecordsText: "전송 대기 중인 기록이 없습니다.",
+gestationReader_batchSentTitle: "일괄 전송됨",
+gestationReader_batchSentText: "{{count}}개의 기록이 성공적으로 전송되었습니다.",
+gestationReader_batchWithErrorsTitle: "오류가 있는 일괄 전송",
+
+gestationReader_recordSentTitle: "기록 전송됨",
+gestationReader_recordSentText: "이동이 성공적으로 전송되었습니다.",
+
+gestationReader_invalidAnimalId: "동물 ID가 올바르지 않습니다.",
+gestationReader_invalidPenRecord: "기록의 우리가 올바르지 않습니다.",
+gestationReader_invalidCrotalRecord: "기록의 이표가 올바르지 않습니다.",
+gestationReader_duplicateIdPending: "ID {{id}}는 이미 전송되지 않은 기록 표에 있습니다.",
+gestationReader_duplicateCrotalPending: "이표 {{crotal}}는 이미 전송되지 않은 기록 표에 있습니다.",
+gestationReader_keyboardMissingId: "동물 ID를 입력하세요.",
+gestationReader_keyboardMissingCrotal: "동물 이표를 입력하세요.",
+gestationReader_keyboardMissingPen: "동물을 추가하기 전에 유효한 우리를 선택하세요.",
+gestationReader_noAnimalById: "ID {{id}}에 해당하는 동물이 없습니다.",
+gestationReader_noAnimalByCrotal: "이표 {{crotal}}에 해당하는 동물이 없습니다.",
+gestationReader_addAnimalError: "동물을 추가할 수 없습니다.",
+
+gestationReader_pendingAnimalHint: "읽은 동물이 여기에 표시됩니다.",
+
+gestationReader_changePenTitle: "우리 변경",
+gestationReader_changePenDescription: "새 입고 우리를 입력하세요.",
+gestationReader_newPenLabel: "새 우리",
+gestationReader_newPenPlaceholder: "예: 1",
+gestationReader_cancel: "취소",
+gestationReader_save: "저장",
+gestationReader_accept: "확인",
+gestationReader_sentHistoryTitle: "전송 기록",
 
   maternityReader_screenTitle: "분만 리더기",
   maternityReader_alertMissingCrotalTitle: "이표가 없습니다",
@@ -591,7 +642,10 @@ estadoAnimal: {
   accept: "확인",
   serverConnectionError: "서버에 연결할 수 없습니다.",
   noIpConfigured: "IP가 설정되어 있지 않습니다.",
-  nextScreenPending: "다음 단계에서 동물 정보 화면을 만들겠습니다."
+  nextScreenPending: "다음 단계에서 동물 정보 화면을 만들겠습니다.",
+  corralMaternityDescription: "분만 우리 번호를 입력하세요.",
+idAnimalDescription: "분만 및 임신 구역에서 동물을 검색합니다.",
+animalNotFound: "동물을 찾을 수 없습니다",
 },
 matCorralDetail: {
   readOnlyPermission: "읽기 전용 권한",
@@ -975,5 +1029,30 @@ movimientoAnimalGestacion: {
 
   exitSentTitle: "출고 전송됨",
   exitByIdSentText: "ID 기준 임신사 출고가 성공적으로 전송되었습니다.",
+},
+gestCorralDetail: {
+    title: "임신 동물 상태",
+    emptyTitle: "이 우리에는 동물이 없습니다",
+
+    id: "ID",
+    crotal: "이표",
+    cycle: "주기",
+    day: "일차",
+
+    stateGestation: "임신",
+    stateOutOfGestation: "임신 아님",
+
+    curve: "곡선",
+    correction: "보정",
+    entryDate: "입고일",
+    inseminationDate: "수정일",
+    house: "동",
+    corral: "우리",
+    estimatedFarrowingDate: "예상 분만일",
+    lastFeeding: "마지막 급이",
+
+    oneDayWithoutFeeding: "1일 미급이",
+    daysWithoutFeeding: "{{count}}일 미급이",
+    of: "중",
 },
 };

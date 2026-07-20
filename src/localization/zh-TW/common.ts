@@ -295,6 +295,57 @@ export default {
   gestationReader_alertInvalidAssociatedCrotalTitle: "耳標無效",
   gestationReader_alertInvalidAssociatedCrotalMessage: "關聯耳標無效。",
   gestationReader_alertUpdateIdErrorTitle: "更新 ID 時發生錯誤",
+  gestationReader_readerMode: "讀取器",
+  gestationReader_keyboardMode: "鍵盤",
+
+  gestationReader_keyboardEntryTitle: "鍵盤輸入",
+  gestationReader_keyboardExitTitle: "鍵盤退出",
+  gestationReader_keyboardDescription: "使用手機鍵盤手動輸入資料。",
+  gestationReader_keyboardId: "ID",
+  gestationReader_keyboardCrotal: "耳標",
+  gestationReader_keyboardIdLabel: "動物 ID",
+  gestationReader_keyboardCrotalLabel: "耳標",
+  gestationReader_keyboardIdPlaceholder: "輸入 ID",
+  gestationReader_keyboardCrotalPlaceholder: "輸入耳標",
+  gestationReader_keyboardAdd: "新增",
+  gestationReader_keyboardAdding: "新增中...",
+
+  gestationReader_pendingRecordsTitle: "尚未傳送的記錄",
+  gestationReader_buttonSendingBatch: "批次傳送中...",
+  gestationReader_buttonSendBatch: "傳送批次",
+  gestationReader_buttonSendBatchCount: "傳送批次 ({{count}})",
+
+  gestationReader_noPendingRecordsTitle: "沒有記錄",
+  gestationReader_noPendingRecordsText: "沒有待傳送的記錄。",
+  gestationReader_batchSentTitle: "批次已傳送",
+  gestationReader_batchSentText: "已成功傳送 {{count}} 筆記錄。",
+  gestationReader_batchWithErrorsTitle: "批次有錯誤",
+
+  gestationReader_recordSentTitle: "記錄已傳送",
+  gestationReader_recordSentText: "移動已成功傳送。",
+
+  gestationReader_invalidAnimalId: "動物 ID 無效。",
+  gestationReader_invalidPenRecord: "記錄的欄位無效。",
+  gestationReader_invalidCrotalRecord: "記錄的耳標無效。",
+  gestationReader_duplicateIdPending: "ID {{id}} 已在尚未傳送的記錄表中。",
+  gestationReader_duplicateCrotalPending: "耳標 {{crotal}} 已在尚未傳送的記錄表中。",
+  gestationReader_keyboardMissingId: "請輸入動物 ID。",
+  gestationReader_keyboardMissingCrotal: "請輸入動物耳標。",
+  gestationReader_keyboardMissingPen: "新增動物前請選擇有效的欄位。",
+  gestationReader_noAnimalById: "不存在 ID 為 {{id}} 的動物。",
+  gestationReader_noAnimalByCrotal: "不存在耳標為 {{crotal}} 的動物。",
+  gestationReader_addAnimalError: "無法新增動物。",
+
+  gestationReader_pendingAnimalHint: "讀取到的動物會顯示在這裡。",
+
+  gestationReader_changePenTitle: "變更欄位",
+  gestationReader_changePenDescription: "輸入新的進入欄位。",
+  gestationReader_newPenLabel: "新欄位",
+  gestationReader_newPenPlaceholder: "例：1",
+  gestationReader_cancel: "取消",
+  gestationReader_save: "儲存",
+  gestationReader_accept: "確認",
+  gestationReader_sentHistoryTitle: "已傳送歷史",
 
   maternityReader_screenTitle: "分娩讀取器",
   maternityReader_alertMissingCrotalTitle: "缺少耳標",
@@ -595,8 +646,10 @@ export default {
     accept: "接受",
     serverConnectionError: "無法連線到伺服器。",
     noIpConfigured: "尚未設定 IP。",
-    nextScreenPending: "下一步我們會建立動物資訊畫面。"
-  },
+    nextScreenPending: "下一步我們會建立動物資訊畫面。",
+    corralMaternityDescription: "請輸入分娩欄位編號。",
+idAnimalDescription: "在分娩區與妊娠區搜尋動物。",
+animalNotFound: "找不到動物",  },
 
   matCorralDetail: {
     readOnlyPermission: "Дозвіл лише на читання",
@@ -982,6 +1035,30 @@ export default {
     exitSentTitle: "退出已傳送",
     exitByIdSentText: "依 ID 的妊娠區退出已成功傳送。",
   },
+gestCorralDetail: {
+    title: "妊娠動物狀態",
+    emptyTitle: "此欄位沒有動物",
 
+    id: "ID",
+    crotal: "耳標",
+    cycle: "週期",
+    day: "天數",
+
+    stateGestation: "妊娠",
+    stateOutOfGestation: "非妊娠",
+
+    curve: "曲線",
+    correction: "修正",
+    entryDate: "進入日期",
+    inseminationDate: "配種日期",
+    house: "舍區",
+    corral: "欄位",
+    estimatedFarrowingDate: "預計分娩日期",
+    lastFeeding: "最後餵食",
+
+    oneDayWithoutFeeding: "1 天未餵食",
+    daysWithoutFeeding: "{{count}} 天未餵食",
+    of: "共",
+},
 
 };

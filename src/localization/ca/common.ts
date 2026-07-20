@@ -297,6 +297,57 @@ export default {
   gestationReader_alertInvalidAssociatedCrotalTitle: "Crotal invàlid",
   gestationReader_alertInvalidAssociatedCrotalMessage: "El crotal associat no és vàlid.",
   gestationReader_alertUpdateIdErrorTitle: "Error en actualitzar ID",
+  gestationReader_readerMode: "Lector",
+gestationReader_keyboardMode: "Teclat",
+
+gestationReader_keyboardEntryTitle: "Entrada per teclat",
+gestationReader_keyboardExitTitle: "Sortida per teclat",
+gestationReader_keyboardDescription: "Escriu la dada manualment amb el teclat del telèfon.",
+gestationReader_keyboardId: "ID",
+gestationReader_keyboardCrotal: "Cròtal",
+gestationReader_keyboardIdLabel: "ID animal",
+gestationReader_keyboardCrotalLabel: "Cròtal",
+gestationReader_keyboardIdPlaceholder: "Escriu l'ID",
+gestationReader_keyboardCrotalPlaceholder: "Escriu el cròtal",
+gestationReader_keyboardAdd: "Afegir",
+gestationReader_keyboardAdding: "Afegint...",
+
+gestationReader_pendingRecordsTitle: "Registres no enviats",
+gestationReader_buttonSendingBatch: "Enviant lot...",
+gestationReader_buttonSendBatch: "Enviar lot",
+gestationReader_buttonSendBatchCount: "Enviar lot ({{count}})",
+
+gestationReader_noPendingRecordsTitle: "Sense registres",
+gestationReader_noPendingRecordsText: "No hi ha registres pendents per enviar.",
+gestationReader_batchSentTitle: "Lot enviat",
+gestationReader_batchSentText: "S'han enviat {{count}} registre(s) correctament.",
+gestationReader_batchWithErrorsTitle: "Lot amb errors",
+
+gestationReader_recordSentTitle: "Registre enviat",
+gestationReader_recordSentText: "El moviment s'ha enviat correctament.",
+
+gestationReader_invalidAnimalId: "L'ID de l'animal no és vàlid.",
+gestationReader_invalidPenRecord: "El corral del registre no és vàlid.",
+gestationReader_invalidCrotalRecord: "El cròtal del registre no és vàlid.",
+gestationReader_duplicateIdPending: "L'ID {{id}} ja és a la taula de registres no enviats.",
+gestationReader_duplicateCrotalPending: "El cròtal {{crotal}} ja és a la taula de registres no enviats.",
+gestationReader_keyboardMissingId: "Escriu l'ID de l'animal.",
+gestationReader_keyboardMissingCrotal: "Escriu el cròtal de l'animal.",
+gestationReader_keyboardMissingPen: "Selecciona un corral vàlid abans d'afegir l'animal.",
+gestationReader_noAnimalById: "No existeix cap animal amb l'ID {{id}}.",
+gestationReader_noAnimalByCrotal: "No existeix cap animal amb el cròtal {{crotal}}.",
+gestationReader_addAnimalError: "No s'ha pogut afegir l'animal.",
+
+gestationReader_pendingAnimalHint: "Els animals llegits apareixeran aquí.",
+
+gestationReader_changePenTitle: "Canviar corral",
+gestationReader_changePenDescription: "Introdueix el nou corral d'entrada.",
+gestationReader_newPenLabel: "Nou corral",
+gestationReader_newPenPlaceholder: "Ex: 1",
+gestationReader_cancel: "Cancel·lar",
+gestationReader_save: "Guardar",
+gestationReader_accept: "Acceptar",
+gestationReader_sentHistoryTitle: "Historial d'enviats",
 
   maternityReader_screenTitle: "Lector Maternitat",
   maternityReader_alertMissingCrotalTitle: "Falta crotal",
@@ -598,6 +649,9 @@ estadoAnimal: {
   noIpConfigured: "No hi ha cap IP configurada.",
   nextScreenPending: "Farem la pantalla d'informació de l'animal en el següent pas.",
   moveToWeaning: "Passar a deslletament",
+  corralMaternityDescription: "Introdueix el número del corral de maternitat.",
+idAnimalDescription: "Cerca l’animal en maternitat i gestació.",
+animalNotFound: "No s’ha trobat l’animal ni en maternitat ni en gestació.",
 
 },
 
@@ -984,6 +1038,31 @@ movimientoAnimalGestacion: {
 
   exitSentTitle: "Sortida enviada",
   exitByIdSentText: "La sortida per ID en gestació s'ha enviat correctament.",
+},
+gestCorralDetail: {
+    title: "Estat animal gestació",
+    emptyTitle: "No hi ha cap animal en aquest corral",
+
+    id: "ID",
+    crotal: "Cròtal",
+    cycle: "Cicle",
+    day: "Dia",
+
+    stateGestation: "Gestació",
+    stateOutOfGestation: "Fora de gestació",
+
+    curve: "Corba",
+    correction: "Correcció",
+    entryDate: "Data d’entrada",
+    inseminationDate: "Data d’inseminació",
+    house: "Nau",
+    corral: "Corral",
+    estimatedFarrowingDate: "Data estimada de part",
+    lastFeeding: "Última alimentació",
+
+    oneDayWithoutFeeding: "1 dia sense alimentar",
+    daysWithoutFeeding: "{{count}} dies sense alimentar",
+    of: "de",
 },
 
 };

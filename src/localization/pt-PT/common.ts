@@ -290,6 +290,57 @@ export default {
   gestationReader_alertInvalidAssociatedCrotalTitle: "Crotal inválido",
   gestationReader_alertInvalidAssociatedCrotalMessage: "O crotal associado não é válido.",
   gestationReader_alertUpdateIdErrorTitle: "Erro ao atualizar ID",
+  gestationReader_readerMode: "Leitor",
+gestationReader_keyboardMode: "Teclado",
+
+gestationReader_keyboardEntryTitle: "Entrada por teclado",
+gestationReader_keyboardExitTitle: "Saída por teclado",
+gestationReader_keyboardDescription: "Introduza o dado manualmente com o teclado do telefone.",
+gestationReader_keyboardId: "ID",
+gestationReader_keyboardCrotal: "Brinco",
+gestationReader_keyboardIdLabel: "ID animal",
+gestationReader_keyboardCrotalLabel: "Brinco",
+gestationReader_keyboardIdPlaceholder: "Introduza o ID",
+gestationReader_keyboardCrotalPlaceholder: "Introduza o brinco",
+gestationReader_keyboardAdd: "Adicionar",
+gestationReader_keyboardAdding: "A adicionar...",
+
+gestationReader_pendingRecordsTitle: "Registos não enviados",
+gestationReader_buttonSendingBatch: "A enviar lote...",
+gestationReader_buttonSendBatch: "Enviar lote",
+gestationReader_buttonSendBatchCount: "Enviar lote ({{count}})",
+
+gestationReader_noPendingRecordsTitle: "Sem registos",
+gestationReader_noPendingRecordsText: "Não há registos pendentes para enviar.",
+gestationReader_batchSentTitle: "Lote enviado",
+gestationReader_batchSentText: "{{count}} registo(s) enviados corretamente.",
+gestationReader_batchWithErrorsTitle: "Lote com erros",
+
+gestationReader_recordSentTitle: "Registo enviado",
+gestationReader_recordSentText: "O movimento foi enviado corretamente.",
+
+gestationReader_invalidAnimalId: "O ID do animal não é válido.",
+gestationReader_invalidPenRecord: "O curral do registo não é válido.",
+gestationReader_invalidCrotalRecord: "O brinco do registo não é válido.",
+gestationReader_duplicateIdPending: "O ID {{id}} já está na tabela de registos não enviados.",
+gestationReader_duplicateCrotalPending: "O brinco {{crotal}} já está na tabela de registos não enviados.",
+gestationReader_keyboardMissingId: "Introduza o ID do animal.",
+gestationReader_keyboardMissingCrotal: "Introduza o brinco do animal.",
+gestationReader_keyboardMissingPen: "Selecione um curral válido antes de adicionar o animal.",
+gestationReader_noAnimalById: "Não existe nenhum animal com o ID {{id}}.",
+gestationReader_noAnimalByCrotal: "Não existe nenhum animal com o brinco {{crotal}}.",
+gestationReader_addAnimalError: "Não foi possível adicionar o animal.",
+
+gestationReader_pendingAnimalHint: "Os animais lidos aparecerão aqui.",
+
+gestationReader_changePenTitle: "Alterar curral",
+gestationReader_changePenDescription: "Introduza o novo curral de entrada.",
+gestationReader_newPenLabel: "Novo curral",
+gestationReader_newPenPlaceholder: "Ex.: 1",
+gestationReader_cancel: "Cancelar",
+gestationReader_save: "Guardar",
+gestationReader_accept: "Aceitar",
+gestationReader_sentHistoryTitle: "Histórico de enviados",
 
   maternityReader_screenTitle: "Leitor Maternidade",
   maternityReader_alertMissingCrotalTitle: "Falta brinco",
@@ -592,7 +643,10 @@ export default {
     accept: "Aceitar",
     serverConnectionError: "Não foi possível ligar ao servidor.",
     noIpConfigured: "Não há nenhum IP configurado.",
-    nextScreenPending: "Vamos criar o ecrã de informação do animal no próximo passo."
+    nextScreenPending: "Vamos criar o ecrã de informação do animal no próximo passo.",
+    corralMaternityDescription: "Introduza o número do curral de maternidade.",
+idAnimalDescription: "Procura o animal em maternidade e gestação.",
+animalNotFound: "Animal não encontrado",
   },
 
   matCorralDetail: {
@@ -979,6 +1033,30 @@ movimientoAnimalGestacion: {
   exitSentTitle: "Saída enviada",
   exitByIdSentText: "A saída por ID em gestação foi enviada corretamente.",
 },
+gestCorralDetail: {
+    title: "Estado animal gestação",
+    emptyTitle: "Não há animal neste curral",
 
+    id: "ID",
+    crotal: "Brinco",
+    cycle: "Ciclo",
+    day: "Dia",
+
+    stateGestation: "Gestação",
+    stateOutOfGestation: "Fora de gestação",
+
+    curve: "Curva",
+    correction: "Correção",
+    entryDate: "Data de entrada",
+    inseminationDate: "Data de inseminação",
+    house: "Pavilhão",
+    corral: "Curral",
+    estimatedFarrowingDate: "Data estimada de parto",
+    lastFeeding: "Última alimentação",
+
+    oneDayWithoutFeeding: "1 dia sem alimentação",
+    daysWithoutFeeding: "{{count}} dias sem alimentação",
+    of: "de",
+},
 
 }

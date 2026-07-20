@@ -223,6 +223,57 @@ export default {
     maternidadConfig_alert_searchError: "Errore nella ricerca",
     maternidadConfig_alert_networkError: "Errore di rete",
     maternidadConfig_alert_networkErrorMessage: "Non è stato possibile connettersi al server.",
+    gestationReader_readerMode: "Lettore",
+gestationReader_keyboardMode: "Tastiera",
+
+gestationReader_keyboardEntryTitle: "Entrata da tastiera",
+gestationReader_keyboardExitTitle: "Uscita da tastiera",
+gestationReader_keyboardDescription: "Inserisci il dato manualmente con la tastiera del telefono.",
+gestationReader_keyboardId: "ID",
+gestationReader_keyboardCrotal: "Marca auricolare",
+gestationReader_keyboardIdLabel: "ID animale",
+gestationReader_keyboardCrotalLabel: "Marca auricolare",
+gestationReader_keyboardIdPlaceholder: "Inserisci l'ID",
+gestationReader_keyboardCrotalPlaceholder: "Inserisci la marca auricolare",
+gestationReader_keyboardAdd: "Aggiungi",
+gestationReader_keyboardAdding: "Aggiunta...",
+
+gestationReader_pendingRecordsTitle: "Registri non inviati",
+gestationReader_buttonSendingBatch: "Invio lotto...",
+gestationReader_buttonSendBatch: "Invia lotto",
+gestationReader_buttonSendBatchCount: "Invia lotto ({{count}})",
+
+gestationReader_noPendingRecordsTitle: "Nessun registro",
+gestationReader_noPendingRecordsText: "Non ci sono registri in attesa di invio.",
+gestationReader_batchSentTitle: "Lotto inviato",
+gestationReader_batchSentText: "{{count}} registro/i inviato/i correttamente.",
+gestationReader_batchWithErrorsTitle: "Lotto con errori",
+
+gestationReader_recordSentTitle: "Registro inviato",
+gestationReader_recordSentText: "Il movimento è stato inviato correttamente.",
+
+gestationReader_invalidAnimalId: "L'ID dell'animale non è valido.",
+gestationReader_invalidPenRecord: "Il box del registro non è valido.",
+gestationReader_invalidCrotalRecord: "La marca auricolare del registro non è valida.",
+gestationReader_duplicateIdPending: "L'ID {{id}} è già nella tabella dei registri non inviati.",
+gestationReader_duplicateCrotalPending: "La marca auricolare {{crotal}} è già nella tabella dei registri non inviati.",
+gestationReader_keyboardMissingId: "Inserisci l'ID dell'animale.",
+gestationReader_keyboardMissingCrotal: "Inserisci la marca auricolare dell'animale.",
+gestationReader_keyboardMissingPen: "Seleziona un box valido prima di aggiungere l'animale.",
+gestationReader_noAnimalById: "Non esiste alcun animale con ID {{id}}.",
+gestationReader_noAnimalByCrotal: "Non esiste alcun animale con marca auricolare {{crotal}}.",
+gestationReader_addAnimalError: "Non è stato possibile aggiungere l'animale.",
+
+gestationReader_pendingAnimalHint: "Gli animali letti appariranno qui.",
+
+gestationReader_changePenTitle: "Cambia box",
+gestationReader_changePenDescription: "Inserisci il nuovo box di entrata.",
+gestationReader_newPenLabel: "Nuovo box",
+gestationReader_newPenPlaceholder: "Es: 1",
+gestationReader_cancel: "Annulla",
+gestationReader_save: "Salva",
+gestationReader_accept: "Accetta",
+gestationReader_sentHistoryTitle: "Storico inviati",
 
     gestationReader_screenTitle: "Lettore Gestazione",
     gestationReader_animalInfoTitle: "Informazioni dell'animale",
@@ -597,7 +648,10 @@ estadoAnimal: {
   accept: "Accetta",
   serverConnectionError: "Impossibile connettersi al server.",
   noIpConfigured: "Nessun IP configurato.",
-  nextScreenPending: "Creeremo la schermata delle informazioni dell'animale nel prossimo passaggio."
+  nextScreenPending: "Creeremo la schermata delle informazioni dell'animale nel prossimo passaggio.",
+  corralMaternityDescription: "Inserisci il numero del box di maternità.",
+idAnimalDescription: "Cerca l’animale in maternità e gestazione.",
+animalNotFound: "Animale non trovato",
 },
 matCorralDetail: {
  readOnlyPermission: "Permesso di sola lettura",
@@ -983,5 +1037,30 @@ movimientoAnimalGestacion: {
 
   exitSentTitle: "Uscita inviata",
   exitByIdSentText: "L'uscita dalla gestazione per ID è stata inviata correttamente.",
+},
+gestCorralDetail: {
+    title: "Stato animale gestazione",
+    emptyTitle: "Non c’è nessun animale in questo box",
+
+    id: "ID",
+    crotal: "Marca auricolare",
+    cycle: "Ciclo",
+    day: "Giorno",
+
+    stateGestation: "Gestazione",
+    stateOutOfGestation: "Fuori gestazione",
+
+    curve: "Curva",
+    correction: "Correzione",
+    entryDate: "Data entrata",
+    inseminationDate: "Data inseminazione",
+    house: "Capannone",
+    corral: "Box",
+    estimatedFarrowingDate: "Data stimata parto",
+    lastFeeding: "Ultima alimentazione",
+
+    oneDayWithoutFeeding: "1 giorno senza alimentazione",
+    daysWithoutFeeding: "{{count}} giorni senza alimentazione",
+    of: "di",
 },
 };

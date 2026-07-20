@@ -295,6 +295,57 @@ export default {
   gestationReader_alertInvalidAssociatedCrotalTitle: "Некоректна бірка",
   gestationReader_alertInvalidAssociatedCrotalMessage: "Пов'язана бірка недійсна.",
   gestationReader_alertUpdateIdErrorTitle: "Помилка під час оновлення ID",
+  gestationReader_readerMode: "Зчитувач",
+gestationReader_keyboardMode: "Клавіатура",
+
+gestationReader_keyboardEntryTitle: "Введення з клавіатури",
+gestationReader_keyboardExitTitle: "Виведення з клавіатури",
+gestationReader_keyboardDescription: "Введіть дані вручну за допомогою клавіатури телефону.",
+gestationReader_keyboardId: "ID",
+gestationReader_keyboardCrotal: "Бирка",
+gestationReader_keyboardIdLabel: "ID тварини",
+gestationReader_keyboardCrotalLabel: "Бирка",
+gestationReader_keyboardIdPlaceholder: "Введіть ID",
+gestationReader_keyboardCrotalPlaceholder: "Введіть бирку",
+gestationReader_keyboardAdd: "Додати",
+gestationReader_keyboardAdding: "Додавання...",
+
+gestationReader_pendingRecordsTitle: "Ненадіслані записи",
+gestationReader_buttonSendingBatch: "Надсилання партії...",
+gestationReader_buttonSendBatch: "Надіслати партію",
+gestationReader_buttonSendBatchCount: "Надіслати партію ({{count}})",
+
+gestationReader_noPendingRecordsTitle: "Немає записів",
+gestationReader_noPendingRecordsText: "Немає записів, що очікують на надсилання.",
+gestationReader_batchSentTitle: "Партію надіслано",
+gestationReader_batchSentText: "{{count}} запис(ів) успішно надіслано.",
+gestationReader_batchWithErrorsTitle: "Партія з помилками",
+
+gestationReader_recordSentTitle: "Запис надіслано",
+gestationReader_recordSentText: "Переміщення успішно надіслано.",
+
+gestationReader_invalidAnimalId: "ID тварини недійсний.",
+gestationReader_invalidPenRecord: "Станок запису недійсний.",
+gestationReader_invalidCrotalRecord: "Бирка запису недійсна.",
+gestationReader_duplicateIdPending: "ID {{id}} уже є в таблиці ненадісланих записів.",
+gestationReader_duplicateCrotalPending: "Бирка {{crotal}} уже є в таблиці ненадісланих записів.",
+gestationReader_keyboardMissingId: "Введіть ID тварини.",
+gestationReader_keyboardMissingCrotal: "Введіть бирку тварини.",
+gestationReader_keyboardMissingPen: "Виберіть дійсний станок перед додаванням тварини.",
+gestationReader_noAnimalById: "Тварини з ID {{id}} не існує.",
+gestationReader_noAnimalByCrotal: "Тварини з биркою {{crotal}} не існує.",
+gestationReader_addAnimalError: "Не вдалося додати тварину.",
+
+gestationReader_pendingAnimalHint: "Зчитані тварини з’являться тут.",
+
+gestationReader_changePenTitle: "Змінити станок",
+gestationReader_changePenDescription: "Введіть новий станок для введення.",
+gestationReader_newPenLabel: "Новий станок",
+gestationReader_newPenPlaceholder: "Напр.: 1",
+gestationReader_cancel: "Скасувати",
+gestationReader_save: "Зберегти",
+gestationReader_accept: "Прийняти",
+gestationReader_sentHistoryTitle: "Історія надісланих",
 
 
   maternityReader_screenTitle: "Зчитувач материнського відділення",
@@ -597,7 +648,10 @@ estadoAnimal: {
   accept: "Прийняти",
   serverConnectionError: "Не вдалося підключитися до сервера.",
   noIpConfigured: "IP-адресу не налаштовано.",
-  nextScreenPending: "Екран інформації про тварину створимо на наступному кроці."
+  nextScreenPending: "Екран інформації про тварину створимо на наступному кроці.",
+  corralMaternityDescription: "Введіть номер станка в маточнику.",
+idAnimalDescription: "Пошук тварини в маточнику та супоросності.",
+animalNotFound: "Тварину не знайдено",
 },
 
 matCorralDetail: {
@@ -979,5 +1033,30 @@ movimientoAnimalGestacion: {
 
   exitSentTitle: "Виведення надіслано",
   exitByIdSentText: "Виведення із супоросності за ID успішно надіслано.",
+},
+gestCorralDetail: {
+    title: "Стан тварини в супоросності",
+    emptyTitle: "У цьому станку немає тварини",
+
+    id: "ID",
+    crotal: "Бирка",
+    cycle: "Цикл",
+    day: "День",
+
+    stateGestation: "Супоросність",
+    stateOutOfGestation: "Поза супоросністю",
+
+    curve: "Крива",
+    correction: "Корекція",
+    entryDate: "Дата входу",
+    inseminationDate: "Дата осіменіння",
+    house: "Приміщення",
+    corral: "Станок",
+    estimatedFarrowingDate: "Очікувана дата опоросу",
+    lastFeeding: "Останнє годування",
+
+    oneDayWithoutFeeding: "1 день без годування",
+    daysWithoutFeeding: "{{count}} дн. без годування",
+    of: "з",
 },
 };

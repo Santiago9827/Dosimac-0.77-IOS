@@ -10,6 +10,7 @@ import { AWRFlowStackNavigator } from './AWRFlowStackNavigator';
 import { AWRStackNavigator } from './AWRStackNavigator';
 import { MovimientoAnimalScreen } from './MovimientoAnimalScreen';
 import { PortalScreen } from '../screens/HomeScreen/PortalScreen';
+import { LectorGestacionScreen } from '../screens/lector/LectorGestacionScreen';
 
 
 
@@ -52,7 +53,11 @@ export const GeneralStackNavigator = () => {
                 name="LectorMaternidad"
                 component={LectorMaternidadScreen}
             />
-
+            
+            <Stack.Screen
+    name="LectorGestacion"
+    component={LectorGestacionScreen}
+/>
             <Stack.Screen
                 name="GeneralAwrStartScan"
                 component={AWRFlowStackNavigator}

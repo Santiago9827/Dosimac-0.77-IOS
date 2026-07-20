@@ -7,6 +7,7 @@ import { CambioPiensoMaternidadScreen } from './CambioPiensoMaternidadScreen';
 import { EstadoAnimalScreen } from './EstadoAnimalScreen';
 import { EstadoAnimalDetalleScreen } from './EstadoAnimalDetalleScreen';
 import { CapturaMaternidadTopTabsNavigator } from './CapturaMaternidadTopTabsNavigator';
+import { GestCorralDetail } from '../../stores/GestCorralDetail';
 
 const Stack = createStackNavigator();
 
@@ -40,9 +41,13 @@ export const CapturaAnimalStackNavigator = () => {
                 component={EstadoAnimalDetalleScreen}
             />
             <Stack.Screen
-    name="CapturaDatosMaternidad"
-    component={CapturaMaternidadTopTabsNavigator}
-/>
+                name="CapturaDatosMaternidad"
+                component={CapturaMaternidadTopTabsNavigator}
+            />
+            <Stack.Screen
+                name="GestCorralDetail"
+                component={GestCorralDetail}
+            />
 
         </Stack.Navigator>
     );
