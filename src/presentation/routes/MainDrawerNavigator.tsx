@@ -49,6 +49,9 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
         setTimeout(() => {
             (props.navigation as any).navigate('MainTabs', {
                 screen: 'GeneralTab',
+                params: {
+                    screen: 'GeneralHome',
+                },
             });
         }, 120);
     };
@@ -281,13 +284,16 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
                     <DrawerButton
                         label="Inicio"
                         icon="home-outline"
-                        active={false}
+                        active={currentRouteName === 'CapturaAnimalHome'}
                         onPress={() => {
                             props.navigation.closeDrawer();
 
                             setTimeout(() => {
                                 (props.navigation as any).navigate('MainTabs', {
                                     screen: 'CapturaAnimalTab',
+                                    params: {
+                                        screen: 'CapturaAnimalHome',
+                                    },
                                 });
                             }, 120);
                         }}
@@ -328,7 +334,7 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
                         fontWeight: '700',
                     }}
                 >
-                    Versión 5
+                    Versión 7
                 </Text>
             </View>
         </DrawerContentScrollView>

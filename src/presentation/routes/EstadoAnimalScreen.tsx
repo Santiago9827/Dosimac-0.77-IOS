@@ -95,184 +95,184 @@ export const EstadoAnimalScreen = ({ navigation }: any) => {
     }, [valor]);
 
     const obtenerNombreCurvaDesdeApi = async (datosApi: any) => {
-    let nombreCurva = '—';
+        let nombreCurva = '—';
 
-    try {
-        const curvas = await consultarCurvas();
-        const curveId = obtenerIdCurva(datosApi);
+        try {
+            const curvas = await consultarCurvas();
+            const curveId = obtenerIdCurva(datosApi);
 
-        nombreCurva = Array.isArray(curvas)
-            ? obtenerNombreCurva(curvas, curveId)
-            : '—';
+            nombreCurva = Array.isArray(curvas)
+                ? obtenerNombreCurva(curvas, curveId)
+                : '—';
 
-        console.log('CurveId:', curveId);
-        console.log('Nombre curva:', nombreCurva);
-    } catch (errorCurvas) {
-        console.log(
-            'No se pudo consultar el nombre de la curva:',
-            errorCurvas,
-        );
-    }
+            console.log('CurveId:', curveId);
+            console.log('Nombre curva:', nombreCurva);
+        } catch (errorCurvas) {
+            console.log(
+                'No se pudo consultar el nombre de la curva:',
+                errorCurvas,
+            );
+        }
 
-    return nombreCurva;
-};
-
-const navegarDetalleMaternidad = async (
-    datosApi: any,
-    valorLimpio: string,
-) => {
-    const nombreCurva = await obtenerNombreCurvaDesdeApi(datosApi);
-
-    const datosDetalle = mapearMaternidadADetalleAnimal(
-        datosApi,
-        nombreCurva,
-    );
-
-    const corralId = Number(
-        datosApi?.animal?.corralName ?? valorLimpio,
-    );
-
-    navigation.navigate('EstadoAnimalDetalle', {
-        corralId: Number.isFinite(corralId)
-            ? corralId
-            : undefined,
-        mockData: datosDetalle,
-        datosMaternidad: datosApi,
-        origen: 'estadoAnimal',
-    });
-};
-
-const navegarDetalleGestacion = async (datosGestacion: any) => {
-    const nombreCurvaGestacion =
-        await obtenerNombreCurvaDesdeApi(datosGestacion);
-
-    const datosGestacionConCurva = {
-        ...datosGestacion,
-        curveName: nombreCurvaGestacion,
-        animal: {
-            ...(datosGestacion?.animal ?? {}),
-            curveName: nombreCurvaGestacion,
-        },
+        return nombreCurva;
     };
 
-    const corralIdGestacion = Number(
-        datosGestacionConCurva?.animal?.corralName ??
-        datosGestacionConCurva?.corral ??
-        0,
-    );
+    const navegarDetalleMaternidad = async (
+        datosApi: any,
+        valorLimpio: string,
+    ) => {
+        const nombreCurva = await obtenerNombreCurvaDesdeApi(datosApi);
 
-    navigation.navigate('GestCorralDetail', {
-        corralId: Number.isFinite(corralIdGestacion)
-            ? corralIdGestacion
-            : undefined,
-        datosGestacion: datosGestacionConCurva,
-        origen: 'estadoAnimalGestacion',
-    });
-};
-
-const buscarPorIdAutomatico = async (valorLimpio: string) => {
-    let errorMaternidad: any = null;
-    let errorGestacion: any = null;
-
-    try {
-        const datosMaternidad =
-            await consultarMaternidadPorId(valorLimpio);
-
-        await navegarDetalleMaternidad(
-            datosMaternidad,
-            valorLimpio,
+        const datosDetalle = mapearMaternidadADetalleAnimal(
+            datosApi,
+            nombreCurva,
         );
 
-        return;
-    } catch (errorMat: any) {
-        errorMaternidad = errorMat;
-
-        console.log(
-            'No encontrado en maternidad o error consultando maternidad:',
-            errorMat,
+        const corralId = Number(
+            datosApi?.animal?.corralName ?? valorLimpio,
         );
-    }
 
-    try {
-        const datosGestacion =
-            await consultarGestacionPorIdAnimal(valorLimpio);
+        navigation.navigate('EstadoAnimalDetalle', {
+            corralId: Number.isFinite(corralId)
+                ? corralId
+                : undefined,
+            mockData: datosDetalle,
+            datosMaternidad: datosApi,
+            origen: 'estadoAnimal',
+        });
+    };
 
-        await navegarDetalleGestacion(datosGestacion);
+    const navegarDetalleGestacion = async (datosGestacion: any) => {
+        const nombreCurvaGestacion =
+            await obtenerNombreCurvaDesdeApi(datosGestacion);
 
-        return;
-    } catch (errorGest: any) {
-        errorGestacion = errorGest;
+        const datosGestacionConCurva = {
+            ...datosGestacion,
+            curveName: nombreCurvaGestacion,
+            animal: {
+                ...(datosGestacion?.animal ?? {}),
+                curveName: nombreCurvaGestacion,
+            },
+        };
 
-        console.log(
-            'No encontrado en gestación o error consultando gestación:',
-            errorGest,
+        const corralIdGestacion = Number(
+            datosGestacionConCurva?.animal?.corralName ??
+            datosGestacionConCurva?.corral ??
+            0,
         );
-    }
 
-    const ambosSonNoEncontrado =
-        esErrorNoEncontrado(errorMaternidad) &&
-        esErrorNoEncontrado(errorGestacion);
+        navigation.navigate('GestCorralDetail', {
+            corralId: Number.isFinite(corralIdGestacion)
+                ? corralIdGestacion
+                : undefined,
+            datosGestacion: datosGestacionConCurva,
+            origen: 'estadoAnimalGestacion',
+        });
+    };
 
-    if (ambosSonNoEncontrado) {
-        throw new Error(t('estadoAnimal.animalNotFound'));
-    }
+    const buscarPorIdAutomatico = async (valorLimpio: string) => {
+        let errorMaternidad: any = null;
+        let errorGestacion: any = null;
 
-    throw new Error(
-        errorGestacion?.message ||
-        errorMaternidad?.message ||
-        t('estadoAnimal.serverConnectionError'),
-    );
-};
+        try {
+            const datosMaternidad =
+                await consultarMaternidadPorId(valorLimpio);
+
+            await navegarDetalleMaternidad(
+                datosMaternidad,
+                valorLimpio,
+            );
+
+            return;
+        } catch (errorMat: any) {
+            errorMaternidad = errorMat;
+
+            console.log(
+                'No encontrado en maternidad o error consultando maternidad:',
+                errorMat,
+            );
+        }
+
+        try {
+            const datosGestacion =
+                await consultarGestacionPorIdAnimal(valorLimpio);
+
+            await navegarDetalleGestacion(datosGestacion);
+
+            return;
+        } catch (errorGest: any) {
+            errorGestacion = errorGest;
+
+            console.log(
+                'No encontrado en gestación o error consultando gestación:',
+                errorGest,
+            );
+        }
+
+        const ambosSonNoEncontrado =
+            esErrorNoEncontrado(errorMaternidad) &&
+            esErrorNoEncontrado(errorGestacion);
+
+        if (ambosSonNoEncontrado) {
+            throw new Error(t('estadoAnimal.animalNotFound'));
+        }
+
+        throw new Error(
+            errorGestacion?.message ||
+            errorMaternidad?.message ||
+            t('estadoAnimal.serverConnectionError'),
+        );
+    };
 
     const buscarEstadoAnimal = async () => {
-    Keyboard.dismiss();
+        Keyboard.dismiss();
 
-    const valorLimpio = valor.trim();
+        const valorLimpio = valor.trim();
 
-    if (!valorLimpio || cargando) {
-        Alert.alert(
-            t('estadoAnimal.requiredData'),
-            tipoBusqueda === 'corral'
-                ? t('estadoAnimal.enterCorral')
-                : t('estadoAnimal.enterId'),
-        );
+        if (!valorLimpio || cargando) {
+            Alert.alert(
+                t('estadoAnimal.requiredData'),
+                tipoBusqueda === 'corral'
+                    ? t('estadoAnimal.enterCorral')
+                    : t('estadoAnimal.enterId'),
+            );
 
-        return;
-    }
-
-    try {
-        setCargando(true);
-
-        if (tipoBusqueda === 'idAutomatico') {
-            await buscarPorIdAutomatico(valorLimpio);
             return;
         }
 
-        const datosMaternidadCorral =
-            await consultarMaternidadPorCorral(valorLimpio);
+        try {
+            setCargando(true);
 
-        await navegarDetalleMaternidad(
-            datosMaternidadCorral,
-            valorLimpio,
-        );
-    } catch (error: any) {
-        console.log('Error consultando estado animal:', error);
+            if (tipoBusqueda === 'idAutomatico') {
+                await buscarPorIdAutomatico(valorLimpio);
+                return;
+            }
 
-        setError(
-            error?.message === 'No hay IP configurada' ||
-                error?.message === 'NO_IP_CONFIGURADA'
-                ? t('estadoAnimal.noIpConfigured', {
-                    defaultValue: 'No hay IP configurada.',
-                })
-                : error?.message ||
-                t('estadoAnimal.serverConnectionError'),
-        );
+            const datosMaternidadCorral =
+                await consultarMaternidadPorCorral(valorLimpio);
 
-        setModalErrorVisible(true);
-    } finally {
-        setCargando(false);
-    }
-};
+            await navegarDetalleMaternidad(
+                datosMaternidadCorral,
+                valorLimpio,
+            );
+        } catch (error: any) {
+            console.log('Error consultando estado animal:', error);
+
+            setError(
+                error?.message === 'No hay IP configurada' ||
+                    error?.message === 'NO_IP_CONFIGURADA'
+                    ? t('estadoAnimal.noIpConfigured', {
+                        defaultValue: 'No hay IP configurada.',
+                    })
+                    : error?.message ||
+                    t('estadoAnimal.serverConnectionError'),
+            );
+
+            setModalErrorVisible(true);
+        } finally {
+            setCargando(false);
+        }
+    };
     const OpcionBusqueda = ({
         tipo,
         titulo,
@@ -334,31 +334,31 @@ const buscarPorIdAutomatico = async (valorLimpio: string) => {
                         />
                     </View>
 
-                   {tipo === 'idAutomatico' ? (
-    <View style={styles.optionTitleDouble}>
-        <Text style={styles.optionTitleBigLine}>
-            ID
-        </Text>
+                    {tipo === 'idAutomatico' ? (
+                        <View style={styles.optionTitleDouble}>
+                            <Text style={styles.optionTitleBigLine}>
+                                ID
+                            </Text>
 
-        <Text style={styles.optionTitleBigLine}>
-            Animal
-        </Text>
-    </View>
-) : tipo === 'corral' ? (
-    <View style={styles.optionTitleDouble}>
-        <Text style={styles.optionTitleBigLine}>
-            Corral
-        </Text>
+                            <Text style={styles.optionTitleBigLine}>
+                                Animal
+                            </Text>
+                        </View>
+                    ) : tipo === 'corral' ? (
+                        <View style={styles.optionTitleDouble}>
+                            <Text style={styles.optionTitleBigLine}>
+                                Corral
+                            </Text>
 
-        <Text style={styles.optionTitleBigLine}>
-            Maternidad
-        </Text>
-    </View>
-) : (
-    <Text style={styles.optionTitle}>
-        {titulo}
-    </Text>
-)}
+                            <Text style={styles.optionTitleBigLine}>
+                                Maternidad
+                            </Text>
+                        </View>
+                    ) : (
+                        <Text style={styles.optionTitle}>
+                            {titulo}
+                        </Text>
+                    )}
                 </View>
 
                 <Text style={styles.optionDescription}>
@@ -429,27 +429,27 @@ const buscarPorIdAutomatico = async (valorLimpio: string) => {
                     </View>
 
                     <View style={styles.optionsBox}>
-                       <OpcionBusqueda
-    tipo="corral"
-    titulo={t('estadoAnimal.corral')}
-    descripcion={t('estadoAnimal.corralMaternityDescription', {
-        defaultValue: 'Introduce el número del corral de maternidad.',
-    })}
-    icono="home-outline"
-    color={GREEN}
-    fondo="#DDF3EF"
-/>
+                        <OpcionBusqueda
+                            tipo="corral"
+                            titulo={t('estadoAnimal.corral')}
+                            descripcion={t('estadoAnimal.corralMaternityDescription', {
+                                defaultValue: 'Introduce el número del corral de maternidad.',
+                            })}
+                            icono="home-outline"
+                            color={GREEN}
+                            fondo="#DDF3EF"
+                        />
 
-<OpcionBusqueda
-    tipo="idAutomatico"
-    titulo={t('estadoAnimal.animalId')}
-    descripcion={t('estadoAnimal.idAnimalDescription', {
-        defaultValue: 'Busca en maternidad y gestación.',
-    })}
-    icono="search-outline"
-    color="#2563EB"
-    fondo="#DBEAFE"
-/>
+                        <OpcionBusqueda
+                            tipo="idAutomatico"
+                            titulo={t('estadoAnimal.animalId')}
+                            descripcion={t('estadoAnimal.idAnimalDescription', {
+                                defaultValue: 'Busca en maternidad y gestación.',
+                            })}
+                            icono="search-outline"
+                            color="#2563EB"
+                            fondo="#DBEAFE"
+                        />
                     </View>
 
                     <View style={styles.inputCard}>
@@ -462,7 +462,7 @@ const buscarPorIdAutomatico = async (valorLimpio: string) => {
                         <TextInput
                             mode="outlined"
                             value={valor}
-                            onChangeText={texto =>  {
+                            onChangeText={texto => {
                                 setValor(texto);
                                 if (error) setError('');
                             }}
@@ -490,11 +490,11 @@ const buscarPorIdAutomatico = async (valorLimpio: string) => {
                             contentStyle={styles.textInputContent}
                             left={
                                 <TextInput.Icon
-                                   icon={
-    tipoBusqueda === 'corral'
-        ? 'home-outline'
-        : 'search-outline'
-}
+                                    icon={
+                                        tipoBusqueda === 'corral'
+                                            ? 'home-outline'
+                                            : 'search-outline'
+                                    }
                                     color={BRAND}
                                 />
                             }
@@ -677,14 +677,14 @@ const styles = StyleSheet.create({
         height: 6,
     },
 
-   optionHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    marginBottom: 8,
-    paddingHorizontal: 4,
-},
+    optionHeaderRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 6,
+        marginBottom: 8,
+        paddingHorizontal: 4,
+    },
     optionIconBox: {
         width: 37,
         height: 37,
@@ -837,17 +837,17 @@ const styles = StyleSheet.create({
         fontWeight: '900',
     },
     optionTitleDouble: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-},
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 
-optionTitleBigLine: {
-    width: '100%',
-    color: TEXT,
-    fontSize: 15,
-    fontWeight: '900',
-    lineHeight: 16,
-    textAlign: 'center',
-},
+    optionTitleBigLine: {
+        width: '100%',
+        color: TEXT,
+        fontSize: 15,
+        fontWeight: '900',
+        lineHeight: 16,
+        textAlign: 'center',
+    },
 });
