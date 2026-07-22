@@ -583,6 +583,7 @@ export const EstadoAnimalDetalleScreen = ({
         useState(false);
 
     const [nuevoCorral, setNuevoCorral] = useState('');
+    const [errorCambiarCorral, setErrorCambiarCorral] = useState('');
 
     const [guardandoCorral, setGuardandoCorral] =
         useState(false);
@@ -602,6 +603,7 @@ export const EstadoAnimalDetalleScreen = ({
         useState(false);
 
     const [nuevoCrotal, setNuevoCrotal] = useState('');
+    const [errorSustituirCrotal, setErrorSustituirCrotal] = useState('');
 
     const [guardandoCrotal, setGuardandoCrotal] =
         useState(false);
@@ -953,6 +955,7 @@ export const EstadoAnimalDetalleScreen = ({
         cerrarOperaciones();
 
         setNuevoCorral('');
+        setErrorCambiarCorral('');
 
         setTimeout(() => {
             setModalCambiarCorralVisible(true);
@@ -962,11 +965,10 @@ export const EstadoAnimalDetalleScreen = ({
     const aplicarCambiarCorral = async () => {
         const corralLimpio = nuevoCorral.trim();
 
+        setErrorCambiarCorral('');
+
         if (!corralLimpio) {
-            Alert.alert(
-                t('matCorralDetail.error', {
-                    defaultValue: 'Error',
-                }),
+            setErrorCambiarCorral(
                 t('matCorralDetail.enterNewPen', {
                     defaultValue: 'Introduce el nuevo corral.',
                 }),
@@ -976,10 +978,7 @@ export const EstadoAnimalDetalleScreen = ({
         }
 
         if (!pkidValido) {
-            Alert.alert(
-                t('matCorralDetail.error', {
-                    defaultValue: 'Error',
-                }),
+            setErrorCambiarCorral(
                 t('matCorralDetail.pkidChangePenNotFound', {
                     defaultValue:
                         'No se encontró el identificador interno del animal.',
@@ -1001,6 +1000,7 @@ export const EstadoAnimalDetalleScreen = ({
 
             setCorralVisual(corralLimpio);
             setModalCambiarCorralVisible(false);
+            setErrorCambiarCorral('');
 
             Alert.alert(
                 t('matCorralDetail.operations', {
@@ -1013,14 +1013,29 @@ export const EstadoAnimalDetalleScreen = ({
         } catch (error: any) {
             console.log('Error cambiando corral:', error);
 
-            Alert.alert(
-                t('matCorralDetail.error', {
-                    defaultValue: 'Error',
-                }),
+            const mensajeError = String(
+                error?.message ?? error ?? '',
+            ).toLowerCase();
+
+            if (
+                mensajeError.includes('corral not found') ||
+                mensajeError.includes('pen not found') ||
+                mensajeError.includes('corral no encontrado') ||
+                mensajeError.includes('not found')
+            ) {
+                setErrorCambiarCorral(
+                    t('matCorralDetail.penNotFound', {
+                        defaultValue: 'Corral no encontrado',
+                    }),
+                );
+
+                return;
+            }
+
+            setErrorCambiarCorral(
                 error?.message ??
                 t('matCorralDetail.changePenError', {
-                    defaultValue:
-                        'No se pudo cambiar el corral.',
+                    defaultValue: 'No se pudo cambiar el corral.',
                 }),
             );
         } finally {
@@ -1032,6 +1047,8 @@ export const EstadoAnimalDetalleScreen = ({
         cerrarOperaciones();
 
         setNuevoCrotal('');
+        setErrorSustituirCrotal('');
+
 
         setTimeout(() => {
             setModalCrotalVisible(true);
@@ -1041,11 +1058,10 @@ export const EstadoAnimalDetalleScreen = ({
     const aplicarCrotal = async () => {
         const crotalNuevo = nuevoCrotal.trim();
 
+        setErrorSustituirCrotal('');
+
         if (!crotalNuevo) {
-            Alert.alert(
-                t('matCorralDetail.error', {
-                    defaultValue: 'Error',
-                }),
+            setErrorSustituirCrotal(
                 t('matCorralDetail.enterNewEarTag', {
                     defaultValue: 'Introduce el nuevo crotal.',
                 }),
@@ -1055,10 +1071,7 @@ export const EstadoAnimalDetalleScreen = ({
         }
 
         if (!pkidValido) {
-            Alert.alert(
-                t('matCorralDetail.error', {
-                    defaultValue: 'Error',
-                }),
+            setErrorSustituirCrotal(
                 t('matCorralDetail.pkidEarTagNotFound', {
                     defaultValue:
                         'No se encontró el identificador interno del animal.',
@@ -1080,12 +1093,16 @@ export const EstadoAnimalDetalleScreen = ({
 
             console.log('===== SUSTITUIR CROTAL =====');
             console.log('payloadCrotal:', JSON.stringify(payloadCrotal, null, 2));
-            console.log('datosMaternidad.animal:', JSON.stringify(datosMaternidad?.animal, null, 2));
+            console.log(
+                'datosMaternidad.animal:',
+                JSON.stringify(datosMaternidad?.animal, null, 2),
+            );
 
             await ejecutarOperacionMaternidad(payloadCrotal);
 
             setCrotalVisual(crotalNuevo);
             setModalCrotalVisible(false);
+            setErrorSustituirCrotal('');
 
             Alert.alert(
                 t('matCorralDetail.operations', {
@@ -1098,14 +1115,28 @@ export const EstadoAnimalDetalleScreen = ({
         } catch (error: any) {
             console.log('Error sustituyendo crotal:', error);
 
-            Alert.alert(
-                t('matCorralDetail.error', {
-                    defaultValue: 'Error',
-                }),
+            const mensajeError = String(
+                error?.message ?? error ?? '',
+            ).toLowerCase();
+
+            if (
+                mensajeError.includes('crotal asignado a otro animal') ||
+                mensajeError.includes('asignado a otro animal') ||
+                mensajeError.includes('assigned to another animal')
+            ) {
+                setErrorSustituirCrotal(
+                    t('matCorralDetail.earTagAlreadyAssigned', {
+                        defaultValue: 'El crotal está asignado a otro animal',
+                    }),
+                );
+
+                return;
+            }
+
+            setErrorSustituirCrotal(
                 error?.message ??
                 t('matCorralDetail.replaceEarTagError', {
-                    defaultValue:
-                        'No se pudo sustituir el crotal.',
+                    defaultValue: 'No se pudo sustituir el crotal.',
                 }),
             );
         } finally {
@@ -1805,18 +1836,25 @@ export const EstadoAnimalDetalleScreen = ({
                             })}
                             value={animal.ciclo ?? '—'}
                         />
-
-                        <ChipDato
-                            label={t('matCorralDetail.day', {
-                                defaultValue: 'Día',
-                            })}
-                            value={animal.dia ?? '—'}
-                        />
                     </View>
 
-                    <Text style={styles.subEstado}>
-                        {subEstadoVisual}
-                    </Text>
+                    <View style={styles.subEstadoRow}>
+                        <Text style={styles.subEstado}>
+                            {subEstadoVisual}
+                        </Text>
+
+                        <View style={styles.diaInline}>
+                            <Text style={styles.diaLabel}>
+                                {t('matCorralDetail.day', {
+                                    defaultValue: 'Día',
+                                })}
+                            </Text>
+
+                            <Text style={styles.diaValue}>
+                                {animal.dia ?? '—'}
+                            </Text>
+                        </View>
+                    </View>
 
                     <View style={styles.kpiRow}>
                         <View style={styles.kpiLeft}>
@@ -2925,12 +2963,18 @@ export const EstadoAnimalDetalleScreen = ({
                 visible={modalCambiarCorralVisible}
                 transparent
                 animationType="fade"
-                onRequestClose={() => setModalCambiarCorralVisible(false)}
+                onRequestClose={() => {
+                    setModalCambiarCorralVisible(false);
+                    setErrorCambiarCorral('');
+                }}
             >
                 <View style={styles.modalSalidaOverlay}>
                     <Pressable
                         style={styles.modalSalidaBackdrop}
-                        onPress={() => setModalCambiarCorralVisible(false)}
+                        onPress={() => {
+                            setModalCambiarCorralVisible(false);
+                            setErrorCambiarCorral('');
+                        }}
                     />
 
                     <View style={styles.modalSalidaCard}>
@@ -2960,7 +3004,10 @@ export const EstadoAnimalDetalleScreen = ({
 
                             <TouchableOpacity
                                 activeOpacity={0.85}
-                                onPress={() => setModalCambiarCorralVisible(false)}
+                                onPress={() => {
+                                    setModalCambiarCorralVisible(false);
+                                    setErrorCambiarCorral('');
+                                }}
                                 style={styles.botonCerrarOperaciones}
                             >
                                 <Ionicons
@@ -2979,9 +3026,13 @@ export const EstadoAnimalDetalleScreen = ({
 
                         <TextInput
                             value={nuevoCorral}
-                            onChangeText={texto =>
-                                setNuevoCorral(texto.replace(/[^0-9]/g, ''))
-                            }
+                            onChangeText={texto => {
+                                setNuevoCorral(texto.replace(/[^0-9]/g, ''));
+
+                                if (errorCambiarCorral) {
+                                    setErrorCambiarCorral('');
+                                }
+                            }}
                             editable={!guardandoCorral}
                             keyboardType="numeric"
                             inputMode="numeric"
@@ -2989,14 +3040,26 @@ export const EstadoAnimalDetalleScreen = ({
                                 defaultValue: 'Introduce el nuevo corral',
                             })}
                             placeholderTextColor="#94A3B8"
-                            style={styles.inputCorral}
+                            style={[
+                                styles.inputCorral,
+                                errorCambiarCorral && styles.inputCorralError,
+                            ]}
                         />
+
+                        {!!errorCambiarCorral && (
+                            <Text style={styles.textoErrorModal}>
+                                {errorCambiarCorral}
+                            </Text>
+                        )}
 
                         <View style={styles.botonesModalFila}>
                             <TouchableOpacity
                                 activeOpacity={0.85}
                                 disabled={guardandoCorral}
-                                onPress={() => setModalCambiarCorralVisible(false)}
+                                onPress={() => {
+                                    setModalCambiarCorralVisible(false);
+                                    setErrorCambiarCorral('');
+                                }}
                                 style={styles.botonModalCancelar}
                             >
                                 <Text style={styles.textoBotonModalCancelar}>
@@ -3238,12 +3301,18 @@ export const EstadoAnimalDetalleScreen = ({
                 visible={modalCrotalVisible}
                 transparent
                 animationType="fade"
-                onRequestClose={() => setModalCrotalVisible(false)}
+                onRequestClose={() => {
+                    setModalCrotalVisible(false);
+                    setErrorSustituirCrotal('');
+                }}
             >
                 <View style={styles.modalSalidaOverlay}>
                     <Pressable
                         style={styles.modalSalidaBackdrop}
-                        onPress={() => setModalCrotalVisible(false)}
+                        onPress={() => {
+                            setModalCrotalVisible(false);
+                            setErrorSustituirCrotal('');
+                        }}
                     />
 
                     <View style={styles.modalSalidaCard}>
@@ -3273,7 +3342,10 @@ export const EstadoAnimalDetalleScreen = ({
 
                             <TouchableOpacity
                                 activeOpacity={0.85}
-                                onPress={() => setModalCrotalVisible(false)}
+                                onPress={() => {
+                                    setModalCrotalVisible(false);
+                                    setErrorSustituirCrotal('');
+                                }}
                                 style={styles.botonCerrarOperaciones}
                             >
                                 <Ionicons
@@ -3292,9 +3364,13 @@ export const EstadoAnimalDetalleScreen = ({
 
                         <TextInput
                             value={nuevoCrotal}
-                            onChangeText={texto =>
-                                setNuevoCrotal(texto.replace(/[^0-9]/g, ''))
-                            }
+                            onChangeText={texto => {
+                                setNuevoCrotal(texto.replace(/[^0-9]/g, ''));
+
+                                if (errorSustituirCrotal) {
+                                    setErrorSustituirCrotal('');
+                                }
+                            }}
                             editable={!guardandoCrotal}
                             keyboardType="numeric"
                             inputMode="numeric"
@@ -3302,14 +3378,26 @@ export const EstadoAnimalDetalleScreen = ({
                                 defaultValue: 'Introduce el nuevo crotal',
                             })}
                             placeholderTextColor="#94A3B8"
-                            style={styles.inputCorral}
+                            style={[
+                                styles.inputCorral,
+                                errorSustituirCrotal && styles.inputCorralError,
+                            ]}
                         />
+
+                        {!!errorSustituirCrotal && (
+                            <Text style={styles.textoErrorModal}>
+                                {errorSustituirCrotal}
+                            </Text>
+                        )}
 
                         <View style={styles.botonesModalFila}>
                             <TouchableOpacity
                                 activeOpacity={0.85}
                                 disabled={guardandoCrotal}
-                                onPress={() => setModalCrotalVisible(false)}
+                                onPress={() => {
+                                    setModalCrotalVisible(false);
+                                    setErrorSustituirCrotal('');
+                                }}
                                 style={styles.botonModalCancelar}
                             >
                                 <Text style={styles.textoBotonModalCancelar}>
@@ -3623,10 +3711,39 @@ const styles = StyleSheet.create({
         maxWidth: 110,
     },
 
-    subEstado: {
+    subEstadoRow: {
         marginTop: 14,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 14,
+        flexWrap: 'wrap',
+    },
+
+    subEstado: {
         color: BLUE,
         fontSize: 31,
+        fontWeight: '900',
+    },
+
+    diaInline: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    diaLabel: {
+        color: '#475569',
+        backgroundColor: '#E5E7EB',
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 999,
+        fontSize: 14,
+        fontWeight: '800',
+    },
+
+    diaValue: {
+        marginLeft: 8,
+        color: '#334155',
+        fontSize: 22,
         fontWeight: '900',
     },
 
@@ -4307,6 +4424,17 @@ const styles = StyleSheet.create({
         backgroundColor: BORDER,
         marginTop: 6,
         marginBottom: 10,
+    },
+    inputCorralError: {
+        borderColor: RED,
+        backgroundColor: '#FEF2F2',
+    },
+
+    textoErrorModal: {
+        marginTop: 8,
+        color: RED,
+        fontSize: 13,
+        fontWeight: '800',
     },
 
 });

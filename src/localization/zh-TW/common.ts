@@ -540,6 +540,9 @@ export default {
   },
 
   noAlimentadosMaternidad: {
+    viewStatus: "查看狀態",
+animalIdNotFound: "找不到動物識別碼。",
+openAnimalInfoError: "無法開啟動物資訊。",
     animalId: "動物 ID",
     corral: "欄舍",
     consumption: "採食量",
@@ -648,10 +651,13 @@ export default {
     noIpConfigured: "尚未設定 IP。",
     nextScreenPending: "下一步我們會建立動物資訊畫面。",
     corralMaternityDescription: "請輸入分娩欄位編號。",
-idAnimalDescription: "在分娩區與妊娠區搜尋動物。",
-animalNotFound: "找不到動物",  },
+    idAnimalDescription: "在分娩區與妊娠區搜尋動物。",
+    animalNotFound: "找不到動物",
+  },
 
   matCorralDetail: {
+    earTagAlreadyAssigned: "此耳標已分配給另一隻動物",
+    penNotFound: "找不到欄位",
     readOnlyPermission: "Дозвіл лише на читання",
     readOnlyPermissionText: "Цей користувач має лише права на читання. Він не може виконувати операції з твариною.",
     animalStatus: "動物狀態",
@@ -1035,7 +1041,7 @@ animalNotFound: "找不到動物",  },
     exitSentTitle: "退出已傳送",
     exitByIdSentText: "依 ID 的妊娠區退出已成功傳送。",
   },
-gestCorralDetail: {
+  gestCorralDetail: {
     title: "妊娠動物狀態",
     emptyTitle: "此欄位沒有動物",
 
@@ -1059,6 +1065,52 @@ gestCorralDetail: {
     oneDayWithoutFeeding: "1 天未餵食",
     daysWithoutFeeding: "{{count}} 天未餵食",
     of: "共",
-},
 
+    operationsButton: "操作",
+    operationsTitle: "操作",
+    operationsSubtitle: "選擇一項操作",
+
+    operationInseminationDate: "配種日期",
+    operationCurve: "曲線",
+    operationBodyCondition: "體況",
+    operationChangePen: "更換欄位",
+    operationExitAnimal: "動物離欄",
+    operationReplaceEarTag: "更換耳標",
+
+    cancel: "取消",
+    accept: "確認",
+    saving: "儲存中...",
+
+    selectCurve: "選擇曲線",
+    loadingCurves: "正在載入曲線...",
+    noCurvesAvailable: "沒有可用的曲線",
+
+    selectBodyCondition: "選擇體況",
+    loadingBodyConditions: "正在載入體況...",
+    noBodyConditionsAvailable: "沒有可用的體況",
+
+    changePenTitle: "更換欄位",
+    currentPen: "目前欄位：{{corral}}",
+    newPen: "新欄位",
+    changePenPlaceholder: "請輸入目標欄位",
+
+    replaceEarTagTitle: "更換耳標",
+    currentEarTag: "目前耳標：{{crotal}}",
+    newEarTag: "新耳標",
+    replaceEarTagPlaceholder: "請輸入新耳標",
+
+    inseminationDateTitle: "配種日期",
+    selectDate: "選擇日期",
+    noFutureInseminationDate: "不可選擇晚於目前日期的日期。",
+
+    exitAnimalTitle: "動物離欄",
+    exitAnimalGestation: "妊娠動物離欄",
+    exitDate: "離欄日期",
+    noFutureExitDate: "離欄日期不可晚於目前日期。",
+
+    penNotFound: "找不到欄位",
+    changePenGenericError: "無法更換欄位。",
+    earTagAlreadyAssigned: "此耳標已分配給另一隻動物",
+    replaceEarTagGenericError: "無法更換耳標。",
+  },
 };

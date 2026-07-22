@@ -656,6 +656,10 @@ animalNotFound: "No s’ha trobat l’animal ni en maternitat ni en gestació.",
 },
 
 matCorralDetail: {
+  viewStatus: "Veure estat",
+animalIdNotFound: "No s'ha trobat l'identificador de l'animal.",
+openAnimalInfoError: "No s'ha pogut obrir la informació de l'animal.",
+  earTagAlreadyAssigned: "El cròtal està assignat a un altre animal",
   readOnlyPermission: "Permís de només lectura",
 readOnlyPermissionText: "Aquest usuari només té permisos de lectura. No pot realitzar operacions sobre l'animal.",
   animalStatus: "Estat de l'animal",
@@ -781,6 +785,8 @@ readOnlyPermissionText: "Aquest usuari només té permisos de lectura. No pot re
   pkidPigletsNotFound: "No s'ha trobat l'identificador intern de l'animal.",
   pigletCaptureDone: "Captura de garrins desada correctament.",
   pigletCaptureError: "No s'ha pogut desar la captura de garrins.",
+  penNotFound: "Corral no trobat",
+
 },
 subState: {
   prepartum: "Prepart",
@@ -828,6 +834,8 @@ capturaParto: {
 
   selectDateTitle: "Seleccionar data",
   selectDateMessage: "Ajusta la data del part amb els botons.",
+  penNotFound: "Corral no trobat",
+
 },
 
 capturaMaternidadEntrada: {
@@ -1039,31 +1047,78 @@ movimientoAnimalGestacion: {
   exitSentTitle: "Sortida enviada",
   exitByIdSentText: "La sortida per ID en gestació s'ha enviat correctament.",
 },
+
 gestCorralDetail: {
-    title: "Estat animal gestació",
-    emptyTitle: "No hi ha cap animal en aquest corral",
+   title: "Estat animal gestació",
+   emptyTitle: "No hi ha cap animal en aquest corral",
 
-    id: "ID",
-    crotal: "Cròtal",
-    cycle: "Cicle",
-    day: "Dia",
+   id: "ID",
+   crotal: "Cròtal",
+   cycle: "Cicle",
+   day: "Dia",
 
-    stateGestation: "Gestació",
-    stateOutOfGestation: "Fora de gestació",
+   stateGestation: "Gestació",
+   stateOutOfGestation: "Fora de gestació",
 
-    curve: "Corba",
-    correction: "Correcció",
-    entryDate: "Data d’entrada",
-    inseminationDate: "Data d’inseminació",
-    house: "Nau",
-    corral: "Corral",
-    estimatedFarrowingDate: "Data estimada de part",
-    lastFeeding: "Última alimentació",
+   curve: "Corba",
+   correction: "Correcció",
+   entryDate: "Data d’entrada",
+   inseminationDate: "Data d’inseminació",
+   house: "Nau",
+   corral: "Corral",
+   estimatedFarrowingDate: "Data estimada de part",
+   lastFeeding: "Última alimentació",
 
-    oneDayWithoutFeeding: "1 dia sense alimentar",
-    daysWithoutFeeding: "{{count}} dies sense alimentar",
-    of: "de",
+   oneDayWithoutFeeding: "1 dia sense alimentar",
+   daysWithoutFeeding: "{{count}} dies sense alimentar",
+   of: "de",
+
+   operationsButton: "Operacions",
+   operationsTitle: "Operacions",
+   operationsSubtitle: "Selecciona una operació",
+
+   operationInseminationDate: "Data d’inseminació",
+   operationCurve: "Corba",
+   operationBodyCondition: "Condició corporal",
+   operationChangePen: "Canvi de corral",
+   operationExitAnimal: "Sortida animal",
+   operationReplaceEarTag: "Substituir cròtal",
+
+   cancel: "Cancel·lar",
+   accept: "Acceptar",
+   saving: "Desant...",
+
+   selectCurve: "Seleccionar corba",
+   loadingCurves: "Carregant corbes...",
+   noCurvesAvailable: "No hi ha corbes disponibles",
+
+   selectBodyCondition: "Seleccionar condició corporal",
+   loadingBodyConditions: "Carregant condicions corporals...",
+   noBodyConditionsAvailable: "No hi ha condicions corporals disponibles",
+
+   changePenTitle: "Canviar corral",
+   currentPen: "Corral actual: {{corral}}",
+   newPen: "Nou corral",
+   changePenPlaceholder: "Introdueix el corral de destinació",
+
+   replaceEarTagTitle: "Substituir cròtal",
+   currentEarTag: "Cròtal actual: {{crotal}}",
+   newEarTag: "Nou cròtal",
+   replaceEarTagPlaceholder: "Introdueix el nou cròtal",
+
+   inseminationDateTitle: "Data d’inseminació",
+   selectDate: "Selecciona la data",
+   noFutureInseminationDate: "No es permet seleccionar una data posterior a l’actual.",
+
+   exitAnimalTitle: "Sortida animal",
+   exitAnimalGestation: "Sortida animal gestació",
+   exitDate: "Data de sortida",
+   noFutureExitDate: "La data de sortida no pot ser posterior a l’actual.",
+
+   penNotFound: "Corral no trobat",
+   changePenGenericError: "No s’ha pogut canviar el corral.",
+   earTagAlreadyAssigned: "El cròtal està assignat a un altre animal",
+   replaceEarTagGenericError: "No s’ha pogut substituir el cròtal.",
 },
-
 };
 

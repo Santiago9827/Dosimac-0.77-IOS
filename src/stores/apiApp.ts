@@ -667,3 +667,62 @@ export async function consultarGestacionPorIdAnimal(
 
     return datosApi;
 }
+export type OperacionGestacionPayload = {
+    op: string;
+    key: string | number;
+    value: string | number;
+};
+
+export async function ejecutarOperacionGestacion(
+    payload: OperacionGestacionPayload,
+): Promise<any> {
+    const endpoint = await construirEndpointAppV1(
+        'gestation/operations/',
+    );
+
+    console.log('===== EJECUTAR OPERACIÓN GESTACIÓN =====');
+    console.log('ENDPOINT:', endpoint);
+    console.log('PAYLOAD:', JSON.stringify(payload, null, 2));
+
+    const respuesta = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            op: String(payload.op),
+            key: String(payload.key),
+            value: String(payload.value),
+        }),
+    });
+
+    return leerRespuesta(
+        respuesta,
+        'No se pudo realizar la operación de gestación.',
+    );
+}
+export type CurvaGestacionApi = {
+    id: number;
+    name: string;
+};
+
+export async function consultarCurvasGestacion(): Promise<CurvaGestacionApi[]> {
+    const datos = await consultarCurvas();
+
+    return Array.isArray(datos)
+        ? datos
+            .map((curva: any) => ({
+                id: Number(curva.id),
+                name: String(
+                    curva.name ??
+                    curva.description ??
+                    '',
+                ).trim(),
+            }))
+            .filter((curva: CurvaGestacionApi) =>
+                Number.isFinite(curva.id) &&
+                curva.name,
+            )
+        : [];
+}

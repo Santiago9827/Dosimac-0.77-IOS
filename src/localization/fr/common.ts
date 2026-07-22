@@ -538,6 +538,10 @@ maternidadConfig_readOnlyUseFunction: "Cet utilisateur dispose uniquement d’au
   },
 
   noAlimentadosMaternidad: {
+    viewStatus: "Voir l'état",
+animalIdNotFound: "Identifiant de l'animal introuvable.",
+openAnimalInfoError: "Impossible d'ouvrir les informations de l'animal.",
+
   animalId: "ID ANIMAL",
   corral: "Enclos",
   consumption: "Consommation",
@@ -650,6 +654,7 @@ idAnimalDescription: "Rechercher l’animal en maternité et en gestation.",
 animalNotFound: "Animal non trouvé",
 },
 matCorralDetail: {
+  earTagAlreadyAssigned: "La boucle est attribuée à un autre animal",
   readOnlyPermission: "Permission en lecture seule",
 readOnlyPermissionText: "Cet utilisateur dispose uniquement de permissions de lecture. Il ne peut pas effectuer d'opérations sur l'animal.",
   animalStatus: "État de l'animal",
@@ -775,6 +780,8 @@ readOnlyPermissionText: "Cet utilisateur dispose uniquement de permissions de le
   pkidPigletsNotFound: "L'identifiant interne de l'animal est introuvable.",
   pigletCaptureDone: "Saisie des porcelets enregistrée avec succès.",
   pigletCaptureError: "Impossible d'enregistrer la saisie des porcelets.",
+  penNotFound: "Case non trouvée",
+
 },
 subState: {
   prepartum: "Pré-partum",
@@ -1033,30 +1040,78 @@ movimientoAnimalGestacion: {
   exitSentTitle: "Sortie envoyée",
   exitByIdSentText: "La sortie de gestation par ID a été envoyée correctement.",
 },
+
 gestCorralDetail: {
-    title: "État animal gestation",
-    emptyTitle: "Il n’y a pas d’animal dans cette case",
+   title: "État animal gestation",
+   emptyTitle: "Il n’y a pas d’animal dans cette case",
 
-    id: "ID",
-    crotal: "Boucle",
-    cycle: "Cycle",
-    day: "Jour",
+   id: "ID",
+   crotal: "Boucle",
+   cycle: "Cycle",
+   day: "Jour",
 
-    stateGestation: "Gestation",
-    stateOutOfGestation: "Hors gestation",
+   stateGestation: "Gestation",
+   stateOutOfGestation: "Hors gestation",
 
-    curve: "Courbe",
-    correction: "Correction",
-    entryDate: "Date d’entrée",
-    inseminationDate: "Date d’insémination",
-    house: "Bâtiment",
-    corral: "Case",
-    estimatedFarrowingDate: "Date estimée de mise bas",
-    lastFeeding: "Dernière alimentation",
+   curve: "Courbe",
+   correction: "Correction",
+   entryDate: "Date d’entrée",
+   inseminationDate: "Date d’insémination",
+   house: "Bâtiment",
+   corral: "Case",
+   estimatedFarrowingDate: "Date estimée de mise bas",
+   lastFeeding: "Dernière alimentation",
 
-    oneDayWithoutFeeding: "1 jour sans alimentation",
-    daysWithoutFeeding: "{{count}} jours sans alimentation",
-    of: "sur",
+   oneDayWithoutFeeding: "1 jour sans alimentation",
+   daysWithoutFeeding: "{{count}} jours sans alimentation",
+   of: "sur",
+
+   operationsButton: "Opérations",
+   operationsTitle: "Opérations",
+   operationsSubtitle: "Sélectionnez une opération",
+
+   operationInseminationDate: "Date d’insémination",
+   operationCurve: "Courbe",
+   operationBodyCondition: "Condition corporelle",
+   operationChangePen: "Changer de case",
+   operationExitAnimal: "Sortie animal",
+   operationReplaceEarTag: "Remplacer la boucle",
+
+   cancel: "Annuler",
+   accept: "Accepter",
+   saving: "Enregistrement...",
+
+   selectCurve: "Sélectionner une courbe",
+   loadingCurves: "Chargement des courbes...",
+   noCurvesAvailable: "Aucune courbe disponible",
+
+   selectBodyCondition: "Sélectionner la condition corporelle",
+   loadingBodyConditions: "Chargement des conditions corporelles...",
+   noBodyConditionsAvailable: "Aucune condition corporelle disponible",
+
+   changePenTitle: "Changer de case",
+   currentPen: "Case actuelle : {{corral}}",
+   newPen: "Nouvelle case",
+   changePenPlaceholder: "Saisissez la case de destination",
+
+   replaceEarTagTitle: "Remplacer la boucle",
+   currentEarTag: "Boucle actuelle : {{crotal}}",
+   newEarTag: "Nouvelle boucle",
+   replaceEarTagPlaceholder: "Saisissez la nouvelle boucle",
+
+   inseminationDateTitle: "Date d’insémination",
+   selectDate: "Sélectionnez la date",
+   noFutureInseminationDate: "Il n’est pas possible de sélectionner une date postérieure à la date actuelle.",
+
+   exitAnimalTitle: "Sortie animal",
+   exitAnimalGestation: "Sortie animal gestation",
+   exitDate: "Date de sortie",
+   noFutureExitDate: "La date de sortie ne peut pas être postérieure à la date actuelle.",
+
+   penNotFound: "Case non trouvée",
+   changePenGenericError: "Impossible de changer la case.",
+   earTagAlreadyAssigned: "La boucle est attribuée à un autre animal",
+   replaceEarTagGenericError: "Impossible de remplacer la boucle.",
 },
 
 };

@@ -650,6 +650,10 @@ animalNotFound: "Animal não encontrado",
   },
 
   matCorralDetail: {
+    viewStatus: "Ver estado",
+animalIdNotFound: "Identificador do animal não encontrado.",
+openAnimalInfoError: "Não foi possível abrir as informações do animal.",
+    earTagAlreadyAssigned: "O brinco está atribuído a outro animal",
     readOnlyPermission: "Permissão só de leitura",
 readOnlyPermissionText: "Este utilizador tem apenas permissões de leitura. Não pode realizar operações sobre o animal.",
     animalStatus: "Estado do animal",
@@ -775,6 +779,8 @@ readOnlyPermissionText: "Este utilizador tem apenas permissões de leitura. Não
     pkidPigletsNotFound: "Não foi encontrado o identificador interno do animal.",
     pigletCaptureDone: "Registo de leitões guardado corretamente.",
     pigletCaptureError: "Não foi possível guardar o registo de leitões.",
+    penNotFound: "Curral não encontrado",
+
   },
   subState: {
     prepartum: "Pré-parto",
@@ -1034,29 +1040,75 @@ movimientoAnimalGestacion: {
   exitByIdSentText: "A saída por ID em gestação foi enviada corretamente.",
 },
 gestCorralDetail: {
-    title: "Estado animal gestação",
-    emptyTitle: "Não há animal neste curral",
+   title: "Estado animal gestação",
+   emptyTitle: "Não há animal neste curral",
 
-    id: "ID",
-    crotal: "Brinco",
-    cycle: "Ciclo",
-    day: "Dia",
+   id: "ID",
+   crotal: "Brinco",
+   cycle: "Ciclo",
+   day: "Dia",
 
-    stateGestation: "Gestação",
-    stateOutOfGestation: "Fora de gestação",
+   stateGestation: "Gestação",
+   stateOutOfGestation: "Fora de gestação",
 
-    curve: "Curva",
-    correction: "Correção",
-    entryDate: "Data de entrada",
-    inseminationDate: "Data de inseminação",
-    house: "Pavilhão",
-    corral: "Curral",
-    estimatedFarrowingDate: "Data estimada de parto",
-    lastFeeding: "Última alimentação",
+   curve: "Curva",
+   correction: "Correção",
+   entryDate: "Data de entrada",
+   inseminationDate: "Data de inseminação",
+   house: "Pavilhão",
+   corral: "Curral",
+   estimatedFarrowingDate: "Data estimada de parto",
+   lastFeeding: "Última alimentação",
 
-    oneDayWithoutFeeding: "1 dia sem alimentação",
-    daysWithoutFeeding: "{{count}} dias sem alimentação",
-    of: "de",
+   oneDayWithoutFeeding: "1 dia sem alimentação",
+   daysWithoutFeeding: "{{count}} dias sem alimentação",
+   of: "de",
+
+   operationsButton: "Operações",
+   operationsTitle: "Operações",
+   operationsSubtitle: "Selecione uma operação",
+
+   operationInseminationDate: "Data de inseminação",
+   operationCurve: "Curva",
+   operationBodyCondition: "Condição corporal",
+   operationChangePen: "Mudança de curral",
+   operationExitAnimal: "Saída animal",
+   operationReplaceEarTag: "Substituir brinco",
+
+   cancel: "Cancelar",
+   accept: "Aceitar",
+   saving: "A guardar...",
+
+   selectCurve: "Selecionar curva",
+   loadingCurves: "A carregar curvas...",
+   noCurvesAvailable: "Não há curvas disponíveis",
+
+   selectBodyCondition: "Selecionar condição corporal",
+   loadingBodyConditions: "A carregar condições corporais...",
+   noBodyConditionsAvailable: "Não há condições corporais disponíveis",
+
+   changePenTitle: "Mudar curral",
+   currentPen: "Curral atual: {{corral}}",
+   newPen: "Novo curral",
+   changePenPlaceholder: "Introduza o curral de destino",
+
+   replaceEarTagTitle: "Substituir brinco",
+   currentEarTag: "Brinco atual: {{crotal}}",
+   newEarTag: "Novo brinco",
+   replaceEarTagPlaceholder: "Introduza o novo brinco",
+
+   inseminationDateTitle: "Data de inseminação",
+   selectDate: "Selecione a data",
+   noFutureInseminationDate: "Não é permitido selecionar uma data posterior à atual.",
+
+   exitAnimalTitle: "Saída animal",
+   exitAnimalGestation: "Saída animal gestação",
+   exitDate: "Data de saída",
+   noFutureExitDate: "A data de saída não pode ser posterior à data atual.",
+
+   penNotFound: "Curral não encontrado",
+   changePenGenericError: "Não foi possível mudar o curral.",
+   earTagAlreadyAssigned: "O brinco está atribuído a outro animal",
+   replaceEarTagGenericError: "Não foi possível substituir o brinco.",
 },
-
 }

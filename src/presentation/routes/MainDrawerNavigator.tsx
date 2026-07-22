@@ -36,6 +36,16 @@ const getDeepestRouteName = (state: any): string | undefined => {
     return getDeepestRouteName(route.state) ?? route.name;
 };
 
+const getDeepestRouteParams = (state: any): any => {
+    if (!state) return undefined;
+
+    const route = state.routes?.[state.index ?? 0];
+
+    if (!route) return undefined;
+
+    return getDeepestRouteParams(route.state) ?? route.params;
+};
+
 function CustomMainDrawerContent(props: DrawerContentComponentProps) {
     const activeTab = getActiveTabName(props);
 
@@ -76,10 +86,15 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
     };
     const activeDrawerRoute = props.state.routeNames[props.state.index];
     const currentRouteName = getDeepestRouteName(props.state);
+    const currentRouteParams = getDeepestRouteParams(props.state);
 
     const isLectorMaternidad = currentRouteName === 'LectorMaternidad';
     const isLectorGestacion = currentRouteName === 'LectorGestacion';
     const isPantallaLector = isLectorMaternidad || isLectorGestacion;
+    const isDetalleMaternidad =
+        currentRouteName === 'EstadoAnimalDetalle';
+    const vieneDeNoAlimentados =
+        currentRouteParams?.origen === 'noAlimentados';
 
     const textDark = '#0F172A';
     const textMuted = '#64748B';
@@ -125,7 +140,32 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
             });
         }, 120);
     };
+   const goBackFromDetalleMaternidad = () => {
+    props.navigation.closeDrawer();
 
+    setTimeout(() => {
+        if (vieneDeNoAlimentados) {
+            (props.navigation as any).navigate('MainTabs', {
+                screen: 'CapturaAnimalTab',
+                params: {
+                    screen: 'AnimalesNoAlimentados',
+                    params: {
+                        screen: 'NoAlimentadosMaternidad',
+                    },
+                },
+            });
+
+            return;
+        }
+
+        (props.navigation as any).navigate('MainTabs', {
+            screen: 'CapturaAnimalTab',
+            params: {
+                screen: 'EstadoAnimal',
+            },
+        });
+    }, 120);
+};
     const DrawerButton = ({
         label,
         icon,
@@ -281,23 +321,32 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
 
             {isCapturaTab && (
                 <View style={{ marginTop: 4 }}>
-                    <DrawerButton
-                        label="Inicio"
-                        icon="home-outline"
-                        active={currentRouteName === 'CapturaAnimalHome'}
-                        onPress={() => {
-                            props.navigation.closeDrawer();
+                    {isDetalleMaternidad ? (
+                        <DrawerButton
+                            label="Atrás"
+                            icon="arrow-back-outline"
+                            active={false}
+                            onPress={goBackFromDetalleMaternidad}
+                        />
+                    ) : (
+                        <DrawerButton
+                            label="Inicio"
+                            icon="home-outline"
+                            active={currentRouteName === 'CapturaAnimalHome'}
+                            onPress={() => {
+                                props.navigation.closeDrawer();
 
-                            setTimeout(() => {
-                                (props.navigation as any).navigate('MainTabs', {
-                                    screen: 'CapturaAnimalTab',
-                                    params: {
-                                        screen: 'CapturaAnimalHome',
-                                    },
-                                });
-                            }, 120);
-                        }}
-                    />
+                                setTimeout(() => {
+                                    (props.navigation as any).navigate('MainTabs', {
+                                        screen: 'CapturaAnimalTab',
+                                        params: {
+                                            screen: 'CapturaAnimalHome',
+                                        },
+                                    });
+                                }, 120);
+                            }}
+                        />
+                    )}
                 </View>
             )}
 
@@ -334,7 +383,7 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
                         fontWeight: '700',
                     }}
                 >
-                    Versión 7
+                    Versión 10
                 </Text>
             </View>
         </DrawerContentScrollView>
