@@ -180,8 +180,13 @@ const payloadSetup = (): Buffer => {
 
    const isI = dosimacSetup.deviceType === 200;
    const isG = dosimacSetup.deviceType === 203;
+   const isW = dosimacSetup.deviceType === 211;
+
    const sw = dosimacInfo.swVersion || 0;
-   const allowUint32 = (isI && sw >= 155) || (isG && sw >= 134);
+
+   const allowUint32 =
+      (isI && sw >= 155) ||
+      ((isG || isW) && sw >= 134);
 
    const baseLen = 148;                 // payload clásico
    const extraLen = allowUint32 ? 4 : 0;// +4 si enviamos corral32
@@ -316,10 +321,18 @@ const pcomresponseStatus = () => {
    // Reglas por versión/tipo
    const isI = dosimacInfo.deviceType === 200;
    const isG = dosimacInfo.deviceType === 203;
-   const allowUint32 = (isI && dosimacInfo.swVersion >= 155) || (isG && dosimacInfo.swVersion >= 134);
+   const isW = dosimacInfo.deviceType === 211;
 
-   // Selecciona el “corral efectivo” para mostrar/usar en la app
-   const corralEfectivo = allowUint32 ? (corral16 === 0 ? corral32 : corral16) : corral16;
+   const allowUint32 =
+      (isI && dosimacInfo.swVersion >= 155) ||
+      ((isG || isW) && dosimacInfo.swVersion >= 134);
+
+   // Selecciona el corral efectivo para mostrar/usar en la app
+   const corralEfectivo = allowUint32
+      ? (corral16 === 0 ? corral32 : corral16)
+      : corral16;
+
+   dosimacInfo.corral = corralEfectivo;
    // ⬇️ log siempre visible con marca de tiempo y tipo de equipo
    console.log(
       `[DOSIMAC][STATUS] v=${dosimacInfo.swVersion} type=${dosimacInfo.deviceType} ` +

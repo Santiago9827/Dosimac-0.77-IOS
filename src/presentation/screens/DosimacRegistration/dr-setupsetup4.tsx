@@ -167,12 +167,23 @@ export const DRSetup = ({ navigation, route }) => {
     }
 
     // === REGLAS POR VERSIÓN: I vs G + swVersion ===
-    const intendedDeviceType = globals.dispenserType <= 2 ? 200 : 203; // I:200 / G:203
+    // === REGLAS POR VERSIÓN: I / G / W + swVersion ===
+    const intendedDeviceType =
+      globals.dispenserType === 4
+        ? 211
+        : globals.dispenserType <= 2
+          ? 200
+          : 203;
+
     const isI = intendedDeviceType === 200;
     const isG = intendedDeviceType === 203;
+    const isW = intendedDeviceType === 211;
+
     const sw = dosimacInfo.swVersion || 0;
 
-    const allowUint32 = (isI && sw >= 155) || (isG && sw >= 134);
+    const allowUint32 =
+      (isI && sw >= 155) ||
+      ((isG || isW) && sw >= 134);
     console.log(
       `[DOSIMAC][UI] ${new Date().toISOString()} Enviar: ` +
       `sw=${sw}, intendedDeviceType=${intendedDeviceType} (I=${isI}, G=${isG}), ` +
@@ -203,13 +214,24 @@ export const DRSetup = ({ navigation, route }) => {
     dosimacSetup.serverIp = sfarm.serverIp || '';
 
     dosimacSetup.deviceType = intendedDeviceType;
-    dosimacSetup.phase = globals.dispenserType <= 2 ? 3 : 2;
+
+    dosimacSetup.phase =
+      globals.dispenserType === 4
+        ? 0
+        : globals.dispenserType <= 2
+          ? 3
+          : 2;
+
     dosimacSetup.deviceNumber = parseInt(deviceNumber) || 1;
     dosimacSetup.nfcTag = nfcTag || '';
 
-    // Asignación dual corral16/corral32
-    dosimacSetup.corral = corralNum;
-    (dosimacSetup as any).corral32 = corralNum;
+    if (allowUint32) {
+      dosimacSetup.corral = 0;
+      (dosimacSetup as any).corral32 = corralNum;
+    } else {
+      dosimacSetup.corral = corralNum;
+      (dosimacSetup as any).corral32 = 0;
+    }
 
 
     // Reset UI y lanzar FSM de setup

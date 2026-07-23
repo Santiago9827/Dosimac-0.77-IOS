@@ -34,8 +34,11 @@ function includesSubsequence(hay: number[], needle: number[]) {
    ========================================================= */
 function getNeedles(operacion?: number): string[] {
   const op = Number(operacion) || 0;
+
   if (op === 1) return ['DOSIMAC-I'];
   if (op === 3) return ['DOSIMAC-G'];
+  if (op === 4) return ['DOSIMAC_W', 'DOSIMAC-W'];
+
   return ['DOSIMAC'];
 }
 
@@ -68,9 +71,9 @@ function isOursIOS(d: BlePeripheral, operacion?: number): boolean {
   const bytes = getAdvBytes(d);
 
   if (bytes) {
-    const s = bytesToAscii(bytes);
+    const s = bytesToAscii(bytes).toUpperCase();
 
-    if (needles.some(x => s.includes(x))) return true;
+    if (needles.some(x => s.includes(x.toUpperCase()))) return true;
 
     if (needles.length === 1 && needles[0] === 'DOSIMAC') {
       const DOSIMAC_ASCII = ASCII('DOSIMAC');
@@ -242,7 +245,7 @@ export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
 
       try {
         ble.stopScanning();
-      } catch {}
+      } catch { }
 
       ble.bleRemoveListener();
     };

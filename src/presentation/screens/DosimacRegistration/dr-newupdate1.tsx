@@ -148,6 +148,20 @@ export default function Drnewupdate() {
                      <Text className='text-slate-200 font-RobotoRegular text-xl font-bold'>{t('common:NewDmGestation')}</Text>
 
                   </Pressable>
+                  <Pressable
+                     className='h-28 rounded-2xl bg-teal-700 justify-center items-center w-[80%] mt-20'
+                     onPress={() => {
+                        globals.dispenserType = 4;
+                        goNextScreen(4);
+                     }}
+                  >
+                     <Text className='text-yellow-100 font-bold text-3xl'>
+                        Dosimac-W
+                     </Text>
+                     <Text className='text-slate-200 font-RobotoRegular text-xl font-bold'>
+                        Nuevo Dosimac agua
+                     </Text>
+                  </Pressable>
 
 
                </View>
