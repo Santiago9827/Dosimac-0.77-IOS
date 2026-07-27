@@ -277,16 +277,12 @@ export const EstadoAnimalScreen = ({ navigation }: any) => {
         tipo,
         titulo,
         descripcion,
-        icono,
         color,
-        fondo,
     }: {
         tipo: TipoBusquedaEstado;
         titulo: string;
-        descripcion: string;
-        icono: string;
+        descripcion?: string;
         color: string;
-        fondo: string;
     }) => {
         const activo = tipoBusqueda === tipo;
 
@@ -317,23 +313,6 @@ export const EstadoAnimalScreen = ({ navigation }: any) => {
                 )}
 
                 <View style={styles.optionHeaderRow}>
-                    <View
-                        style={[
-                            styles.optionIconBox,
-                            {
-                                backgroundColor: activo
-                                    ? '#FFFFFF'
-                                    : fondo,
-                            },
-                        ]}
-                    >
-                        <Ionicons
-                            name={icono}
-                            size={23}
-                            color={color}
-                        />
-                    </View>
-
                     {tipo === 'idAutomatico' ? (
                         <View style={styles.optionTitleDouble}>
                             <Text style={styles.optionTitleBigLine}>
@@ -360,11 +339,11 @@ export const EstadoAnimalScreen = ({ navigation }: any) => {
                         </Text>
                     )}
                 </View>
-
-                <Text style={styles.optionDescription}>
-                    {descripcion}
-                </Text>
-
+                {tipo === 'idAutomatico' && !!descripcion && (
+                    <Text style={styles.optionDescription}>
+                        {descripcion}
+                    </Text>
+                )}
                 <View
                     style={[
                         styles.checkCircle,
@@ -432,12 +411,7 @@ export const EstadoAnimalScreen = ({ navigation }: any) => {
                         <OpcionBusqueda
                             tipo="corral"
                             titulo={t('estadoAnimal.corral')}
-                            descripcion={t('estadoAnimal.corralMaternityDescription', {
-                                defaultValue: 'Introduce el número del corral de maternidad.',
-                            })}
-                            icono="home-outline"
                             color={GREEN}
-                            fondo="#DDF3EF"
                         />
 
                         <OpcionBusqueda
@@ -446,9 +420,7 @@ export const EstadoAnimalScreen = ({ navigation }: any) => {
                             descripcion={t('estadoAnimal.idAnimalDescription', {
                                 defaultValue: 'Busca en maternidad y gestación.',
                             })}
-                            icono="search-outline"
                             color="#2563EB"
-                            fondo="#DBEAFE"
                         />
                     </View>
 
@@ -653,9 +625,9 @@ const styles = StyleSheet.create({
         flex: 1,
         position: 'relative',
         borderRadius: 20,
-        paddingVertical: 15,
-        paddingHorizontal: 12,
-        minHeight: 106,
+        paddingVertical: 16,
+        paddingHorizontal: 10,
+        minHeight: 82,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
@@ -681,8 +653,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 6,
-        marginBottom: 8,
+        marginBottom: 0,
         paddingHorizontal: 4,
     },
     optionIconBox: {
@@ -701,13 +672,13 @@ const styles = StyleSheet.create({
     },
 
     optionDescription: {
+        marginTop: 7,
         color: MUTED,
-        fontSize: 12,
+        fontSize: 11,
         fontWeight: '700',
-        lineHeight: 16,
+        lineHeight: 14,
         textAlign: 'center',
     },
-
     checkCircle: {
         position: 'absolute',
         right: 10,
@@ -837,17 +808,15 @@ const styles = StyleSheet.create({
         fontWeight: '900',
     },
     optionTitleDouble: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
-
     optionTitleBigLine: {
         width: '100%',
         color: TEXT,
-        fontSize: 15,
+        fontSize: 17,
         fontWeight: '900',
-        lineHeight: 16,
+        lineHeight: 19,
         textAlign: 'center',
     },
 });

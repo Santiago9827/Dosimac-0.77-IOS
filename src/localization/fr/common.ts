@@ -604,7 +604,11 @@ noAlimentadosGestacion: {
   cancel: "Annuler",
   clear: "Effacer",
   error: "Erreur",
-  serverConnectionError: "Impossible de se connecter au serveur."
+  serverConnectionError: "Impossible de se connecter au serveur.",
+  viewStatus: "Voir l'état",
+animalIdNotFound: "Identifiant de l'animal introuvable.",
+openAnimalInfoError: "Impossible d'ouvrir les informations de l'animal.",
+
 },
 capturaAnimalHome: {
   selectOption: "Sélectionnez une option",

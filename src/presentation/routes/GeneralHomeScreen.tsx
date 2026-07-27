@@ -11,6 +11,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { useApiMovilVersionStore } from '../../stores/useApiMovilVersionStore';
 
 import {
     obtenerBaseUrlGuardada,
@@ -24,8 +25,13 @@ const MUTED = '#64748B';
 const BG = '#F6F8FC';
 const BRAND = '#4C1D95';
 
-type TipoBloqueo = 'ip' | 'login' | 'permiso' | 'conexion' | 'sesion';
-
+type TipoBloqueo =
+    | 'ip'
+    | 'login'
+    | 'permiso'
+    | 'conexion'
+    | 'sesion'
+    | 'version';
 function GeneralCard({
     titulo,
     descripcion,
@@ -89,21 +95,59 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
 
     const esAdmin = rol.includes('admin');
 
+
+    const consultarVersionApiMovil = useApiMovilVersionStore(
+        s => s.consultarVersionApiMovil,
+    );
+
+    const limpiarVersionActual = useApiMovilVersionStore(
+        s => s.limpiarVersionActual,
+    );
+
+    const compatibleActual = useApiMovilVersionStore(
+        s => s.compatibleActual,
+    );
+
+    const versionComprobada = useApiMovilVersionStore(
+        s => s.versionComprobada,
+    );
+
+    const errorVersion = useApiMovilVersionStore(
+        s => s.errorVersion,
+    );
+    const mostrarAvisoServidorDesactualizado =
+        hayIpConfigurada &&
+        versionComprobada &&
+        !compatibleActual;
+
     const comprobarIpConfigurada = useCallback(async () => {
         const baseUrlGuardada = await obtenerBaseUrlGuardada();
         const existeIp = !!baseUrlGuardada;
 
         setHayIpConfigurada(existeIp);
 
+        if (!existeIp) {
+            limpiarVersionActual();
+        }
+
         return existeIp;
-    }, []);
+    }, [limpiarVersionActual]);
 
     useFocusEffect(
         useCallback(() => {
-            comprobarIpConfigurada();
-        }, [comprobarIpConfigurada])
-    );
+            const comprobarEstadoPantalla = async () => {
+                const existeIp = await comprobarIpConfigurada();
 
+                if (!existeIp) {
+                    return;
+                }
+
+                await consultarVersionApiMovil();
+            };
+
+            comprobarEstadoPantalla();
+        }, [comprobarIpConfigurada, consultarVersionApiMovil])
+    );
     useEffect(() => {
         return () => {
             if (timeoutConectandoRef.current) {
@@ -139,8 +183,16 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
 
             const conexion = await validarInstalacionActiva();
 
+
             if (!conexion.ok) {
                 abrirModalBloqueo('conexion');
+                return;
+            }
+
+            const infoVersion = await consultarVersionApiMovil();
+
+            if (!infoVersion.compatible) {
+                abrirModalBloqueo('version');
                 return;
             }
 
@@ -182,7 +234,11 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                     ? t('generalHome.modalInstallationUnavailableTitle')
                     : tipoBloqueo === 'sesion'
                         ? t('generalHome.modalPreparingSessionTitle')
-                        : t('generalHome.modalReadOnlyPermissionTitle');
+                        : tipoBloqueo === 'version'
+                            ? t('generalHome.modalServerOutdatedTitle', {
+                                defaultValue: 'Servidor CTIFEED desactualizado',
+                            })
+                            : t('generalHome.modalReadOnlyPermissionTitle');
 
     const textoModal =
         tipoBloqueo === 'ip'
@@ -193,10 +249,15 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                     ? t('generalHome.modalInstallationUnavailableText')
                     : tipoBloqueo === 'sesion'
                         ? t('generalHome.modalPreparingSessionText')
-                        : t('generalHome.modalReadOnlyPermissionText');
-
+                        : tipoBloqueo === 'version'
+                            ? errorVersion ||
+                            t('generalHome.modalServerOutdatedText', {
+                                defaultValue:
+                                    'Es necesario actualizar el servidor CTIFEED para usar esta funcionalidad.',
+                            })
+                            : t('generalHome.modalReadOnlyPermissionText');
     const iconoModal =
-        tipoBloqueo === 'permiso'
+        tipoBloqueo === 'permiso' || tipoBloqueo === 'version'
             ? 'warning-outline'
             : tipoBloqueo === 'login'
                 ? 'person-circle-outline'
@@ -209,6 +270,31 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                 showsVerticalScrollIndicator={false}
             >
                 <View style={styles.cardsWrapper}>
+                    {mostrarAvisoServidorDesactualizado && (
+                        <TouchableOpacity
+                            activeOpacity={0.9}
+                            onPress={() => abrirModalBloqueo('version')}
+                            style={styles.versionWarningCard}
+                        >
+                            <View style={styles.versionWarningIconBox}>
+                                <Ionicons
+                                    name="alert-circle-outline"
+                                    size={28}
+                                    color="#DC2626"
+                                />
+                            </View>
+
+                            <View style={{ flex: 1 }}>
+                                <Text style={styles.versionWarningText}>
+                                    {errorVersion ||
+                                        t('generalHome.modalServerOutdatedText', {
+                                            defaultValue:
+                                                'Es necesario actualizar el servidor CTIFEED para usar esta funcionalidad.',
+                                        })}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    )}
                     <GeneralCard
                         titulo={t('generalHome.movementAnimalTitle')}
                         descripcion={t('generalHome.readerDescription')}
@@ -297,6 +383,7 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                     </View>
                 </View>
             </Modal>
+
         </View>
     );
 };
@@ -471,5 +558,39 @@ const styles = StyleSheet.create({
         color: MUTED,
         textAlign: 'center',
         lineHeight: 21,
+    },
+    versionWarningCard: {
+        backgroundColor: '#FEF2F2',
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#FECACA',
+        paddingHorizontal: 15,
+        paddingVertical: 14,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+        shadowColor: '#991B1B',
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+    },
+
+    versionWarningIconBox: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        backgroundColor: '#FEE2E2',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    versionWarningText: {
+        color: '#7F1D1D',
+        fontSize: 13,
+        fontWeight: '700',
+        lineHeight: 18,
     },
 });

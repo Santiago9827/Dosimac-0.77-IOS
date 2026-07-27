@@ -449,7 +449,27 @@ export async function consultarMaternidadPorCorral(
     }
 
     if (!respuesta.ok) {
-        throw new Error('No se encontró el animal de maternidad.');
+        const mensajeBackend =
+            typeof datos === 'string'
+                ? datos
+                : datos?.message ??
+                datos?.error ??
+                datos?.mensaje ??
+                datos?.detail ??
+                texto;
+
+        const mensajeNormalizado = String(mensajeBackend ?? '')
+            .trim()
+            .toLowerCase();
+
+        if (mensajeNormalizado === 'the corral does not exist') {
+            throw new Error('El corral no existe');
+        }
+
+        throw new Error(
+            mensajeBackend ||
+            'No se encontró el animal de maternidad.',
+        );
     }
 
     return datos;

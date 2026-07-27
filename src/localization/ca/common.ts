@@ -605,7 +605,10 @@ noAlimentadosGestacion: {
   cancel: "Cancel·lar",
   clear: "Netejar",
   error: "Error",
-  serverConnectionError: "No s'ha pogut connectar amb el servidor."
+  serverConnectionError: "No s'ha pogut connectar amb el servidor.",
+  viewStatus: "Veure estat",
+animalIdNotFound: "No s'ha trobat l'identificador de l'animal.",
+openAnimalInfoError: "No s'ha pogut obrir la informació de l'animal.",
 },
 capturaAnimalHome: {
   selectOption: "Selecciona una opció",

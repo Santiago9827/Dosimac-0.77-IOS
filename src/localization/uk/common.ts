@@ -604,7 +604,10 @@ noAlimentadosGestacion: {
   cancel: "Скасувати",
   clear: "Очистити",
   error: "Помилка",
-  serverConnectionError: "Не вдалося підключитися до сервера."
+  serverConnectionError: "Не вдалося підключитися до сервера.",
+  viewStatus: "Переглянути стан",
+animalIdNotFound: "Ідентифікатор тварини не знайдено.",
+openAnimalInfoError: "Не вдалося відкрити інформацію про тварину.",
 },
 capturaAnimalHome: {
   selectOption: "Виберіть опцію",

@@ -599,7 +599,10 @@ gestationReader_sentHistoryTitle: "Histórico de enviados",
     cancel: "Cancelar",
     clear: "Limpar",
     error: "Erro",
-    serverConnectionError: "Não foi possível ligar ao servidor."
+    serverConnectionError: "Não foi possível ligar ao servidor.",
+    viewStatus: "Ver estado",
+animalIdNotFound: "Identificador do animal não encontrado.",
+openAnimalInfoError: "Não foi possível abrir as informações do animal.",
   },
   capturaAnimalHome: {
     selectOption: "Selecione uma opção",

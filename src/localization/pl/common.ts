@@ -572,7 +572,10 @@ maternidadConfig_readOnlyUseFunction: "Ten użytkownik ma tylko uprawnienia do o
   cancel: "Anuluj",
   clear: "Wyczyść",
   error: "Błąd",
-  serverConnectionError: "Nie udało się połączyć z serwerem."
+  serverConnectionError: "Nie udało się połączyć z serwerem.",
+  viewStatus: "Zobacz status",
+animalIdNotFound: "Nie znaleziono identyfikatora zwierzęcia.",
+openAnimalInfoError: "Nie można otworzyć informacji o zwierzęciu.",
 },
 
 noAlimentadosGestacion: {

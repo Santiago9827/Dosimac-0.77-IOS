@@ -605,7 +605,10 @@ gestationReader_sentHistoryTitle: "История отправленных",
     cancel: "Отмена",
     clear: "Очистить",
     error: "Ошибка",
-    serverConnectionError: "Не удалось подключиться к серверу."
+    serverConnectionError: "Не удалось подключиться к серверу.",
+    viewStatus: "Посмотреть статус",
+animalIdNotFound: "Идентификатор животного не найден.",
+openAnimalInfoError: "Не удалось открыть информацию о животном.",
   },
   capturaAnimalHome: {
     selectOption: "Выберите вариант",

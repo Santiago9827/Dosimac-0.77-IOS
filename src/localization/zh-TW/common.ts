@@ -605,7 +605,10 @@ openAnimalInfoError: "無法開啟動物資訊。",
     cancel: "取消",
     clear: "清除",
     error: "錯誤",
-    serverConnectionError: "無法連線到伺服器。"
+    serverConnectionError: "無法連線到伺服器。",
+    viewStatus: "查看狀態",
+animalIdNotFound: "找不到動物識別碼。",
+openAnimalInfoError: "無法開啟動物資訊。",
   },
   capturaAnimalHome: {
     selectOption: "選擇一個選項",

@@ -598,7 +598,11 @@ noAlimentadosGestacion: {
   cancel: "취소",
   clear: "지우기",
   error: "오류",
-  serverConnectionError: "서버에 연결할 수 없습니다."
+  serverConnectionError: "서버에 연결할 수 없습니다.",
+  viewStatus: "상태 보기",
+animalIdNotFound: "동물 식별자를 찾을 수 없습니다.",
+openAnimalInfoError: "동물 정보를 열 수 없습니다.",
+
 },
 capturaAnimalHome: {
   selectOption: "옵션을 선택하세요",

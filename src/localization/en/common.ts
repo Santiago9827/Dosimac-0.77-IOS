@@ -626,7 +626,11 @@ openAnimalInfoError: "Could not open the animal information.",
     cancel: "Cancel",
     clear: "Clear",
     error: "Error",
-    serverConnectionError: "Could not connect to the server."
+    serverConnectionError: "Could not connect to the server.",
+    viewStatus: "View status",
+animalIdNotFound: "Animal identifier not found.",
+openAnimalInfoError: "Could not open the animal information.",
+
   },
 
   capturaAnimalHome: {

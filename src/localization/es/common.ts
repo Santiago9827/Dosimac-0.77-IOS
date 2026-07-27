@@ -3,9 +3,9 @@ import { config } from "process";
 
 /* eslint-disable prettier/prettier */
 export default {
-   username: 'Username',
-   password: 'Clave',
-   Server: 'Server IP',
+   username: 'Usario',
+   password: 'Contraseña',
+   Server: 'Servidor IP',
    login: 'Login',
    welcome: 'Bienvenido',
    change_language: 'Cambia idioma',
@@ -37,11 +37,11 @@ export default {
    Guardar: 'Guardar',
    Cancelar: 'Cancelar',
    Aceptar: 'Aceptar',
-   NombreGranja: 'Farm name',
-   Localidad: 'Location',
-   Provincia: 'Province',
-   NombreWifi: 'Wifi SSID',
-   PasswordWifi: 'Wifi password',
+   NombreGranja: 'Nombre Granja',
+   Localidad: 'Localidad',
+   Provincia: 'Provincia',
+   NombreWifi: 'Nombre Wifi',
+   PasswordWifi: 'Contraseña Wifi',
 
    No_hay_dispositivos: 'No hay dispositivos',
    Aviso: 'Aviso',
@@ -629,7 +629,10 @@ export default {
       cancel: "Cancelar",
       clear: "Limpiar",
       error: "Error",
-      serverConnectionError: "No se pudo conectar con el servidor."
+      serverConnectionError: "No se pudo conectar con el servidor.",
+      viewStatus: "Ver estado",
+animalIdNotFound: "No se encontró el identificador del animal.",
+openAnimalInfoError: "No se pudo abrir la información del animal.",
    },
 
    capturaAnimalHome: {

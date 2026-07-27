@@ -22,11 +22,14 @@ import {
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import {
     consultarAnimalesNoAlimentadosGestacion,
     consultarNumeroAnimalesGestacion,
+    consultarGestacionPorIdAnimal,
+    consultarCurvas,
 } from '../../stores/apiApp';
 
 const FONDO = '#F6F8FC';
@@ -115,6 +118,24 @@ const limitarPorcentaje = (
 
     return Math.min(Math.max(Math.round(numero), 0), 100);
 };
+const obtenerIdCurva = (datosApi: any) => {
+    return Number(
+        datosApi?.animal?.curveId ??
+        datosApi?.curveId ??
+        -1,
+    );
+};
+
+const obtenerNombreCurva = (
+    curvas: any[],
+    curveId: number,
+) => {
+    const curvaEncontrada = curvas.find(
+        curva => Number(curva.id) === Number(curveId),
+    );
+
+    return curvaEncontrada?.name ?? '—';
+};
 
 const obtenerClaveAnimalNoAlimentado = (
     item: AnimalNoAlimentado,
@@ -146,10 +167,12 @@ function TarjetaAnimalNoAlimentado({
     item,
     visto,
     onCambiarVisto,
+    onVerEstado,
 }: {
     item: AnimalNoAlimentado;
     visto: boolean;
     onCambiarVisto: () => void;
+    onVerEstado: () => void;
 }) {
     const { t } = useTranslation();
 
@@ -305,12 +328,31 @@ function TarjetaAnimalNoAlimentado({
                     </Text>
                 </View>
             </View>
+            <View style={styles.accionesTarjeta}>
+                <TouchableOpacity
+                    activeOpacity={0.85}
+                    onPress={onVerEstado}
+                    style={styles.botonVerEstadoCompacto}
+                >
+                    <Ionicons
+                        name="eye-outline"
+                        size={18}
+                        color={MORADO}
+                    />
+
+                    <Text style={styles.textoBotonVerEstado}>
+                        {t('noAlimentadosGestacion.viewStatus')}
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
 
 export const NoAlimentadosGestacionScreen = () => {
     const { t } = useTranslation();
+
+    const navigation = useNavigation<NavigationProp<any>>();
 
     const [animales, setAnimales] = useState<
         AnimalNoAlimentado[]
@@ -559,6 +601,66 @@ export const NoAlimentadosGestacionScreen = () => {
             });
         },
         [posixActual, tipoFiltroVistos],
+    );
+
+    const abrirDetalleAnimal = useCallback(
+        async (item: AnimalNoAlimentado) => {
+            const animalId = item.animal?.animalId;
+
+            if (!animalId) {
+                Alert.alert(
+                    t('noAlimentadosGestacion.error'),
+                    t('noAlimentadosGestacion.animalIdNotFound'),
+                );
+
+                return;
+            }
+
+            try {
+                const datosGestacion =
+                    await consultarGestacionPorIdAnimal(animalId);
+
+                const curvas = await consultarCurvas().catch(() => []);
+
+                const curveId = obtenerIdCurva(datosGestacion);
+                const nombreCurva = obtenerNombreCurva(curvas, curveId);
+
+                const datosGestacionConCurva = {
+                    ...datosGestacion,
+                    curveName: nombreCurva,
+                    animal: {
+                        ...(datosGestacion?.animal ?? {}),
+                        curveName: nombreCurva,
+                    },
+                };
+
+                const corralId = Number(
+                    datosGestacionConCurva?.animal?.corralName ??
+                    item.animal?.corralName ??
+                    0,
+                );
+
+                navigation.navigate('GestCorralDetail', {
+                    corralId: Number.isFinite(corralId)
+                        ? corralId
+                        : undefined,
+                    datosGestacion: datosGestacionConCurva,
+                    origen: 'noAlimentadosGestacion',
+                });
+            } catch (error: any) {
+                console.log(
+                    'Error abriendo detalle animal gestación:',
+                    error,
+                );
+
+                Alert.alert(
+                    t('noAlimentadosGestacion.error'),
+                    error?.message ??
+                    t('noAlimentadosGestacion.openAnimalInfoError'),
+                );
+            }
+        },
+        [navigation, t],
     );
 
     const limpiarAnimalesVistos =
@@ -864,6 +966,8 @@ export const NoAlimentadosGestacionScreen = () => {
                             onCambiarVisto={() =>
                                 cambiarAnimalVisto(item)
                             }
+                            onVerEstado={() => abrirDetalleAnimal(item)}
+
                         />
                     );
                 }}
@@ -1758,6 +1862,31 @@ const styles = StyleSheet.create({
     textoAceptar: {
         color: BLANCO,
         fontSize: 15,
+        fontWeight: '900',
+    },
+    accionesTarjeta: {
+        marginTop: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    botonVerEstadoCompacto: {
+        flex: 1,
+        height: 44,
+        borderRadius: 15,
+        backgroundColor: '#F5F3FF',
+        borderWidth: 1,
+        borderColor: '#DDD6FE',
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 8,
+    },
+
+    textoBotonVerEstado: {
+        color: MORADO,
+        fontSize: 14,
         fontWeight: '900',
     },
 });
