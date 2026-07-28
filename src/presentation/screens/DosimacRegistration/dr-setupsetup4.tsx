@@ -156,7 +156,7 @@ export const DRSetup = ({ navigation, route }) => {
 
     if (globals.dispenserType > 2) {
       const devNum = parseInt(deviceNumber);
-      if (!Number.isSafeInteger(devNum) || devNum <= 0 || devNum > 4) {
+      if (!Number.isSafeInteger(devNum) || devNum <= 0 || devNum > 10) {
         setSendHasMsg(true);
         setSendMsg(t('Númeromáquinanovalido'));
         setSendVisible(true);

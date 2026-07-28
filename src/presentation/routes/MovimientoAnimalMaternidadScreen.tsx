@@ -122,6 +122,18 @@ export const MovimientoAnimalMaternidadScreen = () => {
     };
 
     const obtenerMensajeBackend = (texto: string, status: number) => {
+        const traducirMensajeBackend = (mensajeOriginal: string) => {
+            const mensajeNormalizado = String(mensajeOriginal ?? '')
+                .trim()
+                .toLowerCase();
+
+            if (mensajeNormalizado.includes('the corral does not exist')) {
+                return 'El corral no existe';
+            }
+
+            return mensajeOriginal;
+        };
+
         if (!texto || texto.trim() === '') {
             return t('movimientoAnimalMaternidad.serverEmptyResponse', {
                 status,
@@ -132,7 +144,7 @@ export const MovimientoAnimalMaternidadScreen = () => {
             const datos = JSON.parse(texto);
 
             if (typeof datos === 'string') {
-                return datos;
+                return traducirMensajeBackend(datos);
             }
 
             const mensaje =
@@ -143,23 +155,25 @@ export const MovimientoAnimalMaternidadScreen = () => {
                 datos?.title;
 
             if (mensaje) {
-                return String(mensaje);
+                return traducirMensajeBackend(String(mensaje));
             }
 
             if (Array.isArray(datos?.errors)) {
-                return datos.errors.join('\n');
+                return traducirMensajeBackend(datos.errors.join('\n'));
             }
 
             if (datos?.errors && typeof datos.errors === 'object') {
-                return Object.values(datos.errors)
+                const mensajeErrores = Object.values(datos.errors)
                     .flat()
                     .map(String)
                     .join('\n');
+
+                return traducirMensajeBackend(mensajeErrores);
             }
 
-            return texto;
+            return traducirMensajeBackend(texto);
         } catch {
-            return texto;
+            return traducirMensajeBackend(texto);
         }
     };
 
@@ -476,10 +490,14 @@ export const MovimientoAnimalMaternidadScreen = () => {
 
                                         <TextInput
                                             value={corralEntrada}
-                                            onChangeText={setCorralEntrada}
+                                            onChangeText={texto => {
+                                                const soloNumeros = texto.replace(/[^0-9]/g, '');
+                                                setCorralEntrada(soloNumeros.slice(0, 9));
+                                            }}
                                             placeholder=""
                                             placeholderTextColor="#6B7280"
                                             keyboardType="number-pad"
+                                            maxLength={9}
                                             autoCorrect={false}
                                             style={styles.input}
                                             onFocus={hacerScrollAlFinal}
@@ -605,7 +623,14 @@ export const MovimientoAnimalMaternidadScreen = () => {
 
                                     <TextInput
                                         value={valorSalida}
-                                        onChangeText={setValorSalida}
+                                        onChangeText={texto => {
+                                            if (tipoBusquedaSalida === 'corral') {
+                                                const soloNumeros = texto.replace(/[^0-9]/g, '');
+                                                setValorSalida(soloNumeros.slice(0, 9));
+                                            } else {
+                                                setValorSalida(texto);
+                                            }
+                                        }}
                                         placeholder=""
                                         placeholderTextColor="#6B7280"
                                         keyboardType={
@@ -613,6 +638,7 @@ export const MovimientoAnimalMaternidadScreen = () => {
                                                 ? 'number-pad'
                                                 : 'numeric'
                                         }
+                                        maxLength={tipoBusquedaSalida === 'corral' ? 9 : undefined}
                                         autoCorrect={false}
                                         style={styles.input}
                                         onFocus={hacerScrollAlFinal}

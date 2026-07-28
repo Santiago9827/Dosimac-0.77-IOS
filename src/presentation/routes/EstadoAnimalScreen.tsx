@@ -435,9 +435,16 @@ export const EstadoAnimalScreen = ({ navigation }: any) => {
                             mode="outlined"
                             value={valor}
                             onChangeText={texto => {
-                                setValor(texto);
+                                if (tipoBusqueda === 'corral') {
+                                    const soloNumeros = texto.replace(/[^0-9]/g, '');
+                                    setValor(soloNumeros.slice(0, 9));
+                                } else {
+                                    setValor(texto);
+                                }
+
                                 if (error) setError('');
                             }}
+                            maxLength={tipoBusqueda === 'corral' ? 9 : undefined}
                             onFocus={() => {
                                 setTimeout(() => {
                                     scrollRef.current?.scrollToEnd({

@@ -746,3 +746,52 @@ export async function consultarCurvasGestacion(): Promise<CurvaGestacionApi[]> {
             )
         : [];
 }
+
+export type RespuestaCorralGestacion = {
+    ok: boolean;
+    status: number;
+    data: any;
+    rawText: string;
+};
+
+export async function consultarCorralGestacion(
+    corral: string | number,
+): Promise<RespuestaCorralGestacion> {
+    const corralLimpio = String(corral ?? '').trim();
+
+    if (!corralLimpio) {
+        throw new Error('Corral no válido.');
+    }
+
+    const endpoint = await construirEndpointApiDirecta(
+        `espada/readPenGestation/${encodeURIComponent(corralLimpio)}`,
+    );
+
+    console.log('===== CONSULTAR CORRAL GESTACIÓN =====');
+    console.log('ENDPOINT:', endpoint);
+    console.log('CORRAL:', corralLimpio);
+
+    const respuesta = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+        },
+    });
+
+    const texto = await respuesta.text();
+
+    let datos: any = null;
+
+    try {
+        datos = texto ? JSON.parse(texto) : null;
+    } catch {
+        datos = texto;
+    }
+
+    return {
+        ok: respuesta.ok,
+        status: respuesta.status,
+        data: datos,
+        rawText: texto,
+    };
+}

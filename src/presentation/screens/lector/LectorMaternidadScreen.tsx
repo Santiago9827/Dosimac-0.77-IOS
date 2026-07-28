@@ -654,6 +654,21 @@ const respuestaEsCorralLibre = (respuesta: any) => {
     );
 };
 
+const respuestaEsCorralNoExiste = (respuesta: any) => {
+    const texto = normalizarTextoBackend(
+        obtenerMensajeErrorBackend(respuesta),
+    );
+
+    return (
+        texto.includes("thecorraldoesnotexist") ||
+        texto.includes("numerodecorralnotvalid") ||
+        texto.includes("numerodecorral") ||
+        texto.includes("corralnoexiste") ||
+        texto.includes("corraldoesnotexist") ||
+        texto.includes("notvalid")
+    );
+};
+
 const obtenerDetalleCorralOcupado = (respuesta: any, corral: string) => {
     const animal = respuesta?.data ?? {};
 
@@ -1019,6 +1034,13 @@ export const LectorMaternidadScreen = () => {
 
         const respuestaCorral = await obtenerCorralMaternidad(corralLimpio);
 
+        if (respuestaEsCorralNoExiste(respuestaCorral)) {
+            return {
+                ok: false,
+                mensaje: "El corral no existe",
+            };
+        }
+
         if (respuestaEsCorralLibre(respuestaCorral)) {
             return {
                 ok: true,
@@ -1040,7 +1062,7 @@ export const LectorMaternidadScreen = () => {
     }, [registrosPendientesEnvio]);
 
     const abrirModalCorral = React.useCallback(() => {
-        setCorralTemporal(corralInput);
+        setCorralTemporal(soloDigitos(corralInput).slice(0, 9));
         setErrorCorral("");
         setRegistroPendienteTrasCorral(null);
         setMostrarModalCorral(true);
@@ -1063,8 +1085,7 @@ export const LectorMaternidadScreen = () => {
     ]);
 
     const aceptarModalCorral = React.useCallback(async () => {
-        const nuevoCorral = soloDigitos(corralTemporal);
-
+        const nuevoCorral = soloDigitos(corralTemporal).slice(0, 9);
         if (!nuevoCorral) {
             setErrorCorral("Escribe un número de corral antes de aceptar.");
             return;
@@ -1129,8 +1150,8 @@ export const LectorMaternidadScreen = () => {
             setRegistroPendienteTrasCorral(registro);
             setCorralTemporal(
                 registro.corral && registro.corral !== "—"
-                    ? registro.corral
-                    : corralInput
+                    ? soloDigitos(registro.corral).slice(0, 9)
+                    : soloDigitos(corralInput).slice(0, 9)
             );
             setErrorCorral(validacionCorral.mensaje);
             setMostrarModalCorral(true);
@@ -2376,8 +2397,10 @@ export const LectorMaternidadScreen = () => {
     ]);
 
     const procesarEntradaTeclado = React.useCallback(async () => {
-        const valor = soloDigitos(valorTeclado);
-
+        const valor =
+            tipoTeclado === "crotal"
+                ? soloDigitos(valorTeclado).slice(0, 15)
+                : soloDigitos(valorTeclado);
         if (!valor) {
             setErrorTeclado(
                 tipoTeclado === "id"
@@ -2835,7 +2858,7 @@ export const LectorMaternidadScreen = () => {
             setTipoMovimiento(modoInicial);
             setCorralInput(
                 modoInicial === "entrada" && params.corral
-                    ? soloDigitos(String(params.corral))
+                    ? soloDigitos(String(params.corral)).slice(0, 9)
                     : ""
             );
 
@@ -3643,10 +3666,18 @@ export const LectorMaternidadScreen = () => {
                                 label={tipoTeclado === "crotal" ? "Crotal" : "ID"}
                                 value={valorTeclado}
                                 onChangeText={(texto) => {
-                                    setValorTeclado(soloDigitos(texto));
+                                    const soloNumeros = soloDigitos(texto);
+
+                                    if (tipoTeclado === "crotal") {
+                                        setValorTeclado(soloNumeros.slice(0, 15));
+                                    } else {
+                                        setValorTeclado(soloNumeros);
+                                    }
+
                                     setErrorTeclado("");
                                 }}
                                 keyboardType="number-pad"
+                                maxLength={tipoTeclado === "crotal" ? 15 : undefined}
                                 placeholder={tipoTeclado === "crotal" ? "Ej: 982..." : "Ej: 1234"}
                                 outlineColor={BRAND}
                                 activeOutlineColor={BRAND}
@@ -4294,10 +4325,13 @@ export const LectorMaternidadScreen = () => {
                                 label="Corral"
                                 value={editCorral}
                                 onChangeText={(texto) => {
-                                    setEditCorral(soloDigitos(texto));
+                                    const soloNumeros = soloDigitos(texto).slice(0, 9);
+
+                                    setEditCorral(soloNumeros);
                                     setEditError("");
                                 }}
                                 keyboardType="number-pad"
+                                maxLength={9}
                                 placeholder="Ej: 1"
                                 outlineColor={BRAND}
                                 activeOutlineColor={BRAND}
@@ -4548,9 +4582,10 @@ export const LectorMaternidadScreen = () => {
                             label="Número crotal"
                             value={crotalManualTeclado}
                             onChangeText={(texto) => {
-                                setCrotalManualTeclado(soloDigitos(texto));
+                                setCrotalManualTeclado(soloDigitos(texto).slice(0, 15));
                                 setErrorCrotalManualTeclado("");
                             }}
+                            maxLength={15}
                             keyboardType="number-pad"
                             placeholder="Vacío = crotal 0"
                             outlineColor={BRAND}
@@ -4715,10 +4750,13 @@ export const LectorMaternidadScreen = () => {
                             label="Corral"
                             value={corralTemporal}
                             onChangeText={(texto) => {
-                                setCorralTemporal(soloDigitos(texto));
+                                const soloNumeros = soloDigitos(texto).slice(0, 9);
+
+                                setCorralTemporal(soloNumeros);
                                 setErrorCorral("");
                             }}
                             keyboardType="number-pad"
+                            maxLength={9}
                             placeholder="Ej: 1"
                             autoFocus
                             outlineColor={BRAND}

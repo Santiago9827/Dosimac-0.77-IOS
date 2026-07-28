@@ -26,6 +26,7 @@ import { IndicadorConexionAnimado } from "../../components/IndicadorConexionAnim
 import {
     enviarEntradaGestacion,
     enviarSalidaGestacionPorId,
+    consultarCorralGestacion,
 } from "../../../stores/apiApp";
 
 const BG = "#F6F7FB";
@@ -586,6 +587,8 @@ export const LectorGestacionScreen = () => {
     const [corralInput, setCorralInput] = useState("");
     const [modalCorralVisible, setModalCorralVisible] = useState(false);
     const [corralTemporal, setCorralTemporal] = useState("");
+    const [errorCorralModal, setErrorCorralModal] = useState("");
+    const [validandoCorralModal, setValidandoCorralModal] = useState(false);
 
     const [tipoMovimiento, setTipoMovimiento] = useState<TipoMovimiento>("entrada");
     type RegistroPendienteGestacion = RegistroEnviado & {
@@ -838,46 +841,108 @@ export const LectorGestacionScreen = () => {
         if (!esEntrada) return;
 
         Keyboard.dismiss();
-        setCorralTemporal(corralInput);
+        setCorralTemporal(soloDigitos(corralInput).slice(0, 9));
+        setErrorCorralModal("");
         setModalCorralVisible(true);
     }, [esEntrada, corralInput]);
+    const obtenerMensajeErrorCorralGestacion = (respuesta: any) => {
+        if (typeof respuesta?.data === "string") {
+            return respuesta.data;
+        }
+
+        return (
+            respuesta?.data?.message ||
+            respuesta?.data?.mensaje ||
+            respuesta?.data?.error ||
+            respuesta?.rawText ||
+            `HTTP ${respuesta?.status}`
+        );
+    };
+
+    const esCorralGestacionNoExiste = (respuesta: any) => {
+        const mensaje = String(
+            obtenerMensajeErrorCorralGestacion(respuesta) ?? "",
+        )
+            .trim()
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, "");
+
+        return (
+            respuesta?.status === 400 ||
+            respuesta?.status === 404 ||
+            mensaje.includes("numerodecorral") ||
+            mensaje.includes("notvalid") ||
+            mensaje.includes("thecorraldoesnotexist") ||
+            mensaje.includes("corralnoexiste")
+        );
+    };
 
     const cerrarModalCorral = React.useCallback(() => {
         setModalCorralVisible(false);
         setCorralTemporal("");
+        setErrorCorralModal("");
+        setValidandoCorralModal(false);
     }, []);
-
-    const guardarCorralModal = React.useCallback(() => {
-        const corralLimpio = soloDigitos(corralTemporal);
+    const guardarCorralModal = React.useCallback(async () => {
+        const corralLimpio = soloDigitos(corralTemporal).slice(0, 9);
         const corralNumero = Number(corralLimpio);
+
+        setErrorCorralModal("");
 
         if (
             !corralLimpio ||
             !Number.isFinite(corralNumero) ||
             corralNumero <= 0
         ) {
-            mostrarAviso(
-                t("gestationReader_alertMissingCorralTitle"),
+            setErrorCorralModal(
                 t("gestationReader_alertMissingCorralMessage"),
-                "warning"
             );
             return;
         }
 
-        setCorralInput(corralLimpio);
-        setModalCorralVisible(false);
-        setCorralTemporal("");
+        try {
+            setValidandoCorralModal(true);
 
-        limpiarAutoEnvioTimer();
-        ultimoCrotalAutoRef.current = null;
-        limpiarCrotalLeido();
+            const respuesta = await consultarCorralGestacion(corralLimpio);
+
+            if (!respuesta.ok) {
+                if (esCorralGestacionNoExiste(respuesta)) {
+                    setErrorCorralModal("El corral no existe");
+                    return;
+                }
+
+                setErrorCorralModal(
+                    limpiarMensajeBackend(
+                        String(obtenerMensajeErrorCorralGestacion(respuesta)),
+                    ),
+                );
+
+                return;
+            }
+
+            setCorralInput(corralLimpio);
+            setModalCorralVisible(false);
+            setCorralTemporal("");
+            setErrorCorralModal("");
+
+            limpiarAutoEnvioTimer();
+            ultimoCrotalAutoRef.current = null;
+            limpiarCrotalLeido();
+        } catch {
+            setErrorCorralModal(
+                "No se pudo validar el corral. Revisa la conexión con el servidor.",
+            );
+        } finally {
+            setValidandoCorralModal(false);
+        }
     }, [
         corralTemporal,
         limpiarAutoEnvioTimer,
         limpiarCrotalLeido,
         t,
     ]);
-
     const traducirEstadosEnMensaje = (
         mensaje: string,
         tFunction: (clave: string) => string
@@ -1653,8 +1718,10 @@ export const LectorGestacionScreen = () => {
     };
 
     const agregarDesdeTeclado = React.useCallback(async () => {
-        const valorEscrito = soloDigitos(valorTeclado);
-
+        const valorEscrito =
+            tipoTeclado === "crotal"
+                ? soloDigitos(valorTeclado).slice(0, 15)
+                : soloDigitos(valorTeclado);
         if (!valorEscrito) {
             setErrorTeclado(
                 tipoTeclado === "id"
@@ -2769,10 +2836,18 @@ export const LectorGestacionScreen = () => {
                                 }
                                 value={valorTeclado}
                                 onChangeText={(texto) => {
-                                    setValorTeclado(soloDigitos(texto));
+                                    const soloNumeros = soloDigitos(texto);
+
+                                    if (tipoTeclado === "crotal") {
+                                        setValorTeclado(soloNumeros.slice(0, 15));
+                                    } else {
+                                        setValorTeclado(soloNumeros);
+                                    }
+
                                     setErrorTeclado("");
                                 }}
-                                keyboardType="default"
+                                keyboardType="number-pad"
+                                maxLength={tipoTeclado === "crotal" ? 15 : undefined}
                                 placeholder={
                                     tipoTeclado === "id"
                                         ? t("gestationReader_keyboardIdPlaceholder")
@@ -3510,23 +3585,40 @@ export const LectorGestacionScreen = () => {
                             label={t("gestationReader_newPenLabel")}
                             value={corralTemporal}
                             onChangeText={(texto) => {
-                                setCorralTemporal(soloDigitos(texto));
+                                const soloNumeros = soloDigitos(texto).slice(0, 9);
+
+                                setCorralTemporal(soloNumeros);
+                                setErrorCorralModal("");
                             }}
                             keyboardType="number-pad"
+                            maxLength={9}
                             placeholder=""
-                            outlineColor={BRAND}
-                            activeOutlineColor={BRAND}
+                            outlineColor={errorCorralModal ? DANGER : BRAND}
+                            activeOutlineColor={errorCorralModal ? DANGER : BRAND}
                             style={{
                                 backgroundColor: "#FFFFFF",
-                                marginBottom: 18,
+                                marginBottom: errorCorralModal ? 6 : 18,
                             }}
                             outlineStyle={{
                                 borderRadius: 14,
                                 borderWidth: 2,
                             }}
                             textColor={TEXT}
+                            disabled={validandoCorralModal}
                         />
-
+                        {!!errorCorralModal && (
+                            <Text
+                                style={{
+                                    color: DANGER,
+                                    fontSize: 13,
+                                    fontWeight: "800",
+                                    textAlign: "center",
+                                    marginBottom: 12,
+                                }}
+                            >
+                                {errorCorralModal}
+                            </Text>
+                        )}
                         <View
                             style={{
                                 flexDirection: "row",
@@ -3535,6 +3627,7 @@ export const LectorGestacionScreen = () => {
                         >
                             <TouchableOpacity
                                 onPress={cerrarModalCorral}
+                                disabled={validandoCorralModal}
                                 activeOpacity={0.9}
                                 style={{
                                     flex: 1,
@@ -3558,6 +3651,7 @@ export const LectorGestacionScreen = () => {
 
                             <TouchableOpacity
                                 onPress={guardarCorralModal}
+                                disabled={validandoCorralModal || !corralTemporal.trim()}
                                 activeOpacity={0.9}
                                 style={{
                                     flex: 1,
@@ -3575,7 +3669,9 @@ export const LectorGestacionScreen = () => {
                                         fontWeight: "900",
                                     }}
                                 >
-                                    {t("gestationReader_save")}
+                                    {validandoCorralModal
+                                        ? "Validando..."
+                                        : t("gestationReader_save")}
                                 </Text>
                             </TouchableOpacity>
                         </View>

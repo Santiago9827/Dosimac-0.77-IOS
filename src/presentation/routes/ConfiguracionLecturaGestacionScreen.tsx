@@ -26,6 +26,8 @@ import { obtenerLecturaEspada, obtenerAnimalPorId } from "../routes/obtenerLectu
 import { useTranslation } from "react-i18next";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useAjustesEnvioGestacionStore } from "../../stores/ajustesEnvioGestacionStore";
+import { consultarCorralGestacion } from "../../stores/apiApp";
+
 
 type Modo = "entrada" | "salida" | "lectura" | "busqueda";
 
@@ -315,6 +317,7 @@ export const ConfiguracionGestacionScreen = () => {
     const [espadaConectandoId, setEspadaConectandoId] = useState<string | null>(null);
     const [modo, setModo] = useState<Modo>("entrada");
     const [corral, setCorral] = useState("");
+    const [errorCorral, setErrorCorral] = useState("");
     const detectarDesconocidos = useAjustesEnvioGestacionStore(
         (s) => s.detectarDesconocidos
     );
@@ -424,6 +427,73 @@ export const ConfiguracionGestacionScreen = () => {
         try {
             await detenerLectura?.();
         } catch { }
+    };
+
+    const obtenerMensajeErrorCorral = (respuesta: any) => {
+        if (typeof respuesta?.data === "string") {
+            return respuesta.data;
+        }
+
+        return (
+            respuesta?.data?.message ||
+            respuesta?.data?.mensaje ||
+            respuesta?.data?.error ||
+            respuesta?.rawText ||
+            `HTTP ${respuesta?.status}`
+        );
+    };
+
+    const esCorralGestacionNoExiste = (respuesta: any) => {
+        const mensaje = String(obtenerMensajeErrorCorral(respuesta) ?? "")
+            .trim()
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, "");
+
+        return (
+            respuesta?.status === 400 ||
+            respuesta?.status === 404 ||
+            mensaje.includes("numerodecorral") ||
+            mensaje.includes("notvalid") ||
+            mensaje.includes("thecorraldoesnotexist") ||
+            mensaje.includes("corralnoexiste")
+        );
+    };
+
+    const validarCorralGestacion = async () => {
+        const corralLimpio = corral.trim();
+
+        if (!corralLimpio) {
+            setErrorCorral(t("gestacionConfig_corralRequired"));
+            return false;
+        }
+
+        try {
+            const respuesta = await consultarCorralGestacion(corralLimpio);
+
+            if (!respuesta.ok) {
+                if (esCorralGestacionNoExiste(respuesta)) {
+                    setErrorCorral("El corral no existe");
+                    return false;
+                }
+
+                setErrorCorral(
+                    limpiarMensajeBackend(String(obtenerMensajeErrorCorral(respuesta))),
+                );
+
+                return false;
+            }
+
+            setErrorCorral("");
+            return true;
+        } catch {
+            setErrorCorral(
+                "No se pudo validar el corral. Revisa la conexión con el servidor.",
+            );
+
+            return false;
+        }
     };
 
     useEffect(() => {
@@ -555,8 +625,10 @@ export const ConfiguracionGestacionScreen = () => {
                     return;
                 }
 
-                const valor = valorBusqueda.trim();
-
+                const valor =
+                    tipoBusqueda === "crotal"
+                        ? valorBusqueda.replace(/[^0-9]/g, "").slice(0, 15)
+                        : valorBusqueda.trim();
                 if (!valor) {
                     mostrarAviso(
                         t("gestacionConfig_alerts_notice"),
@@ -636,6 +708,14 @@ export const ConfiguracionGestacionScreen = () => {
                 return;
             } finally {
                 setBuscandoAnimal(false);
+            }
+        }
+
+        if (modo === "entrada") {
+            const corralValido = await validarCorralGestacion();
+
+            if (!corralValido) {
+                return;
             }
         }
 
@@ -1031,9 +1111,15 @@ export const ConfiguracionGestacionScreen = () => {
                                     dense
                                     label={t("gestacionConfig_corralLabel")}
                                     value={corral}
-                                    onChangeText={setCorral}
+                                    onChangeText={(texto) => {
+                                        const soloNumeros = texto.replace(/[^0-9]/g, "");
+
+                                        setCorral(soloNumeros.slice(0, 9));
+                                        setErrorCorral("");
+                                    }}
                                     placeholder={t("gestacionConfig_corralPlaceholder")}
                                     keyboardType="number-pad"
+                                    maxLength={9}
                                     outlineColor={corral.trim().length === 0 ? ERROR : BORDER}
                                     activeOutlineColor={corral.trim().length === 0 ? ERROR : BRAND}
                                     textColor={TEXT}
@@ -1058,8 +1144,7 @@ export const ConfiguracionGestacionScreen = () => {
                                     }}
                                 />
                             </View>
-
-                            {!puedeContinuar && (
+                            {(!!errorCorral || !puedeContinuar) && (
                                 <Text
                                     style={{
                                         color: ERROR,
@@ -1068,7 +1153,7 @@ export const ConfiguracionGestacionScreen = () => {
                                         fontSize: 13,
                                     }}
                                 >
-                                    {t("gestacionConfig_corralRequired")}
+                                    {errorCorral || t("gestacionConfig_corralRequired")}
                                 </Text>
                             )}
                         </Card.Content>
@@ -1147,13 +1232,21 @@ export const ConfiguracionGestacionScreen = () => {
                                                     : t("gestacionConfig_idLabelSearch")
                                             }
                                             value={valorBusqueda}
-                                            onChangeText={setValorBusqueda}
+                                            onChangeText={(texto) => {
+                                                if (tipoBusqueda === "crotal") {
+                                                    const soloNumeros = texto.replace(/[^0-9]/g, "");
+                                                    setValorBusqueda(soloNumeros.slice(0, 15));
+                                                } else {
+                                                    setValorBusqueda(texto);
+                                                }
+                                            }}
                                             placeholder={
                                                 tipoBusqueda === "crotal"
                                                     ? t("gestacionConfig_crotalPlaceholderSearch")
                                                     : t("gestacionConfig_idPlaceholderSearch")
                                             }
                                             keyboardType={tipoBusqueda === "crotal" ? "number-pad" : "default"}
+                                            maxLength={tipoBusqueda === "crotal" ? 15 : undefined}
                                             autoCapitalize={tipoBusqueda === "id" ? "characters" : "none"}
                                             autoCorrect={false}
                                             outlineColor={BORDER}

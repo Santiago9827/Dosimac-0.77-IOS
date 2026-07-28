@@ -771,7 +771,7 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
 
                 if (!respuestaEsCorralLibre(respuestaCorral)) {
                     mostrarAviso(
-                        "No se pudo validar el corral",
+                        "Corral no valido ",
                         String(obtenerMensajeErrorBackend(respuestaCorral)),
                         "error"
                     );
@@ -1201,9 +1201,13 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                                     dense
                                     label={t("maternidadConfig_corralLabel")}
                                     value={corral}
-                                    onChangeText={setCorral}
+                                    onChangeText={(texto) => {
+                                        const soloNumeros = texto.replace(/[^0-9]/g, "");
+                                        setCorral(soloNumeros.slice(0, 9));
+                                    }}
                                     placeholder={t("maternidadConfig_corralPlaceholder")}
                                     keyboardType="number-pad"
+                                    maxLength={9}
                                     outlineColor={corral.trim().length === 0 ? ERROR : BORDER}
                                     activeOutlineColor={corral.trim().length === 0 ? ERROR : BRAND}
                                     textColor={TEXT}
@@ -1311,13 +1315,21 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
                                                     : t("maternidadConfig_idLabelSearch")
                                             }
                                             value={valorBusqueda}
-                                            onChangeText={setValorBusqueda}
+                                            onChangeText={(texto) => {
+                                                if (tipoBusqueda === "crotal") {
+                                                    const soloNumeros = texto.replace(/[^0-9]/g, "");
+                                                    setValorBusqueda(soloNumeros.slice(0, 15));
+                                                } else {
+                                                    setValorBusqueda(texto);
+                                                }
+                                            }}
                                             placeholder={
                                                 tipoBusqueda === "crotal"
                                                     ? t("maternidadConfig_crotalPlaceholderSearch")
                                                     : t("maternidadConfig_idPlaceholderSearch")
                                             }
                                             keyboardType={tipoBusqueda === "crotal" ? "number-pad" : "default"}
+                                            maxLength={tipoBusqueda === "crotal" ? 15 : undefined}
                                             autoCapitalize={tipoBusqueda === "id" ? "characters" : "none"}
                                             autoCorrect={false}
                                             outlineColor={BORDER}
