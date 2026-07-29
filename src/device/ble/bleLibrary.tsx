@@ -119,6 +119,47 @@ export const BleStart = async () => {
 
   await BleManager.start({ showAlert: false });
 };
+const waitForBluetoothOn = (timeoutMs = 10000): Promise<void> =>
+  new Promise((resolve, reject) => {
+    let subscription: any = null;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    let finished = false;
+
+    const finish = (error?: Error) => {
+      if (finished) return;
+      finished = true;
+
+      if (timer) clearTimeout(timer);
+      subscription?.remove?.();
+
+      if (error) reject(error);
+      else resolve();
+    };
+
+    const handleState = (state: string) => {
+      if (state === 'on') {
+        finish();
+        return;
+      }
+
+      if (state === 'off' || state === 'unauthorized' || state === 'unsupported') {
+        finish(new Error(`Bluetooth no disponible: ${state}`));
+      }
+    };
+
+    subscription = bleManagerEmitter.addListener(
+      'BleManagerDidUpdateState',
+      ({ state }) => handleState(state)
+    );
+
+    timer = setTimeout(() => {
+      finish(new Error('Timeout esperando a que Bluetooth esté listo'));
+    }, timeoutMs);
+
+    BleManager.checkState()
+      .then(handleState)
+      .catch((error) => finish(error));
+  });
 
 let discoverListenerSubscription: any = null;
 
@@ -145,7 +186,9 @@ export const bleRemoveListener = () => {
 };
 
 export const startScanning = async () => {
-  await BleStart();   // ✅ garantiza init 1 vez
+  await BleStart();
+  await waitForBluetoothOn();
+
   clearDevices();
   console.log('Start Scanning...');
   await BleManager.scan([], 5, false, { matchMode: 2 });

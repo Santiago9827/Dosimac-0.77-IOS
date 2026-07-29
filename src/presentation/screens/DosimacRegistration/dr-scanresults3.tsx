@@ -196,7 +196,7 @@ export const DRScanResultsScreen: React.FC<Props> = ({ navigation, route }) => {
         await ble.resetBleSession();
 
         // Arranca BLE y listener de discovery
-        ble.BleStart();
+        //ble.BleStart();
         ble.bleAddListener();
 
         // Empieza a escanear

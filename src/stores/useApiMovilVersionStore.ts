@@ -3,8 +3,8 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { construirEndpointAppV1 } from "./apiApp";
 
-export const VERSION_MINIMA_API_MOVIL = 40;
-export const VERSION_API_TAREAS = 40;
+export const VERSION_MINIMA_API_MOVIL = 41;
+export const VERSION_API_TAREAS = 41;
 
 type InfoVersionServidor = {
     version: number;
