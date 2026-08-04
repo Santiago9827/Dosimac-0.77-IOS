@@ -27,6 +27,7 @@ import { useTranslation } from "react-i18next";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useAjustesEnvioGestacionStore } from "../../stores/ajustesEnvioGestacionStore";
 import { consultarCorralGestacion } from "../../stores/apiApp";
+import { useLectorCrotales } from "../../stores/useLectorCrotales";
 
 
 type Modo = "entrada" | "salida" | "lectura" | "busqueda";
@@ -300,12 +301,15 @@ export const ConfiguracionGestacionScreen = () => {
     const { t } = useTranslation();
     const navigation = useNavigation<any>();
 
-    const lectorConectado = useAwrConn((s) => s.isConnected);
-    const crotalLeido = useAwrConn((s) => s.lastTag);
-    const iniciarLectura = useAwrConn((s) => s.startReading);
-    const detenerLectura = useAwrConn((s) => s.stopReading);
-    const limpiarCrotalLeido = useAwrConn((s) => s.clearLastTag);
-
+   const {
+    lectorConectado,
+    crotalLeido,
+    iniciarLectura,
+    detenerLectura,
+    limpiarCrotalLeido,
+    tipoLectorActivo,
+    nombreLector,
+} = useLectorCrotales();
     const conectarEspada = useAwrConn((s) => s.connect);
     const currentAwrId = useAwrConn((s) => s.currentId);
     const awrConnecting = useAwrConn((s) => s.connecting);

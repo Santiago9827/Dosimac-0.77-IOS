@@ -51,8 +51,13 @@
 <string>La app necesita conectarse al servidor de la instalación configurado por el usuario para validar la instalación, sincronizar datos y mostrar CTIFEED.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Necesitamos Bluetooth para detectar y configurar los dispositivos DOSIMAC.</string>
+
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Esta app usa Bluetooth para comunicarse con dispositivos cercanos.</string>
+	<key>UISupportedExternalAccessoryProtocols</key>
+<array>
+    <string></string>
+</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UIAppFonts</key>

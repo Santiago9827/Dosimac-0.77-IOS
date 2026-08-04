@@ -295,6 +295,15 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                             </View>
                         </TouchableOpacity>
                     )}
+                     <GeneralCard
+                        titulo="Tareas Movimientos"
+                        descripcion="Consulta y gestión de tareas pendientes de movimientos."
+                        icono="clipboard-outline"
+                        color="#EA580C"
+                        fondoIcono="#FFEDD5"
+                        disabled={validandoConexion}
+                        onPress={() => navegarSiHayIp('TareasMovimientos', true)}
+                    />  
                     <GeneralCard
                         titulo={t('generalHome.movementAnimalTitle')}
                         descripcion={t('generalHome.readerDescription')}

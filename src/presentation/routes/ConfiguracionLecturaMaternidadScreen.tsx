@@ -30,6 +30,7 @@ import {
     obtenerCorralMaternidad,
 } from "../routes/obtenerLecturaEspada";
 import { useAuthStore } from "../../stores/authStore";
+import { useLectorCrotales } from "../../stores/useLectorCrotales";
 
 type Modo = "entrada" | "salida" | "lectura" | "busqueda";
 
@@ -357,12 +358,15 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
     const rol = useAuthStore((s) => s.rol ?? []);
     const esAdmin = rol.includes("admin");
 
-    const lectorConectado = useAwrConn((s) => s.isConnected);
-    const crotalLeido = useAwrConn((s) => s.lastTag);
-    const iniciarLectura = useAwrConn((s) => s.startReading);
-    const detenerLectura = useAwrConn((s) => s.stopReading);
-    const limpiarCrotalLeido = useAwrConn((s) => s.clearLastTag);
-
+ const {
+    lectorConectado,
+    crotalLeido,
+    iniciarLectura,
+    detenerLectura,
+    limpiarCrotalLeido,
+    tipoLectorActivo,
+    nombreLector,
+} = useLectorCrotales();
     const conectarEspada = useAwrConn((s) => s.connect);
     const currentAwrId = useAwrConn((s) => s.currentId);
     const awrConnecting = useAwrConn((s) => s.connecting);
@@ -416,31 +420,6 @@ export const ConfiguracionLecturaMaternidadScreen = () => {
             setModalEspadasVisible(true);
             return;
         }
-
-        const conectarEspadaGuardada = async (id: string) => {
-            try {
-                setEspadaConectandoId(id);
-
-                await conectarEspada(id);
-                await iniciarLectura?.();
-
-                setModalEspadasVisible(false);
-
-                mostrarAviso(
-                    "Conectado",
-                    "La espada se ha conectado correctamente.",
-                    "info"
-                );
-            } catch {
-                mostrarAviso(
-                    "Error",
-                    "No se pudo conectar con la espada seleccionada.",
-                    "error"
-                );
-            } finally {
-                setEspadaConectandoId(null);
-            }
-        };
 
         const topTabsNavigation = navigation.getParent?.();
         const stackNavigation = topTabsNavigation?.getParent?.();

@@ -60,7 +60,6 @@ function CardLector({
         </TouchableOpacity>
     );
 }
-
 function ConfiguracionAwrTemporal({ navigation }: any) {
     const navegarAStack = (screenName: string) => {
         const topTabsNavigation = navigation.getParent?.();
@@ -74,11 +73,8 @@ function ConfiguracionAwrTemporal({ navigation }: any) {
         navigation.navigate(screenName);
     };
 
-    const avisoPendiente = (pantalla: string) => {
-        Alert.alert(
-            'Pendiente',
-            `Después conectaremos esta opción con: ${pantalla}`
-        );
+    const irAConexionBluetooth = () => {
+        navegarAStack('GeneralAllflexBluetooth');
     };
 
     return (
@@ -109,14 +105,14 @@ function ConfiguracionAwrTemporal({ navigation }: any) {
                     descripcion="Ver las espadas o lectores ya configurados."
                     onPress={() => navegarAStack('GeneralAwrSaved')}
                 />
-
-                {/* <CardLector
+{/* 
+                <CardLector
                     color="#0284C7"
                     fondoIcono="#E0F2FE"
                     icono="bluetooth-outline"
                     titulo="Conectar por Bluetooth"
                     descripcion="Conectar con lector Allflex LPR por Bluetooth."
-                    onPress={() => avisoPendiente('GeneralAllflexBluetooth')}
+                    onPress={irAConexionBluetooth}
                 /> */}
             </ScrollView>
         </View>

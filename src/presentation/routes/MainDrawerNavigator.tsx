@@ -36,6 +36,26 @@ const getDeepestRouteName = (state: any): string | undefined => {
     return getDeepestRouteName(route.state) ?? route.name;
 };
 
+const existeRutaEnEstado = (
+    state: any,
+    nombreRuta: string
+): boolean => {
+    if (!state?.routes) {
+        return false;
+    }
+
+    return state.routes.some((route: any) => {
+        if (route.name === nombreRuta) {
+            return true;
+        }
+
+        return existeRutaEnEstado(
+            route.state,
+            nombreRuta
+        );
+    });
+};
+
 const getDeepestRouteParams = (state: any): any => {
     if (!state) return undefined;
 
@@ -93,6 +113,12 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
     const isPantallaLector = isLectorMaternidad || isLectorGestacion;
     const isDetalleMaternidad =
         currentRouteName === 'EstadoAnimalDetalle';
+    const isDetalleTareasMovimientos =
+        existeRutaEnEstado(
+            props.state,
+            'TareasMovimientosDetalle'
+        );
+
     const vieneDeNoAlimentados =
         currentRouteParams?.origen === 'noAlimentados';
 
@@ -140,32 +166,46 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
             });
         }, 120);
     };
-   const goBackFromDetalleMaternidad = () => {
-    props.navigation.closeDrawer();
 
-    setTimeout(() => {
-        if (vieneDeNoAlimentados) {
+    const goBackFromDetalleTareas = () => {
+        props.navigation.closeDrawer();
+
+        setTimeout(() => {
+            (props.navigation as any).navigate('MainTabs', {
+                screen: 'GeneralTab',
+                params: {
+                    screen: 'TareasMovimientos',
+                },
+            });
+        }, 120);
+    };
+
+    const goBackFromDetalleMaternidad = () => {
+        props.navigation.closeDrawer();
+
+        setTimeout(() => {
+            if (vieneDeNoAlimentados) {
+                (props.navigation as any).navigate('MainTabs', {
+                    screen: 'CapturaAnimalTab',
+                    params: {
+                        screen: 'AnimalesNoAlimentados',
+                        params: {
+                            screen: 'NoAlimentadosMaternidad',
+                        },
+                    },
+                });
+
+                return;
+            }
+
             (props.navigation as any).navigate('MainTabs', {
                 screen: 'CapturaAnimalTab',
                 params: {
-                    screen: 'AnimalesNoAlimentados',
-                    params: {
-                        screen: 'NoAlimentadosMaternidad',
-                    },
+                    screen: 'EstadoAnimal',
                 },
             });
-
-            return;
-        }
-
-        (props.navigation as any).navigate('MainTabs', {
-            screen: 'CapturaAnimalTab',
-            params: {
-                screen: 'EstadoAnimal',
-            },
-        });
-    }, 120);
-};
+        }, 120);
+    };
     const DrawerButton = ({
         label,
         icon,
@@ -288,23 +328,36 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
 
             {isGeneralTab && !isPantallaLector && (
                 <View style={{ marginTop: 4 }}>
-                    <DrawerButton
-                        label="Inicio"
-                        icon="home-outline"
-                        active={currentRouteName === 'GeneralHome'}
-                        onPress={goToInicioMovimientos}
-                    />
+                    {isDetalleTareasMovimientos ? (
+                        <DrawerButton
+                            label="Atrás"
+                            icon="arrow-back-outline"
+                            active={false}
+                            onPress={goBackFromDetalleTareas}
+                        />
+                    ) : (
+                        <>
+                            <DrawerButton
+                                label="Inicio"
+                                icon="home-outline"
+                                active={
+                                    currentRouteName === 'GeneralHome'
+                                }
+                                onPress={goToInicioMovimientos}
+                            />
 
-                    <DrawerButton
-                        label="Configuración IP"
-                        icon="wifi-outline"
-                        active={
-                            currentRouteName === 'FarmList' ||
-                            currentRouteName === 'Farm list' ||
-                            currentRouteName === 'Farm detalils'
-                        }
-                        onPress={goToConfiguracionIp}
-                    />
+                            <DrawerButton
+                                label="Configuración IP"
+                                icon="wifi-outline"
+                                active={
+                                    currentRouteName === 'FarmList' ||
+                                    currentRouteName === 'Farm list' ||
+                                    currentRouteName === 'Farm detalils'
+                                }
+                                onPress={goToConfiguracionIp}
+                            />
+                        </>
+                    )}
                 </View>
             )}
 

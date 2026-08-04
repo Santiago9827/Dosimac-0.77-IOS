@@ -34,6 +34,8 @@
 		8D36474BECB4459A92DA2094 /* Poppins-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 533656EF6566443A80CC1DE4 /* Poppins-ExtraBoldItalic.ttf */; };
 		8F296ED376374A70930D0F92 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51A0C0C4A4804B7E89652129 /* Poppins-Medium.ttf */; };
 		922E9E2C0F0A38DA3807C90F /* libPods-gptrnbluetooth-gptrnbluetoothTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56B57414C1088638AC0364C9 /* libPods-gptrnbluetooth-gptrnbluetoothTests.a */; };
+		98259152301A028B007AB8B0 /* AllflexExternalAccessory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98259151301A028B007AB8B0 /* AllflexExternalAccessory.swift */; };
+		98259155301A02C1007AB8B0 /* AllflexExternalAccessoryBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 98259154301A02C1007AB8B0 /* AllflexExternalAccessoryBridge.m */; };
 		9847ADC92E609CA0008EE05E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		9ACF7226B4A04A62A744253D /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 91227625ABB3487698A16EDE /* Poppins-Light.ttf */; };
 		A011E592505F4C3EB7D5DC50 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3569BC6F42D248AB9482A3C6 /* Poppins-Regular.ttf */; };
@@ -105,6 +107,9 @@
 		9548B21B29A34262B8E9BDEB /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BlackItalic.ttf"; path = "../src/assets/fonts/Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
 		9803AC132E5F53E100F81AD4 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		9803AC152E5F540E00F81AD4 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		98259151301A028B007AB8B0 /* AllflexExternalAccessory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllflexExternalAccessory.swift; sourceTree = "<group>"; };
+		98259153301A02A7007AB8B0 /* gptrnbluetooth-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "gptrnbluetooth-Bridging-Header.h"; sourceTree = "<group>"; };
+		98259154301A02C1007AB8B0 /* AllflexExternalAccessoryBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AllflexExternalAccessoryBridge.m; sourceTree = "<group>"; };
 		A56A79D8B8074C1EBE98B959 /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBoldItalic.ttf"; path = "../src/assets/fonts/Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		B501C0B1412949448BCD9054 /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-ThinItalic.ttf"; path = "../src/assets/fonts/Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
 		B86934AEA675ECF7DDA37A93 /* Pods-gptrnbluetooth.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gptrnbluetooth.debug.xcconfig"; path = "Target Support Files/Pods-gptrnbluetooth/Pods-gptrnbluetooth.debug.xcconfig"; sourceTree = "<group>"; };
@@ -232,6 +237,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				98259154301A02C1007AB8B0 /* AllflexExternalAccessoryBridge.m */,
+				98259151301A028B007AB8B0 /* AllflexExternalAccessory.swift */,
 				9803AC152E5F540E00F81AD4 /* Ionicons.ttf */,
 				9803AC132E5F53E100F81AD4 /* MaterialCommunityIcons.ttf */,
 				13B07FAE1A68108700A75B9A /* gptrnbluetooth */,
@@ -241,6 +248,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
 				373BBAD2E2AE40AF94422606 /* Resources */,
+				98259153301A02A7007AB8B0 /* gptrnbluetooth-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -325,7 +333,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 2630;
 					};
 				};
 			};
@@ -563,6 +571,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				98259152301A028B007AB8B0 /* AllflexExternalAccessory.swift in Sources */,
+				98259155301A02C1007AB8B0 /* AllflexExternalAccessoryBridge.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -658,6 +668,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gptrnbluetoothv2;
 				PRODUCT_NAME = gptrnbluetooth;
+				SWIFT_OBJC_BRIDGING_HEADER = "gptrnbluetooth-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -692,6 +703,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gptrnbluetoothv3;
 				PRODUCT_NAME = gptrnbluetooth;
+				SWIFT_OBJC_BRIDGING_HEADER = "gptrnbluetooth-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

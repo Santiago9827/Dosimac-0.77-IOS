@@ -28,6 +28,7 @@ import {
     enviarSalidaGestacionPorId,
     consultarCorralGestacion,
 } from "../../../stores/apiApp";
+import { useLectorCrotales } from "../../../stores/useLectorCrotales";
 
 const BG = "#F6F7FB";
 const CARD = "#FFFFFF";
@@ -574,12 +575,16 @@ export const LectorGestacionScreen = () => {
     const [avisoMensaje, setAvisoMensaje] = useState("");
     const [avisoTipo, setAvisoTipo] = useState<"warning" | "error" | "info">("info");
 
-    const lectorConectado = useAwrConn((s) => s.isConnected);
-    const idLector = useAwrConn((s) => s.currentId);
-    const crotalLeido = useAwrConn((s) => s.lastTag);
-    const iniciarLectura = useAwrConn((s) => s.startReading);
-    const detenerLectura = useAwrConn((s) => s.stopReading);
-    const limpiarCrotalLeido = useAwrConn((s) => s.clearLastTag);
+  const {
+    lectorConectado,
+    idLector,
+    crotalLeido,
+    iniciarLectura,
+    detenerLectura,
+    limpiarCrotalLeido,
+    tipoLectorActivo,
+    nombreLector,
+} = useLectorCrotales();
 
     const [detectarDesconocidos, setDetectarDesconocidos] = useState(true);
     const [confirmar, setConfirmar] = useState(true);

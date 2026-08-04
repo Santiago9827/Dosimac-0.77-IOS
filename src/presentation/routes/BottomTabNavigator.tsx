@@ -128,7 +128,9 @@ export const BottomTabNavigator = () => {
 
           const ocultarHeader =
             rutaActual === 'LectorMaternidad' ||
-            rutaActual === 'LectorGestacion';
+            rutaActual === 'LectorGestacion' ||
+            rutaActual === 'FiltrosTareasMovimientos' ||
+            rutaActual === 'FiltrosHistorialMovimientos';
 
           return {
             title: 'Movimientos',

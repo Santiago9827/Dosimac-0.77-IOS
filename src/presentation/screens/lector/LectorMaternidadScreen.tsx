@@ -40,6 +40,7 @@ import { formatearCrotalVisual } from "../../hooks/formatearCrotalVisual";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import { IndicadorConexionAnimado } from "../../components/IndicadorConexionAnimado";
+import { useLectorCrotales } from "../../../stores/useLectorCrotales";
 
 type LectorMaternidadParams = {
     modo?: "entrada" | "salida" | "lectura" | "busqueda";
@@ -710,13 +711,16 @@ export const LectorMaternidadScreen = () => {
     const pantallaEnfocada = useIsFocused();
     const pantallaActivaRef = useRef(false);
 
-    const lectorConectado = useAwrConn((s) => s.isConnected);
-    const idLector = useAwrConn((s) => s.currentId);
-    const crotalLeido = useAwrConn((s) => s.lastTag);
-    const iniciarLectura = useAwrConn((s) => s.startReading);
-    const detenerLectura = useAwrConn((s) => s.stopReading);
-    const limpiarCrotalLeido = useAwrConn((s) => s.clearLastTag);
-
+ const {
+    lectorConectado,
+    idLector,
+    crotalLeido,
+    iniciarLectura,
+    detenerLectura,
+    limpiarCrotalLeido,
+    tipoLectorActivo,
+    nombreLector,
+} = useLectorCrotales();
     const route = useRoute<RouteProp<Record<string, LectorMaternidadParams>, string>>();
     const params = route.params ?? {};
 

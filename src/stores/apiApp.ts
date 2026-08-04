@@ -424,6 +424,7 @@ export async function consultarTareasCambioPiensoMaternidad(): Promise<
 
     return Array.isArray(datos) ? datos : [];
 }
+
 export async function consultarMaternidadPorCorral(
     corral: string | number,
 ): Promise<any> {
@@ -474,6 +475,7 @@ export async function consultarMaternidadPorCorral(
 
     return datos;
 }
+
 export type OperacionMaternidadPayload = {
     op: string;
     key: string | number;
@@ -792,6 +794,643 @@ export async function consultarCorralGestacion(
         ok: respuesta.ok,
         status: respuesta.status,
         data: datos,
+        rawText: texto,
+    };
+}
+
+/* =========================================================
+   TAREAS DE MOVIMIENTO ANIMAL
+   ========================================================= */
+
+export type TipoTareaMovimientoAnimal =
+    | 'Entrada'
+    | 'Salida'
+    | 'Traslado Entrada'
+    | 'Traslado Salida';
+
+export type TareaMovimientoAnimalApi = {
+    id: string;
+    tipoOperacion: TipoTareaMovimientoAnimal;
+    idAnimal: string;
+    crotal: string;
+    corralDestino?: string;
+    fecha: string;
+    raw?: any;
+};
+
+type TipoEndpointTareasMovimientoAnimal =
+    | 'gestacion'
+    | 'maternidad'
+    | 'todos'
+    | 'realizada';
+
+async function construirEndpointTareasMovimientoAnimal(
+    tipo: TipoEndpointTareasMovimientoAnimal,
+): Promise<string> {
+    return construirEndpointApiDirecta(
+        `tareas-movimiento-animal/${tipo}`,
+    );
+}
+
+function normalizarTipoOperacion(
+    valor: any,
+): TipoTareaMovimientoAnimal {
+    const texto = String(valor ?? '')
+        .trim()
+        .toLowerCase();
+
+    if (
+        texto === 'entrada' ||
+        texto === 'gestation' ||
+        texto === 'maternity' ||
+        texto === 'gestacion entrada' ||
+        texto === 'maternidad entrada'
+    ) {
+        return 'Entrada';
+    }
+
+    if (
+        texto === 'salida' ||
+        texto === 'out_of_gestation' ||
+        texto === 'out_of_maternity'
+    ) {
+        return 'Salida';
+    }
+
+    if (
+        texto === 'traslado entrada' ||
+        texto === 'traslado_entrada' ||
+        texto === 'trasladoentrada'
+    ) {
+        return 'Traslado Entrada';
+    }
+
+    if (
+        texto === 'traslado salida' ||
+        texto === 'traslado_salida' ||
+        texto === 'trasladosalida'
+    ) {
+        return 'Traslado Salida';
+    }
+
+    return 'Salida';
+}
+
+function normalizarTareaMovimientoAnimal(
+    tarea: any,
+    index: number,
+): TareaMovimientoAnimalApi {
+    const tipoOperacion = normalizarTipoOperacion(
+        tarea.tipoOperacion ??
+        tarea.tipo_operacion ??
+        tarea.operacion ??
+        tarea.tipo ??
+        tarea.movimiento ??
+        tarea.tarea,
+    );
+
+    const idAnimal =
+        tarea.idAnimal ??
+        tarea.id_animal ??
+        tarea.animalId ??
+        tarea.animal_id ??
+        tarea.pkIdAnimal ??
+        tarea.pkidAnimal ??
+        tarea.id ??
+        '';
+
+    const crotal =
+        tarea.crotal ??
+        tarea.numeroCrotal ??
+        tarea.numero_crotal ??
+        tarea.earTag ??
+        '';
+
+    const corralDestino =
+        tarea.corral ??
+        tarea.corralDestino ??
+        tarea.corral_destino ??
+        tarea.corralDestinoId ??
+        tarea.corralOrigen ??
+        tarea.corral_origen ??
+        tarea.pen ??
+        undefined;
+
+    const fecha =
+        tarea.fecha ??
+        tarea.date ??
+        tarea.fechaMovimiento ??
+        tarea.fecha_movimiento ??
+        '';
+
+    return {
+        id: String(
+            tarea.id ??
+            tarea.pkid ??
+            tarea.tareaId ??
+            tarea.tarea_id ??
+            `${tipoOperacion}-${idAnimal}-${fecha}-${index}`,
+        ),
+        tipoOperacion,
+        idAnimal: String(idAnimal),
+        crotal: String(crotal),
+        corralDestino:
+            corralDestino !== undefined &&
+            corralDestino !== null
+                ? String(corralDestino)
+                : undefined,
+        fecha: String(fecha),
+        raw: tarea,
+    };
+}
+
+async function consultarTareasMovimientoAnimal(
+    tipo: 'gestacion' | 'maternidad',
+): Promise<TareaMovimientoAnimalApi[]> {
+    const endpoint =
+        await construirEndpointTareasMovimientoAnimal(tipo);
+
+    console.log('===== CONSULTAR TAREAS MOVIMIENTO =====');
+    console.log('TIPO:', tipo);
+    console.log('ENDPOINT:', endpoint);
+
+    const respuesta = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+        },
+    });
+
+    const texto = await respuesta.text();
+
+    let datosApi: any = [];
+
+    try {
+        datosApi = texto ? JSON.parse(texto) : [];
+    } catch {
+        datosApi = [];
+    }
+
+    if (!respuesta.ok) {
+        const mensajeBackend =
+            datosApi?.message ??
+            datosApi?.mensaje ??
+            datosApi?.error ??
+            datosApi?.detail ??
+            texto ??
+            'No se pudieron cargar las tareas de movimiento animal.';
+
+        const errorConsulta: any = new Error(
+            String(mensajeBackend),
+        );
+
+        errorConsulta.status = respuesta.status;
+
+        throw errorConsulta;
+    }
+
+    const lista = Array.isArray(datosApi)
+        ? datosApi
+        : Array.isArray(datosApi?.data)
+          ? datosApi.data
+          : Array.isArray(datosApi?.content)
+            ? datosApi.content
+            : [];
+
+    return lista
+        .filter(
+            (tarea: any) =>
+                Number(tarea.realizado ?? 0) === 0,
+        )
+        .map((tarea: any, index: number) =>
+            normalizarTareaMovimientoAnimal(tarea, index),
+        );
+}
+
+export async function consultarTareasMovimientoGestacion(): Promise<
+    TareaMovimientoAnimalApi[]
+> {
+    return consultarTareasMovimientoAnimal('gestacion');
+}
+
+export async function consultarTareasMovimientoMaternidad(): Promise<
+    TareaMovimientoAnimalApi[]
+> {
+    return consultarTareasMovimientoAnimal('maternidad');
+}
+
+/* =========================================================
+   CONTEO DE TAREAS
+   ========================================================= */
+
+export type TareaMovimientoAnimalBackend = {
+    corral?: number;
+    corralOrigen?: number;
+    corralDestino?: number;
+    fecha?: string;
+    idAnimal?: string;
+    pkIdAnimal?: number;
+    crotal?: number;
+    realizado?: number;
+    tarea?: string;
+};
+
+export type ConteoMovimiento = {
+    entrada: number;
+    salida: number;
+};
+
+export type ConteosTareasMovimientoAnimal = {
+    gestacion: ConteoMovimiento;
+    maternidad: ConteoMovimiento;
+};
+
+async function consultarTareasMovimientoAnimalRaw(
+    tipo: TipoEndpointTareasMovimientoAnimal,
+): Promise<TareaMovimientoAnimalBackend[]> {
+    const endpoint =
+        await construirEndpointTareasMovimientoAnimal(tipo);
+
+    console.log('===== CONSULTAR TAREAS RAW =====');
+    console.log('TIPO:', tipo);
+    console.log('ENDPOINT:', endpoint);
+
+    const respuesta = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+        },
+    });
+
+    const texto = await respuesta.text();
+
+    let datosApi: any = [];
+
+    try {
+        datosApi = texto ? JSON.parse(texto) : [];
+    } catch {
+        datosApi = [];
+    }
+
+    if (!respuesta.ok) {
+        const mensajeBackend =
+            datosApi?.message ??
+            datosApi?.mensaje ??
+            datosApi?.error ??
+            datosApi?.detail ??
+            texto ??
+            'No se pudieron cargar las tareas de movimiento animal.';
+
+        const errorConsulta: any = new Error(
+            String(mensajeBackend),
+        );
+
+        errorConsulta.status = respuesta.status;
+
+        throw errorConsulta;
+    }
+
+    return Array.isArray(datosApi)
+        ? datosApi
+        : Array.isArray(datosApi?.data)
+          ? datosApi.data
+          : Array.isArray(datosApi?.content)
+            ? datosApi.content
+            : [];
+}
+
+function crearConteosTareasMovimiento(): ConteosTareasMovimientoAnimal {
+    return {
+        gestacion: {
+            entrada: 0,
+            salida: 0,
+        },
+        maternidad: {
+            entrada: 0,
+            salida: 0,
+        },
+    };
+}
+
+function contarTareasMovimientoTodos(
+    tareas: TareaMovimientoAnimalBackend[],
+): ConteosTareasMovimientoAnimal {
+    const conteos = crearConteosTareasMovimiento();
+
+    tareas.forEach(tareaActual => {
+        const tareaTexto = String(
+            tareaActual.tarea ?? '',
+        )
+            .trim()
+            .toLowerCase();
+
+        const realizado = Number(
+            tareaActual.realizado ?? 0,
+        );
+
+        if (realizado !== 0) {
+            return;
+        }
+
+        const esSalida =
+            tareaTexto.startsWith('out_of_');
+
+        const tipoBase = tareaTexto.replace(
+            /^out_of_/,
+            '',
+        );
+
+        if (tipoBase === 'gestation') {
+            if (esSalida) {
+                conteos.gestacion.salida += 1;
+            } else {
+                conteos.gestacion.entrada += 1;
+            }
+
+            return;
+        }
+
+        if (tipoBase === 'maternity') {
+            if (esSalida) {
+                conteos.maternidad.salida += 1;
+            } else {
+                conteos.maternidad.entrada += 1;
+            }
+        }
+    });
+
+    return conteos;
+}
+
+export async function consultarConteosTareasMovimientoTodos(): Promise<
+    ConteosTareasMovimientoAnimal
+> {
+    const tareas =
+        await consultarTareasMovimientoAnimalRaw('todos');
+
+    return contarTareasMovimientoTodos(tareas);
+}
+
+/* =========================================================
+   CORRALES DE MOVIMIENTO ANIMAL
+   ========================================================= */
+
+export type TipoCorralMovimientoAnimal =
+    | 'gestation'
+    | 'maternity';
+
+export type CorralMovimientoAnimalApi = {
+    id: number;
+    idHouse: number;
+    name: number;
+    tagRfid: number;
+};
+
+async function construirEndpointCorralesMovimientoAnimal(
+    tipo: TipoCorralMovimientoAnimal,
+): Promise<string> {
+    return construirEndpointApiDirecta(
+        `corral/${tipo}`,
+    );
+}
+
+async function consultarCorralesMovimientoAnimal(
+    tipo: TipoCorralMovimientoAnimal,
+): Promise<CorralMovimientoAnimalApi[]> {
+    const endpoint =
+        await construirEndpointCorralesMovimientoAnimal(tipo);
+
+    console.log('===== CONSULTAR CORRALES =====');
+    console.log('TIPO:', tipo);
+    console.log('ENDPOINT:', endpoint);
+
+    const respuesta = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+        },
+    });
+
+    const texto = await respuesta.text();
+
+    let datosApi: any = [];
+
+    try {
+        datosApi = texto ? JSON.parse(texto) : [];
+    } catch {
+        datosApi = [];
+    }
+
+    if (!respuesta.ok) {
+        const mensajeBackend =
+            datosApi?.message ??
+            datosApi?.mensaje ??
+            datosApi?.error ??
+            datosApi?.detail ??
+            texto ??
+            'No se pudieron cargar los corrales.';
+
+        const errorConsulta: any = new Error(
+            String(mensajeBackend),
+        );
+
+        errorConsulta.status = respuesta.status;
+
+        throw errorConsulta;
+    }
+
+    const lista = Array.isArray(datosApi)
+        ? datosApi
+        : Array.isArray(datosApi?.data)
+          ? datosApi.data
+          : Array.isArray(datosApi?.content)
+            ? datosApi.content
+            : [];
+
+    return lista
+        .map((corral: any) => ({
+            id: Number(corral.id),
+            idHouse: Number(corral.idHouse),
+            name: Number(corral.name),
+            tagRfid: Number(corral.tagRfid),
+        }))
+        .filter(
+            (corral: CorralMovimientoAnimalApi) =>
+                Number.isFinite(corral.id) &&
+                Number.isFinite(corral.name),
+        );
+}
+
+export async function consultarCorralesGestacion(): Promise<
+    CorralMovimientoAnimalApi[]
+> {
+    return consultarCorralesMovimientoAnimal(
+        'gestation',
+    );
+}
+
+export async function consultarCorralesMaternidad(): Promise<
+    CorralMovimientoAnimalApi[]
+> {
+    return consultarCorralesMovimientoAnimal(
+        'maternity',
+    );
+}
+
+export function crearMapaCorralesPorId(
+    corrales: CorralMovimientoAnimalApi[],
+): Record<number, number> {
+    return corrales.reduce<Record<number, number>>(
+        (acumulado, corral) => {
+            acumulado[corral.id] = corral.name;
+
+            return acumulado;
+        },
+        {},
+    );
+}
+
+/* =========================================================
+   MARCAR TAREA COMO REALIZADA
+   ========================================================= */
+
+export async function enviarTareaMovimientoAnimalRealizada(
+    tareaOriginal: any,
+): Promise<any> {
+    const endpoint =
+        await construirEndpointTareasMovimientoAnimal(
+            'realizada',
+        );
+
+    console.log('===== MARCAR TAREA COMO REALIZADA =====');
+    console.log('ENDPOINT:', endpoint);
+    console.log(
+        'TAREA:',
+        JSON.stringify(tareaOriginal, null, 2),
+    );
+
+    const respuesta = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(tareaOriginal),
+    });
+
+    const texto = await respuesta.text();
+
+    let datosRespuesta: any = null;
+
+    try {
+        datosRespuesta = texto
+            ? JSON.parse(texto)
+            : null;
+    } catch {
+        datosRespuesta = texto;
+    }
+
+    if (!respuesta.ok) {
+        const mensajeBackend =
+            datosRespuesta?.message ??
+            datosRespuesta?.mensaje ??
+            datosRespuesta?.error ??
+            datosRespuesta?.detail ??
+            texto ??
+            'No se pudo marcar la tarea como realizada.';
+
+        const errorConsulta: any = new Error(
+            String(mensajeBackend),
+        );
+
+        errorConsulta.status = respuesta.status;
+
+        throw errorConsulta;
+    }
+
+    return datosRespuesta;
+}
+export async function obtenerIdCorralMaternidadPorNombre(
+    corralName: string | number,
+): Promise<number> {
+    const corralNameNumero = Number(corralName);
+
+    if (
+        !Number.isFinite(corralNameNumero) ||
+        corralNameNumero <= 0
+    ) {
+        throw new Error('Corral no válido.');
+    }
+
+    const corrales =
+        await consultarCorralesMaternidad();
+
+    const corralEncontrado = corrales.find(
+        corral =>
+            Number(corral.name) ===
+            corralNameNumero,
+    );
+
+    if (!corralEncontrado) {
+        throw new Error(
+            'No se encontró el identificador interno de ese corral.',
+        );
+    }
+
+    return corralEncontrado.id;
+}
+export type RespuestaValidacionCorralMaternidad = {
+    ok: boolean;
+    status: number;
+    data: any;
+    rawText: string;
+};
+
+export async function validarCorralMaternidadParaTarea(
+    corral: string | number,
+): Promise<RespuestaValidacionCorralMaternidad> {
+    const corralLimpio = String(corral ?? '').trim();
+
+    if (!corralLimpio) {
+        throw new Error('Corral no válido.');
+    }
+
+    const endpoint = await construirEndpointAppV1(
+        `readMaternityPen/${encodeURIComponent(corralLimpio)}`,
+    );
+
+    console.log('===== VALIDAR CORRAL MATERNIDAD PARA TAREA =====');
+    console.log('ENDPOINT:', endpoint);
+    console.log('CORRAL:', corralLimpio);
+
+    const respuesta = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+        },
+    });
+
+    const texto = await respuesta.text();
+
+    let datosApi: any = null;
+
+    try {
+        datosApi = texto ? JSON.parse(texto) : null;
+    } catch {
+        datosApi = texto;
+    }
+
+    console.log('RESPUESTA VALIDACIÓN CORRAL:', {
+        ok: respuesta.ok,
+        status: respuesta.status,
+        data: datosApi,
+        rawText: texto,
+    });
+
+    return {
+        ok: respuesta.ok,
+        status: respuesta.status,
+        data: datosApi,
         rawText: texto,
     };
 }
