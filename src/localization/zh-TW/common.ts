@@ -541,8 +541,8 @@ export default {
 
   noAlimentadosMaternidad: {
     viewStatus: "查看狀態",
-animalIdNotFound: "找不到動物識別碼。",
-openAnimalInfoError: "無法開啟動物資訊。",
+    animalIdNotFound: "找不到動物識別碼。",
+    openAnimalInfoError: "無法開啟動物資訊。",
     animalId: "動物 ID",
     corral: "欄舍",
     consumption: "採食量",
@@ -607,8 +607,8 @@ openAnimalInfoError: "無法開啟動物資訊。",
     error: "錯誤",
     serverConnectionError: "無法連線到伺服器。",
     viewStatus: "查看狀態",
-animalIdNotFound: "找不到動物識別碼。",
-openAnimalInfoError: "無法開啟動物資訊。",
+    animalIdNotFound: "找不到動物識別碼。",
+    openAnimalInfoError: "無法開啟動物資訊。",
   },
   capturaAnimalHome: {
     selectOption: "選擇一個選項",
@@ -676,7 +676,7 @@ openAnimalInfoError: "無法開啟動物資訊。",
     house: "舍棟",
     pen: "欄位",
     lastFeeding: "最後餵食",
-    presentPiglets: "目前仔豬數",
+presentPiglets: "活仔豬",
     inseminationDate: "配種日期",
     teatsNumber: "乳頭數",
 
@@ -1116,4 +1116,247 @@ openAnimalInfoError: "無法開啟動物資訊。",
     earTagAlreadyAssigned: "此耳標已分配給另一隻動物",
     replaceEarTagGenericError: "無法更換耳標。",
   },
+  tareasMovimientos: {
+    tabs: {
+      tareas: "任務",
+      historial: "歷史紀錄"
+    },
+
+    secciones: {
+      gestacion: "妊娠區",
+      maternidad: "分娩區",
+      todos: "全部",
+      todas: "全部"
+    },
+
+    operaciones: {
+      entrada: "進入",
+      salida: "離開",
+      realizada: "已完成"
+    },
+
+    tarjetas: {
+      tareasPendientesMovimientos: "待處理的移動任務",
+      idAnimal: "動物 ID",
+      sinCrotal: "無耳標",
+      corralDestino: "目標欄位",
+      corralOrigen: "來源欄位",
+      fecha: "日期"
+    },
+
+    filtros: {
+      titulo: "篩選",
+      filtrarPorFecha: "依日期篩選",
+      hoy: "今天",
+      ayer: "昨天",
+      fecha: "日期",
+      formatoFecha: "DD/MM/YYYY"
+    },
+
+    carga: {
+      cargandoHistorial: "正在載入歷史紀錄..."
+    },
+
+    vacio: {
+      sinResultados: "沒有結果",
+      sinMovimientosConFiltros: "沒有符合這些篩選條件的已完成移動。",
+      sinMovimientosTodavia: "目前尚無已完成的移動。"
+    },
+
+    errores: {
+      actualizarServidorTareas: "必須更新伺服器才能使用移動任務功能。",
+      noCargarTareas: "無法載入任務。",
+      noCargarHistorialTitulo: "無法載入歷史紀錄",
+      noCargarHistorial: "無法載入移動歷史紀錄。",
+      historialNoDisponible: "歷史紀錄無法使用",
+      actualizarServidorHistorial: "必須更新伺服器才能使用移動任務歷史紀錄。"
+    }
+  },
+  tareasMovimientosDetalle: {
+    tabs: {
+      gestacion: "妊娠區",
+      maternidad: "分娩區"
+    },
+
+    acciones: {
+      filtros: "篩選",
+      ordenar: "排序",
+      marcarRealizado: "標記為已完成",
+      marcarSeleccionadas: "標記（{{total}}）",
+      marcando: "正在標記...",
+      aceptar: "接受",
+      cancelar: "取消",
+      confirmar: "確認",
+      validando: "正在驗證..."
+    },
+
+    orden: {
+      corralAscendente: "欄位由小到大",
+      corralDescendente: "欄位由大到小"
+    },
+
+    operaciones: {
+      entrada: "進入",
+      salida: "離開",
+      trasladoEntrada: "轉移進入",
+      trasladoSalida: "轉移離開"
+    },
+
+    tarjetas: {
+      idAnimal: "動物 ID",
+      sinCrotal: "無耳標",
+      corralDestino: "目標欄位",
+      corralOrigen: "來源欄位",
+      fecha: "日期"
+    },
+
+    estados: {
+      cargandoTareas: "正在載入任務...",
+      noCargarTareasTitulo: "無法載入任務",
+      pulsaReintentar: "點擊以重試",
+      sinTareasConFiltros: "沒有符合這些篩選條件的任務",
+      sinTareasPendientes: "沒有待處理任務",
+      cambiaFiltros: "請嘗試變更已套用的篩選條件。",
+      sinMovimientosPendientes: "未找到待處理的移動。"
+    },
+
+    modalResultado: {
+      tareasRealizadasTitulo: "任務已完成",
+      tareasRealizadasMensaje: "已將選取的任務標記為已完成。",
+      tareaRealizadaTitulo: "任務已完成",
+      tareaRealizadaMensaje: "分娩區進入已標記為已完成。",
+      errorTitulo: "錯誤"
+    },
+
+    modalCorral: {
+      titulo: "確認欄位",
+      mensaje: "請檢查分娩區進入的目標欄位。",
+      labelCorralDestino: "目標欄位",
+      placeholderCorral: "輸入欄位"
+    },
+
+    errores: {
+      noCargarTareas: "無法載入任務。",
+      entradaMaternidadTitulo: "分娩區進入",
+      soloUnaEntradaMaternidad: "一次只能標記一個分娩區進入。",
+      soloUnaEntradaMaternidadCadaVez: "每次只能標記一個分娩區進入。",
+      noMarcarTareas: "無法將任務標記為已完成。",
+      corralMaximo9: "請輸入最多 9 位數的有效欄位。",
+      corralNoExiste: "欄位不存在。",
+      corralOcupado: "欄位已被占用。",
+      noValidarCorral: "無法驗證欄位。",
+      noValidarCorralMaternidad: "無法驗證分娩區欄位。"
+    }
+  },
+  filtrosTareasMovimientos: {
+  cabecera: {
+    titulo: "篩選",
+    subtituloTareasDe: "{{seccion}}任務",
+    limpiar: "清除"
+  },
+
+  secciones: {
+    gestacion: "妊娠區",
+    maternidad: "分娩區"
+  },
+
+  bloques: {
+    tipoMovimiento: "移動類型",
+    fecha: "日期",
+    corral: "欄位",
+    idAnimal: "動物 ID"
+  },
+
+  opciones: {
+    todos: "全部",
+    entrada: "進入",
+    salida: "離開",
+    todasLasFechas: "所有日期",
+    hoy: "今天",
+    manana: "明天",
+    fecha: "日期",
+    todosLosCorrales: "所有欄位",
+    porCorral: "依欄位",
+    todosLosAnimales: "所有動物",
+    porId: "依 ID"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "YY/YYYY",
+    introduceCorral: "輸入欄位",
+    introduceIdAnimal: "輸入動物 ID"
+  },
+
+  validaciones: {
+    fechaCompleta: "請輸入日、月和年。",
+    diaDosCifras: "日期必須為 2 位數。",
+    mesDosCifras: "月份必須為 2 位數。",
+    anioDosOCuatroCifras: "年份必須為 2 位或 4 位數。",
+    diaRango: "日期必須介於 01 和 31 之間。",
+    mesRango: "月份必須介於 01 和 12 之間。",
+    fechaNoExiste: "日期不存在。",
+    introduceCorral: "請輸入欄位編號。",
+    introduceIdAnimal: "請輸入動物 ID。"
+  },
+
+  botones: {
+    cancelar: "取消",
+    aceptar: "接受"
+  }
+},
+filtrosHistorialMovimientos: {
+  cabecera: {
+    titulo: "篩選",
+    subtitulo: "移動歷史紀錄",
+    limpiar: "清除"
+  },
+
+  bloques: {
+    tipoMovimiento: "移動類型",
+    fecha: "日期",
+    corral: "欄位",
+    idAnimal: "動物 ID"
+  },
+
+  opciones: {
+    todos: "全部",
+    entrada: "進入",
+    salida: "離開",
+    todasLasFechas: "所有日期",
+    hoy: "今天",
+    manana: "明天",
+    fecha: "日期",
+    todosLosCorrales: "所有欄位",
+    porCorral: "依欄位",
+    todosLosAnimales: "所有動物",
+    porId: "依 ID"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "YY/YYYY",
+    introduceCorral: "輸入欄位",
+    introduceIdAnimal: "輸入動物 ID"
+  },
+
+  validaciones: {
+    fechaCompleta: "請輸入日、月和年。",
+    diaDosCifras: "日期必須為 2 位數。",
+    mesDosCifras: "月份必須為 2 位數。",
+    anioDosOCuatroCifras: "年份必須為 2 位或 4 位數。",
+    diaRango: "日期必須介於 01 和 31 之間。",
+    mesRango: "月份必須介於 01 和 12 之間。",
+    fechaNoExiste: "日期不存在。",
+    introduceCorral: "請輸入欄位編號。",
+    introduceIdAnimal: "請輸入動物 ID。"
+  },
+
+  botones: {
+    cancelar: "取消",
+    aceptar: "接受"
+  }
+}
 };

@@ -679,7 +679,7 @@ readOnlyPermissionText: "Ten użytkownik ma tylko uprawnienia do odczytu. Nie mo
   house: "Budynek",
   pen: "Kojec",
   lastFeeding: "Ostatnie karmienie",
-  presentPiglets: "Obecne prosięta",
+presentPiglets: "Żywe prosięta",
   inseminationDate: "Data inseminacji",
   teatsNumber: "Liczba sutków",
 
@@ -1118,4 +1118,247 @@ gestCorralDetail: {
    earTagAlreadyAssigned: "Kolczyk jest przypisany do innego zwierzęcia",
    replaceEarTagGenericError: "Nie można zamienić kolczyka.",
 },
+tareasMovimientos: {
+  tabs: {
+    tareas: "Zadania",
+    historial: "Historia"
+  },
+
+  secciones: {
+    gestacion: "Ciąża",
+    maternidad: "Macierzyństwo",
+    todos: "Wszystkie",
+    todas: "Wszystkie"
+  },
+
+  operaciones: {
+    entrada: "Wejście",
+    salida: "Wyjście",
+    realizada: "Wykonano"
+  },
+
+  tarjetas: {
+    tareasPendientesMovimientos: "Oczekujące zadania ruchu",
+    idAnimal: "ID zwierzęcia",
+    sinCrotal: "Bez kolczyka",
+    corralDestino: "Kojec docelowy",
+    corralOrigen: "Kojec początkowy",
+    fecha: "Data"
+  },
+
+  filtros: {
+    titulo: "Filtry",
+    filtrarPorFecha: "Filtruj według daty",
+    hoy: "Dzisiaj",
+    ayer: "Wczoraj",
+    fecha: "Data",
+    formatoFecha: "DD/MM/RRRR"
+  },
+
+  carga: {
+    cargandoHistorial: "Ładowanie historii..."
+  },
+
+  vacio: {
+    sinResultados: "Brak wyników",
+    sinMovimientosConFiltros: "Brak wykonanych ruchów dla tych filtrów.",
+    sinMovimientosTodavia: "Nie ma jeszcze wykonanych ruchów."
+  },
+
+  errores: {
+    actualizarServidorTareas: "Należy zaktualizować serwer, aby korzystać z funkcji zadań ruchu.",
+    noCargarTareas: "Nie udało się załadować zadań.",
+    noCargarHistorialTitulo: "Nie udało się załadować historii",
+    noCargarHistorial: "Nie udało się załadować historii ruchów.",
+    historialNoDisponible: "Historia niedostępna",
+    actualizarServidorHistorial: "Należy zaktualizować serwer, aby korzystać z historii zadań ruchu."
+  }
+},
+tareasMovimientosDetalle: {
+  tabs: {
+    gestacion: "Ciąża",
+    maternidad: "Macierzyństwo"
+  },
+
+  acciones: {
+    filtros: "Filtry",
+    ordenar: "Sortuj",
+    marcarRealizado: "Oznacz jako wykonane",
+    marcarSeleccionadas: "Oznacz ({{total}})",
+    marcando: "Oznaczanie...",
+    aceptar: "Akceptuj",
+    cancelar: "Anuluj",
+    confirmar: "Potwierdź",
+    validando: "Sprawdzanie..."
+  },
+
+  orden: {
+    corralAscendente: "Kojec rosnąco",
+    corralDescendente: "Kojec malejąco"
+  },
+
+  operaciones: {
+    entrada: "Wejście",
+    salida: "Wyjście",
+    trasladoEntrada: "Wejście po przeniesieniu",
+    trasladoSalida: "Wyjście do przeniesienia"
+  },
+
+  tarjetas: {
+    idAnimal: "ID zwierzęcia",
+    sinCrotal: "Bez kolczyka",
+    corralDestino: "Kojec docelowy",
+    corralOrigen: "Kojec początkowy",
+    fecha: "Data"
+  },
+
+  estados: {
+    cargandoTareas: "Ładowanie zadań...",
+    noCargarTareasTitulo: "Nie udało się załadować zadań",
+    pulsaReintentar: "Naciśnij, aby spróbować ponownie",
+    sinTareasConFiltros: "Brak zadań dla tych filtrów",
+    sinTareasPendientes: "Brak oczekujących zadań",
+    cambiaFiltros: "Spróbuj zmienić zastosowane filtry.",
+    sinMovimientosPendientes: "Nie znaleziono oczekujących ruchów."
+  },
+
+  modalResultado: {
+    tareasRealizadasTitulo: "Zadania wykonane",
+    tareasRealizadasMensaje: "Wybrane zadania zostały oznaczone jako wykonane.",
+    tareaRealizadaTitulo: "Zadanie wykonane",
+    tareaRealizadaMensaje: "Wejście do macierzyństwa zostało oznaczone jako wykonane.",
+    errorTitulo: "Błąd"
+  },
+
+  modalCorral: {
+    titulo: "Potwierdź kojec",
+    mensaje: "Sprawdź kojec docelowy wejścia do macierzyństwa.",
+    labelCorralDestino: "Kojec docelowy",
+    placeholderCorral: "Wpisz kojec"
+  },
+
+  errores: {
+    noCargarTareas: "Nie udało się załadować zadań.",
+    entradaMaternidadTitulo: "Wejście do macierzyństwa",
+    soloUnaEntradaMaternidad: "Możesz oznaczyć tylko jedno wejście do macierzyństwa naraz.",
+    soloUnaEntradaMaternidadCadaVez: "Możesz oznaczyć tylko jedno wejście do macierzyństwa za każdym razem.",
+    noMarcarTareas: "Nie udało się oznaczyć zadań jako wykonane.",
+    corralMaximo9: "Wpisz prawidłowy kojec, maksymalnie 9 cyfr.",
+    corralNoExiste: "Kojec nie istnieje.",
+    corralOcupado: "Kojec jest zajęty.",
+    noValidarCorral: "Nie udało się sprawdzić kojca.",
+    noValidarCorralMaternidad: "Nie udało się sprawdzić kojca macierzyństwa."
+  }
+},
+filtrosTareasMovimientos: {
+  cabecera: {
+    titulo: "Filtry",
+    subtituloTareasDe: "Zadania: {{seccion}}",
+    limpiar: "Wyczyść"
+  },
+
+  secciones: {
+    gestacion: "Ciąża",
+    maternidad: "Macierzyństwo"
+  },
+
+  bloques: {
+    tipoMovimiento: "Typ ruchu",
+    fecha: "Data",
+    corral: "Kojec",
+    idAnimal: "ID zwierzęcia"
+  },
+
+  opciones: {
+    todos: "Wszystkie",
+    entrada: "Wejście",
+    salida: "Wyjście",
+    todasLasFechas: "Wszystkie daty",
+    hoy: "Dzisiaj",
+    manana: "Jutro",
+    fecha: "Data",
+    todosLosCorrales: "Wszystkie kojce",
+    porCorral: "Według kojca",
+    todosLosAnimales: "Wszystkie zwierzęta",
+    porId: "Według ID"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "RR/RRRR",
+    introduceCorral: "Wpisz kojec",
+    introduceIdAnimal: "Wpisz ID zwierzęcia"
+  },
+
+  validaciones: {
+    fechaCompleta: "Wpisz dzień, miesiąc i rok.",
+    diaDosCifras: "Dzień musi mieć 2 cyfry.",
+    mesDosCifras: "Miesiąc musi mieć 2 cyfry.",
+    anioDosOCuatroCifras: "Rok musi mieć 2 lub 4 cyfry.",
+    diaRango: "Dzień musi być między 01 a 31.",
+    mesRango: "Miesiąc musi być między 01 a 12.",
+    fechaNoExiste: "Data nie istnieje.",
+    introduceCorral: "Wpisz numer kojca.",
+    introduceIdAnimal: "Wpisz ID zwierzęcia."
+  },
+
+  botones: {
+    cancelar: "Anuluj",
+    aceptar: "Akceptuj"
+  }
+},
+filtrosHistorialMovimientos: {
+  cabecera: {
+    titulo: "Filtry",
+    subtitulo: "Historia ruchów",
+    limpiar: "Wyczyść"
+  },
+
+  bloques: {
+    tipoMovimiento: "Typ ruchu",
+    fecha: "Data",
+    corral: "Kojec",
+    idAnimal: "ID zwierzęcia"
+  },
+
+  opciones: {
+    todos: "Wszystkie",
+    entrada: "Wejście",
+    salida: "Wyjście",
+    todasLasFechas: "Wszystkie daty",
+    hoy: "Dzisiaj",
+    manana: "Jutro",
+    fecha: "Data",
+    todosLosCorrales: "Wszystkie kojce",
+    porCorral: "Według kojca",
+    todosLosAnimales: "Wszystkie zwierzęta",
+    porId: "Według ID"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "RR/RRRR",
+    introduceCorral: "Wpisz kojec",
+    introduceIdAnimal: "Wpisz ID zwierzęcia"
+  },
+
+  validaciones: {
+    fechaCompleta: "Wpisz dzień, miesiąc i rok.",
+    diaDosCifras: "Dzień musi mieć 2 cyfry.",
+    mesDosCifras: "Miesiąc musi mieć 2 cyfry.",
+    anioDosOCuatroCifras: "Rok musi mieć 2 lub 4 cyfry.",
+    diaRango: "Dzień musi być między 01 a 31.",
+    mesRango: "Miesiąc musi być między 01 a 12.",
+    fechaNoExiste: "Data nie istnieje.",
+    introduceCorral: "Wpisz numer kojca.",
+    introduceIdAnimal: "Wpisz ID zwierzęcia."
+  },
+
+  botones: {
+    cancelar: "Anuluj",
+    aceptar: "Akceptuj"
+  }
+}
 };

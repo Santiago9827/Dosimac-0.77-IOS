@@ -677,7 +677,7 @@ readOnlyPermissionText: "У этого пользователя есть тол�
     house: "Корпус",
     pen: "Станок",
     lastFeeding: "Последнее кормление",
-    presentPiglets: "Поросята в наличии",
+presentPiglets: "Живые поросята",
     inseminationDate: "Дата осеменения",
     teatsNumber: "Кол-во сосков",
 
@@ -1117,4 +1117,247 @@ gestCorralDetail: {
    earTagAlreadyAssigned: "Бирка назначена другому животному",
    replaceEarTagGenericError: "Не удалось заменить бирку.",
 },
+tareasMovimientos: {
+  tabs: {
+    tareas: "Задачи",
+    historial: "История"
+  },
+
+  secciones: {
+    gestacion: "Супоросность",
+    maternidad: "Маточник",
+    todos: "Все",
+    todas: "Все"
+  },
+
+  operaciones: {
+    entrada: "Вход",
+    salida: "Выход",
+    realizada: "Выполнено"
+  },
+
+  tarjetas: {
+    tareasPendientesMovimientos: "Ожидающие задачи перемещения",
+    idAnimal: "ID животного",
+    sinCrotal: "Без ушной метки",
+    corralDestino: "Целевой загон",
+    corralOrigen: "Исходный загон",
+    fecha: "Дата"
+  },
+
+  filtros: {
+    titulo: "Фильтры",
+    filtrarPorFecha: "Фильтр по дате",
+    hoy: "Сегодня",
+    ayer: "Вчера",
+    fecha: "Дата",
+    formatoFecha: "ДД/ММ/ГГГГ"
+  },
+
+  carga: {
+    cargandoHistorial: "Загрузка истории..."
+  },
+
+  vacio: {
+    sinResultados: "Нет результатов",
+    sinMovimientosConFiltros: "Нет выполненных перемещений с этими фильтрами.",
+    sinMovimientosTodavia: "Пока нет выполненных перемещений."
+  },
+
+  errores: {
+    actualizarServidorTareas: "Необходимо обновить сервер, чтобы использовать функцию задач перемещения.",
+    noCargarTareas: "Не удалось загрузить задачи.",
+    noCargarHistorialTitulo: "Не удалось загрузить историю",
+    noCargarHistorial: "Не удалось загрузить историю перемещений.",
+    historialNoDisponible: "История недоступна",
+    actualizarServidorHistorial: "Необходимо обновить сервер, чтобы использовать историю задач перемещения."
+  }
+},
+tareasMovimientosDetalle: {
+  tabs: {
+    gestacion: "Супоросность",
+    maternidad: "Маточник"
+  },
+
+  acciones: {
+    filtros: "Фильтры",
+    ordenar: "Сортировать",
+    marcarRealizado: "Отметить как выполненное",
+    marcarSeleccionadas: "Отметить ({{total}})",
+    marcando: "Отмечается...",
+    aceptar: "Принять",
+    cancelar: "Отмена",
+    confirmar: "Подтвердить",
+    validando: "Проверка..."
+  },
+
+  orden: {
+    corralAscendente: "Загон по возрастанию",
+    corralDescendente: "Загон по убыванию"
+  },
+
+  operaciones: {
+    entrada: "Вход",
+    salida: "Выход",
+    trasladoEntrada: "Вход при перемещении",
+    trasladoSalida: "Выход при перемещении"
+  },
+
+  tarjetas: {
+    idAnimal: "ID животного",
+    sinCrotal: "Без ушной метки",
+    corralDestino: "Целевой загон",
+    corralOrigen: "Исходный загон",
+    fecha: "Дата"
+  },
+
+  estados: {
+    cargandoTareas: "Загрузка задач...",
+    noCargarTareasTitulo: "Не удалось загрузить задачи",
+    pulsaReintentar: "Нажмите, чтобы повторить",
+    sinTareasConFiltros: "Нет задач с этими фильтрами",
+    sinTareasPendientes: "Нет ожидающих задач",
+    cambiaFiltros: "Попробуйте изменить применённые фильтры.",
+    sinMovimientosPendientes: "Ожидающие перемещения не найдены."
+  },
+
+  modalResultado: {
+    tareasRealizadasTitulo: "Задачи выполнены",
+    tareasRealizadasMensaje: "Выбранные задачи отмечены как выполненные.",
+    tareaRealizadaTitulo: "Задача выполнена",
+    tareaRealizadaMensaje: "Вход в маточник отмечен как выполненный.",
+    errorTitulo: "Ошибка"
+  },
+
+  modalCorral: {
+    titulo: "Подтвердить загон",
+    mensaje: "Проверьте целевой загон для входа в маточник.",
+    labelCorralDestino: "Целевой загон",
+    placeholderCorral: "Введите загон"
+  },
+
+  errores: {
+    noCargarTareas: "Не удалось загрузить задачи.",
+    entradaMaternidadTitulo: "Вход в маточник",
+    soloUnaEntradaMaternidad: "Можно отметить только один вход в маточник за раз.",
+    soloUnaEntradaMaternidadCadaVez: "Можно отметить только один вход в маточник каждый раз.",
+    noMarcarTareas: "Не удалось отметить задачи как выполненные.",
+    corralMaximo9: "Введите действительный загон, максимум 9 цифр.",
+    corralNoExiste: "Загон не существует.",
+    corralOcupado: "Загон занят.",
+    noValidarCorral: "Не удалось проверить загон.",
+    noValidarCorralMaternidad: "Не удалось проверить загон маточника."
+  }
+},
+filtrosTareasMovimientos: {
+  cabecera: {
+    titulo: "Фильтры",
+    subtituloTareasDe: "Задачи: {{seccion}}",
+    limpiar: "Очистить"
+  },
+
+  secciones: {
+    gestacion: "Супоросность",
+    maternidad: "Маточник"
+  },
+
+  bloques: {
+    tipoMovimiento: "Тип перемещения",
+    fecha: "Дата",
+    corral: "Загон",
+    idAnimal: "ID животного"
+  },
+
+  opciones: {
+    todos: "Все",
+    entrada: "Вход",
+    salida: "Выход",
+    todasLasFechas: "Все даты",
+    hoy: "Сегодня",
+    manana: "Завтра",
+    fecha: "Дата",
+    todosLosCorrales: "Все загоны",
+    porCorral: "По загону",
+    todosLosAnimales: "Все животные",
+    porId: "По ID"
+  },
+
+  placeholders: {
+    dia: "ДД",
+    mes: "ММ",
+    anio: "ГГ/ГГГГ",
+    introduceCorral: "Введите загон",
+    introduceIdAnimal: "Введите ID животного"
+  },
+
+  validaciones: {
+    fechaCompleta: "Введите день, месяц и год.",
+    diaDosCifras: "День должен содержать 2 цифры.",
+    mesDosCifras: "Месяц должен содержать 2 цифры.",
+    anioDosOCuatroCifras: "Год должен содержать 2 или 4 цифры.",
+    diaRango: "День должен быть от 01 до 31.",
+    mesRango: "Месяц должен быть от 01 до 12.",
+    fechaNoExiste: "Дата не существует.",
+    introduceCorral: "Введите номер загона.",
+    introduceIdAnimal: "Введите ID животного."
+  },
+
+  botones: {
+    cancelar: "Отмена",
+    aceptar: "Принять"
+  }
+},
+filtrosHistorialMovimientos: {
+  cabecera: {
+    titulo: "Фильтры",
+    subtitulo: "История перемещений",
+    limpiar: "Очистить"
+  },
+
+  bloques: {
+    tipoMovimiento: "Тип перемещения",
+    fecha: "Дата",
+    corral: "Загон",
+    idAnimal: "ID животного"
+  },
+
+  opciones: {
+    todos: "Все",
+    entrada: "Вход",
+    salida: "Выход",
+    todasLasFechas: "Все даты",
+    hoy: "Сегодня",
+    manana: "Завтра",
+    fecha: "Дата",
+    todosLosCorrales: "Все загоны",
+    porCorral: "По загону",
+    todosLosAnimales: "Все животные",
+    porId: "По ID"
+  },
+
+  placeholders: {
+    dia: "ДД",
+    mes: "ММ",
+    anio: "ГГ/ГГГГ",
+    introduceCorral: "Введите загон",
+    introduceIdAnimal: "Введите ID животного"
+  },
+
+  validaciones: {
+    fechaCompleta: "Введите день, месяц и год.",
+    diaDosCifras: "День должен содержать 2 цифры.",
+    mesDosCifras: "Месяц должен содержать 2 цифры.",
+    anioDosOCuatroCifras: "Год должен содержать 2 или 4 цифры.",
+    diaRango: "День должен быть от 01 до 31.",
+    mesRango: "Месяц должен быть от 01 до 12.",
+    fechaNoExiste: "Дата не существует.",
+    introduceCorral: "Введите номер загона.",
+    introduceIdAnimal: "Введите ID животного."
+  },
+
+  botones: {
+    cancelar: "Отмена",
+    aceptar: "Принять"
+  }
+}
 };

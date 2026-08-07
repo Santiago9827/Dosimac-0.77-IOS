@@ -672,7 +672,7 @@ readOnlyPermissionText: "Este utilizador tem apenas permissões de leitura. Não
     house: "Nave",
     pen: "Curral",
     lastFeeding: "Última alimentação",
-    presentPiglets: "Leitões presentes",
+presentPiglets: "Leitões vivos",
     inseminationDate: "Data de inseminação",
     teatsNumber: "N.º de tetas",
 
@@ -1114,4 +1114,247 @@ gestCorralDetail: {
    earTagAlreadyAssigned: "O brinco está atribuído a outro animal",
    replaceEarTagGenericError: "Não foi possível substituir o brinco.",
 },
+tareasMovimientos: {
+  tabs: {
+    tareas: "Tarefas",
+    historial: "Histórico"
+  },
+
+  secciones: {
+    gestacion: "Gestação",
+    maternidad: "Maternidade",
+    todos: "Todos",
+    todas: "Todas"
+  },
+
+  operaciones: {
+    entrada: "Entrada",
+    salida: "Saída",
+    realizada: "Concluída"
+  },
+
+  tarjetas: {
+    tareasPendientesMovimientos: "Tarefas pendentes de movimentos",
+    idAnimal: "ID animal",
+    sinCrotal: "Sem brinco",
+    corralDestino: "Curral de destino",
+    corralOrigen: "Curral de origem",
+    fecha: "Data"
+  },
+
+  filtros: {
+    titulo: "Filtros",
+    filtrarPorFecha: "Filtrar por data",
+    hoy: "Hoje",
+    ayer: "Ontem",
+    fecha: "Data",
+    formatoFecha: "DD/MM/AAAA"
+  },
+
+  carga: {
+    cargandoHistorial: "A carregar histórico..."
+  },
+
+  vacio: {
+    sinResultados: "Sem resultados",
+    sinMovimientosConFiltros: "Não há movimentos concluídos com estes filtros.",
+    sinMovimientosTodavia: "Ainda não há movimentos concluídos."
+  },
+
+  errores: {
+    actualizarServidorTareas: "É necessário atualizar o servidor para utilizar a função de tarefas de movimentos.",
+    noCargarTareas: "Não foi possível carregar as tarefas.",
+    noCargarHistorialTitulo: "Não foi possível carregar o histórico",
+    noCargarHistorial: "Não foi possível carregar o histórico de movimentos.",
+    historialNoDisponible: "Histórico indisponível",
+    actualizarServidorHistorial: "É necessário atualizar o servidor para utilizar o histórico de tarefas de movimentos."
+  }
+},
+tareasMovimientosDetalle: {
+  tabs: {
+    gestacion: "Gestação",
+    maternidad: "Maternidade"
+  },
+
+  acciones: {
+    filtros: "Filtros",
+    ordenar: "Ordenar",
+    marcarRealizado: "Marcar como concluída",
+    marcarSeleccionadas: "Marcar ({{total}})",
+    marcando: "A marcar...",
+    aceptar: "Aceitar",
+    cancelar: "Cancelar",
+    confirmar: "Confirmar",
+    validando: "A validar..."
+  },
+
+  orden: {
+    corralAscendente: "Curral ascendente",
+    corralDescendente: "Curral descendente"
+  },
+
+  operaciones: {
+    entrada: "Entrada",
+    salida: "Saída",
+    trasladoEntrada: "Entrada por transferência",
+    trasladoSalida: "Saída por transferência"
+  },
+
+  tarjetas: {
+    idAnimal: "ID animal",
+    sinCrotal: "Sem brinco",
+    corralDestino: "Curral de destino",
+    corralOrigen: "Curral de origem",
+    fecha: "Data"
+  },
+
+  estados: {
+    cargandoTareas: "A carregar tarefas...",
+    noCargarTareasTitulo: "Não foi possível carregar as tarefas",
+    pulsaReintentar: "Toque para tentar novamente",
+    sinTareasConFiltros: "Não há tarefas com estes filtros",
+    sinTareasPendientes: "Não há tarefas pendentes",
+    cambiaFiltros: "Experimente alterar os filtros aplicados.",
+    sinMovimientosPendientes: "Não foram encontrados movimentos pendentes."
+  },
+
+  modalResultado: {
+    tareasRealizadasTitulo: "Tarefas concluídas",
+    tareasRealizadasMensaje: "As tarefas selecionadas foram marcadas como concluídas.",
+    tareaRealizadaTitulo: "Tarefa concluída",
+    tareaRealizadaMensaje: "A entrada de maternidade foi marcada como concluída.",
+    errorTitulo: "Erro"
+  },
+
+  modalCorral: {
+    titulo: "Confirmar curral",
+    mensaje: "Verifique o curral de destino da entrada em maternidade.",
+    labelCorralDestino: "Curral de destino",
+    placeholderCorral: "Introduza o curral"
+  },
+
+  errores: {
+    noCargarTareas: "Não foi possível carregar as tarefas.",
+    entradaMaternidadTitulo: "Entrada de maternidade",
+    soloUnaEntradaMaternidad: "Só pode marcar uma entrada de maternidade de cada vez.",
+    soloUnaEntradaMaternidadCadaVez: "Só pode marcar uma entrada de maternidade por vez.",
+    noMarcarTareas: "Não foi possível marcar as tarefas como concluídas.",
+    corralMaximo9: "Introduza um curral válido com no máximo 9 dígitos.",
+    corralNoExiste: "O curral não existe.",
+    corralOcupado: "O curral está ocupado.",
+    noValidarCorral: "Não foi possível validar o curral.",
+    noValidarCorralMaternidad: "Não foi possível validar o curral de maternidade."
+  }
+},
+filtrosTareasMovimientos: {
+  cabecera: {
+    titulo: "Filtros",
+    subtituloTareasDe: "Tarefas de {{seccion}}",
+    limpiar: "Limpar"
+  },
+
+  secciones: {
+    gestacion: "Gestação",
+    maternidad: "Maternidade"
+  },
+
+  bloques: {
+    tipoMovimiento: "Tipo de movimento",
+    fecha: "Data",
+    corral: "Curral",
+    idAnimal: "ID animal"
+  },
+
+  opciones: {
+    todos: "Todos",
+    entrada: "Entrada",
+    salida: "Saída",
+    todasLasFechas: "Todas as datas",
+    hoy: "Hoje",
+    manana: "Amanhã",
+    fecha: "Data",
+    todosLosCorrales: "Todos os currais",
+    porCorral: "Por curral",
+    todosLosAnimales: "Todos os animais",
+    porId: "Por ID"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "AA/AAAA",
+    introduceCorral: "Introduza o curral",
+    introduceIdAnimal: "Introduza o ID animal"
+  },
+
+  validaciones: {
+    fechaCompleta: "Introduza dia, mês e ano.",
+    diaDosCifras: "O dia deve ter 2 dígitos.",
+    mesDosCifras: "O mês deve ter 2 dígitos.",
+    anioDosOCuatroCifras: "O ano deve ter 2 ou 4 dígitos.",
+    diaRango: "O dia deve estar entre 01 e 31.",
+    mesRango: "O mês deve estar entre 01 e 12.",
+    fechaNoExiste: "A data não existe.",
+    introduceCorral: "Introduza um número de curral.",
+    introduceIdAnimal: "Introduza um ID animal."
+  },
+
+  botones: {
+    cancelar: "Cancelar",
+    aceptar: "Aceitar"
+  }
+},
+filtrosHistorialMovimientos: {
+  cabecera: {
+    titulo: "Filtros",
+    subtitulo: "Histórico de movimentos",
+    limpiar: "Limpar"
+  },
+
+  bloques: {
+    tipoMovimiento: "Tipo de movimento",
+    fecha: "Data",
+    corral: "Curral",
+    idAnimal: "ID animal"
+  },
+
+  opciones: {
+    todos: "Todos",
+    entrada: "Entrada",
+    salida: "Saída",
+    todasLasFechas: "Todas as datas",
+    hoy: "Hoje",
+    manana: "Amanhã",
+    fecha: "Data",
+    todosLosCorrales: "Todos os currais",
+    porCorral: "Por curral",
+    todosLosAnimales: "Todos os animais",
+    porId: "Por ID"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "AA/AAAA",
+    introduceCorral: "Introduza o curral",
+    introduceIdAnimal: "Introduza o ID animal"
+  },
+
+  validaciones: {
+    fechaCompleta: "Introduza dia, mês e ano.",
+    diaDosCifras: "O dia deve ter 2 dígitos.",
+    mesDosCifras: "O mês deve ter 2 dígitos.",
+    anioDosOCuatroCifras: "O ano deve ter 2 ou 4 dígitos.",
+    diaRango: "O dia deve estar entre 01 e 31.",
+    mesRango: "O mês deve estar entre 01 e 12.",
+    fechaNoExiste: "A data não existe.",
+    introduceCorral: "Introduza um número de curral.",
+    introduceIdAnimal: "Introduza um ID animal."
+  },
+
+  botones: {
+    cancelar: "Cancelar",
+    aceptar: "Aceitar"
+  }
+}
 }

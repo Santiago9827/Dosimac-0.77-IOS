@@ -674,7 +674,7 @@ readOnlyPermissionText: "Cet utilisateur dispose uniquement de permissions de le
   house: "Bâtiment",
   pen: "Case",
   lastFeeding: "Dernière alimentation",
-  presentPiglets: "Porcelets présents",
+  presentPiglets: "Porcelets vivants",
   inseminationDate: "Date d'insémination",
   teatsNumber: "Nb de tétines",
 
@@ -1117,5 +1117,248 @@ gestCorralDetail: {
    earTagAlreadyAssigned: "La boucle est attribuée à un autre animal",
    replaceEarTagGenericError: "Impossible de remplacer la boucle.",
 },
+tareasMovimientos: {
+  tabs: {
+    tareas: "Tâches",
+    historial: "Historique"
+  },
+
+  secciones: {
+    gestacion: "Gestation",
+    maternidad: "Maternité",
+    todos: "Tous",
+    todas: "Toutes"
+  },
+
+  operaciones: {
+    entrada: "Entrée",
+    salida: "Sortie",
+    realizada: "Terminée"
+  },
+
+  tarjetas: {
+    tareasPendientesMovimientos: "Tâches de mouvements en attente",
+    idAnimal: "ID animal",
+    sinCrotal: "Sans boucle",
+    corralDestino: "Case de destination",
+    corralOrigen: "Case d'origine",
+    fecha: "Date"
+  },
+
+  filtros: {
+    titulo: "Filtres",
+    filtrarPorFecha: "Filtrer par date",
+    hoy: "Aujourd'hui",
+    ayer: "Hier",
+    fecha: "Date",
+    formatoFecha: "JJ/MM/AAAA"
+  },
+
+  carga: {
+    cargandoHistorial: "Chargement de l'historique..."
+  },
+
+  vacio: {
+    sinResultados: "Aucun résultat",
+    sinMovimientosConFiltros: "Aucun mouvement réalisé ne correspond à ces filtres.",
+    sinMovimientosTodavia: "Aucun mouvement n'a encore été réalisé."
+  },
+
+  errores: {
+    actualizarServidorTareas: "Le serveur doit être mis à jour pour utiliser la fonction des tâches de mouvements.",
+    noCargarTareas: "Impossible de charger les tâches.",
+    noCargarHistorialTitulo: "Impossible de charger l'historique",
+    noCargarHistorial: "Impossible de charger l'historique des mouvements.",
+    historialNoDisponible: "Historique non disponible",
+    actualizarServidorHistorial: "Le serveur doit être mis à jour pour utiliser l'historique des tâches de mouvements."
+  }
+},
+tareasMovimientosDetalle: {
+  tabs: {
+    gestacion: "Gestation",
+    maternidad: "Maternité"
+  },
+
+  acciones: {
+    filtros: "Filtres",
+    ordenar: "Trier",
+    marcarRealizado: "Marquer comme terminé",
+    marcarSeleccionadas: "Marquer ({{total}})",
+    marcando: "Marquage...",
+    aceptar: "Accepter",
+    cancelar: "Annuler",
+    confirmar: "Confirmer",
+    validando: "Validation..."
+  },
+
+  orden: {
+    corralAscendente: "Case ascendante",
+    corralDescendente: "Case descendante"
+  },
+
+  operaciones: {
+    entrada: "Entrée",
+    salida: "Sortie",
+    trasladoEntrada: "Entrée de transfert",
+    trasladoSalida: "Sortie de transfert"
+  },
+
+  tarjetas: {
+    idAnimal: "ID animal",
+    sinCrotal: "Sans boucle",
+    corralDestino: "Case de destination",
+    corralOrigen: "Case d'origine",
+    fecha: "Date"
+  },
+
+  estados: {
+    cargandoTareas: "Chargement des tâches...",
+    noCargarTareasTitulo: "Impossible de charger les tâches",
+    pulsaReintentar: "Appuyez pour réessayer",
+    sinTareasConFiltros: "Aucune tâche ne correspond à ces filtres",
+    sinTareasPendientes: "Aucune tâche en attente",
+    cambiaFiltros: "Essayez de modifier les filtres appliqués.",
+    sinMovimientosPendientes: "Aucun mouvement en attente n'a été trouvé."
+  },
+
+  modalResultado: {
+    tareasRealizadasTitulo: "Tâches terminées",
+    tareasRealizadasMensaje: "Les tâches sélectionnées ont été marquées comme terminées.",
+    tareaRealizadaTitulo: "Tâche terminée",
+    tareaRealizadaMensaje: "L'entrée en maternité a été marquée comme terminée.",
+    errorTitulo: "Erreur"
+  },
+
+  modalCorral: {
+    titulo: "Confirmer la case",
+    mensaje: "Vérifiez la case de destination de l'entrée en maternité.",
+    labelCorralDestino: "Case de destination",
+    placeholderCorral: "Saisissez la case"
+  },
+
+  errores: {
+    noCargarTareas: "Impossible de charger les tâches.",
+    entradaMaternidadTitulo: "Entrée en maternité",
+    soloUnaEntradaMaternidad: "Vous ne pouvez marquer qu'une seule entrée en maternité à la fois.",
+    soloUnaEntradaMaternidadCadaVez: "Vous ne pouvez marquer qu'une seule entrée en maternité par opération.",
+    noMarcarTareas: "Impossible de marquer les tâches comme terminées.",
+    corralMaximo9: "Saisissez une case valide de 9 chiffres maximum.",
+    corralNoExiste: "La case n'existe pas.",
+    corralOcupado: "La case est occupée.",
+    noValidarCorral: "Impossible de valider la case.",
+    noValidarCorralMaternidad: "Impossible de valider la case de maternité."
+  }
+},
+filtrosTareasMovimientos: {
+  cabecera: {
+    titulo: "Filtres",
+    subtituloTareasDe: "Tâches de {{seccion}}",
+    limpiar: "Effacer"
+  },
+
+  secciones: {
+    gestacion: "Gestation",
+    maternidad: "Maternité"
+  },
+
+  bloques: {
+    tipoMovimiento: "Type de mouvement",
+    fecha: "Date",
+    corral: "Case",
+    idAnimal: "ID animal"
+  },
+
+  opciones: {
+    todos: "Tous",
+    entrada: "Entrée",
+    salida: "Sortie",
+    todasLasFechas: "Toutes les dates",
+    hoy: "Aujourd'hui",
+    manana: "Demain",
+    fecha: "Date",
+    todosLosCorrales: "Toutes les cases",
+    porCorral: "Par case",
+    todosLosAnimales: "Tous les animaux",
+    porId: "Par ID"
+  },
+
+  placeholders: {
+    dia: "JJ",
+    mes: "MM",
+    anio: "AA/AAAA",
+    introduceCorral: "Saisissez la case",
+    introduceIdAnimal: "Saisissez l'ID animal"
+  },
+
+  validaciones: {
+    fechaCompleta: "Saisissez le jour, le mois et l'année.",
+    diaDosCifras: "Le jour doit contenir 2 chiffres.",
+    mesDosCifras: "Le mois doit contenir 2 chiffres.",
+    anioDosOCuatroCifras: "L'année doit contenir 2 ou 4 chiffres.",
+    diaRango: "Le jour doit être compris entre 01 et 31.",
+    mesRango: "Le mois doit être compris entre 01 et 12.",
+    fechaNoExiste: "La date n'existe pas.",
+    introduceCorral: "Saisissez un numéro de case.",
+    introduceIdAnimal: "Saisissez un ID animal."
+  },
+
+  botones: {
+    cancelar: "Annuler",
+    aceptar: "Accepter"
+  }
+},
+filtrosHistorialMovimientos: {
+  cabecera: {
+    titulo: "Filtres",
+    subtitulo: "Historique des mouvements",
+    limpiar: "Effacer"
+  },
+
+  bloques: {
+    tipoMovimiento: "Type de mouvement",
+    fecha: "Date",
+    corral: "Case",
+    idAnimal: "ID animal"
+  },
+
+  opciones: {
+    todos: "Tous",
+    entrada: "Entrée",
+    salida: "Sortie",
+    todasLasFechas: "Toutes les dates",
+    hoy: "Aujourd'hui",
+    manana: "Demain",
+    fecha: "Date",
+    todosLosCorrales: "Toutes les cases",
+    porCorral: "Par case",
+    todosLosAnimales: "Tous les animaux",
+    porId: "Par ID"
+  },
+
+  placeholders: {
+    dia: "JJ",
+    mes: "MM",
+    anio: "AA/AAAA",
+    introduceCorral: "Saisissez la case",
+    introduceIdAnimal: "Saisissez l'ID animal"
+  },
+
+  validaciones: {
+    fechaCompleta: "Saisissez le jour, le mois et l'année.",
+    diaDosCifras: "Le jour doit contenir 2 chiffres.",
+    mesDosCifras: "Le mois doit contenir 2 chiffres.",
+    anioDosOCuatroCifras: "L'année doit contenir 2 ou 4 chiffres.",
+    diaRango: "Le jour doit être compris entre 01 et 31.",
+    mesRango: "Le mois doit être compris entre 01 et 12.",
+    fechaNoExiste: "La date n'existe pas.",
+    introduceCorral: "Saisissez un numéro de case.",
+    introduceIdAnimal: "Saisissez un ID animal."
+  },
+
+  botones: {
+    cancelar: "Annuler",
+    aceptar: "Accepter"
+  }
+}
 
 };

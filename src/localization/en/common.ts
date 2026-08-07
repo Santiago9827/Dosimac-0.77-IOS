@@ -562,8 +562,8 @@ export default {
 
   noAlimentadosMaternidad: {
     viewStatus: "View status",
-animalIdNotFound: "Animal identifier not found.",
-openAnimalInfoError: "Could not open the animal information.",
+    animalIdNotFound: "Animal identifier not found.",
+    openAnimalInfoError: "Could not open the animal information.",
     animalId: "ANIMAL ID",
     corral: "Pen",
     consumption: "Consumption",
@@ -628,8 +628,8 @@ openAnimalInfoError: "Could not open the animal information.",
     error: "Error",
     serverConnectionError: "Could not connect to the server.",
     viewStatus: "View status",
-animalIdNotFound: "Animal identifier not found.",
-openAnimalInfoError: "Could not open the animal information.",
+    animalIdNotFound: "Animal identifier not found.",
+    openAnimalInfoError: "Could not open the animal information.",
 
   },
 
@@ -697,7 +697,7 @@ openAnimalInfoError: "Could not open the animal information.",
     house: "House",
     pen: "Pen",
     lastFeeding: "Last feeding",
-    presentPiglets: "Present piglets",
+    presentPiglets: "Live piglets",
     inseminationDate: "Insemination date",
     teatsNumber: "No. of teats",
 
@@ -1141,5 +1141,250 @@ openAnimalInfoError: "Could not open the animal information.",
     earTagAlreadyAssigned: "The ear tag is assigned to another animal",
     replaceEarTagGenericError: "The ear tag could not be replaced.",
   },
+
+ tareasMovimientos: {
+  tabs: {
+    tareas: "Tasks",
+    historial: "History"
+  },
+
+  secciones: {
+    gestacion: "Gestation",
+    maternidad: "Maternity",
+    todos: "All",
+    todas: "All"
+  },
+
+  operaciones: {
+    entrada: "Entry",
+    salida: "Exit",
+    realizada: "Completed"
+  },
+
+  tarjetas: {
+    tareasPendientesMovimientos: "Pending movement tasks",
+    idAnimal: "Animal ID",
+    sinCrotal: "No ear tag",
+    corralDestino: "Destination pen",
+    corralOrigen: "Origin pen",
+    fecha: "Date"
+  },
+
+  filtros: {
+    titulo: "Filters",
+    filtrarPorFecha: "Filter by date",
+    hoy: "Today",
+    ayer: "Yesterday",
+    fecha: "Date",
+    formatoFecha: "DD/MM/YYYY"
+  },
+
+  carga: {
+    cargandoHistorial: "Loading history..."
+  },
+
+  vacio: {
+    sinResultados: "No results",
+    sinMovimientosConFiltros: "There are no completed movements matching these filters.",
+    sinMovimientosTodavia: "There are no completed movements yet."
+  },
+
+  errores: {
+    actualizarServidorTareas: "The server must be updated to use the movement tasks feature.",
+    noCargarTareas: "The tasks could not be loaded.",
+    noCargarHistorialTitulo: "The history could not be loaded",
+    noCargarHistorial: "The movement history could not be loaded.",
+    historialNoDisponible: "History unavailable",
+    actualizarServidorHistorial: "The server must be updated to use the movement task history."
+  }
+},
+tareasMovimientosDetalle: {
+  tabs: {
+    gestacion: "Gestation",
+    maternidad: "Maternity"
+  },
+
+  acciones: {
+    filtros: "Filters",
+    ordenar: "Sort",
+    marcarRealizado: "Mark completed",
+    marcarSeleccionadas: "Mark ({{total}})",
+    marcando: "Marking...",
+    aceptar: "Accept",
+    cancelar: "Cancel",
+    confirmar: "Confirm",
+    validando: "Validating..."
+  },
+
+  orden: {
+    corralAscendente: "Pen ascending",
+    corralDescendente: "Pen descending"
+  },
+
+  operaciones: {
+    entrada: "Entry",
+    salida: "Exit",
+    trasladoEntrada: "Transfer entry",
+    trasladoSalida: "Transfer exit"
+  },
+
+  tarjetas: {
+    idAnimal: "Animal ID",
+    sinCrotal: "No ear tag",
+    corralDestino: "Destination pen",
+    corralOrigen: "Origin pen",
+    fecha: "Date"
+  },
+
+  estados: {
+    cargandoTareas: "Loading tasks...",
+    noCargarTareasTitulo: "The tasks could not be loaded",
+    pulsaReintentar: "Tap to try again",
+    sinTareasConFiltros: "No tasks match these filters",
+    sinTareasPendientes: "No pending tasks",
+    cambiaFiltros: "Try changing the applied filters.",
+    sinMovimientosPendientes: "No pending movements were found."
+  },
+
+  modalResultado: {
+    tareasRealizadasTitulo: "Tasks completed",
+    tareasRealizadasMensaje: "The selected tasks have been marked as completed.",
+    tareaRealizadaTitulo: "Task completed",
+    tareaRealizadaMensaje: "The maternity entry has been marked as completed.",
+    errorTitulo: "Error"
+  },
+
+  modalCorral: {
+    titulo: "Confirm pen",
+    mensaje: "Check the destination pen for the maternity entry.",
+    labelCorralDestino: "Destination pen",
+    placeholderCorral: "Enter the pen"
+  },
+
+  errores: {
+    noCargarTareas: "The tasks could not be loaded.",
+    entradaMaternidadTitulo: "Maternity entry",
+    soloUnaEntradaMaternidad: "You can only mark one maternity entry at a time.",
+    soloUnaEntradaMaternidadCadaVez: "You can only mark one maternity entry each time.",
+    noMarcarTareas: "The tasks could not be marked as completed.",
+    corralMaximo9: "Enter a valid pen with a maximum of 9 digits.",
+    corralNoExiste: "The pen does not exist.",
+    corralOcupado: "The pen is occupied.",
+    noValidarCorral: "The pen could not be validated.",
+    noValidarCorralMaternidad: "The maternity pen could not be validated."
+  }
+},
+filtrosTareasMovimientos: {
+  cabecera: {
+    titulo: "Filters",
+    subtituloTareasDe: "{{seccion}} tasks",
+    limpiar: "Clear"
+  },
+
+  secciones: {
+    gestacion: "Gestation",
+    maternidad: "Maternity"
+  },
+
+  bloques: {
+    tipoMovimiento: "Movement type",
+    fecha: "Date",
+    corral: "Pen",
+    idAnimal: "Animal ID"
+  },
+
+  opciones: {
+    todos: "All",
+    entrada: "Entry",
+    salida: "Exit",
+    todasLasFechas: "All dates",
+    hoy: "Today",
+    manana: "Tomorrow",
+    fecha: "Date",
+    todosLosCorrales: "All pens",
+    porCorral: "By pen",
+    todosLosAnimales: "All animals",
+    porId: "By ID"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "YY/YYYY",
+    introduceCorral: "Enter the pen",
+    introduceIdAnimal: "Enter the animal ID"
+  },
+
+  validaciones: {
+    fechaCompleta: "Enter day, month and year.",
+    diaDosCifras: "The day must have 2 digits.",
+    mesDosCifras: "The month must have 2 digits.",
+    anioDosOCuatroCifras: "The year must have 2 or 4 digits.",
+    diaRango: "The day must be between 01 and 31.",
+    mesRango: "The month must be between 01 and 12.",
+    fechaNoExiste: "The date does not exist.",
+    introduceCorral: "Enter a pen number.",
+    introduceIdAnimal: "Enter an animal ID."
+  },
+
+  botones: {
+    cancelar: "Cancel",
+    aceptar: "Accept"
+  }
+},
+filtrosHistorialMovimientos: {
+  cabecera: {
+    titulo: "Filters",
+    subtitulo: "Movement history",
+    limpiar: "Clear"
+  },
+
+  bloques: {
+    tipoMovimiento: "Movement type",
+    fecha: "Date",
+    corral: "Pen",
+    idAnimal: "Animal ID"
+  },
+
+  opciones: {
+    todos: "All",
+    entrada: "Entry",
+    salida: "Exit",
+    todasLasFechas: "All dates",
+    hoy: "Today",
+    manana: "Tomorrow",
+    fecha: "Date",
+    todosLosCorrales: "All pens",
+    porCorral: "By pen",
+    todosLosAnimales: "All animals",
+    porId: "By ID"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "YY/YYYY",
+    introduceCorral: "Enter the pen",
+    introduceIdAnimal: "Enter the animal ID"
+  },
+
+  validaciones: {
+    fechaCompleta: "Enter day, month and year.",
+    diaDosCifras: "The day must have 2 digits.",
+    mesDosCifras: "The month must have 2 digits.",
+    anioDosOCuatroCifras: "The year must have 2 or 4 digits.",
+    diaRango: "The day must be between 01 and 31.",
+    mesRango: "The month must be between 01 and 12.",
+    fechaNoExiste: "The date does not exist.",
+    introduceCorral: "Enter a pen number.",
+    introduceIdAnimal: "Enter an animal ID."
+  },
+
+  botones: {
+    cancelar: "Cancel",
+    aceptar: "Accept"
+  }
+}
+
 
 };

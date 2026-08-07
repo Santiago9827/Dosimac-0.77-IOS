@@ -17,6 +17,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 import {
     consultarTareasMovimientoGestacion,
@@ -355,6 +356,7 @@ function filtrarTareasPorIdAnimal(
         return idAnimal === idFiltro;
     });
 }
+
 function obtenerErrorEstadoCorralMaternidad(datosCorral: any): string {
     if (!datosCorral) {
         return '';
@@ -373,7 +375,7 @@ function obtenerErrorEstadoCorralMaternidad(datosCorral: any): string {
         existe === false ||
         String(existe).toLowerCase() === 'false'
     ) {
-        return 'El corral no existe.';
+        return 'corralNoExiste';
     }
 
     const ocupado =
@@ -386,7 +388,7 @@ function obtenerErrorEstadoCorralMaternidad(datosCorral: any): string {
         String(ocupado).toLowerCase() === 'true' ||
         Number(ocupado) === 1
     ) {
-        return 'El corral está ocupado.';
+        return 'corralOcupado';
     }
 
     const libre =
@@ -400,7 +402,7 @@ function obtenerErrorEstadoCorralMaternidad(datosCorral: any): string {
         String(libre).toLowerCase() === 'false' ||
         Number(libre) === 0
     ) {
-        return 'El corral está ocupado.';
+        return 'corralOcupado';
     }
 
     const estado = String(
@@ -413,7 +415,7 @@ function obtenerErrorEstadoCorralMaternidad(datosCorral: any): string {
         estado.includes('ocupado') ||
         estado.includes('occupied')
     ) {
-        return 'El corral está ocupado.';
+        return 'corralOcupado';
     }
 
     const animal =
@@ -425,7 +427,7 @@ function obtenerErrorEstadoCorralMaternidad(datosCorral: any): string {
         typeof animal === 'object' &&
         Object.keys(animal).length > 0
     ) {
-        return 'El corral está ocupado.';
+        return 'corralOcupado';
     }
 
     if (
@@ -433,7 +435,7 @@ function obtenerErrorEstadoCorralMaternidad(datosCorral: any): string {
         datos?.pkIdAnimal ||
         datos?.crotal
     ) {
-        return 'El corral está ocupado.';
+        return 'corralOcupado';
     }
 
     return '';
@@ -478,6 +480,7 @@ function respuestaCorralMaternidadNoExiste(resultadoCorral: any): boolean {
 ========================= */
 
 function BarraAccionesTareas({
+
     onAbrirFiltros,
     ordenCorral,
     desplegableOrdenVisible,
@@ -496,6 +499,7 @@ function BarraAccionesTareas({
     marcandoRealizadas: boolean;
     onMarcarRealizadas: () => void;
 }) {
+    const { t } = useTranslation();
     return (
         <View style={styles.actionsBar}>
             <TouchableOpacity
@@ -510,7 +514,7 @@ function BarraAccionesTareas({
                 />
 
                 <Text style={styles.actionText}>
-                    Filtros
+                    {t('tareasMovimientosDetalle.acciones.filtros')}
                 </Text>
             </TouchableOpacity>
 
@@ -536,10 +540,12 @@ function BarraAccionesTareas({
 
                 <Text style={styles.actionTextMain}>
                     {marcandoRealizadas
-                        ? 'Marcando...'
+                        ? t('tareasMovimientosDetalle.acciones.marcando')
                         : totalSeleccionadas > 0
-                            ? `Marcar (${totalSeleccionadas})`
-                            : 'Marcar Realizado'}
+                            ? t('tareasMovimientosDetalle.acciones.marcarSeleccionadas', {
+                                total: totalSeleccionadas,
+                            })
+                            : t('tareasMovimientosDetalle.acciones.marcarRealizado')}
                 </Text>
             </TouchableOpacity>
 
@@ -564,7 +570,7 @@ function BarraAccionesTareas({
                     />
 
                     <Text style={styles.actionText}>
-                        Ordenar
+                        {t('tareasMovimientosDetalle.acciones.ordenar')}
                     </Text>
                 </TouchableOpacity>
 
@@ -588,7 +594,7 @@ function BarraAccionesTareas({
                             />
 
                             <Text style={styles.orderOptionText}>
-                                Corral ascendente
+                                {t('tareasMovimientosDetalle.orden.corralAscendente')}
                             </Text>
 
                             {ordenCorral === 'asc' && (
@@ -618,7 +624,7 @@ function BarraAccionesTareas({
                             />
 
                             <Text style={styles.orderOptionText}>
-                                Corral descendente
+                                {t('tareasMovimientosDetalle.orden.corralDescendente')}
                             </Text>
 
                             {ordenCorral === 'desc' && (
@@ -649,7 +655,7 @@ function CardTarea({
     marcada: boolean;
     onToggleMarcada: () => void;
 }) {
-
+    const { t } = useTranslation();
     const esMovimientoEntrada = esTareaEntrada(tarea);
 
     const colorOperacion = esMovimientoEntrada
@@ -673,9 +679,20 @@ function CardTarea({
             ? 'enter-outline'
             : 'exit-outline';
 
+
+
+    const textoOperacion =
+        tarea.tipoOperacion === 'Entrada'
+            ? t('tareasMovimientosDetalle.operaciones.entrada')
+            : tarea.tipoOperacion === 'Salida'
+                ? t('tareasMovimientosDetalle.operaciones.salida')
+                : tarea.tipoOperacion === 'Traslado Entrada'
+                    ? t('tareasMovimientosDetalle.operaciones.trasladoEntrada')
+                    : t('tareasMovimientosDetalle.operaciones.trasladoSalida');
+
     const textoCorral = esMovimientoEntrada
-        ? 'Corral destino'
-        : 'Corral origen';
+        ? t('tareasMovimientosDetalle.tarjetas.corralDestino')
+        : t('tareasMovimientosDetalle.tarjetas.corralOrigen');
 
     return (
         <View
@@ -724,7 +741,7 @@ function CardTarea({
                                 },
                             ]}
                         >
-                            {tarea.tipoOperacion}
+                            {textoOperacion}
                         </Text>
                     </View>
 
@@ -764,7 +781,7 @@ function CardTarea({
                         ]}
                     >
                         <Text style={styles.informationLabel}>
-                            ID animal
+                            {t('tareasMovimientosDetalle.tarjetas.idAnimal')}
                         </Text>
 
                         <Text style={styles.animalId}>
@@ -776,7 +793,7 @@ function CardTarea({
                             numberOfLines={1}
                             adjustsFontSizeToFit
                         >
-                            {tarea.crotal || 'Sin crotal'}
+                            {tarea.crotal || t('tareasMovimientosDetalle.tarjetas.sinCrotal')}
                         </Text>
                     </View>
 
@@ -812,7 +829,7 @@ function CardTarea({
                         </View>
 
                         <Text style={styles.fechaDetalleLabel}>
-                            Fecha
+                            {t('tareasMovimientosDetalle.tarjetas.fecha')}
                         </Text>
                     </View>
 
@@ -838,6 +855,7 @@ function ModalResultadoTareas({
     mensaje: string;
     onCerrar: () => void;
 }) {
+    const { t } = useTranslation();
     const esExito = tipo === 'exito';
 
     const colorModal = esExito
@@ -897,7 +915,7 @@ function ModalResultadoTareas({
                         ]}
                     >
                         <Text style={styles.modalButtonText}>
-                            Aceptar
+                            {t('tareasMovimientosDetalle.acciones.aceptar')}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -924,6 +942,7 @@ function ModalCorralMaternidad({
     onCancelar: () => void;
     onConfirmar: () => void;
 }) {
+    const { t } = useTranslation();
     return (
         <Modal
             visible={visible}
@@ -942,16 +961,16 @@ function ModalCorralMaternidad({
                     </View>
 
                     <Text style={styles.modalTitle}>
-                        Confirmar corral
+                        {t('tareasMovimientosDetalle.modalCorral.titulo')}
                     </Text>
 
                     <Text style={styles.modalMessage}>
-                        Revisa el corral destino de la entrada en maternidad.
+                        {t('tareasMovimientosDetalle.modalCorral.mensaje')}
                     </Text>
 
                     <View style={styles.modalInputBlock}>
                         <Text style={styles.modalInputLabel}>
-                            Corral destino
+                            {t('tareasMovimientosDetalle.modalCorral.labelCorralDestino')}
                         </Text>
 
                         <TextInput
@@ -959,7 +978,7 @@ function ModalCorralMaternidad({
                             onChangeText={onCambiarCorral}
                             keyboardType="number-pad"
                             maxLength={9}
-                            placeholder="Introduce el corral"
+                            placeholder={t('tareasMovimientosDetalle.modalCorral.placeholderCorral')}
                             placeholderTextColor="#94A3B8"
                             editable={
                                 !marcandoRealizadas &&
@@ -990,7 +1009,7 @@ function ModalCorralMaternidad({
                             style={styles.modalButtonSecondary}
                         >
                             <Text style={styles.modalButtonSecondaryText}>
-                                Cancelar
+                                {t('tareasMovimientosDetalle.acciones.cancelar')}
                             </Text>
                         </TouchableOpacity>
 
@@ -1010,10 +1029,10 @@ function ModalCorralMaternidad({
                         >
                             <Text style={styles.modalButtonText}>
                                 {validandoCorral
-                                    ? 'Validando...'
+                                    ? t('tareasMovimientosDetalle.acciones.validando')
                                     : marcandoRealizadas
-                                        ? 'Marcando...'
-                                        : 'Confirmar'}
+                                        ? t('tareasMovimientosDetalle.acciones.marcando')
+                                        : t('tareasMovimientosDetalle.acciones.confirmar')}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -1032,6 +1051,7 @@ function TareasListaTab({
     tipo: TipoSeccionTareas;
     onAbrirFiltros: () => void;
 }) {
+    const { t } = useTranslation();
     const [ordenCorral, setOrdenCorral] =
         useState<TipoOrdenCorral>('asc');
 
@@ -1046,7 +1066,7 @@ function TareasListaTab({
     const [cargando, setCargando] =
         useState(false);
 
-        const primeraCargaRef = useRef(true);
+    const primeraCargaRef = useRef(true);
 
     const [error, setError] =
         useState('');
@@ -1119,22 +1139,45 @@ function TareasListaTab({
                     ? state.filtrosGestacion
                     : state.filtrosMaternidad
         );
-const cargarTareas = useCallback(
-    async (mostrarCargaCompleta = false) => {
-        try {
-            if (mostrarCargaCompleta) {
-                setCargando(true);
-            }
+    const cargarTareas = useCallback(
+        async (mostrarCargaCompleta = false) => {
+            try {
+                if (mostrarCargaCompleta) {
+                    setCargando(true);
+                }
 
-            setError('');
+                setError('');
 
-            if (tipo === 'gestacion') {
+                if (tipo === 'gestacion') {
+                    const [
+                        tareasApi,
+                        corralesApi,
+                    ] = await Promise.all([
+                        consultarTareasMovimientoGestacion(),
+                        consultarCorralesGestacion(),
+                    ]);
+
+                    const mapaCorrales =
+                        crearMapaCorralesPorId(corralesApi);
+
+                    setTareas(
+                        tareasApi.map((tarea: any) =>
+                            adaptarTareaMovimientoApi(
+                                tarea,
+                                mapaCorrales,
+                            ),
+                        ),
+                    );
+
+                    return;
+                }
+
                 const [
                     tareasApi,
                     corralesApi,
                 ] = await Promise.all([
-                    consultarTareasMovimientoGestacion(),
-                    consultarCorralesGestacion(),
+                    consultarTareasMovimientoMaternidad(),
+                    consultarCorralesMaternidad(),
                 ]);
 
                 const mapaCorrales =
@@ -1148,76 +1191,53 @@ const cargarTareas = useCallback(
                         ),
                     ),
                 );
+            } catch (errorConsulta: any) {
+                console.log(
+                    'Error cargando tareas de movimiento:',
+                    errorConsulta,
+                );
 
-                return;
+                /*
+                 * Solo vaciamos la pantalla si todavía
+                 * no había información cargada.
+                 */
+                if (primeraCargaRef.current) {
+                    setTareas([]);
+                }
+
+                setError(
+                    errorConsulta?.message ??
+                    t('tareasMovimientosDetalle.errores.noCargarTareas'),
+                );
+            } finally {
+                if (mostrarCargaCompleta) {
+                    setCargando(false);
+                }
+
+                primeraCargaRef.current = false;
             }
+        },
+        [tipo, t],
+    );
 
-            const [
-                tareasApi,
-                corralesApi,
-            ] = await Promise.all([
-                consultarTareasMovimientoMaternidad(),
-                consultarCorralesMaternidad(),
-            ]);
-
-            const mapaCorrales =
-                crearMapaCorralesPorId(corralesApi);
-
-            setTareas(
-                tareasApi.map((tarea: any) =>
-                    adaptarTareaMovimientoApi(
-                        tarea,
-                        mapaCorrales,
-                    ),
-                ),
-            );
-        } catch (errorConsulta: any) {
-            console.log(
-                'Error cargando tareas de movimiento:',
-                errorConsulta,
-            );
+    useFocusEffect(
+        useCallback(() => {
+            setDesplegableOrdenVisible(false);
 
             /*
-             * Solo vaciamos la pantalla si todavía
-             * no había información cargada.
+             * Primera entrada:
+             * muestra el estado de carga.
+             *
+             * Siguientes cambios entre tabs:
+             * actualiza silenciosamente sin borrar la lista.
              */
-            if (primeraCargaRef.current) {
-                setTareas([]);
-            }
+            cargarTareas(primeraCargaRef.current);
 
-            setError(
-                errorConsulta?.message ??
-                'No se pudieron cargar las tareas.',
-            );
-        } finally {
-            if (mostrarCargaCompleta) {
-                setCargando(false);
-            }
-
-            primeraCargaRef.current = false;
-        }
-    },
-    [tipo],
-);
-
-   useFocusEffect(
-    useCallback(() => {
-        setDesplegableOrdenVisible(false);
-
-        /*
-         * Primera entrada:
-         * muestra el estado de carga.
-         *
-         * Siguientes cambios entre tabs:
-         * actualiza silenciosamente sin borrar la lista.
-         */
-        cargarTareas(primeraCargaRef.current);
-
-        return () => {
-            setDesplegableOrdenVisible(false);
-        };
-    }, [cargarTareas]),
-);
+            return () => {
+                setDesplegableOrdenVisible(false);
+            };
+        }, [cargarTareas]),
+    );
 
 
     const tareasFiltradasMovimiento = filtrarTareasPorMovimiento(
@@ -1279,8 +1299,8 @@ const cargarTareas = useCallback(
                 setModalResultado({
                     visible: true,
                     tipo: 'error',
-                    titulo: 'Entrada de maternidad',
-                    mensaje: 'Solo puedes marcar una entrada de maternidad a la vez.',
+                    titulo: t('tareasMovimientosDetalle.errores.entradaMaternidadTitulo'),
+                    mensaje: t('tareasMovimientosDetalle.errores.soloUnaEntradaMaternidad'),
                 });
 
                 return;
@@ -1298,35 +1318,30 @@ const cargarTareas = useCallback(
     );
 
     const enviarTareasSeleccionadas = async (
-        idCorralInternoMaternidad?: number
+        idCorralInternoMaternidad?: number,
     ) => {
         await Promise.all(
             tareasSeleccionadas.map((tarea) => {
-                let jsonTarea = tarea.raw;
-
-                if (
+                const esEntradaMaternidad =
                     tipo === 'maternidad' &&
-                    esTareaEntrada(tarea) &&
-                    idCorralInternoMaternidad !== undefined
-                ) {
-                    jsonTarea = {
-                        ...tarea.raw,
+                    esTareaEntrada(tarea);
 
-                        /*
-                         * En pantalla se ve el corral name.
-                         * Al backend se manda el id interno.
-                         */
-                        corral: idCorralInternoMaternidad,
-                    };
-                }
+                const valueOperacion = esEntradaMaternidad
+                    ? String(
+                        idCorralInternoMaternidad ??
+                        tarea.raw?.corral ??
+                        tarea.corralId ??
+                        '',
+                    )
+                    : '';
 
                 return enviarTareaMovimientoAnimalRealizada(
-                    jsonTarea
+                    tarea.id,
+                    valueOperacion,
                 );
-            })
+            }),
         );
     };
-
     const marcarTareasRealizadas = async () => {
         if (tareasSeleccionadas.length === 0) {
             return;
@@ -1341,8 +1356,8 @@ const cargarTareas = useCallback(
             setModalResultado({
                 visible: true,
                 tipo: 'error',
-                titulo: 'Entrada de maternidad',
-                mensaje: 'Solo puedes marcar una entrada de maternidad cada vez.',
+                titulo: t('tareasMovimientosDetalle.errores.entradaMaternidadTitulo'),
+                mensaje: t('tareasMovimientosDetalle.errores.soloUnaEntradaMaternidadCadaVez'),
             });
 
             return;
@@ -1380,8 +1395,8 @@ const cargarTareas = useCallback(
             setModalResultado({
                 visible: true,
                 tipo: 'exito',
-                titulo: 'Tareas realizadas',
-                mensaje: 'Las tareas seleccionadas se han marcado como realizadas.',
+                titulo: t('tareasMovimientosDetalle.modalResultado.tareasRealizadasTitulo'),
+                mensaje: t('tareasMovimientosDetalle.modalResultado.tareasRealizadasMensaje'),
             });
         } catch (errorMarcar: any) {
             console.log(
@@ -1392,10 +1407,10 @@ const cargarTareas = useCallback(
             setModalResultado({
                 visible: true,
                 tipo: 'error',
-                titulo: 'Error',
+                titulo: t('tareasMovimientosDetalle.modalResultado.errorTitulo'),
                 mensaje:
                     errorMarcar?.message ??
-                    'No se pudieron marcar las tareas como realizadas.',
+                    t('tareasMovimientosDetalle.errores.noMarcarTareas'),
             });
         } finally {
             setMarcandoRealizadas(false);
@@ -1416,9 +1431,8 @@ const cargarTareas = useCallback(
             corralNumero <= 0
         ) {
             setErrorCorralMaternidad(
-                'Introduce un corral válido de máximo 9 números.'
+                t('tareasMovimientosDetalle.errores.corralMaximo9')
             );
-
             return;
         }
 
@@ -1453,7 +1467,7 @@ const cargarTareas = useCallback(
 
             if (corralNoExiste) {
                 setErrorCorralMaternidad(
-                    'El corral no existe.'
+                    t('tareasMovimientosDetalle.errores.corralNoExiste')
                 );
 
                 return;
@@ -1462,7 +1476,7 @@ const cargarTareas = useCallback(
             if (!corralLibre) {
                 if (!resultadoCorral.ok) {
                     setErrorCorralMaternidad(
-                        'No se pudo validar el corral.'
+                        t('tareasMovimientosDetalle.errores.noValidarCorral')
                     );
 
                     return;
@@ -1475,7 +1489,7 @@ const cargarTareas = useCallback(
 
                 if (errorEstadoCorral) {
                     setErrorCorralMaternidad(
-                        errorEstadoCorral
+                        t(`tareasMovimientosDetalle.errores.${errorEstadoCorral}`)
                     );
 
                     return;
@@ -1486,7 +1500,7 @@ const cargarTareas = useCallback(
                  * normalmente significa que hay información de un animal.
                  */
                 setErrorCorralMaternidad(
-                    'El corral está ocupado.'
+                    t('tareasMovimientosDetalle.errores.corralOcupado')
                 );
 
                 return;
@@ -1532,8 +1546,8 @@ const cargarTareas = useCallback(
             setModalResultado({
                 visible: true,
                 tipo: 'exito',
-                titulo: 'Tarea realizada',
-                mensaje: 'La entrada de maternidad se ha marcado como realizada.',
+                titulo: t('tareasMovimientosDetalle.modalResultado.tareaRealizadaTitulo'),
+                mensaje: t('tareasMovimientosDetalle.modalResultado.tareaRealizadaMensaje'),
             });
         } catch (errorMarcar: any) {
             console.log(
@@ -1543,7 +1557,7 @@ const cargarTareas = useCallback(
 
             setErrorCorralMaternidad(
                 errorMarcar?.message ??
-                'No se pudo validar el corral de maternidad.'
+                t('tareasMovimientosDetalle.errores.noValidarCorralMaternidad')
             );
         } finally {
             setValidandoCorralMaternidad(false);
@@ -1586,23 +1600,23 @@ const cargarTareas = useCallback(
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.content}
             >
-              {cargando && tareas.length === 0 && (
-    <View style={styles.stateCard}>
+                {cargando && tareas.length === 0 && (
+                    <View style={styles.stateCard}>
                         <ActivityIndicator
                             size="small"
                             color={PURPLE}
                         />
 
                         <Text style={styles.stateTitle}>
-                            Cargando tareas...
+                            {t('tareasMovimientosDetalle.estados.cargandoTareas')}
                         </Text>
                     </View>
                 )}
 
-               {!cargando && tareas.length === 0 && error && (
+                {!cargando && tareas.length === 0 && error && (
                     <TouchableOpacity
                         activeOpacity={0.85}
-onPress={() => cargarTareas(true)}
+                        onPress={() => cargarTareas(true)}
                         style={styles.stateCard}
                     >
                         <Ionicons
@@ -1612,7 +1626,7 @@ onPress={() => cargarTareas(true)}
                         />
 
                         <Text style={styles.stateTitle}>
-                            No se pudieron cargar las tareas
+                            {t('tareasMovimientosDetalle.estados.noCargarTareasTitulo')}
                         </Text>
 
                         <Text style={styles.stateText}>
@@ -1620,7 +1634,7 @@ onPress={() => cargarTareas(true)}
                         </Text>
 
                         <Text style={styles.retryText}>
-                            Pulsa para reintentar
+                            {t('tareasMovimientosDetalle.estados.pulsaReintentar')}
                         </Text>
                     </TouchableOpacity>
                 )}
@@ -1637,14 +1651,14 @@ onPress={() => cargarTareas(true)}
 
                             <Text style={styles.stateTitle}>
                                 {hayFiltrosActivos
-                                    ? 'No hay tareas con esos filtros'
-                                    : 'No hay tareas pendientes'}
+                                    ? t('tareasMovimientosDetalle.estados.sinTareasConFiltros')
+                                    : t('tareasMovimientosDetalle.estados.sinTareasPendientes')}
                             </Text>
 
                             <Text style={styles.stateText}>
                                 {hayFiltrosActivos
-                                    ? 'Prueba cambiando los filtros aplicados.'
-                                    : 'No se encontraron movimientos pendientes.'}
+                                    ? t('tareasMovimientosDetalle.estados.cambiaFiltros')
+                                    : t('tareasMovimientosDetalle.estados.sinMovimientosPendientes')}
                             </Text>
                         </View>
                     )}
@@ -1693,6 +1707,7 @@ export const TareasMovimientosDetalleScreen = ({
     navigation,
     route,
 }: any) => {
+    const { t } = useTranslation();
     const tabInicial =
         route.params?.tabInicial === 'Maternidad'
             ? 'Maternidad'
@@ -1747,7 +1762,7 @@ export const TareasMovimientosDetalleScreen = ({
             <TopTab.Screen
                 name="Gestacion"
                 options={{
-                    title: 'Gestación',
+                    title: t('tareasMovimientosDetalle.tabs.gestacion'),
                 }}
             >
                 {() => (
@@ -1763,7 +1778,7 @@ export const TareasMovimientosDetalleScreen = ({
             <TopTab.Screen
                 name="Maternidad"
                 options={{
-                    title: 'Maternidad',
+                    title: t('tareasMovimientosDetalle.tabs.maternidad'),
                 }}
             >
                 {() => (

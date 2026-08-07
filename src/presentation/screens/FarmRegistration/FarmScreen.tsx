@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  Share,
 } from 'react-native';
 import { Appbar, TextInput } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
@@ -48,6 +49,93 @@ export const FarmScreen = ({ navigation, route }) => {
   const fetchFarmData = async (id: number) => {
     const farmData: farmFacility = await GetFarmDataById(id);
     setfarmdata(farmData);
+  };
+
+  const compartirInstalacion = async () => {
+    try {
+      const datosInstalacion: string[] = [
+        '📍 INSTALACIÓN DOSIMAC',
+        '',
+      ];
+
+      if (name.trim()) {
+        datosInstalacion.push(`🏠 Nombre: ${name.trim()}`);
+      }
+
+      if (location.trim()) {
+        datosInstalacion.push(`🌍 Localidad: ${location.trim()}`);
+      }
+
+      if (province.trim()) {
+        datosInstalacion.push(`📌 Provincia: ${province.trim()}`);
+      }
+
+      if (serverIp.trim()) {
+        datosInstalacion.push(
+          '',
+          `🌐 Dirección IP del servidor: ${serverIp.trim()}`
+        );
+      }
+
+      if (userName.trim()) {
+        datosInstalacion.push(
+          '',
+          `👤 Usuario: ${userName.trim()}`
+        );
+      }
+
+      if (password.trim()) {
+        datosInstalacion.push(
+          `🔑 Contraseña: ${password.trim()}`
+        );
+      }
+
+      if (ssid.trim()) {
+        datosInstalacion.push(
+          '',
+          `📶 Red WiFi: ${ssid.trim()}`
+        );
+      }
+
+      if (wifiPassword.trim()) {
+        datosInstalacion.push(
+          `🔒 Contraseña WiFi: ${wifiPassword.trim()}`
+        );
+      }
+
+      const hayDatos =
+        name.trim() ||
+        location.trim() ||
+        province.trim() ||
+        serverIp.trim() ||
+        userName.trim() ||
+        password.trim() ||
+        ssid.trim() ||
+        wifiPassword.trim();
+
+      if (!hayDatos) {
+        Alert.alert(
+          'Sin datos para compartir',
+          'La instalación no contiene ningún dato.'
+        );
+        return;
+      }
+
+      const textoInstalacion = datosInstalacion.join('\n');
+
+      await Share.share({
+        title: `Instalación DOSIMAC - ${name.trim() || 'Sin nombre'}`,
+        message: textoInstalacion,
+      });
+    } catch (error: any) {
+      console.log('Error al compartir la instalación:', error);
+
+      Alert.alert(
+        'No se pudo compartir',
+        error?.message ||
+        'Ha ocurrido un error al compartir los datos de la instalación.'
+      );
+    }
   };
 
   const setfarmdata = (farmData: farmFacility) => {
@@ -137,24 +225,24 @@ export const FarmScreen = ({ navigation, route }) => {
       /**
        * 1. Guardamos la IP activa para que la usen los endpoints.
        */
-     console.log("========== DEBUG GUARDAR INSTALACION ==========");
-console.log("serverIp escrito:", serverIp);
-console.log("serverIpLimpia:", serverIpLimpia);
-console.log("usernameLimpio:", usernameLimpio);
-console.log("tienePassword:", !!passwordLimpia);
+      console.log("========== DEBUG GUARDAR INSTALACION ==========");
+      console.log("serverIp escrito:", serverIp);
+      console.log("serverIpLimpia:", serverIpLimpia);
+      console.log("usernameLimpio:", usernameLimpio);
+      console.log("tienePassword:", !!passwordLimpia);
 
-const baseUrlGuardada = await guardarBaseUrlDesdeServerIp(serverIpLimpia);
+      const baseUrlGuardada = await guardarBaseUrlDesdeServerIp(serverIpLimpia);
 
-console.log("baseUrlGuardada después de guardar:", baseUrlGuardada);
+      console.log("baseUrlGuardada después de guardar:", baseUrlGuardada);
 
-/**
- * 2. Comprobamos si la instalación responde.
- * Si no responde, NO bloqueamos el guardado.
- */
-const disponibilidad = await validarInstalacionActiva();
+      /**
+       * 2. Comprobamos si la instalación responde.
+       * Si no responde, NO bloqueamos el guardado.
+       */
+      const disponibilidad = await validarInstalacionActiva();
 
-console.log("resultado validarInstalacionActiva:", disponibilidad);
-console.log("==============================================");
+      console.log("resultado validarInstalacionActiva:", disponibilidad);
+      console.log("==============================================");
 
       const farmDataGuardar: farmFacility = {
         name,
@@ -280,18 +368,42 @@ console.log("==============================================");
       {/* Appbar FUERA del ScrollView */}
       <Appbar.Header elevated>
         <Appbar.BackAction onPress={navigation.goBack} />
+
         <Appbar.Content title={t('common:DetallesInstalacion')} />
+
         <Appbar.Action
           icon={(props) => (
-            <MaterialCommunityIcons name="delete" size={props.size} color={props.color} />
+            <MaterialCommunityIcons
+              name="share-variant-outline"
+              size={props.size}
+              color={props.color}
+            />
+          )}
+          onPress={compartirInstalacion}
+        />
+
+        <Appbar.Action
+          icon={(props) => (
+            <MaterialCommunityIcons
+              name="delete"
+              size={props.size}
+              color={props.color}
+            />
           )}
           onPress={() => {
             Alert.alert(
               t('BorrarGranja'),
               t('Deseaborrarlagranja'),
               [
-                { text: t('Cancelar'), style: 'cancel' },
-                { text: 'OK', style: 'destructive', onPress: () => deleteFarm() },
+                {
+                  text: t('Cancelar'),
+                  style: 'cancel',
+                },
+                {
+                  text: 'OK',
+                  style: 'destructive',
+                  onPress: () => deleteFarm(),
+                },
               ],
               { cancelable: true }
             );

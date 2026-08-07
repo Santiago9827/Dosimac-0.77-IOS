@@ -29,6 +29,7 @@ import {
 import {
     useFiltrosHistorialMovimientosStore,
 } from '../../stores/useFiltrosHistorialMovimientosStore';
+import { useTranslation } from 'react-i18next';
 
 /* =========================
    Colores
@@ -112,19 +113,19 @@ function obtenerErrorFechaConcreta(fecha: string): string | null {
     const { dia, mes, anio } = obtenerPartesFecha(fecha);
 
     if (!dia || !mes || !anio) {
-        return 'Introduce día, mes y año.';
+        return 'fechaCompleta';
     }
 
     if (dia.length !== 2) {
-        return 'El día debe tener 2 cifras.';
+        return 'diaDosCifras';
     }
 
     if (mes.length !== 2) {
-        return 'El mes debe tener 2 cifras.';
+        return 'mesDosCifras';
     }
 
     if (anio.length !== 2 && anio.length !== 4) {
-        return 'El año debe tener 2 o 4 cifras.';
+        return 'anioDosOCuatroCifras';
     }
 
     const diaNumero = Number(dia);
@@ -136,11 +137,11 @@ function obtenerErrorFechaConcreta(fecha: string): string | null {
             : Number(anio);
 
     if (diaNumero < 1 || diaNumero > 31) {
-        return 'El día debe estar entre 01 y 31.';
+        return 'diaRango';
     }
 
     if (mesNumero < 1 || mesNumero > 12) {
-        return 'El mes debe estar entre 01 y 12.';
+        return 'mesRango';
     }
 
     const fechaComprobacion = new Date(
@@ -155,12 +156,11 @@ function obtenerErrorFechaConcreta(fecha: string): string | null {
         fechaComprobacion.getDate() === diaNumero;
 
     if (!fechaExiste) {
-        return 'La fecha no existe.';
+        return 'fechaNoExiste';
     }
 
     return null;
 }
-
 function normalizarFechaParaGuardar(fecha: string): string {
     const { dia, mes, anio } = obtenerPartesFecha(fecha);
 
@@ -325,6 +325,7 @@ function CampoFechaFiltro({
         texto: string
     ) => void;
 }) {
+    const { t } = useTranslation();
     const partes = obtenerPartesFecha(fecha);
 
     return (
@@ -341,7 +342,7 @@ function CampoFechaFiltro({
                 onChangeText={(texto) =>
                     onChangeParte('dia', texto)
                 }
-                placeholder="DD"
+                placeholder={t('filtrosHistorialMovimientos.placeholders.dia')}
                 placeholderTextColor="#94A3B8"
                 keyboardType="number-pad"
                 maxLength={2}
@@ -358,7 +359,7 @@ function CampoFechaFiltro({
                 onChangeText={(texto) =>
                     onChangeParte('mes', texto)
                 }
-                placeholder="MM"
+                placeholder={t('filtrosHistorialMovimientos.placeholders.mes')}
                 placeholderTextColor="#94A3B8"
                 keyboardType="number-pad"
                 maxLength={2}
@@ -375,7 +376,7 @@ function CampoFechaFiltro({
                 onChangeText={(texto) =>
                     onChangeParte('anio', texto)
                 }
-                placeholder="AA/AAAA"
+                placeholder={t('filtrosHistorialMovimientos.placeholders.anio')}
                 placeholderTextColor="#94A3B8"
                 keyboardType="number-pad"
                 maxLength={4}
@@ -395,6 +396,7 @@ function CampoFechaFiltro({
 export const FiltrosHistorialMovimientosScreen = ({
     navigation,
 }: any) => {
+    const { t } = useTranslation();
     const scrollViewRef = React.useRef<ScrollView>(null);
 
     const subirScrollPorTeclado = () => {
@@ -530,11 +532,11 @@ export const FiltrosHistorialMovimientosScreen = ({
 
                     <View style={styles.headerTextContainer}>
                         <Text style={styles.headerTitle}>
-                            Filtros
+                            {t('filtrosHistorialMovimientos.cabecera.titulo')}
                         </Text>
 
                         <Text style={styles.headerSubtitle}>
-                            Historial de movimientos
+                            {t('filtrosHistorialMovimientos.cabecera.subtitulo')}
                         </Text>
                     </View>
 
@@ -544,7 +546,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                         style={styles.resetButton}
                     >
                         <Text style={styles.resetButtonText}>
-                            Limpiar
+                            {t('filtrosHistorialMovimientos.cabecera.limpiar')}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -558,11 +560,11 @@ export const FiltrosHistorialMovimientosScreen = ({
                     contentContainerStyle={styles.content}
                 >
                     <BloqueFiltro
-                        titulo="Tipo de movimiento"
+                        titulo={t('filtrosHistorialMovimientos.bloques.tipoMovimiento')}
                         icono="swap-horizontal-outline"
                     >
                         <OpcionFiltro
-                            texto="Todos"
+                            texto={t('filtrosHistorialMovimientos.opciones.todos')}
                             seleccionada={
                                 filtrosTemporales.tipoMovimiento ===
                                 'todos'
@@ -579,7 +581,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Entrada"
+                            texto={t('filtrosHistorialMovimientos.opciones.entrada')}
                             seleccionada={
                                 filtrosTemporales.tipoMovimiento ===
                                 'entrada'
@@ -596,7 +598,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Salida"
+                            texto={t('filtrosHistorialMovimientos.opciones.salida')}
                             seleccionada={
                                 filtrosTemporales.tipoMovimiento ===
                                 'salida'
@@ -614,11 +616,11 @@ export const FiltrosHistorialMovimientosScreen = ({
                     </BloqueFiltro>
 
                     <BloqueFiltro
-                        titulo="Fecha"
+                        titulo={t('filtrosHistorialMovimientos.bloques.fecha')}
                         icono="calendar-outline"
                     >
                         <OpcionFiltro
-                            texto="Todas las fechas"
+                            texto={t('filtrosHistorialMovimientos.opciones.todasLasFechas')}
                             seleccionada={
                                 filtrosTemporales.tipoFecha ===
                                 'todas'
@@ -635,7 +637,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Hoy"
+                            texto={t('filtrosHistorialMovimientos.opciones.hoy')}
                             seleccionada={
                                 filtrosTemporales.tipoFecha ===
                                 'hoy'
@@ -652,7 +654,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Mañana"
+                            texto={t('filtrosHistorialMovimientos.opciones.manana')}
                             seleccionada={
                                 filtrosTemporales.tipoFecha ===
                                 'manana'
@@ -670,7 +672,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Fecha"
+                            texto={t('filtrosHistorialMovimientos.opciones.fecha')}
                             seleccionada={
                                 filtrosTemporales.tipoFecha ===
                                 'concreta'
@@ -727,17 +729,17 @@ export const FiltrosHistorialMovimientosScreen = ({
                             'concreta' &&
                             errorFecha && (
                                 <Text style={styles.validationText}>
-                                    {errorFecha}
+                                    {t(`filtrosHistorialMovimientos.validaciones.${errorFecha}`)}
                                 </Text>
                             )}
                     </BloqueFiltro>
 
                     <BloqueFiltro
-                        titulo="Corral"
+                        titulo={t('filtrosHistorialMovimientos.bloques.corral')}
                         icono="home-outline"
                     >
                         <OpcionFiltro
-                            texto="Todos los corrales"
+                            texto={t('filtrosHistorialMovimientos.opciones.todosLosCorrales')}
                             seleccionada={
                                 filtrosTemporales.tipoCorral ===
                                 'todos'
@@ -756,7 +758,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Por corral"
+                            texto={t('filtrosHistorialMovimientos.opciones.porCorral')}
                             seleccionada={
                                 filtrosTemporales.tipoCorral ===
                                 'especifico'
@@ -779,7 +781,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                                     value={
                                         filtrosTemporales.corralEspecifico
                                     }
-                                    placeholder="Introduce el corral"
+                                    placeholder={t('filtrosHistorialMovimientos.placeholders.introduceCorral')}
                                     maxLength={9}
                                     onFocus={subirScrollPorTeclado}
                                     onChangeText={(texto) =>
@@ -806,17 +808,17 @@ export const FiltrosHistorialMovimientosScreen = ({
                             'especifico' &&
                             !corralValido && (
                                 <Text style={styles.validationText}>
-                                    Introduce un número de corral.
+                                    {t('filtrosHistorialMovimientos.validaciones.introduceCorral')}
                                 </Text>
                             )}
                     </BloqueFiltro>
 
                     <BloqueFiltro
-                        titulo="ID animal"
+                        titulo={t('filtrosHistorialMovimientos.bloques.idAnimal')}
                         icono="paw-outline"
                     >
                         <OpcionFiltro
-                            texto="Todos los animales"
+                            texto={t('filtrosHistorialMovimientos.opciones.todosLosAnimales')}
                             seleccionada={
                                 filtrosTemporales.tipoAnimal ===
                                 'todos'
@@ -835,7 +837,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Por ID"
+                            texto={t('filtrosHistorialMovimientos.opciones.porId')}
                             seleccionada={
                                 filtrosTemporales.tipoAnimal ===
                                 'especifico'
@@ -858,7 +860,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                                     value={
                                         filtrosTemporales.idAnimalEspecifico
                                     }
-                                    placeholder="Introduce el ID animal"
+                                    placeholder={t('filtrosHistorialMovimientos.placeholders.introduceIdAnimal')}
                                     keyboardType="default"
                                     autoCapitalize="characters"
                                     onFocus={subirScrollPorTeclado}
@@ -881,7 +883,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                             'especifico' &&
                             !animalValido && (
                                 <Text style={styles.validationText}>
-                                    Introduce un ID de animal.
+                                    {t('filtrosHistorialMovimientos.validaciones.introduceIdAnimal')}
                                 </Text>
                             )}
                     </BloqueFiltro>
@@ -894,7 +896,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                         style={styles.cancelButton}
                     >
                         <Text style={styles.cancelButtonText}>
-                            Cancelar
+                            {t('filtrosHistorialMovimientos.botones.cancelar')}
                         </Text>
                     </TouchableOpacity>
 
@@ -915,7 +917,7 @@ export const FiltrosHistorialMovimientosScreen = ({
                         />
 
                         <Text style={styles.acceptButtonText}>
-                            Aceptar
+                            {t('filtrosHistorialMovimientos.botones.aceptar')}
                         </Text>
                     </TouchableOpacity>
                 </View>

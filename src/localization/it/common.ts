@@ -676,7 +676,7 @@ readOnlyPermissionText: "Questo utente dispone solo dei permessi di lettura. Non
   house: "Capannone",
   pen: "Box",
   lastFeeding: "Ultima alimentazione",
-  presentPiglets: "Suinetti presenti",
+  presentPiglets: "Suinetti vivi",
   inseminationDate: "Data inseminazione",
   teatsNumber: "Nº capezzoli",
 
@@ -1120,4 +1120,248 @@ gestCorralDetail: {
    earTagAlreadyAssigned: "La marca auricolare è assegnata a un altro animale",
    replaceEarTagGenericError: "Impossibile sostituire la marca auricolare.",
 },
+
+tareasMovimientos: {
+  tabs: {
+    tareas: "Attività",
+    historial: "Cronologia"
+  },
+
+  secciones: {
+    gestacion: "Gestazione",
+    maternidad: "Maternità",
+    todos: "Tutti",
+    todas: "Tutte"
+  },
+
+  operaciones: {
+    entrada: "Ingresso",
+    salida: "Uscita",
+    realizada: "Completata"
+  },
+
+  tarjetas: {
+    tareasPendientesMovimientos: "Attività di movimento in sospeso",
+    idAnimal: "ID animale",
+    sinCrotal: "Senza marca auricolare",
+    corralDestino: "Recinto di destinazione",
+    corralOrigen: "Recinto di origine",
+    fecha: "Data"
+  },
+
+  filtros: {
+    titulo: "Filtri",
+    filtrarPorFecha: "Filtra per data",
+    hoy: "Oggi",
+    ayer: "Ieri",
+    fecha: "Data",
+    formatoFecha: "GG/MM/AAAA"
+  },
+
+  carga: {
+    cargandoHistorial: "Caricamento cronologia..."
+  },
+
+  vacio: {
+    sinResultados: "Nessun risultato",
+    sinMovimientosConFiltros: "Non ci sono movimenti completati con questi filtri.",
+    sinMovimientosTodavia: "Non ci sono ancora movimenti completati."
+  },
+
+  errores: {
+    actualizarServidorTareas: "È necessario aggiornare il server per utilizzare la funzione delle attività di movimento.",
+    noCargarTareas: "Impossibile caricare le attività.",
+    noCargarHistorialTitulo: "Impossibile caricare la cronologia",
+    noCargarHistorial: "Impossibile caricare la cronologia dei movimenti.",
+    historialNoDisponible: "Cronologia non disponibile",
+    actualizarServidorHistorial: "È necessario aggiornare il server per utilizzare la cronologia delle attività di movimento."
+  }
+},
+tareasMovimientosDetalle: {
+  tabs: {
+    gestacion: "Gestazione",
+    maternidad: "Maternità"
+  },
+
+  acciones: {
+    filtros: "Filtri",
+    ordenar: "Ordina",
+    marcarRealizado: "Segna come completata",
+    marcarSeleccionadas: "Segna ({{total}})",
+    marcando: "Marcatura...",
+    aceptar: "Accetta",
+    cancelar: "Annulla",
+    confirmar: "Conferma",
+    validando: "Convalida..."
+  },
+
+  orden: {
+    corralAscendente: "Recinto crescente",
+    corralDescendente: "Recinto decrescente"
+  },
+
+  operaciones: {
+    entrada: "Ingresso",
+    salida: "Uscita",
+    trasladoEntrada: "Ingresso trasferimento",
+    trasladoSalida: "Uscita trasferimento"
+  },
+
+  tarjetas: {
+    idAnimal: "ID animale",
+    sinCrotal: "Senza marca auricolare",
+    corralDestino: "Recinto di destinazione",
+    corralOrigen: "Recinto di origine",
+    fecha: "Data"
+  },
+
+  estados: {
+    cargandoTareas: "Caricamento attività...",
+    noCargarTareasTitulo: "Impossibile caricare le attività",
+    pulsaReintentar: "Tocca per riprovare",
+    sinTareasConFiltros: "Nessuna attività con questi filtri",
+    sinTareasPendientes: "Nessuna attività in sospeso",
+    cambiaFiltros: "Prova a modificare i filtri applicati.",
+    sinMovimientosPendientes: "Non sono stati trovati movimenti in sospeso."
+  },
+
+  modalResultado: {
+    tareasRealizadasTitulo: "Attività completate",
+    tareasRealizadasMensaje: "Le attività selezionate sono state segnate come completate.",
+    tareaRealizadaTitulo: "Attività completata",
+    tareaRealizadaMensaje: "L'ingresso in maternità è stato segnato come completato.",
+    errorTitulo: "Errore"
+  },
+
+  modalCorral: {
+    titulo: "Conferma recinto",
+    mensaje: "Controlla il recinto di destinazione dell'ingresso in maternità.",
+    labelCorralDestino: "Recinto di destinazione",
+    placeholderCorral: "Inserisci il recinto"
+  },
+
+  errores: {
+    noCargarTareas: "Impossibile caricare le attività.",
+    entradaMaternidadTitulo: "Ingresso in maternità",
+    soloUnaEntradaMaternidad: "Puoi segnare solo un ingresso in maternità alla volta.",
+    soloUnaEntradaMaternidadCadaVez: "Puoi segnare solo un ingresso in maternità per volta.",
+    noMarcarTareas: "Impossibile segnare le attività come completate.",
+    corralMaximo9: "Inserisci un recinto valido di massimo 9 cifre.",
+    corralNoExiste: "Il recinto non esiste.",
+    corralOcupado: "Il recinto è occupato.",
+    noValidarCorral: "Impossibile convalidare il recinto.",
+    noValidarCorralMaternidad: "Impossibile convalidare il recinto di maternità."
+  }
+},
+filtrosTareasMovimientos: {
+  cabecera: {
+    titulo: "Filtri",
+    subtituloTareasDe: "Attività di {{seccion}}",
+    limpiar: "Pulisci"
+  },
+
+  secciones: {
+    gestacion: "Gestazione",
+    maternidad: "Maternità"
+  },
+
+  bloques: {
+    tipoMovimiento: "Tipo di movimento",
+    fecha: "Data",
+    corral: "Recinto",
+    idAnimal: "ID animale"
+  },
+
+  opciones: {
+    todos: "Tutti",
+    entrada: "Ingresso",
+    salida: "Uscita",
+    todasLasFechas: "Tutte le date",
+    hoy: "Oggi",
+    manana: "Domani",
+    fecha: "Data",
+    todosLosCorrales: "Tutti i recinti",
+    porCorral: "Per recinto",
+    todosLosAnimales: "Tutti gli animali",
+    porId: "Per ID"
+  },
+
+  placeholders: {
+    dia: "GG",
+    mes: "MM",
+    anio: "AA/AAAA",
+    introduceCorral: "Inserisci il recinto",
+    introduceIdAnimal: "Inserisci l'ID animale"
+  },
+
+  validaciones: {
+    fechaCompleta: "Inserisci giorno, mese e anno.",
+    diaDosCifras: "Il giorno deve avere 2 cifre.",
+    mesDosCifras: "Il mese deve avere 2 cifre.",
+    anioDosOCuatroCifras: "L'anno deve avere 2 o 4 cifre.",
+    diaRango: "Il giorno deve essere compreso tra 01 e 31.",
+    mesRango: "Il mese deve essere compreso tra 01 e 12.",
+    fechaNoExiste: "La data non esiste.",
+    introduceCorral: "Inserisci un numero di recinto.",
+    introduceIdAnimal: "Inserisci un ID animale."
+  },
+
+  botones: {
+    cancelar: "Annulla",
+    aceptar: "Accetta"
+  }
+},
+filtrosHistorialMovimientos: {
+  cabecera: {
+    titulo: "Filtri",
+    subtitulo: "Cronologia dei movimenti",
+    limpiar: "Pulisci"
+  },
+
+  bloques: {
+    tipoMovimiento: "Tipo di movimento",
+    fecha: "Data",
+    corral: "Recinto",
+    idAnimal: "ID animale"
+  },
+
+  opciones: {
+    todos: "Tutti",
+    entrada: "Ingresso",
+    salida: "Uscita",
+    todasLasFechas: "Tutte le date",
+    hoy: "Oggi",
+    manana: "Domani",
+    fecha: "Data",
+    todosLosCorrales: "Tutti i recinti",
+    porCorral: "Per recinto",
+    todosLosAnimales: "Tutti gli animali",
+    porId: "Per ID"
+  },
+
+  placeholders: {
+    dia: "GG",
+    mes: "MM",
+    anio: "AA/AAAA",
+    introduceCorral: "Inserisci il recinto",
+    introduceIdAnimal: "Inserisci l'ID animale"
+  },
+
+  validaciones: {
+    fechaCompleta: "Inserisci giorno, mese e anno.",
+    diaDosCifras: "Il giorno deve avere 2 cifre.",
+    mesDosCifras: "Il mese deve avere 2 cifre.",
+    anioDosOCuatroCifras: "L'anno deve avere 2 o 4 cifre.",
+    diaRango: "Il giorno deve essere compreso tra 01 e 31.",
+    mesRango: "Il mese deve essere compreso tra 01 e 12.",
+    fechaNoExiste: "La data non esiste.",
+    introduceCorral: "Inserisci un numero di recinto.",
+    introduceIdAnimal: "Inserisci un ID animale."
+  },
+
+  botones: {
+    cancelar: "Annulla",
+    aceptar: "Accetta"
+  }
+}
 };

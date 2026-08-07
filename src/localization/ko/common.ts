@@ -672,7 +672,7 @@ readOnlyPermissionText: "이 사용자는 읽기 권한만 있습니다. 동물�
   house: "동",
   pen: "우리",
   lastFeeding: "마지막 급이",
-  presentPiglets: "현재 자돈",
+presentPiglets: "생존 자돈",
   inseminationDate: "수정일",
   teatsNumber: "유두 수",
 
@@ -1112,4 +1112,248 @@ gestCorralDetail: {
    earTagAlreadyAssigned: "이표가 다른 동물에게 할당되어 있습니다",
    replaceEarTagGenericError: "이표를 교체할 수 없습니다.",
 },
+
+tareasMovimientos: {
+  tabs: {
+    tareas: "작업",
+    historial: "기록"
+  },
+
+  secciones: {
+    gestacion: "임신사",
+    maternidad: "분만사",
+    todos: "전체",
+    todas: "전체"
+  },
+
+  operaciones: {
+    entrada: "입고",
+    salida: "출고",
+    realizada: "완료됨"
+  },
+
+  tarjetas: {
+    tareasPendientesMovimientos: "대기 중인 이동 작업",
+    idAnimal: "동물 ID",
+    sinCrotal: "이표 없음",
+    corralDestino: "대상 돈방",
+    corralOrigen: "출발 돈방",
+    fecha: "날짜"
+  },
+
+  filtros: {
+    titulo: "필터",
+    filtrarPorFecha: "날짜로 필터링",
+    hoy: "오늘",
+    ayer: "어제",
+    fecha: "날짜",
+    formatoFecha: "DD/MM/YYYY"
+  },
+
+  carga: {
+    cargandoHistorial: "기록을 불러오는 중..."
+  },
+
+  vacio: {
+    sinResultados: "결과 없음",
+    sinMovimientosConFiltros: "해당 필터와 일치하는 완료된 이동이 없습니다.",
+    sinMovimientosTodavia: "아직 완료된 이동이 없습니다."
+  },
+
+  errores: {
+    actualizarServidorTareas: "이동 작업 기능을 사용하려면 서버를 업데이트해야 합니다.",
+    noCargarTareas: "작업을 불러올 수 없습니다.",
+    noCargarHistorialTitulo: "기록을 불러올 수 없습니다",
+    noCargarHistorial: "이동 기록을 불러올 수 없습니다.",
+    historialNoDisponible: "기록을 사용할 수 없습니다",
+    actualizarServidorHistorial: "이동 작업 기록을 사용하려면 서버를 업데이트해야 합니다."
+  }
+},
+tareasMovimientosDetalle: {
+  tabs: {
+    gestacion: "임신사",
+    maternidad: "분만사"
+  },
+
+  acciones: {
+    filtros: "필터",
+    ordenar: "정렬",
+    marcarRealizado: "완료로 표시",
+    marcarSeleccionadas: "표시 ({{total}})",
+    marcando: "표시 중...",
+    aceptar: "확인",
+    cancelar: "취소",
+    confirmar: "확인",
+    validando: "확인 중..."
+  },
+
+  orden: {
+    corralAscendente: "돈방 오름차순",
+    corralDescendente: "돈방 내림차순"
+  },
+
+  operaciones: {
+    entrada: "입고",
+    salida: "출고",
+    trasladoEntrada: "이동 입고",
+    trasladoSalida: "이동 출고"
+  },
+
+  tarjetas: {
+    idAnimal: "동물 ID",
+    sinCrotal: "이표 없음",
+    corralDestino: "대상 돈방",
+    corralOrigen: "출발 돈방",
+    fecha: "날짜"
+  },
+
+  estados: {
+    cargandoTareas: "작업을 불러오는 중...",
+    noCargarTareasTitulo: "작업을 불러올 수 없습니다",
+    pulsaReintentar: "다시 시도하려면 누르세요",
+    sinTareasConFiltros: "해당 필터에 맞는 작업이 없습니다",
+    sinTareasPendientes: "대기 중인 작업이 없습니다",
+    cambiaFiltros: "적용된 필터를 변경해 보세요.",
+    sinMovimientosPendientes: "대기 중인 이동을 찾을 수 없습니다."
+  },
+
+  modalResultado: {
+    tareasRealizadasTitulo: "작업 완료",
+    tareasRealizadasMensaje: "선택한 작업이 완료로 표시되었습니다.",
+    tareaRealizadaTitulo: "작업 완료",
+    tareaRealizadaMensaje: "분만사 입고가 완료로 표시되었습니다.",
+    errorTitulo: "오류"
+  },
+
+  modalCorral: {
+    titulo: "돈방 확인",
+    mensaje: "분만사 입고의 대상 돈방을 확인하세요.",
+    labelCorralDestino: "대상 돈방",
+    placeholderCorral: "돈방을 입력하세요"
+  },
+
+  errores: {
+    noCargarTareas: "작업을 불러올 수 없습니다.",
+    entradaMaternidadTitulo: "분만사 입고",
+    soloUnaEntradaMaternidad: "분만사 입고는 한 번에 하나만 표시할 수 있습니다.",
+    soloUnaEntradaMaternidadCadaVez: "분만사 입고는 매번 하나만 표시할 수 있습니다.",
+    noMarcarTareas: "작업을 완료로 표시할 수 없습니다.",
+    corralMaximo9: "최대 9자리의 유효한 돈방 번호를 입력하세요.",
+    corralNoExiste: "돈방이 존재하지 않습니다.",
+    corralOcupado: "돈방이 사용 중입니다.",
+    noValidarCorral: "돈방을 확인할 수 없습니다.",
+    noValidarCorralMaternidad: "분만사 돈방을 확인할 수 없습니다."
+  }
+},
+filtrosTareasMovimientos: {
+  cabecera: {
+    titulo: "필터",
+    subtituloTareasDe: "{{seccion}} 작업",
+    limpiar: "초기화"
+  },
+
+  secciones: {
+    gestacion: "임신사",
+    maternidad: "분만사"
+  },
+
+  bloques: {
+    tipoMovimiento: "이동 유형",
+    fecha: "날짜",
+    corral: "돈방",
+    idAnimal: "동물 ID"
+  },
+
+  opciones: {
+    todos: "전체",
+    entrada: "입고",
+    salida: "출고",
+    todasLasFechas: "모든 날짜",
+    hoy: "오늘",
+    manana: "내일",
+    fecha: "날짜",
+    todosLosCorrales: "모든 돈방",
+    porCorral: "돈방별",
+    todosLosAnimales: "모든 동물",
+    porId: "ID별"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "YY/YYYY",
+    introduceCorral: "돈방을 입력하세요",
+    introduceIdAnimal: "동물 ID를 입력하세요"
+  },
+
+  validaciones: {
+    fechaCompleta: "일, 월, 연도를 입력하세요.",
+    diaDosCifras: "일은 2자리여야 합니다.",
+    mesDosCifras: "월은 2자리여야 합니다.",
+    anioDosOCuatroCifras: "연도는 2자리 또는 4자리여야 합니다.",
+    diaRango: "일은 01에서 31 사이여야 합니다.",
+    mesRango: "월은 01에서 12 사이여야 합니다.",
+    fechaNoExiste: "해당 날짜는 존재하지 않습니다.",
+    introduceCorral: "돈방 번호를 입력하세요.",
+    introduceIdAnimal: "동물 ID를 입력하세요."
+  },
+
+  botones: {
+    cancelar: "취소",
+    aceptar: "확인"
+  }
+},
+filtrosHistorialMovimientos: {
+  cabecera: {
+    titulo: "필터",
+    subtitulo: "이동 기록",
+    limpiar: "초기화"
+  },
+
+  bloques: {
+    tipoMovimiento: "이동 유형",
+    fecha: "날짜",
+    corral: "돈방",
+    idAnimal: "동물 ID"
+  },
+
+  opciones: {
+    todos: "전체",
+    entrada: "입고",
+    salida: "출고",
+    todasLasFechas: "모든 날짜",
+    hoy: "오늘",
+    manana: "내일",
+    fecha: "날짜",
+    todosLosCorrales: "모든 돈방",
+    porCorral: "돈방별",
+    todosLosAnimales: "모든 동물",
+    porId: "ID별"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "YY/YYYY",
+    introduceCorral: "돈방을 입력하세요",
+    introduceIdAnimal: "동물 ID를 입력하세요"
+  },
+
+  validaciones: {
+    fechaCompleta: "일, 월, 연도를 입력하세요.",
+    diaDosCifras: "일은 2자리여야 합니다.",
+    mesDosCifras: "월은 2자리여야 합니다.",
+    anioDosOCuatroCifras: "연도는 2자리 또는 4자리여야 합니다.",
+    diaRango: "일은 01에서 31 사이여야 합니다.",
+    mesRango: "월은 01에서 12 사이여야 합니다.",
+    fechaNoExiste: "해당 날짜는 존재하지 않습니다.",
+    introduceCorral: "돈방 번호를 입력하세요.",
+    introduceIdAnimal: "동물 ID를 입력하세요."
+  },
+
+  botones: {
+    cancelar: "취소",
+    aceptar: "확인"
+  }
+}
 };

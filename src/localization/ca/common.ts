@@ -678,7 +678,7 @@ readOnlyPermissionText: "Aquest usuari només té permisos de lectura. No pot re
   house: "Nau",
   pen: "Corral",
   lastFeeding: "Última alimentació",
-  presentPiglets: "Garrins presents",
+  presentPiglets: "Garrins vius",
   inseminationDate: "Data d'inseminació",
   teatsNumber: "Nre. de mugrons",
 
@@ -1123,5 +1123,250 @@ gestCorralDetail: {
    earTagAlreadyAssigned: "El cròtal està assignat a un altre animal",
    replaceEarTagGenericError: "No s’ha pogut substituir el cròtal.",
 },
+
+tareasMovimientos: {
+  tabs: {
+    tareas: "Tasques",
+    historial: "Historial"
+  },
+
+  secciones: {
+    gestacion: "Gestació",
+    maternidad: "Maternitat",
+    todos: "Tots",
+    todas: "Totes"
+  },
+
+  operaciones: {
+    entrada: "Entrada",
+    salida: "Sortida",
+    realizada: "Realitzada"
+  },
+
+  tarjetas: {
+    tareasPendientesMovimientos: "Tasques pendents de moviments",
+    idAnimal: "ID animal",
+    sinCrotal: "Sense crotal",
+    corralDestino: "Corral de destinació",
+    corralOrigen: "Corral d'origen",
+    fecha: "Data"
+  },
+
+  filtros: {
+    titulo: "Filtres",
+    filtrarPorFecha: "Filtrar per data",
+    hoy: "Avui",
+    ayer: "Ahir",
+    fecha: "Data",
+    formatoFecha: "DD/MM/AAAA"
+  },
+
+  carga: {
+    cargandoHistorial: "Carregant historial..."
+  },
+
+  vacio: {
+    sinResultados: "Sense resultats",
+    sinMovimientosConFiltros: "No hi ha moviments realitzats amb aquests filtres.",
+    sinMovimientosTodavia: "Encara no hi ha moviments realitzats."
+  },
+
+  errores: {
+    actualizarServidorTareas: "Cal actualitzar el servidor per utilitzar la funció de tasques de moviments.",
+    noCargarTareas: "No s'han pogut carregar les tasques.",
+    noCargarHistorialTitulo: "No s'ha pogut carregar l'historial",
+    noCargarHistorial: "No s'ha pogut carregar l'historial de moviments.",
+    historialNoDisponible: "Historial no disponible",
+    actualizarServidorHistorial: "Cal actualitzar el servidor per utilitzar l'historial de tasques de moviments."
+  }
+},
+
+tareasMovimientosDetalle: {
+  tabs: {
+    gestacion: "Gestació",
+    maternidad: "Maternitat"
+  },
+
+  acciones: {
+    filtros: "Filtres",
+    ordenar: "Ordenar",
+    marcarRealizado: "Marcar realitzada",
+    marcarSeleccionadas: "Marcar ({{total}})",
+    marcando: "Marcant...",
+    aceptar: "Acceptar",
+    cancelar: "Cancel·lar",
+    confirmar: "Confirmar",
+    validando: "Validant..."
+  },
+
+  orden: {
+    corralAscendente: "Corral ascendent",
+    corralDescendente: "Corral descendent"
+  },
+
+  operaciones: {
+    entrada: "Entrada",
+    salida: "Sortida",
+    trasladoEntrada: "Entrada de trasllat",
+    trasladoSalida: "Sortida de trasllat"
+  },
+
+  tarjetas: {
+    idAnimal: "ID animal",
+    sinCrotal: "Sense crotal",
+    corralDestino: "Corral de destinació",
+    corralOrigen: "Corral d'origen",
+    fecha: "Data"
+  },
+
+  estados: {
+    cargandoTareas: "Carregant tasques...",
+    noCargarTareasTitulo: "No s'han pogut carregar les tasques",
+    pulsaReintentar: "Prem per tornar-ho a intentar",
+    sinTareasConFiltros: "No hi ha tasques amb aquests filtres",
+    sinTareasPendientes: "No hi ha tasques pendents",
+    cambiaFiltros: "Prova de canviar els filtres aplicats.",
+    sinMovimientosPendientes: "No s'han trobat moviments pendents."
+  },
+
+  modalResultado: {
+    tareasRealizadasTitulo: "Tasques realitzades",
+    tareasRealizadasMensaje: "Les tasques seleccionades s'han marcat com a realitzades.",
+    tareaRealizadaTitulo: "Tasca realitzada",
+    tareaRealizadaMensaje: "L'entrada de maternitat s'ha marcat com a realitzada.",
+    errorTitulo: "Error"
+  },
+
+  modalCorral: {
+    titulo: "Confirmar corral",
+    mensaje: "Revisa el corral de destinació de l'entrada en maternitat.",
+    labelCorralDestino: "Corral de destinació",
+    placeholderCorral: "Introdueix el corral"
+  },
+
+  errores: {
+    noCargarTareas: "No s'han pogut carregar les tasques.",
+    entradaMaternidadTitulo: "Entrada de maternitat",
+    soloUnaEntradaMaternidad: "Només pots marcar una entrada de maternitat alhora.",
+    soloUnaEntradaMaternidadCadaVez: "Només pots marcar una entrada de maternitat cada vegada.",
+    noMarcarTareas: "No s'han pogut marcar les tasques com a realitzades.",
+    corralMaximo9: "Introdueix un corral vàlid de màxim 9 números.",
+    corralNoExiste: "El corral no existeix.",
+    corralOcupado: "El corral està ocupat.",
+    noValidarCorral: "No s'ha pogut validar el corral.",
+    noValidarCorralMaternidad: "No s'ha pogut validar el corral de maternitat."
+  }
+},
+filtrosTareasMovimientos: {
+  cabecera: {
+    titulo: "Filtres",
+    subtituloTareasDe: "Tasques de {{seccion}}",
+    limpiar: "Netejar"
+  },
+
+  secciones: {
+    gestacion: "Gestació",
+    maternidad: "Maternitat"
+  },
+
+  bloques: {
+    tipoMovimiento: "Tipus de moviment",
+    fecha: "Data",
+    corral: "Corral",
+    idAnimal: "ID animal"
+  },
+
+  opciones: {
+    todos: "Tots",
+    entrada: "Entrada",
+    salida: "Sortida",
+    todasLasFechas: "Totes les dates",
+    hoy: "Avui",
+    manana: "Demà",
+    fecha: "Data",
+    todosLosCorrales: "Tots els corrals",
+    porCorral: "Per corral",
+    todosLosAnimales: "Tots els animals",
+    porId: "Per ID"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "AA/AAAA",
+    introduceCorral: "Introdueix el corral",
+    introduceIdAnimal: "Introdueix l'ID animal"
+  },
+
+  validaciones: {
+    fechaCompleta: "Introdueix dia, mes i any.",
+    diaDosCifras: "El dia ha de tenir 2 xifres.",
+    mesDosCifras: "El mes ha de tenir 2 xifres.",
+    anioDosOCuatroCifras: "L'any ha de tenir 2 o 4 xifres.",
+    diaRango: "El dia ha d'estar entre 01 i 31.",
+    mesRango: "El mes ha d'estar entre 01 i 12.",
+    fechaNoExiste: "La data no existeix.",
+    introduceCorral: "Introdueix un número de corral.",
+    introduceIdAnimal: "Introdueix un ID d'animal."
+  },
+
+  botones: {
+    cancelar: "Cancel·lar",
+    aceptar: "Acceptar"
+  }
+},
+filtrosHistorialMovimientos: {
+  cabecera: {
+    titulo: "Filtres",
+    subtitulo: "Historial de moviments",
+    limpiar: "Netejar"
+  },
+
+  bloques: {
+    tipoMovimiento: "Tipus de moviment",
+    fecha: "Data",
+    corral: "Corral",
+    idAnimal: "ID animal"
+  },
+
+  opciones: {
+    todos: "Tots",
+    entrada: "Entrada",
+    salida: "Sortida",
+    todasLasFechas: "Totes les dates",
+    hoy: "Avui",
+    manana: "Demà",
+    fecha: "Data",
+    todosLosCorrales: "Tots els corrals",
+    porCorral: "Per corral",
+    todosLosAnimales: "Tots els animals",
+    porId: "Per ID"
+  },
+
+  placeholders: {
+    dia: "DD",
+    mes: "MM",
+    anio: "AA/AAAA",
+    introduceCorral: "Introdueix el corral",
+    introduceIdAnimal: "Introdueix l'ID animal"
+  },
+
+  validaciones: {
+    fechaCompleta: "Introdueix dia, mes i any.",
+    diaDosCifras: "El dia ha de tenir 2 xifres.",
+    mesDosCifras: "El mes ha de tenir 2 xifres.",
+    anioDosOCuatroCifras: "L'any ha de tenir 2 o 4 xifres.",
+    diaRango: "El dia ha d'estar entre 01 i 31.",
+    mesRango: "El mes ha d'estar entre 01 i 12.",
+    fechaNoExiste: "La data no existeix.",
+    introduceCorral: "Introdueix un número de corral.",
+    introduceIdAnimal: "Introdueix un ID d'animal."
+  },
+
+  botones: {
+    cancelar: "Cancel·lar",
+    aceptar: "Acceptar"
+  }
+}
 };
 

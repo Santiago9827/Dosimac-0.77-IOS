@@ -678,7 +678,7 @@ readOnlyPermissionText: "Цей користувач має лише права 
   house: "Корпус",
   pen: "Станок",
   lastFeeding: "Останнє годування",
-  presentPiglets: "Поросята на місці",
+presentPiglets: "Живі поросята",
   inseminationDate: "Дата осіменіння",
   teatsNumber: "К-сть сосків",
 
@@ -1114,4 +1114,248 @@ gestCorralDetail: {
    earTagAlreadyAssigned: "Бирка призначена іншій тварині",
    replaceEarTagGenericError: "Не вдалося замінити бирку.",
 },
+
+tareasMovimientos: {
+  tabs: {
+    tareas: "Завдання",
+    historial: "Історія"
+  },
+
+  secciones: {
+    gestacion: "Супоросність",
+    maternidad: "Маточник",
+    todos: "Усі",
+    todas: "Усі"
+  },
+
+  operaciones: {
+    entrada: "Вхід",
+    salida: "Вихід",
+    realizada: "Виконано"
+  },
+
+  tarjetas: {
+    tareasPendientesMovimientos: "Очікувані завдання переміщення",
+    idAnimal: "ID тварини",
+    sinCrotal: "Без вушної мітки",
+    corralDestino: "Цільовий загін",
+    corralOrigen: "Початковий загін",
+    fecha: "Дата"
+  },
+
+  filtros: {
+    titulo: "Фільтри",
+    filtrarPorFecha: "Фільтрувати за датою",
+    hoy: "Сьогодні",
+    ayer: "Вчора",
+    fecha: "Дата",
+    formatoFecha: "ДД/ММ/РРРР"
+  },
+
+  carga: {
+    cargandoHistorial: "Завантаження історії..."
+  },
+
+  vacio: {
+    sinResultados: "Немає результатів",
+    sinMovimientosConFiltros: "Немає виконаних переміщень за цими фільтрами.",
+    sinMovimientosTodavia: "Поки що немає виконаних переміщень."
+  },
+
+  errores: {
+    actualizarServidorTareas: "Потрібно оновити сервер, щоб використовувати функцію завдань переміщення.",
+    noCargarTareas: "Не вдалося завантажити завдання.",
+    noCargarHistorialTitulo: "Не вдалося завантажити історію",
+    noCargarHistorial: "Не вдалося завантажити історію переміщень.",
+    historialNoDisponible: "Історія недоступна",
+    actualizarServidorHistorial: "Потрібно оновити сервер, щоб використовувати історію завдань переміщення."
+  }
+},
+tareasMovimientosDetalle: {
+  tabs: {
+    gestacion: "Супоросність",
+    maternidad: "Маточник"
+  },
+
+  acciones: {
+    filtros: "Фільтри",
+    ordenar: "Сортувати",
+    marcarRealizado: "Позначити як виконане",
+    marcarSeleccionadas: "Позначити ({{total}})",
+    marcando: "Позначення...",
+    aceptar: "Прийняти",
+    cancelar: "Скасувати",
+    confirmar: "Підтвердити",
+    validando: "Перевірка..."
+  },
+
+  orden: {
+    corralAscendente: "Загін за зростанням",
+    corralDescendente: "Загін за спаданням"
+  },
+
+  operaciones: {
+    entrada: "Вхід",
+    salida: "Вихід",
+    trasladoEntrada: "Вхід при переміщенні",
+    trasladoSalida: "Вихід при переміщенні"
+  },
+
+  tarjetas: {
+    idAnimal: "ID тварини",
+    sinCrotal: "Без вушної мітки",
+    corralDestino: "Цільовий загін",
+    corralOrigen: "Початковий загін",
+    fecha: "Дата"
+  },
+
+  estados: {
+    cargandoTareas: "Завантаження завдань...",
+    noCargarTareasTitulo: "Не вдалося завантажити завдання",
+    pulsaReintentar: "Натисніть, щоб повторити",
+    sinTareasConFiltros: "Немає завдань за цими фільтрами",
+    sinTareasPendientes: "Немає очікуваних завдань",
+    cambiaFiltros: "Спробуйте змінити застосовані фільтри.",
+    sinMovimientosPendientes: "Очікуваних переміщень не знайдено."
+  },
+
+  modalResultado: {
+    tareasRealizadasTitulo: "Завдання виконано",
+    tareasRealizadasMensaje: "Вибрані завдання позначено як виконані.",
+    tareaRealizadaTitulo: "Завдання виконано",
+    tareaRealizadaMensaje: "Вхід у маточник позначено як виконаний.",
+    errorTitulo: "Помилка"
+  },
+
+  modalCorral: {
+    titulo: "Підтвердити загін",
+    mensaje: "Перевірте цільовий загін для входу в маточник.",
+    labelCorralDestino: "Цільовий загін",
+    placeholderCorral: "Введіть загін"
+  },
+
+  errores: {
+    noCargarTareas: "Не вдалося завантажити завдання.",
+    entradaMaternidadTitulo: "Вхід у маточник",
+    soloUnaEntradaMaternidad: "Можна позначити лише один вхід у маточник за раз.",
+    soloUnaEntradaMaternidadCadaVez: "Можна позначити лише один вхід у маточник щоразу.",
+    noMarcarTareas: "Не вдалося позначити завдання як виконані.",
+    corralMaximo9: "Введіть дійсний загін максимум із 9 цифр.",
+    corralNoExiste: "Загін не існує.",
+    corralOcupado: "Загін зайнятий.",
+    noValidarCorral: "Не вдалося перевірити загін.",
+    noValidarCorralMaternidad: "Не вдалося перевірити загін маточника."
+  }
+},
+filtrosTareasMovimientos: {
+  cabecera: {
+    titulo: "Фільтри",
+    subtituloTareasDe: "Завдання: {{seccion}}",
+    limpiar: "Очистити"
+  },
+
+  secciones: {
+    gestacion: "Супоросність",
+    maternidad: "Маточник"
+  },
+
+  bloques: {
+    tipoMovimiento: "Тип переміщення",
+    fecha: "Дата",
+    corral: "Загін",
+    idAnimal: "ID тварини"
+  },
+
+  opciones: {
+    todos: "Усі",
+    entrada: "Вхід",
+    salida: "Вихід",
+    todasLasFechas: "Усі дати",
+    hoy: "Сьогодні",
+    manana: "Завтра",
+    fecha: "Дата",
+    todosLosCorrales: "Усі загони",
+    porCorral: "За загоном",
+    todosLosAnimales: "Усі тварини",
+    porId: "За ID"
+  },
+
+  placeholders: {
+    dia: "ДД",
+    mes: "ММ",
+    anio: "РР/РРРР",
+    introduceCorral: "Введіть загін",
+    introduceIdAnimal: "Введіть ID тварини"
+  },
+
+  validaciones: {
+    fechaCompleta: "Введіть день, місяць і рік.",
+    diaDosCifras: "День має містити 2 цифри.",
+    mesDosCifras: "Місяць має містити 2 цифри.",
+    anioDosOCuatroCifras: "Рік має містити 2 або 4 цифри.",
+    diaRango: "День має бути від 01 до 31.",
+    mesRango: "Місяць має бути від 01 до 12.",
+    fechaNoExiste: "Дата не існує.",
+    introduceCorral: "Введіть номер загону.",
+    introduceIdAnimal: "Введіть ID тварини."
+  },
+
+  botones: {
+    cancelar: "Скасувати",
+    aceptar: "Прийняти"
+  }
+},
+filtrosHistorialMovimientos: {
+  cabecera: {
+    titulo: "Фільтри",
+    subtitulo: "Історія переміщень",
+    limpiar: "Очистити"
+  },
+
+  bloques: {
+    tipoMovimiento: "Тип переміщення",
+    fecha: "Дата",
+    corral: "Загін",
+    idAnimal: "ID тварини"
+  },
+
+  opciones: {
+    todos: "Усі",
+    entrada: "Вхід",
+    salida: "Вихід",
+    todasLasFechas: "Усі дати",
+    hoy: "Сьогодні",
+    manana: "Завтра",
+    fecha: "Дата",
+    todosLosCorrales: "Усі загони",
+    porCorral: "За загоном",
+    todosLosAnimales: "Усі тварини",
+    porId: "За ID"
+  },
+
+  placeholders: {
+    dia: "ДД",
+    mes: "ММ",
+    anio: "РР/РРРР",
+    introduceCorral: "Введіть загін",
+    introduceIdAnimal: "Введіть ID тварини"
+  },
+
+  validaciones: {
+    fechaCompleta: "Введіть день, місяць і рік.",
+    diaDosCifras: "День має містити 2 цифри.",
+    mesDosCifras: "Місяць має містити 2 цифри.",
+    anioDosOCuatroCifras: "Рік має містити 2 або 4 цифри.",
+    diaRango: "День має бути від 01 до 31.",
+    mesRango: "Місяць має бути від 01 до 12.",
+    fechaNoExiste: "Дата не існує.",
+    introduceCorral: "Введіть номер загону.",
+    introduceIdAnimal: "Введіть ID тварини."
+  },
+
+  botones: {
+    cancelar: "Скасувати",
+    aceptar: "Прийняти"
+  }
+}
 };

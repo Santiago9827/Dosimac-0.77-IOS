@@ -29,6 +29,7 @@ import {
     TipoSeccionTareas,
     useFiltrosTareasMovimientosStore,
 } from '../../stores/useFiltrosTareasMovimientosStore';
+import { useTranslation } from 'react-i18next';
 
 /*
  * Ajusta "../../stores/" según la ubicación real
@@ -116,19 +117,19 @@ function obtenerErrorFechaConcreta(fecha: string): string | null {
     const { dia, mes, anio } = obtenerPartesFecha(fecha);
 
     if (!dia || !mes || !anio) {
-        return 'Introduce día, mes y año.';
+        return 'fechaCompleta';
     }
 
     if (dia.length !== 2) {
-        return 'El día debe tener 2 cifras.';
+        return 'diaDosCifras';
     }
 
     if (mes.length !== 2) {
-        return 'El mes debe tener 2 cifras.';
+        return 'mesDosCifras';
     }
 
     if (anio.length !== 2 && anio.length !== 4) {
-        return 'El año debe tener 2 o 4 cifras.';
+        return 'anioDosOCuatroCifras';
     }
 
     const diaNumero = Number(dia);
@@ -139,11 +140,11 @@ function obtenerErrorFechaConcreta(fecha: string): string | null {
             : Number(anio);
 
     if (diaNumero < 1 || diaNumero > 31) {
-        return 'El día debe estar entre 01 y 31.';
+        return 'diaRango';
     }
 
     if (mesNumero < 1 || mesNumero > 12) {
-        return 'El mes debe estar entre 01 y 12.';
+        return 'mesRango';
     }
 
     const fechaComprobacion = new Date(
@@ -158,7 +159,7 @@ function obtenerErrorFechaConcreta(fecha: string): string | null {
         fechaComprobacion.getDate() === diaNumero;
 
     if (!fechaExiste) {
-        return 'La fecha no existe.';
+        return 'fechaNoExiste';
     }
 
     return null;
@@ -328,6 +329,7 @@ function CampoFechaFiltro({
         texto: string
     ) => void;
 }) {
+    const { t } = useTranslation();
     const partes = obtenerPartesFecha(fecha);
 
     return (
@@ -344,7 +346,7 @@ function CampoFechaFiltro({
                 onChangeText={(texto) =>
                     onChangeParte('dia', texto)
                 }
-                placeholder="DD"
+                placeholder={t('filtrosTareasMovimientos.placeholders.dia')}
                 placeholderTextColor="#94A3B8"
                 keyboardType="number-pad"
                 maxLength={2}
@@ -359,7 +361,7 @@ function CampoFechaFiltro({
                 onChangeText={(texto) =>
                     onChangeParte('mes', texto)
                 }
-                placeholder="MM"
+                placeholder={t('filtrosTareasMovimientos.placeholders.mes')}
                 placeholderTextColor="#94A3B8"
                 keyboardType="number-pad"
                 maxLength={2}
@@ -374,7 +376,7 @@ function CampoFechaFiltro({
                 onChangeText={(texto) =>
                     onChangeParte('anio', texto)
                 }
-                placeholder="AA/AAAA"
+                placeholder={t('filtrosTareasMovimientos.placeholders.anio')}
                 placeholderTextColor="#94A3B8"
                 keyboardType="number-pad"
                 maxLength={4}
@@ -394,6 +396,7 @@ function CampoFechaFiltro({
 export const FiltrosTareasMovimientosScreen = ({
     navigation,
 }: any) => {
+    const { t } = useTranslation();
     const route = useRoute<any>();
     const scrollViewRef = React.useRef<ScrollView>(null);
 
@@ -464,9 +467,8 @@ export const FiltrosTareasMovimientosScreen = ({
         tipo === 'gestacion';
 
     const tituloSeccion = esGestacion
-        ? 'Gestación'
-        : 'Maternidad';
-
+        ? t('filtrosTareasMovimientos.secciones.gestacion')
+        : t('filtrosTareasMovimientos.secciones.maternidad');
     /* =========================
        Validación
     ========================= */
@@ -593,7 +595,7 @@ export const FiltrosTareasMovimientosScreen = ({
                         <Text
                             style={styles.headerTitle}
                         >
-                            Filtros
+                            {t('filtrosTareasMovimientos.cabecera.titulo')}
                         </Text>
 
                         <Text
@@ -601,7 +603,9 @@ export const FiltrosTareasMovimientosScreen = ({
                                 styles.headerSubtitle
                             }
                         >
-                            Tareas de {tituloSeccion}
+                            {t('filtrosTareasMovimientos.cabecera.subtituloTareasDe', {
+                                seccion: tituloSeccion,
+                            })}
                         </Text>
                     </View>
 
@@ -615,7 +619,7 @@ export const FiltrosTareasMovimientosScreen = ({
                                 styles.resetButtonText
                             }
                         >
-                            Limpiar
+                            {t('filtrosTareasMovimientos.cabecera.limpiar')}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -630,11 +634,11 @@ export const FiltrosTareasMovimientosScreen = ({
                 >
                     {/* Tipo de movimiento */}
                     <BloqueFiltro
-                        titulo="Tipo de movimiento"
+                        titulo={t('filtrosTareasMovimientos.bloques.tipoMovimiento')}
                         icono="swap-horizontal-outline"
                     >
                         <OpcionFiltro
-                            texto="Todos"
+                            texto={t('filtrosTareasMovimientos.opciones.todos')}
                             seleccionada={
                                 filtrosTemporales.tipoMovimiento ===
                                 'todos'
@@ -651,7 +655,7 @@ export const FiltrosTareasMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Entrada"
+                            texto={t('filtrosTareasMovimientos.opciones.entrada')}
                             seleccionada={
                                 filtrosTemporales.tipoMovimiento ===
                                 'entrada'
@@ -668,7 +672,7 @@ export const FiltrosTareasMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Salida"
+                            texto={t('filtrosTareasMovimientos.opciones.salida')}
                             seleccionada={
                                 filtrosTemporales.tipoMovimiento ===
                                 'salida'
@@ -687,11 +691,11 @@ export const FiltrosTareasMovimientosScreen = ({
 
                     {/* Fecha */}
                     <BloqueFiltro
-                        titulo="Fecha"
+                        titulo={t('filtrosTareasMovimientos.bloques.fecha')}
                         icono="calendar-outline"
                     >
                         <OpcionFiltro
-                            texto="Todas las fechas"
+                            texto={t('filtrosTareasMovimientos.opciones.todasLasFechas')}
                             seleccionada={
                                 filtrosTemporales.tipoFecha ===
                                 'todas'
@@ -708,7 +712,7 @@ export const FiltrosTareasMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Hoy"
+                            texto={t('filtrosTareasMovimientos.opciones.hoy')}
                             seleccionada={
                                 filtrosTemporales.tipoFecha ===
                                 'hoy'
@@ -725,7 +729,7 @@ export const FiltrosTareasMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Mañana"
+                            texto={t('filtrosTareasMovimientos.opciones.manana')}
                             seleccionada={
                                 filtrosTemporales.tipoFecha ===
                                 'manana'
@@ -743,7 +747,7 @@ export const FiltrosTareasMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Fecha"
+                            texto={t('filtrosTareasMovimientos.opciones.fecha')}
                             seleccionada={
                                 filtrosTemporales.tipoFecha ===
                                 'concreta'
@@ -796,18 +800,18 @@ export const FiltrosTareasMovimientosScreen = ({
                             'concreta' &&
                             errorFecha && (
                                 <Text style={styles.validationText}>
-                                    {errorFecha}
+                                    {t(`filtrosTareasMovimientos.validaciones.${errorFecha}`)}
                                 </Text>
                             )}
                     </BloqueFiltro>
 
                     {/* Corral */}
                     <BloqueFiltro
-                        titulo="Corral"
+                        titulo={t('filtrosTareasMovimientos.bloques.corral')}
                         icono="home-outline"
                     >
                         <OpcionFiltro
-                            texto="Todos los corrales"
+                            texto={t('filtrosTareasMovimientos.opciones.todosLosCorrales')}
                             seleccionada={
                                 filtrosTemporales.tipoCorral ===
                                 'todos'
@@ -826,7 +830,7 @@ export const FiltrosTareasMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Por Corral "
+                            texto={t('filtrosTareasMovimientos.opciones.porCorral')}
                             seleccionada={
                                 filtrosTemporales.tipoCorral ===
                                 'especifico'
@@ -849,7 +853,7 @@ export const FiltrosTareasMovimientosScreen = ({
                                     value={
                                         filtrosTemporales.corralEspecifico
                                     }
-                                    placeholder="Introduce el corral"
+                                    placeholder={t('filtrosTareasMovimientos.placeholders.introduceCorral')}
                                     maxLength={9}
                                     onFocus={subirScrollPorTeclado}
 
@@ -883,19 +887,18 @@ export const FiltrosTareasMovimientosScreen = ({
                                         styles.validationText
                                     }
                                 >
-                                    Introduce un número de
-                                    corral.
+                                    {t('filtrosTareasMovimientos.validaciones.introduceCorral')}
                                 </Text>
                             )}
                     </BloqueFiltro>
 
                     {/* ID animal */}
                     <BloqueFiltro
-                        titulo="ID animal"
+                        titulo={t('filtrosTareasMovimientos.bloques.idAnimal')}
                         icono="paw-outline"
                     >
                         <OpcionFiltro
-                            texto="Todos los animales"
+                            texto={t('filtrosTareasMovimientos.opciones.todosLosAnimales')}
                             seleccionada={
                                 filtrosTemporales.tipoAnimal ===
                                 'todos'
@@ -914,7 +917,7 @@ export const FiltrosTareasMovimientosScreen = ({
                         />
 
                         <OpcionFiltro
-                            texto="Por ID"
+                            texto={t('filtrosTareasMovimientos.opciones.porId')}
                             seleccionada={
                                 filtrosTemporales.tipoAnimal ===
                                 'especifico'
@@ -937,7 +940,7 @@ export const FiltrosTareasMovimientosScreen = ({
                                     value={
                                         filtrosTemporales.idAnimalEspecifico
                                     }
-                                    placeholder="Introduce el ID animal"
+                                    placeholder={t('filtrosTareasMovimientos.placeholders.introduceIdAnimal')}
                                     keyboardType="default"
                                     autoCapitalize="characters"
                                     onFocus={subirScrollPorTeclado}
@@ -961,8 +964,7 @@ export const FiltrosTareasMovimientosScreen = ({
                                         styles.validationText
                                     }
                                 >
-                                    Introduce un ID de
-                                    animal.
+                                    {t('filtrosTareasMovimientos.validaciones.introduceIdAnimal')}
                                 </Text>
                             )}
                     </BloqueFiltro>
@@ -980,7 +982,7 @@ export const FiltrosTareasMovimientosScreen = ({
                                 styles.cancelButtonText
                             }
                         >
-                            Cancelar
+                            {t('filtrosTareasMovimientos.botones.cancelar')}
                         </Text>
                     </TouchableOpacity>
 
@@ -1005,7 +1007,7 @@ export const FiltrosTareasMovimientosScreen = ({
                                 styles.acceptButtonText
                             }
                         >
-                            Aceptar
+                            {t('filtrosTareasMovimientos.botones.aceptar')}
                         </Text>
                     </TouchableOpacity>
                 </View>

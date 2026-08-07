@@ -14,7 +14,14 @@ import {
     useNavigation,
     useFocusEffect,
 } from '@react-navigation/native';
-import { consultarConteosTareasMovimientoTodos } from '../../stores/apiApp';
+import {
+    consultarConteosTareasMovimientoTodos,
+    consultarHistorialMovimientoGestacion,
+    consultarHistorialMovimientoMaternidad,
+    consultarCorralesGestacion,
+    consultarCorralesMaternidad,
+    crearMapaCorralesPorId,
+} from '../../stores/apiApp';
 import { useFiltrosHistorialMovimientosStore } from '../../stores/useFiltrosHistorialMovimientosStore';
 import {
     TipoFiltroMovimiento,
@@ -22,6 +29,7 @@ import {
     TipoFiltroCorral,
     TipoFiltroAnimal,
 } from '../../stores/useFiltrosTareasMovimientosStore';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -68,41 +76,18 @@ type HistorialMovimiento = {
     fecha: string;
 };
 
-const historialInventado: HistorialMovimiento[] = [
-    {
-        id: '1',
-        tipoOperacion: 'Entrada',
-        seccion: 'Gestación',
-        idAnimal: '55555',
-        crotal: '123456',
-        corral: '4',
-        fecha: '03/08/2026',
-    },
-    {
-        id: '2',
-        tipoOperacion: 'Salida',
-        seccion: 'Maternidad',
-        idAnimal: '77881',
-        crotal: '998877',
-        corral: '9',
-        fecha: '02/08/2026',
-    },
-    {
-        id: '3',
-        tipoOperacion: 'Entrada',
-        seccion: 'Maternidad',
-        idAnimal: '44321',
-        crotal: '654321',
-        corral: '12',
-        fecha: '01/08/2026',
-    },
-];
+type TipoFiltroSeccionHistorial =
+    | 'todos'
+    | 'gestacion'
+    | 'maternidad';
 
-type TipoFiltroFechaHistorial =
-    | 'todas'
-    | 'hoy'
-    | 'ayer'
-    | 'concreta';
+
+
+// type TipoFiltroFechaHistorial =
+//     | 'todas'
+//     | 'hoy'
+//     | 'ayer'
+//     | 'concreta'; 
 
 function formatearFechaHistorialDate(fecha: Date): string {
     const dia = String(fecha.getDate()).padStart(2, '0');
@@ -271,6 +256,25 @@ function filtrarHistorialPorIdAnimal(
                 .toLowerCase() === idFiltro
     );
 }
+function filtrarHistorialPorSeccion(
+    historial: HistorialMovimiento[],
+    tipoSeccion: TipoFiltroSeccionHistorial,
+): HistorialMovimiento[] {
+    if (tipoSeccion === 'todos') {
+        return historial;
+    }
+
+    if (tipoSeccion === 'gestacion') {
+        return historial.filter(
+            item => item.seccion === 'Gestación',
+        );
+    }
+
+    return historial.filter(
+        item => item.seccion === 'Maternidad',
+    );
+}
+
 function DatoMovimiento({
     titulo,
     valor,
@@ -356,6 +360,8 @@ function CardTareaMovimiento({
     disabled?: boolean;
     onPress: () => void;
 }) {
+    const { t } = useTranslation();
+
     return (
         <TouchableOpacity
             activeOpacity={disabled ? 1 : 0.9}
@@ -389,14 +395,14 @@ function CardTareaMovimiento({
                         </Text>
 
                         <Text style={styles.cardSubtitle}>
-                            Tareas pendientes de movimientos
+                            {t('tareasMovimientos.tarjetas.tareasPendientesMovimientos')}
                         </Text>
                     </View>
                 </View>
 
                 <View style={styles.movimientosPillsContainer}>
                     <DatoMovimiento
-                        titulo="Entrada"
+                        titulo={t('tareasMovimientos.operaciones.entrada')}
                         valor={entrada}
                         color={GREEN}
                         fondo="#ECFDF5"
@@ -405,7 +411,7 @@ function CardTareaMovimiento({
                     />
 
                     <DatoMovimiento
-                        titulo="Salida"
+                        titulo={t('tareasMovimientos.operaciones.salida')}
                         valor={salida}
                         color={ORANGE}
                         fondo="#FFF7ED"
@@ -419,6 +425,7 @@ function CardTareaMovimiento({
 }
 
 function TareasTab() {
+    const { t } = useTranslation();
     const navigation = useNavigation<any>();
 
     const [conteos, setConteos] =
@@ -468,7 +475,7 @@ function TareasTab() {
                 setServidorDesactualizado(true);
 
                 setError(
-                    'Debe actualizar el servidor para utilizar la función de tareas de movimientos.',
+                    t('tareasMovimientos.errores.actualizarServidorTareas'),
                 );
 
                 return;
@@ -478,12 +485,13 @@ function TareasTab() {
 
             setError(
                 errorConsulta?.message ??
-                'No se pudieron cargar las tareas.',
+                t('tareasMovimientos.errores.noCargarTareas'),
             );
         } finally {
             setCargando(false);
         }
-    }, []);
+    }, [t]);
+
     useFocusEffect(
         React.useCallback(() => {
             cargarConteos();
@@ -513,7 +521,7 @@ function TareasTab() {
             ) : null}
 
             <CardTareaMovimiento
-                titulo="Gestación"
+                titulo={t('tareasMovimientos.secciones.gestacion')}
                 icono="leaf-outline"
                 color={PURPLE}
                 fondoIcono="#F3E8FF"
@@ -529,7 +537,7 @@ function TareasTab() {
             />
 
             <CardTareaMovimiento
-                titulo="Maternidad"
+                titulo={t('tareasMovimientos.secciones.maternidad')}
                 icono="home-outline"
                 color={BLUE}
                 fondoIcono="#DBEAFE"
@@ -546,150 +554,168 @@ function TareasTab() {
         </ScrollView>
     );
 }
-function FiltroFechaHistorial({
-    tipoFiltro,
-    fechaConcreta,
-    onCambiarTipo,
-    onCambiarFecha,
-}: {
-    tipoFiltro: TipoFiltroFechaHistorial;
-    fechaConcreta: string;
-    onCambiarTipo: (tipo: TipoFiltroFechaHistorial) => void;
-    onCambiarFecha: (fecha: string) => void;
-}) {
-    return (
-        <View style={styles.filtroHistorialCard}>
-            <View style={styles.filtroHistorialHeader}>
-                <View style={styles.filtroHistorialIconBox}>
-                    <Ionicons
-                        name="calendar-outline"
-                        size={18}
-                        color={PURPLE}
-                    />
-                </View>
+// function FiltroFechaHistorial({
+//     tipoFiltro,
+//     fechaConcreta,
+//     onCambiarTipo,
+//     onCambiarFecha,
+// }: {
+//     tipoFiltro: TipoFiltroFechaHistorial;
+//     fechaConcreta: string;
+//     onCambiarTipo: (tipo: TipoFiltroFechaHistorial) => void;
+//     onCambiarFecha: (fecha: string) => void;
+// }) {
+//     return (
+//         <View style={styles.filtroHistorialCard}>
+//             <View style={styles.filtroHistorialHeader}>
+//                 <View style={styles.filtroHistorialIconBox}>
+//                     <Ionicons
+//                         name="calendar-outline"
+//                         size={18}
+//                         color={PURPLE}
+//                     />
+//                 </View>
 
-                <Text style={styles.filtroHistorialTitle}>
-                    Filtrar por fecha
-                </Text>
-            </View>
+//                 <Text style={styles.filtroHistorialTitle}>
+//                     Filtrar por fecha
+//                 </Text>
+//             </View>
 
-            <View style={styles.filtroHistorialChips}>
-                <TouchableOpacity
-                    activeOpacity={0.85}
-                    onPress={() => onCambiarTipo('todas')}
-                    style={[
-                        styles.filtroChip,
-                        tipoFiltro === 'todas' &&
-                        styles.filtroChipSelected,
-                    ]}
-                >
-                    <Text
-                        style={[
-                            styles.filtroChipText,
-                            tipoFiltro === 'todas' &&
-                            styles.filtroChipTextSelected,
-                        ]}
-                    >
-                        Todas
-                    </Text>
-                </TouchableOpacity>
+//             <View style={styles.filtroHistorialChips}>
+//                 <TouchableOpacity
+//                     activeOpacity={0.85}
+//                     onPress={() => onCambiarTipo('todas')}
+//                     style={[
+//                         styles.filtroChip,
+//                         tipoFiltro === 'todas' &&
+//                         styles.filtroChipSelected,
+//                     ]}
+//                 >
+//                     <Text
+//                         style={[
+//                             styles.filtroChipText,
+//                             tipoFiltro === 'todas' &&
+//                             styles.filtroChipTextSelected,
+//                         ]}
+//                     >
+//                         Todas
+//                     </Text>
+//                 </TouchableOpacity>
 
-                <TouchableOpacity
-                    activeOpacity={0.85}
-                    onPress={() => onCambiarTipo('hoy')}
-                    style={[
-                        styles.filtroChip,
-                        tipoFiltro === 'hoy' &&
-                        styles.filtroChipSelected,
-                    ]}
-                >
-                    <Text
-                        style={[
-                            styles.filtroChipText,
-                            tipoFiltro === 'hoy' &&
-                            styles.filtroChipTextSelected,
-                        ]}
-                    >
-                        Hoy
-                    </Text>
-                </TouchableOpacity>
+//                 <TouchableOpacity
+//                     activeOpacity={0.85}
+//                     onPress={() => onCambiarTipo('hoy')}
+//                     style={[
+//                         styles.filtroChip,
+//                         tipoFiltro === 'hoy' &&
+//                         styles.filtroChipSelected,
+//                     ]}
+//                 >
+//                     <Text
+//                         style={[
+//                             styles.filtroChipText,
+//                             tipoFiltro === 'hoy' &&
+//                             styles.filtroChipTextSelected,
+//                         ]}
+//                     >
+//                         Hoy
+//                     </Text>
+//                 </TouchableOpacity>
 
-                <TouchableOpacity
-                    activeOpacity={0.85}
-                    onPress={() => onCambiarTipo('ayer')}
-                    style={[
-                        styles.filtroChip,
-                        tipoFiltro === 'ayer' &&
-                        styles.filtroChipSelected,
-                    ]}
-                >
-                    <Text
-                        style={[
-                            styles.filtroChipText,
-                            tipoFiltro === 'ayer' &&
-                            styles.filtroChipTextSelected,
-                        ]}
-                    >
-                        Ayer
-                    </Text>
-                </TouchableOpacity>
+//                 <TouchableOpacity
+//                     activeOpacity={0.85}
+//                     onPress={() => onCambiarTipo('ayer')}
+//                     style={[
+//                         styles.filtroChip,
+//                         tipoFiltro === 'ayer' &&
+//                         styles.filtroChipSelected,
+//                     ]}
+//                 >
+//                     <Text
+//                         style={[
+//                             styles.filtroChipText,
+//                             tipoFiltro === 'ayer' &&
+//                             styles.filtroChipTextSelected,
+//                         ]}
+//                     >
+//                         Ayer
+//                     </Text>
+//                 </TouchableOpacity>
 
-                <TouchableOpacity
-                    activeOpacity={0.85}
-                    onPress={() => onCambiarTipo('concreta')}
-                    style={[
-                        styles.filtroChip,
-                        tipoFiltro === 'concreta' &&
-                        styles.filtroChipSelected,
-                    ]}
-                >
-                    <Text
-                        style={[
-                            styles.filtroChipText,
-                            tipoFiltro === 'concreta' &&
-                            styles.filtroChipTextSelected,
-                        ]}
-                    >
-                        Fecha
-                    </Text>
-                </TouchableOpacity>
-            </View>
+//                 <TouchableOpacity
+//                     activeOpacity={0.85}
+//                     onPress={() => onCambiarTipo('concreta')}
+//                     style={[
+//                         styles.filtroChip,
+//                         tipoFiltro === 'concreta' &&
+//                         styles.filtroChipSelected,
+//                     ]}
+//                 >
+//                     <Text
+//                         style={[
+//                             styles.filtroChipText,
+//                             tipoFiltro === 'concreta' &&
+//                             styles.filtroChipTextSelected,
+//                         ]}
+//                     >
+//                         Fecha
+//                     </Text>
+//                 </TouchableOpacity>
+//             </View>
 
-            {tipoFiltro === 'concreta' && (
-                <View style={styles.filtroFechaInputBox}>
-                    <Ionicons
-                        name="calendar-number-outline"
-                        size={18}
-                        color={MUTED}
-                    />
+//             {tipoFiltro === 'concreta' && (
+//                 <View style={styles.filtroFechaInputBox}>
+//                     <Ionicons
+//                         name="calendar-number-outline"
+//                         size={18}
+//                         color={MUTED}
+//                     />
 
-                    <TextInput
-                        value={fechaConcreta}
-                        onChangeText={(texto) =>
-                            onCambiarFecha(
-                                texto
-                                    .replace(/[^0-9/-]/g, '')
-                                    .slice(0, 10)
-                            )
-                        }
-                        placeholder="DD/MM/AAAA"
-                        placeholderTextColor="#94A3B8"
-                        keyboardType="number-pad"
-                        style={styles.filtroFechaInput}
-                    />
-                </View>
-            )}
-        </View>
-    );
-}
+//                     <TextInput
+//                         value={fechaConcreta}
+//                         onChangeText={(texto) =>
+//                             onCambiarFecha(
+//                                 texto
+//                                     .replace(/[^0-9/-]/g, '')
+//                                     .slice(0, 10)
+//                             )
+//                         }
+//                         placeholder="DD/MM/AAAA"
+//                         placeholderTextColor="#94A3B8"
+//                         keyboardType="number-pad"
+//                         style={styles.filtroFechaInput}
+//                     />
+//                 </View>
+//             )}
+//         </View>
+//     );
+// }
 
 function CardHistorialMovimiento({
     item,
 }: {
     item: HistorialMovimiento;
 }) {
+    const { t } = useTranslation();
+
     const esEntrada =
         item.tipoOperacion === 'Entrada';
+
+    const textoOperacion = esEntrada
+        ? t('tareasMovimientos.operaciones.entrada')
+        : t('tareasMovimientos.operaciones.salida');
+
+    const textoSeccion =
+        item.seccion === 'Gestación'
+            ? t('tareasMovimientos.secciones.gestacion')
+            : t('tareasMovimientos.secciones.maternidad');
+
+    const textoCorral = esEntrada
+        ? t('tareasMovimientos.tarjetas.corralDestino')
+        : t('tareasMovimientos.tarjetas.corralOrigen');
+
+    const corralCorto =
+        String(item.corral).trim().length <= 2;
 
     const colorOperacion = esEntrada
         ? GREEN
@@ -707,10 +733,6 @@ function CardHistorialMovimiento({
         esEntrada
             ? 'enter-outline'
             : 'exit-outline';
-
-    const textoCorral = esEntrada
-        ? 'Corral destino'
-        : 'Corral origen';
 
     return (
         <View style={styles.historialCard}>
@@ -755,24 +777,28 @@ function CardHistorialMovimiento({
                                     },
                                 ]}
                             >
-                                {item.tipoOperacion}
+                                {textoOperacion}
                             </Text>
 
                             <Text style={styles.historialSeccion}>
-                                {item.seccion}
+                                {t('tareasMovimientos.operaciones.realizada')}
                             </Text>
                         </View>
                     </View>
 
                     <View style={styles.realizadaBadge}>
                         <Ionicons
-                            name="checkmark-done-outline"
+                            name={
+                                item.seccion === 'Gestación'
+                                    ? 'leaf-outline'
+                                    : 'home-outline'
+                            }
                             size={14}
                             color={GREEN}
                         />
 
                         <Text style={styles.realizadaText}>
-                            Realizada
+                            {textoSeccion}
                         </Text>
                     </View>
                 </View>
@@ -782,15 +808,13 @@ function CardHistorialMovimiento({
                         style={[
                             styles.historialAnimalBox,
                             {
-                                backgroundColor:
-                                    fondoSuave,
-                                borderColor:
-                                    bordeSuave,
+                                backgroundColor: '#EFF6FF',
+                                borderColor: '#BFDBFE',
                             },
                         ]}
                     >
                         <Text style={styles.historialLabel}>
-                            ID animal
+                            {t('tareasMovimientos.tarjetas.idAnimal')}
                         </Text>
 
                         <Text style={styles.historialAnimalId}>
@@ -798,7 +822,7 @@ function CardHistorialMovimiento({
                         </Text>
 
                         <Text style={styles.historialCrotal}>
-                            {item.crotal}
+                            {item.crotal || t('tareasMovimientos.tarjetas.sinCrotal')}
                         </Text>
                     </View>
 
@@ -806,10 +830,8 @@ function CardHistorialMovimiento({
                         style={[
                             styles.historialCorralBox,
                             {
-                                backgroundColor:
-                                    fondoSuave,
-                                borderColor:
-                                    bordeSuave,
+                                backgroundColor: '#FFFFFF',
+                                borderColor: '#E2E8F0',
                             },
                         ]}
                     >
@@ -817,7 +839,13 @@ function CardHistorialMovimiento({
                             {textoCorral}
                         </Text>
 
-                        <Text style={styles.historialCorralValue}>
+                        <Text
+                            style={[
+                                styles.historialCorralValue,
+                                corralCorto &&
+                                styles.historialCorralValueCorto,
+                            ]}
+                        >
                             {item.corral}
                         </Text>
                     </View>
@@ -832,7 +860,7 @@ function CardHistorialMovimiento({
                         />
 
                         <Text style={styles.historialFechaLabel}>
-                            Fecha
+                            {t('tareasMovimientos.tarjetas.fecha')}
                         </Text>
                     </View>
 
@@ -844,13 +872,40 @@ function CardHistorialMovimiento({
         </View>
     );
 }
+
 function BarraAccionesHistorial({
     onAbrirFiltros,
     hayFiltrosActivos,
+    filtroSeccion,
+    desplegableSeccionVisible,
+    onToggleSeccion,
+    onCambiarSeccion,
 }: {
     onAbrirFiltros: () => void;
     hayFiltrosActivos: boolean;
+    filtroSeccion: TipoFiltroSeccionHistorial;
+    desplegableSeccionVisible: boolean;
+    onToggleSeccion: () => void;
+    onCambiarSeccion: (
+        tipo: TipoFiltroSeccionHistorial,
+    ) => void;
 }) {
+    const { t } = useTranslation();
+
+    const textoFiltroSeccion =
+        filtroSeccion === 'todos'
+            ? t('tareasMovimientos.secciones.todos')
+            : filtroSeccion === 'gestacion'
+                ? t('tareasMovimientos.secciones.gestacion')
+                : t('tareasMovimientos.secciones.maternidad');
+
+    const iconoFiltroSeccion: string =
+        filtroSeccion === 'gestacion'
+            ? 'leaf-outline'
+            : filtroSeccion === 'maternidad'
+                ? 'home-outline'
+                : 'apps-outline';
+
     return (
         <View style={styles.historialActionsBar}>
             <TouchableOpacity
@@ -869,104 +924,557 @@ function BarraAccionesHistorial({
                 />
 
                 <Text style={styles.historialFilterText}>
-                    Filtros
+                    {t('tareasMovimientos.filtros.titulo')}
                 </Text>
 
                 {hayFiltrosActivos && (
-                    <View style={styles.historialFilterDot} />
+                    <View
+                        style={
+                            styles.historialFilterDot
+                        }
+                    />
                 )}
             </TouchableOpacity>
+
+            <View
+                style={
+                    styles.historialSeccionWrapper
+                }
+            >
+                <TouchableOpacity
+                    activeOpacity={0.85}
+                    onPress={onToggleSeccion}
+                    style={[
+                        styles.historialSeccionButton,
+                        filtroSeccion !== 'todos' &&
+                        styles.historialSeccionButtonActive,
+                    ]}
+                >
+                    <Ionicons
+                        name={iconoFiltroSeccion}
+                        size={17}
+                        color={PURPLE}
+                    />
+
+                    <Text
+                        style={
+                            styles.historialFilterText
+                        }
+                    >
+                        {textoFiltroSeccion}
+                    </Text>
+
+                    <Ionicons
+                        name={
+                            desplegableSeccionVisible
+                                ? 'chevron-up-outline'
+                                : 'chevron-down-outline'
+                        }
+                        size={15}
+                        color={PURPLE}
+                    />
+                </TouchableOpacity>
+
+                {desplegableSeccionVisible && (
+                    <View
+                        style={
+                            styles.historialSeccionDropdown
+                        }
+                    >
+                        <TouchableOpacity
+                            activeOpacity={0.85}
+                            onPress={() =>
+                                onCambiarSeccion(
+                                    'todos',
+                                )
+                            }
+                            style={[
+                                styles.historialSeccionOption,
+                                filtroSeccion ===
+                                'todos' &&
+                                styles.historialSeccionOptionSelected,
+                            ]}
+                        >
+                            <Ionicons
+                                name="apps-outline"
+                                size={17}
+                                color={PURPLE}
+                            />
+
+                            <Text
+                                style={
+                                    styles.historialSeccionOptionText
+                                }
+                            >
+                                {t('tareasMovimientos.secciones.todos')}
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            activeOpacity={0.85}
+                            onPress={() =>
+                                onCambiarSeccion(
+                                    'gestacion',
+                                )
+                            }
+                            style={[
+                                styles.historialSeccionOption,
+                                filtroSeccion ===
+                                'gestacion' &&
+                                styles.historialSeccionOptionSelected,
+                            ]}
+                        >
+                            <Ionicons
+                                name="leaf-outline"
+                                size={17}
+                                color={PURPLE}
+                            />
+
+                            <Text
+                                style={
+                                    styles.historialSeccionOptionText
+                                }
+                            >
+                                {t('tareasMovimientos.secciones.gestacion')}
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            activeOpacity={0.85}
+                            onPress={() =>
+                                onCambiarSeccion(
+                                    'maternidad',
+                                )
+                            }
+                            style={[
+                                styles.historialSeccionOption,
+                                filtroSeccion ===
+                                'maternidad' &&
+                                styles.historialSeccionOptionSelected,
+                            ]}
+                        >
+                            <Ionicons
+                                name="home-outline"
+                                size={17}
+                                color={PURPLE}
+                            />
+
+                            <Text
+                                style={
+                                    styles.historialSeccionOptionText
+                                }
+                            >
+                                {t('tareasMovimientos.secciones.maternidad')}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+            </View>
         </View>
     );
 }
 
 function HistorialTab() {
+    const { t } = useTranslation();
     const navigation = useNavigation<any>();
+
+    const [historial, setHistorial] =
+        React.useState<HistorialMovimiento[]>([]);
+
+    const [cargandoHistorial, setCargandoHistorial] =
+        React.useState(false);
+
+    const [errorHistorial, setErrorHistorial] =
+        React.useState('');
+
+    const [
+        filtroSeccionHistorial,
+        setFiltroSeccionHistorial,
+    ] = React.useState<TipoFiltroSeccionHistorial>(
+        'todos',
+    );
+
+    const [
+        desplegableSeccionVisible,
+        setDesplegableSeccionVisible,
+    ] = React.useState(false);
 
     const filtrosHistorial =
         useFiltrosHistorialMovimientosStore(
-            (state) => state.filtrosHistorial
+            state => state.filtrosHistorial,
         );
+
+    const cargarHistorial =
+        React.useCallback(async () => {
+            try {
+                setCargandoHistorial(true);
+                setErrorHistorial('');
+
+                const [
+                    historialGestacion,
+                    historialMaternidad,
+                    corralesGestacion,
+                    corralesMaternidad,
+                ] = await Promise.all([
+                    consultarHistorialMovimientoGestacion(),
+                    consultarHistorialMovimientoMaternidad(),
+                    consultarCorralesGestacion(),
+                    consultarCorralesMaternidad(),
+                ]);
+
+                const mapaCorralesGestacion =
+                    crearMapaCorralesPorId(
+                        corralesGestacion,
+                    );
+
+                const mapaCorralesMaternidad =
+                    crearMapaCorralesPorId(
+                        corralesMaternidad,
+                    );
+
+                const historialGestacionAdaptado:
+                    HistorialMovimiento[] =
+                    historialGestacion.map(item => {
+                        const corralId =
+                            Number(item.corralId);
+
+                        const corralVisible =
+                            Number.isFinite(corralId) &&
+                                mapaCorralesGestacion[
+                                corralId
+                                ] !== undefined
+                                ? String(
+                                    mapaCorralesGestacion[
+                                    corralId
+                                    ],
+                                )
+                                : String(
+                                    item.corralId ??
+                                    '—',
+                                );
+
+                        return {
+                            id: `gestacion-${item.id}`,
+                            tipoOperacion:
+                                item.tipoOperacion,
+                            seccion: 'Gestación',
+                            idAnimal:
+                                item.idAnimal,
+                            crotal:
+                                item.crotal,
+                            corral:
+                                corralVisible,
+                            fecha:
+                                item.fecha,
+                        };
+                    });
+
+                const historialMaternidadAdaptado:
+                    HistorialMovimiento[] =
+                    historialMaternidad.map(item => {
+                        const corralId =
+                            Number(item.corralId);
+
+                        const corralVisible =
+                            Number.isFinite(corralId) &&
+                                mapaCorralesMaternidad[
+                                corralId
+                                ] !== undefined
+                                ? String(
+                                    mapaCorralesMaternidad[
+                                    corralId
+                                    ],
+                                )
+                                : String(
+                                    item.corralId ??
+                                    '—',
+                                );
+
+                        return {
+                            id: `maternidad-${item.id}`,
+                            tipoOperacion:
+                                item.tipoOperacion,
+                            seccion: 'Maternidad',
+                            idAnimal:
+                                item.idAnimal,
+                            crotal:
+                                item.crotal,
+                            corral:
+                                corralVisible,
+                            fecha:
+                                item.fecha,
+                        };
+                    });
+
+                const historialCompleto = [
+                    ...historialGestacionAdaptado,
+                    ...historialMaternidadAdaptado,
+                ].sort((itemA, itemB) => {
+                    const convertirFecha = (
+                        fecha: string,
+                    ) => {
+                        const [
+                            dia,
+                            mes,
+                            anio,
+                        ] = fecha.split('/');
+
+                        return new Date(
+                            Number(anio),
+                            Number(mes) - 1,
+                            Number(dia),
+                        ).getTime();
+                    };
+
+                    return (
+                        convertirFecha(itemB.fecha) -
+                        convertirFecha(itemA.fecha)
+                    );
+                });
+
+                setHistorial(
+                    historialCompleto,
+                );
+            } catch (errorConsulta: any) {
+                console.log(
+                    'Error cargando historial de movimientos:',
+                    errorConsulta,
+                );
+
+                setHistorial([]);
+
+                setErrorHistorial(
+                    errorConsulta?.message ??
+                    t('tareasMovimientos.errores.noCargarHistorial'),
+                );
+            } finally {
+                setCargandoHistorial(false);
+            }
+        }, [t]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            cargarHistorial();
+        }, [cargarHistorial]),
+    );
 
     const historialFiltradoMovimiento =
         filtrarHistorialPorMovimiento(
-            historialInventado,
-            filtrosHistorial.tipoMovimiento
+            historial,
+            filtrosHistorial.tipoMovimiento,
         );
 
     const historialFiltradoFecha =
         filtrarHistorialPorFecha(
             historialFiltradoMovimiento,
             filtrosHistorial.tipoFecha,
-            filtrosHistorial.fechaConcreta
+            filtrosHistorial.fechaConcreta,
         );
 
     const historialFiltradoCorral =
         filtrarHistorialPorCorral(
             historialFiltradoFecha,
             filtrosHistorial.tipoCorral,
-            filtrosHistorial.corralEspecifico
+            filtrosHistorial.corralEspecifico,
         );
 
-    const historialFiltrado =
+    const historialFiltradoAnimal =
         filtrarHistorialPorIdAnimal(
             historialFiltradoCorral,
             filtrosHistorial.tipoAnimal,
-            filtrosHistorial.idAnimalEspecifico
+            filtrosHistorial.idAnimalEspecifico,
         );
 
+    const historialFiltrado =
+        filtrarHistorialPorSeccion(
+            historialFiltradoAnimal,
+            filtroSeccionHistorial,
+        );
+
+    const hayFiltrosPantallaActivos =
+        filtrosHistorial.tipoMovimiento !==
+        'todos' ||
+        filtrosHistorial.tipoFecha !==
+        'todas' ||
+        filtrosHistorial.tipoCorral !==
+        'todos' ||
+        filtrosHistorial.tipoAnimal !==
+        'todos';
+
+
+
     const hayFiltrosActivos =
-        filtrosHistorial.tipoMovimiento !== 'todos' ||
-        filtrosHistorial.tipoFecha !== 'todas' ||
-        filtrosHistorial.tipoCorral !== 'todos' ||
-        filtrosHistorial.tipoAnimal !== 'todos';
+        hayFiltrosPantallaActivos ||
+        filtroSeccionHistorial !== 'todos';
+
+    const cambiarFiltroSeccionHistorial = (
+        tipoSeccion: TipoFiltroSeccionHistorial,
+    ) => {
+        setFiltroSeccionHistorial(
+            tipoSeccion,
+        );
+
+        setDesplegableSeccionVisible(false);
+    };
+
+    const abrirFiltrosHistorial = () => {
+        setDesplegableSeccionVisible(false);
+
+        navigation.navigate(
+            'FiltrosHistorialMovimientos',
+        );
+    };
 
     return (
         <View style={styles.screen}>
             <BarraAccionesHistorial
-                hayFiltrosActivos={hayFiltrosActivos}
-                onAbrirFiltros={() =>
-                    navigation.navigate(
-                        'FiltrosHistorialMovimientos'
+                hayFiltrosActivos={
+                    hayFiltrosPantallaActivos
+                }
+                filtroSeccion={
+                    filtroSeccionHistorial
+                }
+                desplegableSeccionVisible={
+                    desplegableSeccionVisible
+                }
+                onToggleSeccion={() =>
+                    setDesplegableSeccionVisible(
+                        visible => !visible,
                     )
                 }
+                onCambiarSeccion={
+                    cambiarFiltroSeccionHistorial
+                }
+                onAbrirFiltros={
+                    abrirFiltrosHistorial
+                }
             />
+            {desplegableSeccionVisible && (
+                <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() =>
+                        setDesplegableSeccionVisible(
+                            false,
+                        )
+                    }
+                    style={
+                        styles.historialDropdownBackdrop
+                    }
+                />
+            )}
 
             <ScrollView
                 style={styles.screen}
-                contentContainerStyle={styles.content}
-                showsVerticalScrollIndicator={false}
+                contentContainerStyle={
+                    styles.content
+                }
+                showsVerticalScrollIndicator={
+                    false
+                }
             >
-                {historialFiltrado.length === 0 ? (
-                    <View style={styles.historialEmptyCard}>
+                {cargandoHistorial &&
+                    historial.length === 0 ? (
+                    <View
+                        style={
+                            styles.historialEmptyCard
+                        }
+                    >
+                        <ActivityIndicator
+                            size="small"
+                            color={PURPLE}
+                        />
+
+                        <Text
+                            style={
+                                styles.historialEmptyTitle
+                            }
+                        >
+                            {t('tareasMovimientos.carga.cargandoHistorial')}
+                        </Text>
+                    </View>
+                ) : null}
+
+                {!cargandoHistorial &&
+                    errorHistorial ? (
+                    <View
+                        style={
+                            styles.historialEmptyCard
+                        }
+                    >
+                        <Ionicons
+                            name="warning-outline"
+                            size={34}
+                            color={ORANGE}
+                        />
+
+                        <Text
+                            style={
+                                styles.historialEmptyTitle
+                            }
+                        >
+                            {t('tareasMovimientos.errores.noCargarHistorialTitulo')}                        </Text>
+
+                        <Text
+                            style={
+                                styles.historialEmptyText
+                            }
+                        >
+                            {errorHistorial}
+                        </Text>
+                    </View>
+                ) : null}
+
+                {!cargandoHistorial &&
+                    !errorHistorial &&
+                    historialFiltrado.length === 0 ? (
+                    <View
+                        style={
+                            styles.historialEmptyCard
+                        }
+                    >
                         <Ionicons
                             name="search-outline"
                             size={34}
                             color={MUTED}
                         />
 
-                        <Text style={styles.historialEmptyTitle}>
-                            Sin resultados
+                        <Text
+                            style={
+                                styles.historialEmptyTitle
+                            }
+                        >
+                            {t('tareasMovimientos.vacio.sinResultados')}
                         </Text>
 
-                        <Text style={styles.historialEmptyText}>
-                            No hay movimientos realizados con esos filtros.
+                        <Text
+                            style={
+                                styles.historialEmptyText
+                            }
+                        >
+                            {hayFiltrosActivos
+                                ? t('tareasMovimientos.vacio.sinMovimientosConFiltros')
+                                : t('tareasMovimientos.vacio.sinMovimientosTodavia')}
                         </Text>
                     </View>
-                ) : (
-                    historialFiltrado.map((item) => (
-                        <CardHistorialMovimiento
-                            key={item.id}
-                            item={item}
-                        />
-                    ))
-                )}
+                ) : null}
+
+                {!errorHistorial &&
+                    historialFiltrado.map(
+                        item => (
+                            <CardHistorialMovimiento
+                                key={item.id}
+                                item={item}
+                            />
+                        ),
+                    )}
             </ScrollView>
         </View>
     );
 }
 
 export const TareasMovimientosScreen = () => {
+        const { t } = useTranslation();
+
     return (
         <TopTab.Navigator
             initialRouteName="Tareas"
@@ -995,22 +1503,309 @@ export const TareasMovimientosScreen = () => {
                 tabBarPressColor: '#EEF2FF',
             }}
         >
-            <TopTab.Screen
+             <TopTab.Screen
                 name="Tareas"
                 component={TareasTab}
-                options={{ title: 'Tareas' }}
+                options={{
+                    title: t('tareasMovimientos.tabs.tareas'),
+                }}
             />
 
-            <TopTab.Screen
+             <TopTab.Screen
                 name="Historial"
                 component={HistorialTab}
-                options={{ title: 'Historial' }}
+                options={{
+                    title: t('tareasMovimientos.tabs.historial'),
+                }}
             />
         </TopTab.Navigator>
     );
 };
 
 const styles = StyleSheet.create({
+    historialCard: {
+    backgroundColor: CARD,
+    borderRadius: 18,
+    overflow: 'hidden',
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: BORDER,
+
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.05,
+    shadowRadius: 7,
+    shadowOffset: {
+        width: 0,
+        height: 3,
+    },
+
+    elevation: 2,
+},
+
+historialBody: {
+    paddingHorizontal: 12,
+    paddingTop: 10,
+    paddingBottom: 12,
+},
+
+historialHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+},
+
+historialHeaderLeft: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: 6,
+},
+
+historialIconBox: {
+    width: 34,
+    height: 34,
+    borderRadius: 12,
+    borderWidth: 1.3,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    marginRight: 8,
+},
+
+historialOperacion: {
+    fontSize: 15,
+    fontWeight: '900',
+},
+
+historialSeccion: {
+    color: MUTED,
+    fontSize: 11,
+    fontWeight: '800',
+    marginTop: 0,
+},
+
+realizadaBadge: {
+    minHeight: 28,
+    borderRadius: 999,
+    backgroundColor: '#ECFDF5',
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+    paddingHorizontal: 8,
+
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+},
+
+realizadaText: {
+    color: GREEN,
+    fontSize: 11,
+    fontWeight: '900',
+},
+
+historialInfoRow: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    gap: 8,
+    marginBottom: 9,
+},
+
+historialAnimalBox: {
+    flex: 1.25,
+    borderRadius: 15,
+    borderWidth: 1.3,
+    paddingHorizontal: 11,
+    paddingVertical: 9,
+    justifyContent: 'center',
+},
+
+historialLabel: {
+    color: MUTED,
+    fontSize: 11,
+    fontWeight: '800',
+    marginBottom: 1,
+},
+
+historialAnimalId: {
+    color: TEXT,
+    fontSize: 25,
+    lineHeight: 29,
+    fontWeight: '900',
+    marginBottom: 2,
+},
+
+historialCrotal: {
+    color: MUTED,
+    fontSize: 11,
+    fontWeight: '700',
+},
+
+historialCorralBox: {
+    minWidth: 104,
+    borderRadius: 15,
+    borderWidth: 1.3,
+    paddingHorizontal: 10,
+    paddingVertical: 9,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+},
+
+historialCorralLabel: {
+    color: MUTED,
+    fontSize: 11,
+    fontWeight: '800',
+    marginBottom: 5,
+    textAlign: 'right',
+},
+
+historialCorralValue: {
+    color: TEXT,
+    fontSize: 25,
+    lineHeight: 29,
+    fontWeight: '900',
+    textAlign: 'right',
+},
+
+historialCorralValueCorto: {
+    width: '100%',
+    textAlign: 'center',
+},
+
+historialFechaBox: {
+    minHeight: 44,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#DDD6FE',
+    backgroundColor: '#F5F3FF',
+    paddingHorizontal: 10,
+
+    flexDirection: 'row',
+    alignItems: 'center',
+},
+
+historialFechaLeft: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+},
+
+historialFechaLabel: {
+    color: '#5B21B6',
+    fontSize: 13,
+    fontWeight: '900',
+},
+
+historialFechaValue: {
+    color: PURPLE,
+    fontSize: 15,
+    fontWeight: '900',
+},
+    historialActionsBar: {
+        backgroundColor: CARD,
+        borderBottomWidth: 1,
+        borderBottomColor: BORDER,
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        flexDirection: 'row',
+        gap: 8,
+        zIndex: 1000,
+        elevation: 1000,
+        overflow: 'visible',
+    },
+
+    historialFilterButton: {
+        flex: 1,
+        height: 42,
+        borderRadius: 14,
+        backgroundColor: '#EEF2FF',
+        borderWidth: 1,
+        borderColor: '#DDD6FE',
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 6,
+    },
+    historialSeccionWrapper: {
+        flex: 1,
+        position: 'relative',
+        zIndex: 1001,
+        elevation: 1001,
+        overflow: 'visible',
+    },
+
+    historialSeccionButton: {
+        height: 42,
+        borderRadius: 14,
+        backgroundColor: '#EEF2FF',
+        borderWidth: 1,
+        borderColor: '#DDD6FE',
+        paddingHorizontal: 14,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 6,
+    },
+
+    historialSeccionButtonActive: {
+        backgroundColor: '#F5F3FF',
+        borderColor: '#C4B5FD',
+    },
+
+    historialSeccionDropdown: {
+        position: 'absolute',
+        top: 48,
+        right: 0,
+        width: '100%',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 16,
+        borderWidth: 1,
+        borderColor: '#DDD6FE',
+        padding: 6,
+        shadowColor: '#0F172A',
+        shadowOpacity: 0.14,
+        shadowRadius: 14,
+        shadowOffset: {
+            width: 0,
+            height: 8,
+        },
+        elevation: 2000,
+        zIndex: 2000,
+    },
+
+    historialSeccionOption: {
+        minHeight: 44,
+        borderRadius: 12,
+        paddingHorizontal: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+
+    historialSeccionOptionSelected: {
+        backgroundColor: '#F5F3FF',
+    },
+
+    historialSeccionOptionText: {
+        flex: 1,
+        color: PURPLE,
+        fontSize: 13,
+        fontWeight: '900',
+    },
+
+    historialDropdownBackdrop: {
+        position: 'absolute',
+        top: 64,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'transparent',
+        zIndex: 900,
+        elevation: 900,
+    },
 
     cardDisabled: {
         opacity: 0.48,
@@ -1190,181 +1985,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 4,
     },
-    historialCard: {
-        backgroundColor: CARD,
-        borderRadius: 22,
-        overflow: 'hidden',
-        marginBottom: 14,
-        borderWidth: 1,
-        borderColor: BORDER,
-
-        shadowColor: '#0F172A',
-        shadowOpacity: 0.07,
-        shadowRadius: 9,
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-
-        elevation: 3,
-    },
-
-    historialBody: {
-        paddingHorizontal: 16,
-        paddingTop: 14,
-        paddingBottom: 16,
-    },
-
-    historialHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 14,
-    },
-
-    historialHeaderLeft: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingRight: 8,
-    },
-
-    historialIconBox: {
-        width: 42,
-        height: 42,
-        borderRadius: 14,
-        borderWidth: 1.5,
-
-        alignItems: 'center',
-        justifyContent: 'center',
-
-        marginRight: 10,
-    },
-
-    historialOperacion: {
-        fontSize: 17,
-        fontWeight: '900',
-    },
-
-    historialSeccion: {
-        color: MUTED,
-        fontSize: 12,
-        fontWeight: '800',
-        marginTop: 1,
-    },
-
-    realizadaBadge: {
-        minHeight: 32,
-        borderRadius: 999,
-        backgroundColor: '#ECFDF5',
-        borderWidth: 1,
-        borderColor: '#A7F3D0',
-        paddingHorizontal: 10,
-
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 5,
-    },
-
-    realizadaText: {
-        color: GREEN,
-        fontSize: 12,
-        fontWeight: '900',
-    },
-
-    historialInfoRow: {
-        flexDirection: 'row',
-        alignItems: 'stretch',
-        gap: 12,
-        marginBottom: 12,
-    },
-
-    historialAnimalBox: {
-        flex: 1.25,
-        borderRadius: 18,
-        borderWidth: 1.5,
-        paddingHorizontal: 14,
-        paddingVertical: 12,
-        justifyContent: 'center',
-    },
-
-    historialLabel: {
-        color: MUTED,
-        fontSize: 12,
-        fontWeight: '800',
-        marginBottom: 2,
-    },
-
-    historialAnimalId: {
-        color: TEXT,
-        fontSize: 30,
-        lineHeight: 35,
-        fontWeight: '900',
-        marginBottom: 4,
-    },
-
-    historialCrotal: {
-        color: MUTED,
-        fontSize: 12,
-        fontWeight: '700',
-    },
-
-    historialCorralBox: {
-        minWidth: 126,
-        borderRadius: 18,
-        borderWidth: 1.5,
-        paddingHorizontal: 12,
-        paddingVertical: 12,
-        alignItems: 'flex-end',
-        justifyContent: 'flex-start',
-    },
-
-    historialCorralLabel: {
-        color: MUTED,
-        fontSize: 12,
-        fontWeight: '800',
-        marginBottom: 8,
-        textAlign: 'right',
-    },
-
-    historialCorralValue: {
-        color: TEXT,
-        fontSize: 30,
-        lineHeight: 35,
-        fontWeight: '900',
-        textAlign: 'right',
-    },
-
-    historialFechaBox: {
-        minHeight: 54,
-        borderRadius: 16,
-        borderWidth: 1,
-        borderColor: '#DDD6FE',
-        backgroundColor: '#F5F3FF',
-        paddingHorizontal: 12,
-
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    historialFechaLeft: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    },
-
-    historialFechaLabel: {
-        color: '#5B21B6',
-        fontSize: 14,
-        fontWeight: '900',
-    },
-
-    historialFechaValue: {
-        color: PURPLE,
-        fontSize: 16,
-        fontWeight: '900',
-    },
     filtroHistorialCard: {
         backgroundColor: CARD,
         borderRadius: 20,
@@ -1487,30 +2107,6 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         textAlign: 'center',
         marginTop: 4,
-    },
-
-    historialActionsBar: {
-        backgroundColor: CARD,
-        borderBottomWidth: 1,
-        borderBottomColor: BORDER,
-        paddingHorizontal: 12,
-        paddingVertical: 10,
-
-        flexDirection: 'row',
-    },
-
-    historialFilterButton: {
-        height: 42,
-        borderRadius: 14,
-        backgroundColor: '#EEF2FF',
-        borderWidth: 1,
-        borderColor: '#DDD6FE',
-        paddingHorizontal: 16,
-
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 6,
     },
 
     historialFilterButtonActive: {

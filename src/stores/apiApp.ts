@@ -822,7 +822,10 @@ type TipoEndpointTareasMovimientoAnimal =
     | 'gestacion'
     | 'maternidad'
     | 'todos'
-    | 'realizada';
+    | 'realizada'
+    | 'operation'
+    | 'gestacion/historico'
+    | 'maternidad/historico';
 
 async function construirEndpointTareasMovimientoAnimal(
     tipo: TipoEndpointTareasMovimientoAnimal,
@@ -1295,19 +1298,24 @@ export function crearMapaCorralesPorId(
    ========================================================= */
 
 export async function enviarTareaMovimientoAnimalRealizada(
-    tareaOriginal: any,
+    idTarea: string | number,
+    value: string | number = '',
 ): Promise<any> {
+
     const endpoint =
         await construirEndpointTareasMovimientoAnimal(
-            'realizada',
+            'operation',
         );
 
-    console.log('===== MARCAR TAREA COMO REALIZADA =====');
+    const payload = {
+        op: 'marcar_realizado',
+        key: String(idTarea),
+        value: String(value ?? ''),
+    };
+
+    console.log('===== MARCAR TAREA =====');
     console.log('ENDPOINT:', endpoint);
-    console.log(
-        'TAREA:',
-        JSON.stringify(tareaOriginal, null, 2),
-    );
+    console.log('PAYLOAD:', JSON.stringify(payload, null, 2));
 
     const respuesta = await fetch(endpoint, {
         method: 'POST',
@@ -1315,7 +1323,7 @@ export async function enviarTareaMovimientoAnimalRealizada(
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(tareaOriginal),
+        body: JSON.stringify(payload),
     });
 
     const texto = await respuesta.text();
@@ -1350,6 +1358,8 @@ export async function enviarTareaMovimientoAnimalRealizada(
 
     return datosRespuesta;
 }
+
+
 export async function obtenerIdCorralMaternidadPorNombre(
     corralName: string | number,
 ): Promise<number> {
@@ -1433,4 +1443,174 @@ export async function validarCorralMaternidadParaTarea(
         data: datosApi,
         rawText: texto,
     };
+}
+
+export type TipoSeccionHistorialMovimiento =
+    | 'Gestación'
+    | 'Maternidad';
+
+export type HistorialMovimientoAnimalApi = {
+    id: string;
+    tipoOperacion: 'Entrada' | 'Salida';
+    seccion: TipoSeccionHistorialMovimiento;
+    idAnimal: string;
+    crotal: string;
+    corralId?: string;
+    fecha: string;
+    raw?: any;
+};
+
+function normalizarFechaHistorialMovimiento(
+    fechaApi: string,
+): string {
+    const texto = String(fechaApi ?? '').trim();
+
+    const coincidencia = texto.match(
+        /^(\d{4})-(\d{2})-(\d{2})/,
+    );
+
+    if (!coincidencia) {
+        return texto;
+    }
+
+    const [, anio, mes, dia] = coincidencia;
+
+    return `${dia}/${mes}/${anio}`;
+}
+
+function normalizarHistorialMovimientoAnimal(
+    tarea: any,
+    seccion: TipoSeccionHistorialMovimiento,
+    index: number,
+): HistorialMovimientoAnimalApi {
+    const tareaTexto = String(
+        tarea?.tarea ?? '',
+    )
+        .trim()
+        .toLowerCase();
+
+    const tipoOperacion: 'Entrada' | 'Salida' =
+        tareaTexto.startsWith('out_of_')
+            ? 'Salida'
+            : 'Entrada';
+
+    const corral =
+        tarea?.corral ??
+        tarea?.corralDestino ??
+        tarea?.corralOrigen ??
+        undefined;
+
+    return {
+        id: String(
+            tarea?.id ??
+            `${seccion}-${tarea?.idAnimal ?? ''}-${index}`,
+        ),
+        tipoOperacion,
+        seccion,
+        idAnimal: String(
+            tarea?.idAnimal ??
+            tarea?.pkIdAnimal ??
+            '',
+        ),
+        crotal: String(
+            tarea?.crotal ??
+            '',
+        ),
+        corralId:
+            corral !== undefined &&
+            corral !== null
+                ? String(corral)
+                : undefined,
+        fecha: normalizarFechaHistorialMovimiento(
+            String(tarea?.fecha ?? ''),
+        ),
+        raw: tarea,
+    };
+}
+
+async function consultarHistorialMovimientoAnimal(
+    tipo: 'gestacion' | 'maternidad',
+): Promise<HistorialMovimientoAnimalApi[]> {
+    const endpoint =
+        await construirEndpointTareasMovimientoAnimal(
+            `${tipo}/historico`,
+        );
+
+    console.log('===== CONSULTAR HISTORIAL MOVIMIENTO =====');
+    console.log('TIPO:', tipo);
+    console.log('ENDPOINT:', endpoint);
+
+    const respuesta = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+        },
+    });
+
+    const texto = await respuesta.text();
+
+    let datosApi: any = [];
+
+    try {
+        datosApi = texto
+            ? JSON.parse(texto)
+            : [];
+    } catch {
+        datosApi = [];
+    }
+
+    if (!respuesta.ok) {
+        const mensajeBackend =
+            datosApi?.message ??
+            datosApi?.mensaje ??
+            datosApi?.error ??
+            datosApi?.detail ??
+            'No se pudo cargar el historial de movimientos.';
+
+        const errorConsulta: any =
+            new Error(String(mensajeBackend));
+
+        errorConsulta.status =
+            respuesta.status;
+
+        throw errorConsulta;
+    }
+
+    const lista = Array.isArray(datosApi)
+        ? datosApi
+        : Array.isArray(datosApi?.data)
+          ? datosApi.data
+          : Array.isArray(datosApi?.content)
+            ? datosApi.content
+            : [];
+
+    const seccion: TipoSeccionHistorialMovimiento =
+        tipo === 'gestacion'
+            ? 'Gestación'
+            : 'Maternidad';
+
+    return lista.map(
+        (tarea: any, index: number) =>
+            normalizarHistorialMovimientoAnimal(
+                tarea,
+                seccion,
+                index,
+            ),
+    );
+}
+
+export async function consultarHistorialMovimientoGestacion(): Promise<
+    HistorialMovimientoAnimalApi[]
+> {
+    return consultarHistorialMovimientoAnimal(
+        'gestacion',
+    );
+}
+
+export async function consultarHistorialMovimientoMaternidad(): Promise<
+    HistorialMovimientoAnimalApi[]
+> {
+    return consultarHistorialMovimientoAnimal(
+        'maternidad',
+    );
 }
