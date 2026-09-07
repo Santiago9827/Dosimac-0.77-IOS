@@ -879,18 +879,48 @@ function normalizarTipoOperacion(
     return 'Salida';
 }
 
-function normalizarTareaMovimientoAnimal(
+function normalizarTipoOperacionDesdeTarea(
     tarea: any,
-    index: number,
-): TareaMovimientoAnimalApi {
-    const tipoOperacion = normalizarTipoOperacion(
+): TipoTareaMovimientoAnimal {
+    const texto = String(
         tarea.tipoOperacion ??
         tarea.tipo_operacion ??
         tarea.operacion ??
         tarea.tipo ??
         tarea.movimiento ??
-        tarea.tarea,
-    );
+        tarea.tarea ??
+        '',
+    )
+        .trim()
+        .toLowerCase();
+
+    const esTraslado =
+        Number(tarea.traslado ?? 0) === 1 ||
+        texto.includes('traslado');
+
+    const esSalida =
+        texto === 'salida' ||
+        texto === 'out_of_gestation' ||
+        texto === 'out_of_maternity' ||
+        texto.includes('out_of');
+
+    if (esSalida) {
+        return esTraslado
+            ? 'Traslado Salida'
+            : 'Salida';
+    }
+
+    return esTraslado
+        ? 'Traslado Entrada'
+        : 'Entrada';
+}
+
+function normalizarTareaMovimientoAnimal(
+    tarea: any,
+    index: number,
+): TareaMovimientoAnimalApi {
+   const tipoOperacion =
+    normalizarTipoOperacionDesdeTarea(tarea);
 
     const idAnimal =
         tarea.idAnimal ??
@@ -1022,6 +1052,25 @@ export async function consultarTareasMovimientoMaternidad(): Promise<
     return consultarTareasMovimientoAnimal('maternidad');
 }
 
+export async function consultarTareasMovimientoTodos(): Promise<
+    TareaMovimientoAnimalApi[]
+> {
+    const tareas =
+        await consultarTareasMovimientoAnimalRaw('todos');
+
+    return tareas
+        .filter(
+            (tarea: any) =>
+                Number(tarea.realizado ?? 0) === 0,
+        )
+        .map((tarea: any, index: number) =>
+            normalizarTareaMovimientoAnimal(
+                tarea,
+                index,
+            ),
+        );
+}
+
 /* =========================================================
    CONTEO DE TAREAS
    ========================================================= */
@@ -1036,6 +1085,8 @@ export type TareaMovimientoAnimalBackend = {
     crotal?: number;
     realizado?: number;
     tarea?: string;
+    traslado?: number;
+
 };
 
 export type ConteoMovimiento = {
@@ -1457,6 +1508,7 @@ export type HistorialMovimientoAnimalApi = {
     crotal: string;
     corralId?: string;
     fecha: string;
+    fechaRealizado: string;
     raw?: any;
 };
 
@@ -1524,6 +1576,13 @@ function normalizarHistorialMovimientoAnimal(
         fecha: normalizarFechaHistorialMovimiento(
             String(tarea?.fecha ?? ''),
         ),
+        fechaRealizado: normalizarFechaHistorialMovimiento(
+        String(
+            tarea?.fechaRealizado ??
+            tarea?.fecha_realizado ??
+            '',
+        ),
+    ),
         raw: tarea,
     };
 }

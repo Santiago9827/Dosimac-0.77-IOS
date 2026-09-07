@@ -17,7 +17,11 @@
   "resource_bundles": {
     "RNPermissionsPrivacyInfo": "ios/PrivacyInfo.xcprivacy"
   },
-  "source_files": "ios/*.{h,mm}",
+  "source_files": [
+    "ios/*.{h,mm}",
+    "ios/Camera/*.{h,mm}"
+  ],
+  "frameworks": "AVFoundation",
   "dependencies": {
     "React-Core": []
   }

@@ -10,6 +10,7 @@ import { FarmListNavigator } from './FarmListNavigator';
 import { GeneralHomeScreen } from './GeneralHomeScreen';
 import { GeneralStackNavigator } from './GeneralStackNavigator';
 import { CapturaAnimalStackNavigator } from './CapturaAnimalStackNavigator';
+import { DRStackNavigator } from './dr_StackNavigator';
 
 const Tab = createBottomTabNavigator();
 const AltaDispositivosStack = createStackNavigator();
@@ -30,10 +31,14 @@ const AltaDispositivosStackNavigator = () => {
         name="FarmList"
         component={FarmListNavigator}
       />
+
+      <AltaDispositivosStack.Screen
+        name="Register"
+        component={DRStackNavigator}
+      />
     </AltaDispositivosStack.Navigator>
   );
 };
-
 const primary = '#4C1D95';
 
 function HeaderMenuButton({ navigation }: any) {

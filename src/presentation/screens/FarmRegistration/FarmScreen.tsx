@@ -12,6 +12,7 @@ import {
   Platform,
   SafeAreaView,
   Share,
+  Modal,
 } from 'react-native';
 import { Appbar, TextInput } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +24,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { IonIcon } from '../../components/shared/IonIcon';
 import { guardarBaseUrlDesdeServerIp, validarInstalacionActiva } from "../../../stores/ipConfig";
 import { sincronizarSesionInstalacion } from './sincronizarSesionInstalacion';
+ import QRCode from 'react-native-qrcode-svg';
 
 export const FarmScreen = ({ navigation, route }) => {
   const [name, setName] = useState('');
@@ -34,6 +36,9 @@ export const FarmScreen = ({ navigation, route }) => {
   const [password, setPassword] = useState('');
   const [serverIp, setServerIp] = useState('');
   const [guardando, setGuardando] = useState(false);
+  const [qrVisible, setQrVisible] = useState(false);
+const [qrData, setQrData] = useState('');
+const [qrInstallationName, setQrInstallationName] = useState('');
 
   const sfarm = farmStore((state) => state.farm);
   const UseSetNewFarm = farmStore((state) => state.UseSetNewFarm);
@@ -138,6 +143,45 @@ export const FarmScreen = ({ navigation, route }) => {
     }
   };
 
+  const abrirCodigoQR = () => {
+  const datosQR = {
+    type: 'DOSIMAC_INSTALLATION',
+    version: 1,
+    data: {
+      name: name.trim(),
+      location: location.trim(),
+      province: province.trim(),
+      serverIp: serverIp.trim(),
+      userName: userName.trim(),
+      password: password.trim(),
+      ssid: ssid.trim(),
+      wifiPassword: wifiPassword.trim(),
+    },
+  };
+
+  const hayDatos =
+    name.trim() ||
+    location.trim() ||
+    province.trim() ||
+    serverIp.trim() ||
+    userName.trim() ||
+    password.trim() ||
+    ssid.trim() ||
+    wifiPassword.trim();
+
+  if (!hayDatos) {
+    Alert.alert(
+      'Sin datos para generar QR',
+      'La instalación no contiene ningún dato.'
+    );
+    return;
+  }
+
+  setQrData(`DOSIMAC_INSTALLATION::${JSON.stringify(datosQR)}`);
+  setQrInstallationName(name.trim() || 'Instalación DOSIMAC');
+  setQrVisible(true);
+};
+
   const setfarmdata = (farmData: farmFacility) => {
     setName(farmData.name);
     setLocation(farmData.location);
@@ -174,13 +218,36 @@ export const FarmScreen = ({ navigation, route }) => {
     setServerIp('');
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      if (route.params.isNewFarm) Inicilizefarmdata();
-      else fetchFarmData(route.params.id);
-      return () => { };
-    }, [])
-  );
+const cargarInstalacionImportada = (importedFarm: any) => {
+  setName(importedFarm.name ?? '');
+  setLocation(importedFarm.location ?? '');
+  setProvince(importedFarm.province ?? '');
+  setServerIp(importedFarm.serverIp ?? '');
+  setUsername(importedFarm.userName ?? '');
+  setPassword(importedFarm.password ?? '');
+  setSsid(importedFarm.ssid ?? '');
+  setWifiPassword(importedFarm.wifiPassword ?? '');
+};
+
+useFocusEffect(
+  React.useCallback(() => {
+    if (route.params.isNewFarm) {
+      if (route.params.importedFarm) {
+        cargarInstalacionImportada(route.params.importedFarm);
+      } else {
+        Inicilizefarmdata();
+      }
+    } else {
+      fetchFarmData(route.params.id);
+    }
+
+    return () => { };
+  }, [
+    route.params?.id,
+    route.params?.isNewFarm,
+    route.params?.importedFarm,
+  ])
+);
 
   const volverConAviso = (titulo: string, mensaje: string) => {
     Alert.alert(
@@ -372,6 +439,17 @@ export const FarmScreen = ({ navigation, route }) => {
         <Appbar.Content title={t('common:DetallesInstalacion')} />
 
         <Appbar.Action
+    icon={(props) => (
+      <MaterialCommunityIcons
+        name="qrcode"
+        size={props.size}
+        color={props.color}
+      />
+    )}
+    onPress={abrirCodigoQR}
+  />
+
+        <Appbar.Action
           icon={(props) => (
             <MaterialCommunityIcons
               name="share-variant-outline"
@@ -537,7 +615,57 @@ export const FarmScreen = ({ navigation, route }) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      <Modal
+  visible={qrVisible}
+  transparent
+  animationType="fade"
+  onRequestClose={() => setQrVisible(false)}
+>
+  <View style={styles.modalOverlay}>
+    <View style={styles.qrModalCard}>
+      <View style={styles.qrIconBox}>
+        <MaterialCommunityIcons
+          name="qrcode"
+          size={42}
+          color="#0F766E"
+        />
+      </View>
+
+      <Text style={styles.qrModalTitle}>
+        Código QR
+      </Text>
+
+      <Text style={styles.qrInstallationName}>
+        {qrInstallationName}
+      </Text>
+
+      <View style={styles.qrBox}>
+        {qrData ? (
+          <QRCode
+            value={qrData}
+            size={240}
+          />
+        ) : null}
+      </View>
+
+      <Text style={styles.qrWarning}>
+        Este código QR contiene datos de la instalación.
+        Compártelo únicamente con personas autorizadas.
+      </Text>
+
+      <Pressable
+        style={styles.qrCloseButton}
+        onPress={() => setQrVisible(false)}
+      >
+        <Text style={styles.qrCloseButtonText}>
+          Cerrar
+        </Text>
+      </Pressable>
+    </View>
+  </View>
+</Modal>
     </SafeAreaView>
+    
   );
 };
 
@@ -561,4 +689,81 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
   },
+  modalOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(15, 23, 42, 0.45)',
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingHorizontal: 24,
+},
+
+qrModalCard: {
+  width: '100%',
+  maxWidth: 370,
+  backgroundColor: '#FFFFFF',
+  borderRadius: 28,
+  padding: 24,
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: '#E2E8F0',
+},
+
+qrIconBox: {
+  width: 76,
+  height: 76,
+  borderRadius: 38,
+  backgroundColor: '#CCFBF1',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: 16,
+},
+
+qrModalTitle: {
+  color: '#0F172A',
+  fontSize: 24,
+  fontWeight: '900',
+  textAlign: 'center',
+},
+
+qrInstallationName: {
+  color: '#64748B',
+  fontSize: 16,
+  fontWeight: '800',
+  textAlign: 'center',
+  marginTop: 6,
+  marginBottom: 20,
+},
+
+qrBox: {
+  backgroundColor: '#FFFFFF',
+  padding: 18,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: '#E2E8F0',
+  marginBottom: 20,
+},
+
+qrWarning: {
+  color: '#64748B',
+  fontSize: 14,
+  fontWeight: '700',
+  textAlign: 'center',
+  lineHeight: 21,
+},
+
+qrCloseButton: {
+  width: '100%',
+  height: 50,
+  borderRadius: 16,
+  backgroundColor: '#0F766E',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: 22,
+},
+
+qrCloseButtonText: {
+  color: '#FFFFFF',
+  fontSize: 16,
+  fontWeight: '900',
+},
 });

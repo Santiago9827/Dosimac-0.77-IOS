@@ -17,7 +17,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { GetFarmsList, InicialiceFarmDataTable, GetFarmDataById } from '../../../FarmDB/farmsDB';
 import { guardarBaseUrlDesdeServerIp, validarInstalacionActiva } from '../../../stores/ipConfig';
 import { sincronizarSesionInstalacion } from './sincronizarSesionInstalacion';
-
+import { Camera, CameraType } from 'react-native-camera-kit';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 // interface farmFacility {
 //   name: String;
@@ -45,6 +46,8 @@ export const FarmListScreen = ({ navigation, route }) => {
   const [modalConexionTipo, setModalConexionTipo] = useState<'loading' | 'success' | 'error'>('loading');
   const [modalConexionTitulo, setModalConexionTitulo] = useState('');
   const [modalConexionTexto, setModalConexionTexto] = useState('');
+  const [scannerVisible, setScannerVisible] = useState(false);
+  const [qrEscaneado, setQrEscaneado] = useState(false);
 
   const timerModalConexionRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -252,10 +255,11 @@ export const FarmListScreen = ({ navigation, route }) => {
       setValue(String(item.id));
       UseSetNewFarm(item.id);
 
+      
       mostrarModalConexion(
         'loading',
-        'Conectando',
-        'Estamos conectando con la instalación seleccionada...'
+        t('farmList.conectando'),
+        t('conectandoInstalacionSeleccionada')
       );
 
       const instalacionCompleta = await GetFarmDataById(item.id);
@@ -289,8 +293,7 @@ export const FarmListScreen = ({ navigation, route }) => {
           'error',
           'No se ha podido conectar',
           disponibilidad.mensaje ||
-          'No se puede conectar con la instalación seleccionada. Comprueba la red WiFi o la IP del servidor.'
-        );
+          t('noPuedeConectarInstalacionSeleccionada'));
         return;
       }
 
@@ -309,8 +312,8 @@ export const FarmListScreen = ({ navigation, route }) => {
       if (resultadoSesion.tipo === 'sin_login') {
         mostrarModalConexion(
           'success',
-          'Instalación seleccionada',
-          'La IP se ha aplicado correctamente, pero esta instalación no tiene Username y Clave.',
+          t('instalacionSeleccionada'),
+          t('ipAplicadaSinCredenciales'),
           true
         );
         return;
@@ -318,8 +321,8 @@ export const FarmListScreen = ({ navigation, route }) => {
 
       mostrarModalConexion(
         'success',
-        'Conexión exitosa',
-        'La instalación se ha conectado correctamente.',
+        t('conexionExitosa'),
+        t('instalacionConectadaCorrectamente'),
         true
       );
 
@@ -379,6 +382,125 @@ export const FarmListScreen = ({ navigation, route }) => {
     );
   }
 
+  const normalizarCampoQR = (valor: any) => {
+    if (valor === null || valor === undefined) {
+      return '';
+    }
+
+    return String(valor);
+  };
+
+  const obtenerInstalacionDesdeQR = (contenido: any) => {
+    const tipo = String(contenido?.type ?? '').trim();
+    const version = Number(contenido?.version);
+
+    if (tipo !== 'DOSIMAC_INSTALLATION') {
+      throw new Error(`Tipo incorrecto: ${tipo || 'vacío'}`);
+    }
+
+    if (version !== 1) {
+      throw new Error(`Versión incorrecta: ${contenido?.version ?? 'vacía'}`);
+    }
+
+    if (!contenido?.data || typeof contenido.data !== 'object') {
+      throw new Error('El QR no contiene datos de instalación.');
+    }
+
+    const data = contenido.data;
+
+    return {
+      name: normalizarCampoQR(data.name),
+      location: normalizarCampoQR(data.location),
+      province: normalizarCampoQR(data.province),
+      serverIp: normalizarCampoQR(data.serverIp),
+      userName: normalizarCampoQR(data.userName),
+      password: normalizarCampoQR(data.password),
+      ssid: normalizarCampoQR(data.ssid),
+      wifiPassword: normalizarCampoQR(data.wifiPassword),
+    };
+  };
+
+  const abrirScannerQR = async () => {
+    setQrEscaneado(false);
+
+    const estadoCamara = await check(PERMISSIONS.IOS.CAMERA);
+
+    if (estadoCamara === RESULTS.GRANTED) {
+      setScannerVisible(true);
+      return;
+    }
+
+    const nuevoEstado = await request(PERMISSIONS.IOS.CAMERA);
+
+    if (nuevoEstado !== RESULTS.GRANTED) {
+      mostrarModalConexion(
+        'error',
+        t('permisoCamaraNecesario'),
+        t('permisoCamaraQrTexto')
+      );
+      return;
+    }
+
+    setScannerVisible(true);
+  };
+
+  const cerrarScannerQR = () => {
+    setScannerVisible(false);
+    setQrEscaneado(false);
+  };
+
+  const procesarCodigoQR = (event: any) => {
+    if (qrEscaneado) {
+      return;
+    }
+
+    setQrEscaneado(true);
+
+    let textoQR = '';
+
+    try {
+      textoQR = String(event?.nativeEvent?.codeStringValue ?? '').trim();
+
+      if (!textoQR) {
+        throw new Error('El QR se ha leído vacío.');
+      }
+
+      textoQR = textoQR.replace(/^\uFEFF/, '');
+
+      const prefijo = 'DOSIMAC_INSTALLATION::';
+
+      if (!textoQR.startsWith(prefijo)) {
+        throw new Error(
+          t('qrNoEsInstalacionDosimac')
+        );
+      }
+
+      const jsonLimpio = textoQR.replace(prefijo, '');
+      const contenido = JSON.parse(jsonLimpio);
+
+      const instalacionImportada = obtenerInstalacionDesdeQR(contenido);
+
+      setScannerVisible(false);
+      setQrEscaneado(false);
+
+      navigation.navigate('Farm detalils', {
+        id: 0,
+        isNewFarm: true,
+        SetectedValue: Number(value) || 0,
+        importedFarm: instalacionImportada,
+      });
+    } catch (error: any) {
+      setScannerVisible(false);
+      setQrEscaneado(false);
+
+      mostrarModalConexion(
+        'error',
+        t('qrNoValido'),
+        error?.message || 'Este código QR no contiene una instalación DOSIMAC válida.'
+      );
+    }
+  };
+
   return (
 
 
@@ -388,6 +510,17 @@ export const FarmListScreen = ({ navigation, route }) => {
 
         <Appbar.BackAction onPress={goToHome} />
         <Appbar.Content title={t('common:Lista_instalaciones')} />
+        <Appbar.Action
+          accessibilityLabel="Escanear QR de instalación"
+          icon={({ size, color }) => (
+            <Ionicons
+              name="scan-outline"
+              size={size}
+              color={color}
+            />
+          )}
+          onPress={abrirScannerQR}
+        />
         <Appbar.Action icon="add" onPress={() => { navigation.navigate("Farm detalils", { id: 0, isNewFarm: true, SetectedValue: 0 }) }} />
         {/* <Appbar.Action icon="add" onPress={() => {UseSetFirstElement(!setFirstElment)}} /> */}
       </Appbar.Header>
@@ -427,6 +560,47 @@ export const FarmListScreen = ({ navigation, route }) => {
           </View>
         )}
       </RadioButton.Group>
+      <Modal
+        visible={scannerVisible}
+        transparent={false}
+        animationType="slide"
+        onRequestClose={cerrarScannerQR}
+      >
+        <View style={styles.scannerContainer}>
+          <Appbar.Header elevated>
+            <Appbar.BackAction onPress={cerrarScannerQR} />
+            <Appbar.Content title="Escanear instalación" />
+          </Appbar.Header>
+
+          <View style={styles.scannerBody}>
+            <Camera
+              style={styles.scannerCamera}
+              cameraType={CameraType.Back}
+              scanBarcode={true}
+              showFrame={true}
+              laserColor="red"
+              frameColor="white"
+              onReadCode={procesarCodigoQR}
+            />
+
+            <View style={styles.scannerInfoBox}>
+              <Ionicons
+                name="qr-code-outline"
+                size={34}
+                color="#FFFFFF"
+              />
+
+              <Text style={styles.scannerInfoTitle}>
+                {t('escaneaCodigoQr')}
+              </Text>
+
+              <Text style={styles.scannerInfoText}>
+                {t('colocaQrInstalacionCamara')}
+              </Text>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <Modal
         visible={modalConexionVisible}
         transparent
@@ -481,7 +655,7 @@ export const FarmListScreen = ({ navigation, route }) => {
                 onPress={cerrarModalConexion}
               >
                 <Text style={styles.modalConexionBotonTexto}>
-                  Aceptar
+                  {t('Aceptar')}
                 </Text>
               </Pressable>
             )}
@@ -610,6 +784,48 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '900',
+  },
+  scannerContainer: {
+    flex: 1,
+    backgroundColor: '#000000',
+  },
+
+  scannerBody: {
+    flex: 1,
+    backgroundColor: '#000000',
+  },
+
+  scannerCamera: {
+    flex: 1,
+    width: '100%',
+  },
+
+  scannerInfoBox: {
+    position: 'absolute',
+    left: 24,
+    right: 24,
+    bottom: 40,
+    backgroundColor: 'rgba(15, 23, 42, 0.88)',
+    borderRadius: 24,
+    padding: 20,
+    alignItems: 'center',
+  },
+
+  scannerInfoTitle: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: '900',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+
+  scannerInfoText: {
+    color: '#CBD5E1',
+    fontSize: 15,
+    fontWeight: '700',
+    textAlign: 'center',
+    lineHeight: 22,
+    marginTop: 8,
   },
 
 

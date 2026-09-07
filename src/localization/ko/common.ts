@@ -36,7 +36,22 @@ export default {
   Provincia: '주/도',
   NombreWifi: 'Wifi SSID',
   PasswordWifi: 'Wifi 비밀번호',
-  No_hay_dispositivos: '장치 없음',
+  colocaQrInstalacionCamara: "설치 QR 코드를 카메라 화면 안에 맞춰 주세요.",
+  escaneaCodigoQr: "QR 코드를 스캔하세요",
+  permisoCamaraNecesario: "카메라 권한 필요",
+permisoCamaraQrTexto: "QR 코드를 스캔하려면 카메라 접근을 허용해야 합니다.",
+qrNoValido: "유효하지 않은 QR 코드",
+qrNoEsInstalacionDosimac: "이 QR 코드는 DOSIMAC 설치 QR 코드가 아닙니다.",
+ipAplicadaSinCredenciales: "IP가 올바르게 적용되었지만 이 설치에는 Username과 비밀번호가 없습니다.",
+instalacionSeleccionada: "설치가 선택되었습니다",
+conexionExitosa: "연결 성공",
+instalacionConectadaCorrectamente: "설치가 올바르게 연결되었습니다.",
+noPuedeConectarInstalacionSeleccionada: "선택한 설치에 연결할 수 없습니다. WiFi 네트워크 또는 서버 IP를 확인하세요.",  
+conectando: "연결 중",
+conectandoInstalacionSeleccionada: "선택한 설치에 연결하는 중...",
+
+
+No_hay_dispositivos: '장치 없음',
   Aviso: '알림',
   SearchingDevices: '장치 검색 중...',
   NoSePuedeBorrarGranja: '새 농장은 삭제할 수 없습니다',
@@ -926,6 +941,10 @@ avisoAplicacionNoConfigurada: {
   link: "여기를 누르세요",
 },
 generalHome: {
+  servidorCtifeedDesactualizadoTitulo: "CTIFEED 서버가 오래되었습니다",
+servidorCtifeedDesactualizadoTexto: "이 기능을 사용하려면 CTIFEED 서버를 업데이트해야 합니다.",
+  tareasMovimientosTitulo: "이동 작업",
+tareasMovimientosDescripcion: "대기 중인 이동 작업을 조회하고 관리합니다.",
   movementAnimalTitle: "동물 이동",
   readerDescription: "이표 리더기.",
   keyboardDescription: "키보드",
@@ -1138,7 +1157,8 @@ tareasMovimientos: {
     sinCrotal: "이표 없음",
     corralDestino: "대상 돈방",
     corralOrigen: "출발 돈방",
-    fecha: "날짜"
+    fecha: "예정 날짜",
+    fechaRealizado: "완료 날짜",
   },
 
   filtros: {
@@ -1355,5 +1375,13 @@ filtrosHistorialMovimientos: {
     cancelar: "취소",
     aceptar: "확인"
   }
+},
+modalSalidaPendiente: {
+  titulo: "대기 중인 출고",
+  mensaje: "이 동물에는 대기 중인 출고 작업이 있습니다. 먼저 출고를 완료한 후 선택한 입고를 진행하시겠습니까?",
+  animal: "동물",
+  botonConfirmar: "작업 실행",
+  trasladoEntradaTitulo: "입고 이동",
+soloUnTrasladoEntrada: "입고 이동은 한 번에 하나만 선택할 수 있습니다.",
 }
 };

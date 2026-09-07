@@ -38,6 +38,23 @@ export default {
   Provincia: 'Province',
   NombreWifi: 'Wifi SSID',
   PasswordWifi: 'Wifi password',
+  colocaQrInstalacionCamara: "Place the installation QR code inside the camera frame.",
+  escaneaCodigoQr: "Scan the QR code",
+  permisoCamaraNecesario: "Camera permission required",
+  permisoCamaraQrTexto: "You need to allow camera access to scan the QR code.",
+  qrNoValido: "Invalid QR code",
+  qrNoEsInstalacionDosimac: "This is not a DOSIMAC installation QR code.",
+  ipAplicadaSinCredenciales: "The IP has been applied correctly, but this installation does not have a Username and Password.",
+  instalacionSeleccionada: "Installation selected",
+  conexionExitosa: "Successful connection",
+  instalacionConectadaCorrectamente: "The installation has connected successfully.",
+  noPuedeConectarInstalacionSeleccionada: "Cannot connect to the selected installation. Check the WiFi network or the server IP.",
+  conectando: "Connecting",
+conectandoInstalacionSeleccionada: "Connecting to the selected installation...",
+
+
+
+
   No_hay_dispositivos: 'No devices',
   Aviso: 'Notice',
   SearchingDevices: 'Searching devices...',
@@ -954,6 +971,10 @@ export default {
     link: "Tap here",
   },
   generalHome: {
+    servidorCtifeedDesactualizadoTitulo: "Outdated CTIFEED server",
+    servidorCtifeedDesactualizadoTexto: "The CTIFEED server needs to be updated to use this feature.",
+    tareasMovimientosTitulo: "Movement Tasks",
+    tareasMovimientosDescripcion: "View and manage pending movement tasks.",
     movementAnimalTitle: "Animal movement",
     readerDescription: "Ear tag reader.",
     keyboardDescription: "Keyboard",
@@ -1142,249 +1163,259 @@ export default {
     replaceEarTagGenericError: "The ear tag could not be replaced.",
   },
 
- tareasMovimientos: {
-  tabs: {
-    tareas: "Tasks",
-    historial: "History"
-  },
+  tareasMovimientos: {
+    tabs: {
+      tareas: "Tasks",
+      historial: "History"
+    },
 
-  secciones: {
-    gestacion: "Gestation",
-    maternidad: "Maternity",
-    todos: "All",
-    todas: "All"
-  },
+    secciones: {
+      gestacion: "Gestation",
+      maternidad: "Maternity",
+      todos: "All",
+      todas: "All"
+    },
 
-  operaciones: {
-    entrada: "Entry",
-    salida: "Exit",
-    realizada: "Completed"
-  },
+    operaciones: {
+      entrada: "Entry",
+      salida: "Exit",
+      realizada: "Completed"
+    },
 
-  tarjetas: {
-    tareasPendientesMovimientos: "Pending movement tasks",
-    idAnimal: "Animal ID",
-    sinCrotal: "No ear tag",
-    corralDestino: "Destination pen",
-    corralOrigen: "Origin pen",
-    fecha: "Date"
-  },
+    tarjetas: {
+      tareasPendientesMovimientos: "Pending movement tasks",
+      idAnimal: "Animal ID",
+      sinCrotal: "No ear tag",
+      corralDestino: "Destination pen",
+      corralOrigen: "Origin pen",
+      fecha: "Scheduled date",
+      fechaRealizado: "Date completed",
 
-  filtros: {
-    titulo: "Filters",
-    filtrarPorFecha: "Filter by date",
-    hoy: "Today",
-    ayer: "Yesterday",
-    fecha: "Date",
-    formatoFecha: "DD/MM/YYYY"
-  },
+    },
 
-  carga: {
-    cargandoHistorial: "Loading history..."
-  },
+    filtros: {
+      titulo: "Filters",
+      filtrarPorFecha: "Filter by date",
+      hoy: "Today",
+      ayer: "Yesterday",
+      fecha: "Date",
+      formatoFecha: "DD/MM/YYYY"
+    },
 
-  vacio: {
-    sinResultados: "No results",
-    sinMovimientosConFiltros: "There are no completed movements matching these filters.",
-    sinMovimientosTodavia: "There are no completed movements yet."
-  },
+    carga: {
+      cargandoHistorial: "Loading history..."
+    },
 
-  errores: {
-    actualizarServidorTareas: "The server must be updated to use the movement tasks feature.",
-    noCargarTareas: "The tasks could not be loaded.",
-    noCargarHistorialTitulo: "The history could not be loaded",
-    noCargarHistorial: "The movement history could not be loaded.",
-    historialNoDisponible: "History unavailable",
-    actualizarServidorHistorial: "The server must be updated to use the movement task history."
+    vacio: {
+      sinResultados: "No results",
+      sinMovimientosConFiltros: "There are no completed movements matching these filters.",
+      sinMovimientosTodavia: "There are no completed movements yet."
+    },
+
+    errores: {
+      actualizarServidorTareas: "The server must be updated to use the movement tasks feature.",
+      noCargarTareas: "The tasks could not be loaded.",
+      noCargarHistorialTitulo: "The history could not be loaded",
+      noCargarHistorial: "The movement history could not be loaded.",
+      historialNoDisponible: "History unavailable",
+      actualizarServidorHistorial: "The server must be updated to use the movement task history."
+    }
+  },
+  tareasMovimientosDetalle: {
+    tabs: {
+      gestacion: "Gestation",
+      maternidad: "Maternity"
+    },
+
+    acciones: {
+      filtros: "Filters",
+      ordenar: "Sort",
+      marcarRealizado: "Mark completed",
+      marcarSeleccionadas: "Mark ({{total}})",
+      marcando: "Marking...",
+      aceptar: "Accept",
+      cancelar: "Cancel",
+      confirmar: "Confirm",
+      validando: "Validating..."
+    },
+
+    orden: {
+      corralAscendente: "Pen ascending",
+      corralDescendente: "Pen descending"
+    },
+
+    operaciones: {
+      entrada: "Entry",
+      salida: "Exit",
+      trasladoEntrada: "Transfer entry",
+      trasladoSalida: "Transfer exit"
+    },
+
+    tarjetas: {
+      idAnimal: "Animal ID",
+      sinCrotal: "No ear tag",
+      corralDestino: "Destination pen",
+      corralOrigen: "Origin pen",
+      fecha: "Date"
+    },
+
+    estados: {
+      cargandoTareas: "Loading tasks...",
+      noCargarTareasTitulo: "The tasks could not be loaded",
+      pulsaReintentar: "Tap to try again",
+      sinTareasConFiltros: "No tasks match these filters",
+      sinTareasPendientes: "No pending tasks",
+      cambiaFiltros: "Try changing the applied filters.",
+      sinMovimientosPendientes: "No pending movements were found."
+    },
+
+    modalResultado: {
+      tareasRealizadasTitulo: "Tasks completed",
+      tareasRealizadasMensaje: "The selected tasks have been marked as completed.",
+      tareaRealizadaTitulo: "Task completed",
+      tareaRealizadaMensaje: "The maternity entry has been marked as completed.",
+      errorTitulo: "Error"
+    },
+
+    modalCorral: {
+      titulo: "Confirm pen",
+      mensaje: "Check the destination pen for the maternity entry.",
+      labelCorralDestino: "Destination pen",
+      placeholderCorral: "Enter the pen"
+    },
+
+    errores: {
+      noCargarTareas: "The tasks could not be loaded.",
+      entradaMaternidadTitulo: "Maternity entry",
+      soloUnaEntradaMaternidad: "You can only mark one maternity entry at a time.",
+      soloUnaEntradaMaternidadCadaVez: "You can only mark one maternity entry each time.",
+      noMarcarTareas: "The tasks could not be marked as completed.",
+      corralMaximo9: "Enter a valid pen with a maximum of 9 digits.",
+      corralNoExiste: "The pen does not exist.",
+      corralOcupado: "The pen is occupied.",
+      noValidarCorral: "The pen could not be validated.",
+      noValidarCorralMaternidad: "The maternity pen could not be validated."
+    }
+  },
+  filtrosTareasMovimientos: {
+    cabecera: {
+      titulo: "Filters",
+      subtituloTareasDe: "{{seccion}} tasks",
+      limpiar: "Clear"
+    },
+
+    secciones: {
+      gestacion: "Gestation",
+      maternidad: "Maternity"
+    },
+
+    bloques: {
+      tipoMovimiento: "Movement type",
+      fecha: "Date",
+      corral: "Pen",
+      idAnimal: "Animal ID"
+    },
+
+    opciones: {
+      todos: "All",
+      entrada: "Entry",
+      salida: "Exit",
+      todasLasFechas: "All dates",
+      hoy: "Today",
+      manana: "Tomorrow",
+      fecha: "Date",
+      todosLosCorrales: "All pens",
+      porCorral: "By pen",
+      todosLosAnimales: "All animals",
+      porId: "By ID"
+    },
+
+    placeholders: {
+      dia: "DD",
+      mes: "MM",
+      anio: "YY/YYYY",
+      introduceCorral: "Enter the pen",
+      introduceIdAnimal: "Enter the animal ID"
+    },
+
+    validaciones: {
+      fechaCompleta: "Enter day, month and year.",
+      diaDosCifras: "The day must have 2 digits.",
+      mesDosCifras: "The month must have 2 digits.",
+      anioDosOCuatroCifras: "The year must have 2 or 4 digits.",
+      diaRango: "The day must be between 01 and 31.",
+      mesRango: "The month must be between 01 and 12.",
+      fechaNoExiste: "The date does not exist.",
+      introduceCorral: "Enter a pen number.",
+      introduceIdAnimal: "Enter an animal ID."
+    },
+
+    botones: {
+      cancelar: "Cancel",
+      aceptar: "Accept"
+    }
+  },
+  filtrosHistorialMovimientos: {
+    cabecera: {
+      titulo: "Filters",
+      subtitulo: "Movement history",
+      limpiar: "Clear"
+    },
+
+    bloques: {
+      tipoMovimiento: "Movement type",
+      fecha: "Date",
+      corral: "Pen",
+      idAnimal: "Animal ID"
+    },
+
+    opciones: {
+      todos: "All",
+      entrada: "Entry",
+      salida: "Exit",
+      todasLasFechas: "All dates",
+      hoy: "Today",
+      manana: "Tomorrow",
+      fecha: "Date",
+      todosLosCorrales: "All pens",
+      porCorral: "By pen",
+      todosLosAnimales: "All animals",
+      porId: "By ID"
+    },
+
+    placeholders: {
+      dia: "DD",
+      mes: "MM",
+      anio: "YY/YYYY",
+      introduceCorral: "Enter the pen",
+      introduceIdAnimal: "Enter the animal ID"
+    },
+
+    validaciones: {
+      fechaCompleta: "Enter day, month and year.",
+      diaDosCifras: "The day must have 2 digits.",
+      mesDosCifras: "The month must have 2 digits.",
+      anioDosOCuatroCifras: "The year must have 2 or 4 digits.",
+      diaRango: "The day must be between 01 and 31.",
+      mesRango: "The month must be between 01 and 12.",
+      fechaNoExiste: "The date does not exist.",
+      introduceCorral: "Enter a pen number.",
+      introduceIdAnimal: "Enter an animal ID."
+    },
+
+    botones: {
+      cancelar: "Cancel",
+      aceptar: "Accept"
+    }
+  },
+  modalSalidaPendiente: {
+    titulo: "Pending exit",
+    mensaje: "This animal has a pending exit task. Do you want to complete the exit first and then perform the selected entry?",
+    animal: "Animal",
+    botonConfirmar: "Perform operation",
+    trasladoEntradaTitulo: "Entry transfer",
+    soloUnTrasladoEntrada: "You can only select one entry transfer at a time.",
   }
-},
-tareasMovimientosDetalle: {
-  tabs: {
-    gestacion: "Gestation",
-    maternidad: "Maternity"
-  },
-
-  acciones: {
-    filtros: "Filters",
-    ordenar: "Sort",
-    marcarRealizado: "Mark completed",
-    marcarSeleccionadas: "Mark ({{total}})",
-    marcando: "Marking...",
-    aceptar: "Accept",
-    cancelar: "Cancel",
-    confirmar: "Confirm",
-    validando: "Validating..."
-  },
-
-  orden: {
-    corralAscendente: "Pen ascending",
-    corralDescendente: "Pen descending"
-  },
-
-  operaciones: {
-    entrada: "Entry",
-    salida: "Exit",
-    trasladoEntrada: "Transfer entry",
-    trasladoSalida: "Transfer exit"
-  },
-
-  tarjetas: {
-    idAnimal: "Animal ID",
-    sinCrotal: "No ear tag",
-    corralDestino: "Destination pen",
-    corralOrigen: "Origin pen",
-    fecha: "Date"
-  },
-
-  estados: {
-    cargandoTareas: "Loading tasks...",
-    noCargarTareasTitulo: "The tasks could not be loaded",
-    pulsaReintentar: "Tap to try again",
-    sinTareasConFiltros: "No tasks match these filters",
-    sinTareasPendientes: "No pending tasks",
-    cambiaFiltros: "Try changing the applied filters.",
-    sinMovimientosPendientes: "No pending movements were found."
-  },
-
-  modalResultado: {
-    tareasRealizadasTitulo: "Tasks completed",
-    tareasRealizadasMensaje: "The selected tasks have been marked as completed.",
-    tareaRealizadaTitulo: "Task completed",
-    tareaRealizadaMensaje: "The maternity entry has been marked as completed.",
-    errorTitulo: "Error"
-  },
-
-  modalCorral: {
-    titulo: "Confirm pen",
-    mensaje: "Check the destination pen for the maternity entry.",
-    labelCorralDestino: "Destination pen",
-    placeholderCorral: "Enter the pen"
-  },
-
-  errores: {
-    noCargarTareas: "The tasks could not be loaded.",
-    entradaMaternidadTitulo: "Maternity entry",
-    soloUnaEntradaMaternidad: "You can only mark one maternity entry at a time.",
-    soloUnaEntradaMaternidadCadaVez: "You can only mark one maternity entry each time.",
-    noMarcarTareas: "The tasks could not be marked as completed.",
-    corralMaximo9: "Enter a valid pen with a maximum of 9 digits.",
-    corralNoExiste: "The pen does not exist.",
-    corralOcupado: "The pen is occupied.",
-    noValidarCorral: "The pen could not be validated.",
-    noValidarCorralMaternidad: "The maternity pen could not be validated."
-  }
-},
-filtrosTareasMovimientos: {
-  cabecera: {
-    titulo: "Filters",
-    subtituloTareasDe: "{{seccion}} tasks",
-    limpiar: "Clear"
-  },
-
-  secciones: {
-    gestacion: "Gestation",
-    maternidad: "Maternity"
-  },
-
-  bloques: {
-    tipoMovimiento: "Movement type",
-    fecha: "Date",
-    corral: "Pen",
-    idAnimal: "Animal ID"
-  },
-
-  opciones: {
-    todos: "All",
-    entrada: "Entry",
-    salida: "Exit",
-    todasLasFechas: "All dates",
-    hoy: "Today",
-    manana: "Tomorrow",
-    fecha: "Date",
-    todosLosCorrales: "All pens",
-    porCorral: "By pen",
-    todosLosAnimales: "All animals",
-    porId: "By ID"
-  },
-
-  placeholders: {
-    dia: "DD",
-    mes: "MM",
-    anio: "YY/YYYY",
-    introduceCorral: "Enter the pen",
-    introduceIdAnimal: "Enter the animal ID"
-  },
-
-  validaciones: {
-    fechaCompleta: "Enter day, month and year.",
-    diaDosCifras: "The day must have 2 digits.",
-    mesDosCifras: "The month must have 2 digits.",
-    anioDosOCuatroCifras: "The year must have 2 or 4 digits.",
-    diaRango: "The day must be between 01 and 31.",
-    mesRango: "The month must be between 01 and 12.",
-    fechaNoExiste: "The date does not exist.",
-    introduceCorral: "Enter a pen number.",
-    introduceIdAnimal: "Enter an animal ID."
-  },
-
-  botones: {
-    cancelar: "Cancel",
-    aceptar: "Accept"
-  }
-},
-filtrosHistorialMovimientos: {
-  cabecera: {
-    titulo: "Filters",
-    subtitulo: "Movement history",
-    limpiar: "Clear"
-  },
-
-  bloques: {
-    tipoMovimiento: "Movement type",
-    fecha: "Date",
-    corral: "Pen",
-    idAnimal: "Animal ID"
-  },
-
-  opciones: {
-    todos: "All",
-    entrada: "Entry",
-    salida: "Exit",
-    todasLasFechas: "All dates",
-    hoy: "Today",
-    manana: "Tomorrow",
-    fecha: "Date",
-    todosLosCorrales: "All pens",
-    porCorral: "By pen",
-    todosLosAnimales: "All animals",
-    porId: "By ID"
-  },
-
-  placeholders: {
-    dia: "DD",
-    mes: "MM",
-    anio: "YY/YYYY",
-    introduceCorral: "Enter the pen",
-    introduceIdAnimal: "Enter the animal ID"
-  },
-
-  validaciones: {
-    fechaCompleta: "Enter day, month and year.",
-    diaDosCifras: "The day must have 2 digits.",
-    mesDosCifras: "The month must have 2 digits.",
-    anioDosOCuatroCifras: "The year must have 2 or 4 digits.",
-    diaRango: "The day must be between 01 and 31.",
-    mesRango: "The month must be between 01 and 12.",
-    fechaNoExiste: "The date does not exist.",
-    introduceCorral: "Enter a pen number.",
-    introduceIdAnimal: "Enter an animal ID."
-  },
-
-  botones: {
-    cancelar: "Cancel",
-    aceptar: "Accept"
-  }
-}
 
 
 };

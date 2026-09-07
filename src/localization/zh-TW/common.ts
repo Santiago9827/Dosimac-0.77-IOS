@@ -36,6 +36,21 @@ export default {
   Provincia: '省份',
   NombreWifi: 'Wifi SSID',
   PasswordWifi: 'Wifi 密碼',
+  colocaQrInstalacionCamara: "請將安裝 QR 碼放入相機畫面內。",
+  escaneaCodigoQr: "掃描 QR 碼",
+  permisoCamaraNecesario: "需要相機權限",
+  permisoCamaraQrTexto: "你需要允許相機存取權限才能掃描 QR 碼。",
+  qrNoValido: "QR 碼無效",
+  qrNoEsInstalacionDosimac: "這不是 DOSIMAC 安裝 QR 碼。",
+  ipAplicadaSinCredenciales: "IP 已正確套用，但此安裝沒有 Username 和密碼。",
+  instalacionSeleccionada: "已選擇安裝",
+  conexionExitosa: "連線成功",
+  instalacionConectadaCorrectamente: "安裝已成功連線。",
+  noPuedeConectarInstalacionSeleccionada: "無法連線到所選安裝。請檢查 WiFi 網路或伺服器 IP。",
+  conectando: "連線中",
+  conectandoInstalacionSeleccionada: "正在連線到所選安裝...",
+
+
   No_hay_dispositivos: '沒有裝置',
   Aviso: '通知',
   SearchingDevices: '正在搜尋裝置...',
@@ -676,7 +691,7 @@ export default {
     house: "舍棟",
     pen: "欄位",
     lastFeeding: "最後餵食",
-presentPiglets: "活仔豬",
+    presentPiglets: "活仔豬",
     inseminationDate: "配種日期",
     teatsNumber: "乳頭數",
 
@@ -931,6 +946,10 @@ presentPiglets: "活仔豬",
     link: "點擊這裡",
   },
   generalHome: {
+    servidorCtifeedDesactualizadoTitulo: "CTIFEED 伺服器已過時",
+    servidorCtifeedDesactualizadoTexto: "需要更新 CTIFEED 伺服器才能使用此功能。",
+    tareasMovimientosTitulo: "移動任務",
+    tareasMovimientosDescripcion: "查看和管理待處理的移動任務。",
     movementAnimalTitle: "動物移動",
     readerDescription: "耳標讀取器。",
     keyboardDescription: "鍵盤",
@@ -1141,7 +1160,8 @@ presentPiglets: "活仔豬",
       sinCrotal: "無耳標",
       corralDestino: "目標欄位",
       corralOrigen: "來源欄位",
-      fecha: "日期"
+      fecha: "預定日期",
+      fechaRealizado: "完成日期",
     },
 
     filtros: {
@@ -1249,114 +1269,122 @@ presentPiglets: "活仔豬",
     }
   },
   filtrosTareasMovimientos: {
-  cabecera: {
-    titulo: "篩選",
-    subtituloTareasDe: "{{seccion}}任務",
-    limpiar: "清除"
-  },
+    cabecera: {
+      titulo: "篩選",
+      subtituloTareasDe: "{{seccion}}任務",
+      limpiar: "清除"
+    },
 
-  secciones: {
-    gestacion: "妊娠區",
-    maternidad: "分娩區"
-  },
+    secciones: {
+      gestacion: "妊娠區",
+      maternidad: "分娩區"
+    },
 
-  bloques: {
-    tipoMovimiento: "移動類型",
-    fecha: "日期",
-    corral: "欄位",
-    idAnimal: "動物 ID"
-  },
+    bloques: {
+      tipoMovimiento: "移動類型",
+      fecha: "日期",
+      corral: "欄位",
+      idAnimal: "動物 ID"
+    },
 
-  opciones: {
-    todos: "全部",
-    entrada: "進入",
-    salida: "離開",
-    todasLasFechas: "所有日期",
-    hoy: "今天",
-    manana: "明天",
-    fecha: "日期",
-    todosLosCorrales: "所有欄位",
-    porCorral: "依欄位",
-    todosLosAnimales: "所有動物",
-    porId: "依 ID"
-  },
+    opciones: {
+      todos: "全部",
+      entrada: "進入",
+      salida: "離開",
+      todasLasFechas: "所有日期",
+      hoy: "今天",
+      manana: "明天",
+      fecha: "日期",
+      todosLosCorrales: "所有欄位",
+      porCorral: "依欄位",
+      todosLosAnimales: "所有動物",
+      porId: "依 ID"
+    },
 
-  placeholders: {
-    dia: "DD",
-    mes: "MM",
-    anio: "YY/YYYY",
-    introduceCorral: "輸入欄位",
-    introduceIdAnimal: "輸入動物 ID"
-  },
+    placeholders: {
+      dia: "DD",
+      mes: "MM",
+      anio: "YY/YYYY",
+      introduceCorral: "輸入欄位",
+      introduceIdAnimal: "輸入動物 ID"
+    },
 
-  validaciones: {
-    fechaCompleta: "請輸入日、月和年。",
-    diaDosCifras: "日期必須為 2 位數。",
-    mesDosCifras: "月份必須為 2 位數。",
-    anioDosOCuatroCifras: "年份必須為 2 位或 4 位數。",
-    diaRango: "日期必須介於 01 和 31 之間。",
-    mesRango: "月份必須介於 01 和 12 之間。",
-    fechaNoExiste: "日期不存在。",
-    introduceCorral: "請輸入欄位編號。",
-    introduceIdAnimal: "請輸入動物 ID。"
-  },
+    validaciones: {
+      fechaCompleta: "請輸入日、月和年。",
+      diaDosCifras: "日期必須為 2 位數。",
+      mesDosCifras: "月份必須為 2 位數。",
+      anioDosOCuatroCifras: "年份必須為 2 位或 4 位數。",
+      diaRango: "日期必須介於 01 和 31 之間。",
+      mesRango: "月份必須介於 01 和 12 之間。",
+      fechaNoExiste: "日期不存在。",
+      introduceCorral: "請輸入欄位編號。",
+      introduceIdAnimal: "請輸入動物 ID。"
+    },
 
-  botones: {
-    cancelar: "取消",
-    aceptar: "接受"
+    botones: {
+      cancelar: "取消",
+      aceptar: "接受"
+    }
+  },
+  filtrosHistorialMovimientos: {
+    cabecera: {
+      titulo: "篩選",
+      subtitulo: "移動歷史紀錄",
+      limpiar: "清除"
+    },
+
+    bloques: {
+      tipoMovimiento: "移動類型",
+      fecha: "日期",
+      corral: "欄位",
+      idAnimal: "動物 ID"
+    },
+
+    opciones: {
+      todos: "全部",
+      entrada: "進入",
+      salida: "離開",
+      todasLasFechas: "所有日期",
+      hoy: "今天",
+      manana: "明天",
+      fecha: "日期",
+      todosLosCorrales: "所有欄位",
+      porCorral: "依欄位",
+      todosLosAnimales: "所有動物",
+      porId: "依 ID"
+    },
+
+    placeholders: {
+      dia: "DD",
+      mes: "MM",
+      anio: "YY/YYYY",
+      introduceCorral: "輸入欄位",
+      introduceIdAnimal: "輸入動物 ID"
+    },
+
+    validaciones: {
+      fechaCompleta: "請輸入日、月和年。",
+      diaDosCifras: "日期必須為 2 位數。",
+      mesDosCifras: "月份必須為 2 位數。",
+      anioDosOCuatroCifras: "年份必須為 2 位或 4 位數。",
+      diaRango: "日期必須介於 01 和 31 之間。",
+      mesRango: "月份必須介於 01 和 12 之間。",
+      fechaNoExiste: "日期不存在。",
+      introduceCorral: "請輸入欄位編號。",
+      introduceIdAnimal: "請輸入動物 ID。"
+    },
+
+    botones: {
+      cancelar: "取消",
+      aceptar: "接受"
+    }
+  },
+  modalSalidaPendiente: {
+    titulo: "待處理的移出",
+    mensaje: "此動物有一個待處理的移出任務。是否要先完成移出，然後再執行所選的移入？",
+    animal: "動物",
+    botonConfirmar: "執行操作",
+    trasladoEntradaTitulo: "移入轉移",
+    soloUnTrasladoEntrada: "一次只能選擇一個移入轉移。",
   }
-},
-filtrosHistorialMovimientos: {
-  cabecera: {
-    titulo: "篩選",
-    subtitulo: "移動歷史紀錄",
-    limpiar: "清除"
-  },
-
-  bloques: {
-    tipoMovimiento: "移動類型",
-    fecha: "日期",
-    corral: "欄位",
-    idAnimal: "動物 ID"
-  },
-
-  opciones: {
-    todos: "全部",
-    entrada: "進入",
-    salida: "離開",
-    todasLasFechas: "所有日期",
-    hoy: "今天",
-    manana: "明天",
-    fecha: "日期",
-    todosLosCorrales: "所有欄位",
-    porCorral: "依欄位",
-    todosLosAnimales: "所有動物",
-    porId: "依 ID"
-  },
-
-  placeholders: {
-    dia: "DD",
-    mes: "MM",
-    anio: "YY/YYYY",
-    introduceCorral: "輸入欄位",
-    introduceIdAnimal: "輸入動物 ID"
-  },
-
-  validaciones: {
-    fechaCompleta: "請輸入日、月和年。",
-    diaDosCifras: "日期必須為 2 位數。",
-    mesDosCifras: "月份必須為 2 位數。",
-    anioDosOCuatroCifras: "年份必須為 2 位或 4 位數。",
-    diaRango: "日期必須介於 01 和 31 之間。",
-    mesRango: "月份必須介於 01 和 12 之間。",
-    fechaNoExiste: "日期不存在。",
-    introduceCorral: "請輸入欄位編號。",
-    introduceIdAnimal: "請輸入動物 ID。"
-  },
-
-  botones: {
-    cancelar: "取消",
-    aceptar: "接受"
-  }
-}
 };

@@ -36,6 +36,21 @@ export default {
   Provincia: 'Область',
   NombreWifi: 'Wifi SSID',
   PasswordWifi: 'Пароль Wifi',
+  colocaQrInstalacionCamara: "Розмістіть QR-код установки в області камери.",
+  escaneaCodigoQr: "Відскануйте QR-код",
+  permisoCamaraNecesario: "Потрібен дозвіл на камеру",
+permisoCamaraQrTexto: "Потрібно дозволити доступ до камери, щоб відсканувати QR-код.",
+qrNoValido: "Недійсний QR-код",
+qrNoEsInstalacionDosimac: "Це не QR-код установки DOSIMAC.",
+ipAplicadaSinCredenciales: "IP застосовано правильно, але в цієї установки немає Username і пароля.",
+instalacionSeleccionada: "Установку вибрано",
+conexionExitosa: "Успішне підключення",
+instalacionConectadaCorrectamente: "Установку успішно підключено.",
+noPuedeConectarInstalacionSeleccionada: "Не вдається підключитися до вибраної установки. Перевірте мережу WiFi або IP-адресу сервера.",
+conectando: "Підключення",
+conectandoInstalacionSeleccionada: "Підключення до вибраної установки...",
+
+
   No_hay_dispositivos: 'Нет устройств',
   Aviso: 'Уведомление',
   SearchingDevices: 'Поиск устройств...',
@@ -929,6 +944,10 @@ avisoAplicacionNoConfigurada: {
   link: "Натисніть тут",
 },
 generalHome: {
+  servidorCtifeedDesactualizadoTitulo: "Сервер CTIFEED застарів",
+  servidorCtifeedDesactualizadoTexto: "Необхідно оновити сервер CTIFEED, щоб використовувати цю функцію.",
+  tareasMovimientosTitulo: "Завдання переміщення",
+tareasMovimientosDescripcion: "Перегляд і керування очікуваними завданнями переміщення.",
   movementAnimalTitle: "Переміщення тварин",
   readerDescription: "Зчитувач вушних бирок.",
   keyboardDescription: "Клавіатура",
@@ -1140,7 +1159,8 @@ tareasMovimientos: {
     sinCrotal: "Без вушної мітки",
     corralDestino: "Цільовий загін",
     corralOrigen: "Початковий загін",
-    fecha: "Дата"
+    fecha: "Запланована дата",
+    fechaRealizado: "Дата виконання",
   },
 
   filtros: {
@@ -1357,5 +1377,13 @@ filtrosHistorialMovimientos: {
     cancelar: "Скасувати",
     aceptar: "Прийняти"
   }
+},
+modalSalidaPendiente: {
+  titulo: "Очікуваний вихід",
+  mensaje: "Для цієї тварини є очікуване завдання виходу. Бажаєте спочатку виконати вихід, а потім виконати вибраний вхід?",
+  animal: "Тварина",
+  botonConfirmar: "Виконати операцію",
+  trasladoEntradaTitulo: "Переміщення на вхід",
+soloUnTrasladoEntrada: "Можна вибрати лише одне переміщення на вхід за раз.",
 }
 };

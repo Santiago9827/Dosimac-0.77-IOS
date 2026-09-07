@@ -235,7 +235,7 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                     : tipoBloqueo === 'sesion'
                         ? t('generalHome.modalPreparingSessionTitle')
                         : tipoBloqueo === 'version'
-                            ? t('generalHome.modalServerOutdatedTitle', {
+                            ? t('generalHome.servidorCtifeedDesactualizadoTitulo', {
                                 defaultValue: 'Servidor CTIFEED desactualizado',
                             })
                             : t('generalHome.modalReadOnlyPermissionTitle');
@@ -251,7 +251,7 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                         ? t('generalHome.modalPreparingSessionText')
                         : tipoBloqueo === 'version'
                             ? errorVersion ||
-                            t('generalHome.modalServerOutdatedText', {
+                            t('generalHome.servidorCtifeedDesactualizadoTexto', {
                                 defaultValue:
                                     'Es necesario actualizar el servidor CTIFEED para usar esta funcionalidad.',
                             })
@@ -287,7 +287,7 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                             <View style={{ flex: 1 }}>
                                 <Text style={styles.versionWarningText}>
                                     {errorVersion ||
-                                        t('generalHome.modalServerOutdatedText', {
+                                        t('generalHome.servidorCtifeedDesactualizadoTexto', {
                                             defaultValue:
                                                 'Es necesario actualizar el servidor CTIFEED para usar esta funcionalidad.',
                                         })}
@@ -295,15 +295,15 @@ export const GeneralHomeScreen = ({ navigation }: any) => {
                             </View>
                         </TouchableOpacity>
                     )}
-                     <GeneralCard
-                        titulo="Tareas Movimientos"
-                        descripcion="Consulta y gestión de tareas pendientes de movimientos."
+                    <GeneralCard
+                        titulo={t('generalHome.tareasMovimientosTitulo')}
+                        descripcion={t('generalHome.tareasMovimientosDescripcion')}
                         icono="clipboard-outline"
                         color="#EA580C"
                         fondoIcono="#FFEDD5"
                         disabled={validandoConexion}
                         onPress={() => navegarSiHayIp('TareasMovimientos', true)}
-                    />  
+                    />
                     <GeneralCard
                         titulo={t('generalHome.movementAnimalTitle')}
                         descripcion={t('generalHome.readerDescription')}

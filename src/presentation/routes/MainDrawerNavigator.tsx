@@ -135,7 +135,16 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
     };
 
     const goToAltaDosimac = () => {
-        closeAndNavigate('Register');
+        props.navigation.closeDrawer();
+
+        setTimeout(() => {
+            (props.navigation as any).navigate('MainTabs', {
+                screen: 'AltaDispositivosTab',
+                params: {
+                    screen: 'Register',
+                },
+            });
+        }, 120);
     };
 
     const goToInstalaciones = () => {
@@ -309,7 +318,7 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
                     <DrawerButton
                         label="Alta Dosimac"
                         icon="add-circle-outline"
-                        active={activeDrawerRoute === 'Register'}
+                        active={currentRouteName === 'Register'}
                         onPress={goToAltaDosimac}
                     />
 
@@ -436,7 +445,7 @@ function CustomMainDrawerContent(props: DrawerContentComponentProps) {
                         fontWeight: '700',
                     }}
                 >
-                    Versión 10
+                    Versión 12
                 </Text>
             </View>
         </DrawerContentScrollView>
@@ -464,14 +473,14 @@ export const MainDrawerNavigator = () => {
                 component={BottomTabNavigator}
             />
 
-            <Drawer.Screen
+            {/* <Drawer.Screen
                 name="Register"
                 component={DRStackNavigator}
                 options={{
                     drawerItemStyle: { height: 0 },
                     drawerLabel: () => null,
                 }}
-            />
+            /> */}
             <Drawer.Screen
                 name="Settings"
                 component={SettingsStackNavigator}

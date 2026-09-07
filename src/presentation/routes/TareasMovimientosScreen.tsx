@@ -74,6 +74,8 @@ type HistorialMovimiento = {
     crotal: string;
     corral: string;
     fecha: string;
+    fechaRealizado: string;
+
 };
 
 type TipoFiltroSeccionHistorial =
@@ -101,13 +103,7 @@ function obtenerFechaHoyHistorial(): string {
     return formatearFechaHistorialDate(new Date());
 }
 
-function obtenerFechaAyerHistorial(): string {
-    const fecha = new Date();
 
-    fecha.setDate(fecha.getDate() - 1);
-
-    return formatearFechaHistorialDate(fecha);
-}
 
 function normalizarFechaHistorial(fecha: string): string {
     const texto = String(fecha ?? '').trim();
@@ -150,6 +146,22 @@ function obtenerFechaMananaHistorial(): string {
     fecha.setDate(fecha.getDate() + 1);
 
     return formatearFechaHistorialDate(fecha);
+}
+
+function formatearFechaHistorialApi(fechaApi: string): string {
+    const texto = String(fechaApi ?? '').trim();
+
+    const coincidencia = texto.match(
+        /^(\d{4})-(\d{2})-(\d{2})/
+    );
+
+    if (!coincidencia) {
+        return texto;
+    }
+
+    const [, anio, mes, dia] = coincidencia;
+
+    return `${dia}/${mes}/${anio}`;
 }
 
 function filtrarHistorialPorMovimiento(
@@ -793,7 +805,7 @@ function CardHistorialMovimiento({
                                     ? 'leaf-outline'
                                     : 'home-outline'
                             }
-                            size={14}
+                            size={17}
                             color={GREEN}
                         />
 
@@ -851,22 +863,70 @@ function CardHistorialMovimiento({
                     </View>
                 </View>
 
-                <View style={styles.historialFechaBox}>
-                    <View style={styles.historialFechaLeft}>
-                        <Ionicons
-                            name="calendar-outline"
-                            size={18}
-                            color={PURPLE}
-                        />
+                <View style={styles.historialFechasRow}>
+                    <View
+                        style={[
+                            styles.historialFechaMiniBox,
+                            styles.historialFechaProgramadaBox,
+                        ]}
+                    >
+                        <View style={styles.historialFechaMiniHeader}>
+                            <Ionicons
+                                name="calendar-outline"
+                                size={16}
+                                color={PURPLE}
+                            />
 
-                        <Text style={styles.historialFechaLabel}>
-                            {t('tareasMovimientos.tarjetas.fecha')}
+                            <Text
+                                style={styles.historialFechaMiniLabel}
+                                numberOfLines={1}
+                                adjustsFontSizeToFit
+                                minimumFontScale={0.75}
+                            >
+                                {t('tareasMovimientos.tarjetas.fecha')}
+                            </Text>
+                        </View>
+
+                        <Text
+                            style={styles.historialFechaMiniValue}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                        >
+                            {item.fecha}
                         </Text>
                     </View>
 
-                    <Text style={styles.historialFechaValue}>
-                        {item.fecha}
-                    </Text>
+                    <View
+                        style={[
+                            styles.historialFechaMiniBox,
+                            styles.historialFechaRealizadaMiniBox,
+                        ]}
+                    >
+                        <View style={styles.historialFechaMiniHeader}>
+                            <Ionicons
+                                name="checkmark-done-outline"
+                                size={16}
+                                color={GREEN}
+                            />
+
+                            <Text
+                                style={styles.historialFechaRealizadoMiniLabel}
+                                numberOfLines={1}
+                                adjustsFontSizeToFit
+                                minimumFontScale={0.75}
+                            >
+                                {t('tareasMovimientos.tarjetas.fechaRealizado')}
+                            </Text>
+                        </View>
+
+                        <Text
+                            style={styles.historialFechaRealizadoMiniValue}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                        >
+                            {item.fechaRealizado}
+                        </Text>
+                    </View>
                 </View>
             </View>
         </View>
@@ -1165,7 +1225,11 @@ function HistorialTab() {
                             corral:
                                 corralVisible,
                             fecha:
-                                item.fecha,
+                                formatearFechaHistorialApi(item.fecha),
+                            fechaRealizado:
+                                formatearFechaHistorialApi(
+                                    (item as any).fechaRealizado ?? ''
+                                ),
                         };
                     });
 
@@ -1202,7 +1266,11 @@ function HistorialTab() {
                             corral:
                                 corralVisible,
                             fecha:
-                                item.fecha,
+                                formatearFechaHistorialApi(item.fecha),
+                            fechaRealizado:
+                                formatearFechaHistorialApi(
+                                    (item as any).fechaRealizado ?? ''
+                                ),
                         };
                     });
 
@@ -1473,7 +1541,7 @@ function HistorialTab() {
 }
 
 export const TareasMovimientosScreen = () => {
-        const { t } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <TopTab.Navigator
@@ -1503,7 +1571,7 @@ export const TareasMovimientosScreen = () => {
                 tabBarPressColor: '#EEF2FF',
             }}
         >
-             <TopTab.Screen
+            <TopTab.Screen
                 name="Tareas"
                 component={TareasTab}
                 options={{
@@ -1511,7 +1579,7 @@ export const TareasMovimientosScreen = () => {
                 }}
             />
 
-             <TopTab.Screen
+            <TopTab.Screen
                 name="Historial"
                 component={HistorialTab}
                 options={{
@@ -1524,185 +1592,185 @@ export const TareasMovimientosScreen = () => {
 
 const styles = StyleSheet.create({
     historialCard: {
-    backgroundColor: CARD,
-    borderRadius: 18,
-    overflow: 'hidden',
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: BORDER,
+        backgroundColor: CARD,
+        borderRadius: 18,
+        overflow: 'hidden',
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: BORDER,
 
-    shadowColor: '#0F172A',
-    shadowOpacity: 0.05,
-    shadowRadius: 7,
-    shadowOffset: {
-        width: 0,
-        height: 3,
+        shadowColor: '#0F172A',
+        shadowOpacity: 0.05,
+        shadowRadius: 7,
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+
+        elevation: 2,
     },
 
-    elevation: 2,
-},
+    historialBody: {
+        paddingHorizontal: 12,
+        paddingTop: 10,
+        paddingBottom: 12,
+    },
 
-historialBody: {
-    paddingHorizontal: 12,
-    paddingTop: 10,
-    paddingBottom: 12,
-},
+    historialHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 10,
+    },
 
-historialHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-},
+    historialHeaderLeft: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingRight: 6,
+    },
 
-historialHeaderLeft: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingRight: 6,
-},
+    historialIconBox: {
+        width: 34,
+        height: 34,
+        borderRadius: 12,
+        borderWidth: 1.3,
 
-historialIconBox: {
-    width: 34,
-    height: 34,
-    borderRadius: 12,
-    borderWidth: 1.3,
+        alignItems: 'center',
+        justifyContent: 'center',
 
-    alignItems: 'center',
-    justifyContent: 'center',
+        marginRight: 8,
+    },
 
-    marginRight: 8,
-},
+    historialOperacion: {
+        fontSize: 18,
+        fontWeight: '900',
+    },
 
-historialOperacion: {
-    fontSize: 15,
-    fontWeight: '900',
-},
+    historialSeccion: {
+        color: MUTED,
+        fontSize: 11,
+        fontWeight: '800',
+        marginTop: 0,
+    },
 
-historialSeccion: {
-    color: MUTED,
-    fontSize: 11,
-    fontWeight: '800',
-    marginTop: 0,
-},
+    realizadaBadge: {
+        minHeight: 34,
+        borderRadius: 999,
+        backgroundColor: '#ECFDF5',
+        borderWidth: 1,
+        borderColor: '#A7F3D0',
+        paddingHorizontal: 11,
 
-realizadaBadge: {
-    minHeight: 28,
-    borderRadius: 999,
-    backgroundColor: '#ECFDF5',
-    borderWidth: 1,
-    borderColor: '#A7F3D0',
-    paddingHorizontal: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
+    },
 
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-},
+    realizadaText: {
+        color: GREEN,
+        fontSize: 14,
+        fontWeight: '900',
+    },
 
-realizadaText: {
-    color: GREEN,
-    fontSize: 11,
-    fontWeight: '900',
-},
+    historialInfoRow: {
+        flexDirection: 'row',
+        alignItems: 'stretch',
+        gap: 8,
+        marginBottom: 9,
+    },
 
-historialInfoRow: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    gap: 8,
-    marginBottom: 9,
-},
+    historialAnimalBox: {
+        flex: 1.25,
+        borderRadius: 15,
+        borderWidth: 1.3,
+        paddingHorizontal: 11,
+        paddingVertical: 9,
+        justifyContent: 'center',
+    },
 
-historialAnimalBox: {
-    flex: 1.25,
-    borderRadius: 15,
-    borderWidth: 1.3,
-    paddingHorizontal: 11,
-    paddingVertical: 9,
-    justifyContent: 'center',
-},
+    historialLabel: {
+        color: MUTED,
+        fontSize: 11,
+        fontWeight: '800',
+        marginBottom: 1,
+    },
 
-historialLabel: {
-    color: MUTED,
-    fontSize: 11,
-    fontWeight: '800',
-    marginBottom: 1,
-},
+    historialAnimalId: {
+        color: TEXT,
+        fontSize: 25,
+        lineHeight: 29,
+        fontWeight: '900',
+        marginBottom: 2,
+    },
 
-historialAnimalId: {
-    color: TEXT,
-    fontSize: 25,
-    lineHeight: 29,
-    fontWeight: '900',
-    marginBottom: 2,
-},
+    historialCrotal: {
+        color: MUTED,
+        fontSize: 11,
+        fontWeight: '700',
+    },
 
-historialCrotal: {
-    color: MUTED,
-    fontSize: 11,
-    fontWeight: '700',
-},
+    historialCorralBox: {
+        minWidth: 104,
+        borderRadius: 15,
+        borderWidth: 1.3,
+        paddingHorizontal: 10,
+        paddingVertical: 9,
+        alignItems: 'flex-end',
+        justifyContent: 'flex-start',
+    },
 
-historialCorralBox: {
-    minWidth: 104,
-    borderRadius: 15,
-    borderWidth: 1.3,
-    paddingHorizontal: 10,
-    paddingVertical: 9,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-start',
-},
+    historialCorralLabel: {
+        color: MUTED,
+        fontSize: 11,
+        fontWeight: '800',
+        marginBottom: 5,
+        textAlign: 'right',
+    },
 
-historialCorralLabel: {
-    color: MUTED,
-    fontSize: 11,
-    fontWeight: '800',
-    marginBottom: 5,
-    textAlign: 'right',
-},
+    historialCorralValue: {
+        color: TEXT,
+        fontSize: 25,
+        lineHeight: 29,
+        fontWeight: '900',
+        textAlign: 'right',
+    },
 
-historialCorralValue: {
-    color: TEXT,
-    fontSize: 25,
-    lineHeight: 29,
-    fontWeight: '900',
-    textAlign: 'right',
-},
+    historialCorralValueCorto: {
+        width: '100%',
+        textAlign: 'center',
+    },
 
-historialCorralValueCorto: {
-    width: '100%',
-    textAlign: 'center',
-},
+    historialFechaBox: {
+        minHeight: 44,
+        borderRadius: 14,
+        borderWidth: 1,
+        borderColor: '#DDD6FE',
+        backgroundColor: '#F5F3FF',
+        paddingHorizontal: 10,
 
-historialFechaBox: {
-    minHeight: 44,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: '#DDD6FE',
-    backgroundColor: '#F5F3FF',
-    paddingHorizontal: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
 
-    flexDirection: 'row',
-    alignItems: 'center',
-},
+    historialFechaLeft: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+    },
 
-historialFechaLeft: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-},
+    historialFechaLabel: {
+        color: '#5B21B6',
+        fontSize: 13,
+        fontWeight: '900',
+    },
 
-historialFechaLabel: {
-    color: '#5B21B6',
-    fontSize: 13,
-    fontWeight: '900',
-},
-
-historialFechaValue: {
-    color: PURPLE,
-    fontSize: 15,
-    fontWeight: '900',
-},
+    historialFechaValue: {
+        color: PURPLE,
+        fontSize: 15,
+        fontWeight: '900',
+    },
     historialActionsBar: {
         backgroundColor: CARD,
         borderBottomWidth: 1,
@@ -2157,6 +2225,64 @@ historialFechaValue: {
 
     movimientoPillValue: {
         fontSize: 22,
+        fontWeight: '900',
+    },
+    historialFechasRow: {
+        flexDirection: 'row',
+        alignItems: 'stretch',
+        gap: 8,
+    },
+
+    historialFechaMiniBox: {
+        flex: 1,
+        minHeight: 64,
+        borderRadius: 14,
+        borderWidth: 1,
+        paddingHorizontal: 9,
+        paddingVertical: 9,
+        justifyContent: 'center',
+    },
+
+    historialFechaProgramadaBox: {
+        borderColor: '#DDD6FE',
+        backgroundColor: '#F5F3FF',
+    },
+
+    historialFechaRealizadaMiniBox: {
+        borderColor: '#A7F3D0',
+        backgroundColor: '#ECFDF5',
+    },
+
+    historialFechaMiniHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+        marginBottom: 6,
+    },
+
+    historialFechaMiniLabel: {
+        flex: 1,
+        color: '#5B21B6',
+        fontSize: 11,
+        fontWeight: '900',
+    },
+
+    historialFechaRealizadoMiniLabel: {
+        flex: 1,
+        color: GREEN,
+        fontSize: 11,
+        fontWeight: '900',
+    },
+
+    historialFechaMiniValue: {
+        color: PURPLE,
+        fontSize: 15,
+        fontWeight: '900',
+    },
+
+    historialFechaRealizadoMiniValue: {
+        color: GREEN,
+        fontSize: 15,
         fontWeight: '900',
     },
 });

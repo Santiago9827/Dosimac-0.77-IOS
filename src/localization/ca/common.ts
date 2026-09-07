@@ -38,6 +38,22 @@ export default {
   Provincia: 'Província',
   NombreWifi: 'Wifi SSID',
   PasswordWifi: 'Contrasenya Wifi',
+  colocaQrInstalacionCamara: "Col·loca el codi QR de la instal·lació dins de la càmera.",
+  escaneaCodigoQr: "Escaneja el codi QR",
+  permisoCamaraNecesario: "Permís de càmera necessari",
+  permisoCamaraQrTexto: "Has de permetre l’accés a la càmera per escanejar el codi QR.",
+  qrNoValido: "Codi QR no vàlid",
+  qrNoEsInstalacionDosimac: "Aquest no és un codi QR d’instal·lació DOSIMAC.",
+  ipAplicadaSinCredenciales: "La IP s’ha aplicat correctament, però aquesta instal·lació no té Username ni Clau.",
+  instalacionSeleccionada: "Instal·lació seleccionada",
+  conexionExitosa: "Connexió correcta",
+  instalacionConectadaCorrectamente: "La instal·lació s’ha connectat correctament.",
+  noPuedeConectarInstalacionSeleccionada: "No es pot connectar amb la instal·lació seleccionada. Comprova la xarxa WiFi o la IP del servidor.",
+  conectando: "Connectant",
+  conectandoInstalacionSeleccionada: "S’està connectant amb la instal·lació seleccionada...",
+
+
+
   No_hay_dispositivos: 'No hi ha dispositius',
   Aviso: 'Avís',
   SearchingDevices: 'Cercant equips...',
@@ -298,56 +314,56 @@ export default {
   gestationReader_alertInvalidAssociatedCrotalMessage: "El crotal associat no és vàlid.",
   gestationReader_alertUpdateIdErrorTitle: "Error en actualitzar ID",
   gestationReader_readerMode: "Lector",
-gestationReader_keyboardMode: "Teclat",
+  gestationReader_keyboardMode: "Teclat",
 
-gestationReader_keyboardEntryTitle: "Entrada per teclat",
-gestationReader_keyboardExitTitle: "Sortida per teclat",
-gestationReader_keyboardDescription: "Escriu la dada manualment amb el teclat del telèfon.",
-gestationReader_keyboardId: "ID",
-gestationReader_keyboardCrotal: "Cròtal",
-gestationReader_keyboardIdLabel: "ID animal",
-gestationReader_keyboardCrotalLabel: "Cròtal",
-gestationReader_keyboardIdPlaceholder: "Escriu l'ID",
-gestationReader_keyboardCrotalPlaceholder: "Escriu el cròtal",
-gestationReader_keyboardAdd: "Afegir",
-gestationReader_keyboardAdding: "Afegint...",
+  gestationReader_keyboardEntryTitle: "Entrada per teclat",
+  gestationReader_keyboardExitTitle: "Sortida per teclat",
+  gestationReader_keyboardDescription: "Escriu la dada manualment amb el teclat del telèfon.",
+  gestationReader_keyboardId: "ID",
+  gestationReader_keyboardCrotal: "Cròtal",
+  gestationReader_keyboardIdLabel: "ID animal",
+  gestationReader_keyboardCrotalLabel: "Cròtal",
+  gestationReader_keyboardIdPlaceholder: "Escriu l'ID",
+  gestationReader_keyboardCrotalPlaceholder: "Escriu el cròtal",
+  gestationReader_keyboardAdd: "Afegir",
+  gestationReader_keyboardAdding: "Afegint...",
 
-gestationReader_pendingRecordsTitle: "Registres no enviats",
-gestationReader_buttonSendingBatch: "Enviant lot...",
-gestationReader_buttonSendBatch: "Enviar lot",
-gestationReader_buttonSendBatchCount: "Enviar lot ({{count}})",
+  gestationReader_pendingRecordsTitle: "Registres no enviats",
+  gestationReader_buttonSendingBatch: "Enviant lot...",
+  gestationReader_buttonSendBatch: "Enviar lot",
+  gestationReader_buttonSendBatchCount: "Enviar lot ({{count}})",
 
-gestationReader_noPendingRecordsTitle: "Sense registres",
-gestationReader_noPendingRecordsText: "No hi ha registres pendents per enviar.",
-gestationReader_batchSentTitle: "Lot enviat",
-gestationReader_batchSentText: "S'han enviat {{count}} registre(s) correctament.",
-gestationReader_batchWithErrorsTitle: "Lot amb errors",
+  gestationReader_noPendingRecordsTitle: "Sense registres",
+  gestationReader_noPendingRecordsText: "No hi ha registres pendents per enviar.",
+  gestationReader_batchSentTitle: "Lot enviat",
+  gestationReader_batchSentText: "S'han enviat {{count}} registre(s) correctament.",
+  gestationReader_batchWithErrorsTitle: "Lot amb errors",
 
-gestationReader_recordSentTitle: "Registre enviat",
-gestationReader_recordSentText: "El moviment s'ha enviat correctament.",
+  gestationReader_recordSentTitle: "Registre enviat",
+  gestationReader_recordSentText: "El moviment s'ha enviat correctament.",
 
-gestationReader_invalidAnimalId: "L'ID de l'animal no és vàlid.",
-gestationReader_invalidPenRecord: "El corral del registre no és vàlid.",
-gestationReader_invalidCrotalRecord: "El cròtal del registre no és vàlid.",
-gestationReader_duplicateIdPending: "L'ID {{id}} ja és a la taula de registres no enviats.",
-gestationReader_duplicateCrotalPending: "El cròtal {{crotal}} ja és a la taula de registres no enviats.",
-gestationReader_keyboardMissingId: "Escriu l'ID de l'animal.",
-gestationReader_keyboardMissingCrotal: "Escriu el cròtal de l'animal.",
-gestationReader_keyboardMissingPen: "Selecciona un corral vàlid abans d'afegir l'animal.",
-gestationReader_noAnimalById: "No existeix cap animal amb l'ID {{id}}.",
-gestationReader_noAnimalByCrotal: "No existeix cap animal amb el cròtal {{crotal}}.",
-gestationReader_addAnimalError: "No s'ha pogut afegir l'animal.",
+  gestationReader_invalidAnimalId: "L'ID de l'animal no és vàlid.",
+  gestationReader_invalidPenRecord: "El corral del registre no és vàlid.",
+  gestationReader_invalidCrotalRecord: "El cròtal del registre no és vàlid.",
+  gestationReader_duplicateIdPending: "L'ID {{id}} ja és a la taula de registres no enviats.",
+  gestationReader_duplicateCrotalPending: "El cròtal {{crotal}} ja és a la taula de registres no enviats.",
+  gestationReader_keyboardMissingId: "Escriu l'ID de l'animal.",
+  gestationReader_keyboardMissingCrotal: "Escriu el cròtal de l'animal.",
+  gestationReader_keyboardMissingPen: "Selecciona un corral vàlid abans d'afegir l'animal.",
+  gestationReader_noAnimalById: "No existeix cap animal amb l'ID {{id}}.",
+  gestationReader_noAnimalByCrotal: "No existeix cap animal amb el cròtal {{crotal}}.",
+  gestationReader_addAnimalError: "No s'ha pogut afegir l'animal.",
 
-gestationReader_pendingAnimalHint: "Els animals llegits apareixeran aquí.",
+  gestationReader_pendingAnimalHint: "Els animals llegits apareixeran aquí.",
 
-gestationReader_changePenTitle: "Canviar corral",
-gestationReader_changePenDescription: "Introdueix el nou corral d'entrada.",
-gestationReader_newPenLabel: "Nou corral",
-gestationReader_newPenPlaceholder: "Ex: 1",
-gestationReader_cancel: "Cancel·lar",
-gestationReader_save: "Guardar",
-gestationReader_accept: "Acceptar",
-gestationReader_sentHistoryTitle: "Historial d'enviats",
+  gestationReader_changePenTitle: "Canviar corral",
+  gestationReader_changePenDescription: "Introdueix el nou corral d'entrada.",
+  gestationReader_newPenLabel: "Nou corral",
+  gestationReader_newPenPlaceholder: "Ex: 1",
+  gestationReader_cancel: "Cancel·lar",
+  gestationReader_save: "Guardar",
+  gestationReader_accept: "Acceptar",
+  gestationReader_sentHistoryTitle: "Historial d'enviats",
 
   maternityReader_screenTitle: "Lector Maternitat",
   maternityReader_alertMissingCrotalTitle: "Falta crotal",
@@ -479,7 +495,7 @@ gestationReader_sentHistoryTitle: "Historial d'enviats",
   Config_lastReadMismatchTitle: "L'animal llegit no coincideix amb la cerca",
   Config_lastReadMismatchCrotal: "Crotal",
   Config_lastReadMismatchId: "ID",
-  awrBluetoothPermissionMessage: "Activa el Bluetooth i accepta el permís per poder escanejar.", 
+  awrBluetoothPermissionMessage: "Activa el Bluetooth i accepta el permís per poder escanejar.",
 
   animalState: {
     gestation: "Gestació",
@@ -488,54 +504,54 @@ gestationReader_sentHistoryTitle: "Historial d'enviats",
     out_of_maternity: "Fora de maternitat"
   },
 
-  
-Reader_readingTitle: "Lectura de crotals",
-Reader_labelId: "ID",
-Reader_labelCrotal: "Crotal",
-Reader_labelCorral: "Corral",
-Reader_labelHouse: "Nau",
-Reader_labelState: "Estat",
-Reader_autoReadingBadge: "Lectura automàtica",
 
-gestacionConfig_flowSectionTitle: "Configuració del flux",
-gestacionConfig_workModeTitle: "Mode de treball",
-gestacionConfig_workModeDescription: "Selecciona què farà el lector.",
-gestacionConfig_entryDescription: "Registrar entrada",
-gestacionConfig_exitDescription: "Registrar sortida",
-gestacionConfig_readingDescription: "Només consultar",
-gestacionConfig_searchDescription: "Buscar animal",
+  Reader_readingTitle: "Lectura de crotals",
+  Reader_labelId: "ID",
+  Reader_labelCrotal: "Crotal",
+  Reader_labelCorral: "Corral",
+  Reader_labelHouse: "Nau",
+  Reader_labelState: "Estat",
+  Reader_autoReadingBadge: "Lectura automàtica",
 
-gestacionConfig_sendSettingsTitle: "Ajustos de l’enviament",
-gestacionConfig_sendSettingsDescription: "Configura com es comporta el flux en llegir animals.",
+  gestacionConfig_flowSectionTitle: "Configuració del flux",
+  gestacionConfig_workModeTitle: "Mode de treball",
+  gestacionConfig_workModeDescription: "Selecciona què farà el lector.",
+  gestacionConfig_entryDescription: "Registrar entrada",
+  gestacionConfig_exitDescription: "Registrar sortida",
+  gestacionConfig_readingDescription: "Només consultar",
+  gestacionConfig_searchDescription: "Buscar animal",
 
-gestacionConfig_corralSectionTitle: "Corral d’entrada",
-gestacionConfig_corralSectionDescription: "Aquesta dada és obligatòria per continuar amb el registre.",
+  gestacionConfig_sendSettingsTitle: "Ajustos de l’enviament",
+  gestacionConfig_sendSettingsDescription: "Configura com es comporta el flux en llegir animals.",
 
-gestacionConfig_alerts_notice: "Avís",
-gestacionConfig_alerts_invalidCrotalFromBackend: "El backend no ha retornat un cròtal vàlid per comparar.",
+  gestacionConfig_corralSectionTitle: "Corral d’entrada",
+  gestacionConfig_corralSectionDescription: "Aquesta dada és obligatòria per continuar amb el registre.",
 
-common_accept: "Acceptar",
+  gestacionConfig_alerts_notice: "Avís",
+  gestacionConfig_alerts_invalidCrotalFromBackend: "El backend no ha retornat un cròtal vàlid per comparar.",
 
-maternidadConfig_flowSectionTitle: "Configuració del flux",
-maternidadConfig_workModeTitle: "Mode de treball",
-maternidadConfig_workModeDescription: "Selecciona què farà el lector.",
-maternidadConfig_entryDescription: "Registrar entrada",
-maternidadConfig_exitDescription: "Registrar sortida",
-maternidadConfig_readingDescription: "Només consultar",
-maternidadConfig_searchDescription: "Buscar animal",
+  common_accept: "Acceptar",
 
-maternidadConfig_sendSettingsTitle: "Ajustos de l’enviament",
-maternidadConfig_sendSettingsDescription: "Configura com es comporta el flux en llegir animals.",
+  maternidadConfig_flowSectionTitle: "Configuració del flux",
+  maternidadConfig_workModeTitle: "Mode de treball",
+  maternidadConfig_workModeDescription: "Selecciona què farà el lector.",
+  maternidadConfig_entryDescription: "Registrar entrada",
+  maternidadConfig_exitDescription: "Registrar sortida",
+  maternidadConfig_readingDescription: "Només consultar",
+  maternidadConfig_searchDescription: "Buscar animal",
 
-maternidadConfig_corralSectionTitle: "Corral d’entrada",
-maternidadConfig_corralSectionDescription: "Aquesta dada és obligatòria per continuar amb el registre.",
+  maternidadConfig_sendSettingsTitle: "Ajustos de l’enviament",
+  maternidadConfig_sendSettingsDescription: "Configura com es comporta el flux en llegir animals.",
 
-maternidadConfig_alert_invalidCrotalFromBackend: "El backend no ha retornat un cròtal vàlid per comparar.",
-maternidadConfig_readOnlyTitle: "Permís de només lectura",
-maternidadConfig_readOnlyModifySettings: "Aquest usuari només té permisos de lectura. No pot modificar aquesta configuració.",
-maternidadConfig_readOnlyUseFunction: "Aquest usuari només té permisos de lectura. No pot utilitzar aquesta funció.",
+  maternidadConfig_corralSectionTitle: "Corral d’entrada",
+  maternidadConfig_corralSectionDescription: "Aquesta dada és obligatòria per continuar amb el registre.",
 
-ajustesEnvioMaternidad: {
+  maternidadConfig_alert_invalidCrotalFromBackend: "El backend no ha retornat un cròtal vàlid per comparar.",
+  maternidadConfig_readOnlyTitle: "Permís de només lectura",
+  maternidadConfig_readOnlyModifySettings: "Aquest usuari només té permisos de lectura. No pot modificar aquesta configuració.",
+  maternidadConfig_readOnlyUseFunction: "Aquest usuari només té permisos de lectura. No pot utilitzar aquesta funció.",
+
+  ajustesEnvioMaternidad: {
     headerTitle: "Ajustos de l'enviament",
     headerSubtitle: "Configura com es comporta el flux en llegir animals.",
     cardTitle: "Enviament de registres",
@@ -543,830 +559,843 @@ ajustesEnvioMaternidad: {
   },
 
   noAlimentadosMaternidad: {
-  animalId: "ID ANIMAL",
-  corral: "Corral",
-  consumption: "Consum",
-  withoutFeeding: "Sense alimentar",
-  day: "dia",
-  days: "dies",
-  loadingAnimals: "Carregant animals...",
-  title: "Animals no alimentats",
-  totalAnimalsMaternity: "Total d'animals de maternitat:",
-  notSeen: "No vistos",
-  all: "Tots",
-  sort: "Ordenar",
-  emptyTitle: "No hi ha animals pendents",
-  emptyText: "No s'han trobat animals no alimentats a maternitat.",
-  sortBy: "Ordenar per",
-  daysWithoutFeeding: "Dies sense alimentar",
-  sortDaysHelp: "Ordena pels dies sense alimentació",
-  sortCorralHelp: "Ordena pel número de corral",
-  descending: "Descendent",
-  ascending: "Ascendent",
-  filterAnimals: "Filtrar animals",
-  allHelp: "Mostra tots els animals",
-  unmarked: "No marcats",
-  unmarkedHelp: "Oculta els animals ja revisats",
-  clearMarkedTitle: "Netejar animals marcats",
-  clearMarkedText: "S'eliminaran totes les marques dels animals revisats.",
-  cancel: "Cancel·lar",
-  clear: "Netejar",
-  error: "Error",
-  serverConnectionError: "No s'ha pogut connectar amb el servidor."
-},
-
-noAlimentadosGestacion: {
-  animalId: "ID ANIMAL",
-  corral: "Corral",
-  consumption: "Consum",
-  withoutFeeding: "Sense alimentar",
-  day: "dia",
-  days: "dies",
-  loadingAnimals: "Carregant animals...",
-  title: "Animals no alimentats",
-  totalAnimalsGestation: "Total d'animals de gestació:",
-  notSeen: "No vistos",
-  all: "Tots",
-  sort: "Ordenar",
-  emptyTitle: "No hi ha animals pendents",
-  emptyText: "No s'han trobat animals no alimentats a gestació.",
-  sortBy: "Ordenar per",
-  daysWithoutFeeding: "Dies sense alimentar",
-  sortDaysHelp: "Ordena pels dies sense alimentació",
-  sortCorralHelp: "Ordena pel número de corral",
-  descending: "Descendent",
-  ascending: "Ascendent",
-  filterAnimals: "Filtrar animals",
-  allHelp: "Mostra tots els animals",
-  unmarked: "No marcats",
-  unmarkedHelp: "Oculta els animals ja revisats",
-  clearMarkedTitle: "Netejar animals marcats",
-  clearMarkedText: "S'eliminaran totes les marques dels animals revisats.",
-  cancel: "Cancel·lar",
-  clear: "Netejar",
-  error: "Error",
-  serverConnectionError: "No s'ha pogut connectar amb el servidor.",
-  viewStatus: "Veure estat",
-animalIdNotFound: "No s'ha trobat l'identificador de l'animal.",
-openAnimalInfoError: "No s'ha pogut obrir la informació de l'animal.",
-},
-capturaAnimalHome: {
-  selectOption: "Selecciona una opció",
-  unfedAnimalsTitle: "Animals no alimentats",
-  unfedAnimalsDescription: "Consulta els animals que no han rebut l'alimentació prevista.",
-  twoFeedsTitle: "2 pinsos",
-  twoFeedsDescription: "Gestiona el canvi d'alimentació a les boques de caiguda.",
-  animalStatusTitle: "Estat de l'animal",
-animalStatusDescription: "Consultar o actualitzar l'estat de l'animal.",
-},
-cambioPiensoMaternidad: {
-  error: "Error",
-  loadTasksError: "No s'han pogut carregar les tasques de canvi de pinso.",
-  loadingTasks: "Carregant tasques...",
-  title: "Canvi de pinso",
-  pendingTask: "{{count}} tasca pendent",
-  pendingTasks: "{{count}} tasques pendents",
-  emptyTitle: "No hi ha tasques pendents",
-  emptyText: "No s'han trobat tasques de canvi de pinso.",
-  animalId: "ID ANIMAL",
-  corral: "Corral",
-  setTo: "Fixar a",
-  destination: "Destinació"
-},
-estadoAnimal: {
-  queryLabel: "Consulta",
-  title: "Estat de l'animal",
-  subtitle: "Selecciona com vols identificar l'animal.",
-  corral: "Corral",
-  corralDescription: "Introdueix el número de corral.",
-  id: "ID",
-  idDescription: "Introdueix l'identificador de l'animal.",
-  animalId: "ID animal",
-  requiredData: "Dada obligatòria",
-  enterCorral: "Introdueix el número de corral.",
-  enterId: "Introdueix l'identificador de l'animal.",
-  consulting: "Consultant...",
-  continue: "Continuar",
-  accept: "Acceptar",
-  serverConnectionError: "No s'ha pogut connectar amb el servidor.",
-  noIpConfigured: "No hi ha cap IP configurada.",
-  nextScreenPending: "Farem la pantalla d'informació de l'animal en el següent pas.",
-  moveToWeaning: "Passar a deslletament",
-  corralMaternityDescription: "Introdueix el número del corral de maternitat.",
-idAnimalDescription: "Cerca l’animal en maternitat i gestació.",
-animalNotFound: "No s’ha trobat l’animal ni en maternitat ni en gestació.",
-
-},
-
-matCorralDetail: {
-  viewStatus: "Veure estat",
-animalIdNotFound: "No s'ha trobat l'identificador de l'animal.",
-openAnimalInfoError: "No s'ha pogut obrir la informació de l'animal.",
-  earTagAlreadyAssigned: "El cròtal està assignat a un altre animal",
-  readOnlyPermission: "Permís de només lectura",
-readOnlyPermissionText: "Aquest usuari només té permisos de lectura. No pot realitzar operacions sobre l'animal.",
-  animalStatus: "Estat de l'animal",
-  id: "ID",
-  earTag: "Cròtal",
-  cycle: "Cicle",
-  day: "Dia",
-
-  curve: "Corba",
-  correction: "Correcció",
-  entryDate: "Data d'entrada",
-  farrowingDate: "Data de part",
-  house: "Nau",
-  pen: "Corral",
-  lastFeeding: "Última alimentació",
-  presentPiglets: "Garrins vius",
-  inseminationDate: "Data d'inseminació",
-  teatsNumber: "Nre. de mugrons",
-
-  operations: "Operacions",
-
-  consumption: "Consum",
-  ofGrams: "de {{amount}} g",
-  oneDayWithoutFeeding: "1 dia sense alimentar",
-  daysWithoutFeeding: "{{count}} dies sense alimentar",
-
-  noAnimalData: "No hi ha dades de l'animal",
-  noAnimalDataText: "No s'ha rebut informació per mostrar.",
-  back: "Tornar",
-  operationsPendingTitle: "Operacions",
-  operationsPendingText: "Farem les operacions en el pas següent.",
-  moveToWeaning: "Passar a deslletament",
-  chooseOption: "Selecciona una operació per a aquest animal.",
-  nextOperation: "Operació següent",
-  insertAnimal: "Inserir animal",
-  moveToLactation: "Passar a lactància",
-  nextStep: "Pas següent",
-  actions: "Accions",
-
-  bodyCondition: "Condició corporal",
-  subState: "Subestat",
-  pigletCapture: "Captura de garrins",
-  animalExit: "Sortida de l'animal",
-  replaceEarTag: "Substituir cròtal",
-  changePen: "Canviar corral",
-  anonymousAnimalId: "Identificador d'animal anònim",
-
-  cancel: "Cancel·lar",
-  accept: "Acceptar",
-  saving: "Desant...",
-  error: "Error",
-
-  operationDone: "Operació realitzada correctament.",
-  changeStateDone: "Subestat actualitzat correctament.",
-  changeStateError: "No s'ha pogut canviar l'estat de l'animal.",
-  confirmNextOperation: "Segur que vols passar a l'operació següent?",
-  pkidChangeStateNotFound: "No s'ha trobat l'identificador intern de l'animal.",
-
-  selectExitType: "Selecciona el tipus de sortida que vols aplicar.",
-  exitImmediate: "Sortida immediata",
-  exitScheduled: "Sortida programada",
-  exitScheduledEmptyHopper: "Sortida programada amb tremuja buida",
-  cancelScheduledExit: "Cancel·lar sortida programada",
-  scheduledDate: "Data programada",
-  exitDateLimitText: "No es pot seleccionar una data anterior a avui ni posterior a 3 dies.",
-  animalExitDone: "Sortida de l'animal realitzada correctament.",
-  animalExitError: "No s'ha pogut realitzar la sortida de l'animal.",
-  pkidExitNotFound: "No s'ha trobat l'identificador intern de l'animal.",
-
-  selectCurve: "Seleccionar corba",
-  selectCurveText: "Selecciona la nova corba de l'animal.",
-  loadingCurves: "Carregant corbes...",
-  noCurvesAvailable: "No hi ha corbes disponibles.",
-  confirmChangeCurve: "Segur que vols canviar la corba?",
-  loadCurvesError: "No s'han pogut carregar les corbes.",
-  pkidChangeCurveNotFound: "No s'ha trobat l'identificador intern de l'animal.",
-  changeCurveDone: "Corba actualitzada correctament.",
-  changeCurveError: "No s'ha pogut canviar la corba.",
-
-  selectBodyConditionText: "Selecciona la nova condició corporal de l'animal.",
-  loadingBodyConditions: "Carregant condicions corporals...",
-  noBodyConditionsAvailable: "No hi ha condicions corporals disponibles.",
-  confirmChangeBodyCondition: "Segur que vols canviar la condició corporal?",
-  loadBodyConditionsError: "No s'han pogut carregar les condicions corporals.",
-  pkidChangeBodyConditionNotFound: "No s'ha trobat l'identificador intern de l'animal.",
-  changeBodyConditionDone: "Condició corporal actualitzada correctament.",
-  changeBodyConditionError: "No s'ha pogut canviar la condició corporal.",
-
-  selectSubStateText: "Selecciona manualment el nou subestat de l'animal.",
-  confirmChangeSubState: "Segur que vols canviar el subestat?",
-
-  currentPen: "Corral actual: {{pen}}",
-  newPen: "Nou corral",
-  enterNewPen: "Introdueix el nou corral.",
-  pkidChangePenNotFound: "No s'ha trobat l'identificador intern de l'animal.",
-  changePenDone: "Corral actualitzat correctament.",
-  changePenError: "No s'ha pogut canviar el corral.",
-
-  currentEarTag: "Cròtal actual: {{earTag}}",
-  newEarTag: "Nou cròtal",
-  enterNewEarTag: "Introdueix el nou cròtal.",
-  pkidEarTagNotFound: "No s'ha trobat l'identificador intern de l'animal.",
-  replaceEarTagDone: "Cròtal actualitzat correctament.",
-  replaceEarTagError: "No s'ha pogut substituir el cròtal.",
-
-  identifyAnonymousAnimalText: "Tria si vols assignar un ID o un cròtal a l'animal.",
-  newId: "Nou ID",
-  enterNewId: "Introdueix el nou ID.",
-  idExample: "Ex: 1010",
-  earTagExample: "Ex: 123",
-  notAnonymousAnimalText: "Aquest animal no és anònim perquè ja té un ID o un cròtal assignat.",
-  pkidIdentifyNotFound: "No s'ha trobat l'identificador intern de l'animal.",
-  identifyAnonymousAnimalDone: "Identificador de l'animal actualitzat correctament.",
-  identifyAnonymousAnimalError: "No s'ha pogut identificar l'animal anònim.",
-
-  livePiglets: "Vius",
-  deadPiglets: "Morts",
-  mummifiedPiglets: "Momificats",
-  totalBornPiglets: "Nascuts totals",
-  pigletCaptureText: "Introdueix els garrins vius, morts i momificats.",
-  captureBeforeLactationText: "Registra els nascuts abans de passar a lactància.",
-  weaningPigletsOnlyRead: "En deslletament només es poden consultar els garrins.",
-  pkidPigletsNotFound: "No s'ha trobat l'identificador intern de l'animal.",
-  pigletCaptureDone: "Captura de garrins desada correctament.",
-  pigletCaptureError: "No s'ha pogut desar la captura de garrins.",
-  penNotFound: "Corral no trobat",
-
-},
-subState: {
-  prepartum: "Prepart",
-  lactation: "Lactància",
-  weaning: "Deslletament",
-},
-
-capturaParto: {
-  birthDataTitle: "Dades del part",
-  birthDataSubtitle: "Revisa les dades de l'animal abans de registrar el part.",
-  corral: "Corral",
-  id: "ID",
-  date: "Data",
-  subState: "Subestat",
-
-  dataCollectionTitle: "Recollida de dades",
-  dataCollectionSubtitle: "Introdueix els nascuts vius, morts i momificats.",
-  weaningReadOnly: "En deslletament només es poden consultar les dades.",
-
-  totalBorn: "Nascuts totals",
-  live: "Vius",
-  dead: "Morts",
-  mummified: "Momificats",
-
-  prepartum: "Prepart",
-  farrowing: "Part",
-  lactation: "Lactància",
-  weaning: "Deslletament",
-
-  accept: "Acceptar",
-  cancel: "Cancel·lar",
-  saving: "Desant...",
-
-  sentTitle: "Captura enviada",
-  sentMessage: "La captura de part s'ha desat correctament.",
-
-  errorTitle: "Error",
-  invalidAnimalTitle: "Animal no vàlid",
-  invalidAnimalText: "No s'ha trobat l'identificador intern de l'animal.",
-  reportSendError: "No s'ha pogut desar la captura de part.",
-
-  invalidDateTitle: "Data no vàlida",
-  invalidDateMessage: "La data de part no pot ser posterior a avui.",
-  changeDate: "Canviar data",
-
-  selectDateTitle: "Seleccionar data",
-  selectDateMessage: "Ajusta la data del part amb els botons.",
-  penNotFound: "Corral no trobat",
-
-},
-
-capturaMaternidadEntrada: {
-  title: "Captura de part",
-  description: "Busca l'animal per corral o per ID per registrar el part.",
-  maternityLabel: "MATERNITAT",
-
-  corral: "Corral",
-  corralDescription: "Busca l'animal pel número de corral.",
-  id: "ID",
-  idDescription: "Busca l'animal pel seu identificador.",
-  animalId: "ID animal",
-
-  corralExample: "Ex: 102",
-  idExample: "Ex: 1234",
-
-  consulting: "Consultant...",
-  continue: "Continuar",
-  accept: "Acceptar",
-
-  serverConnectionError: "No s'ha pogut connectar amb el servidor.",
-},
-altaBajaStack: {
-  tituloPantalla: "Alta/Baixa de garrins",
-  descripcionPantalla: "Busca la mare per corral o ID per registrar altes o baixes de garrins.",
-},
-altaBajaLechones: {
-  heroTitle: "Moviment de garrins",
-  statusAlta: "Alta",
-  statusBaja: "Baixa",
-
-  corralUpper: "CORRAL",
-  idUpper: "ID",
-  dateUpper: "DATA",
-
-  movementType: "Tipus de moviment",
-  movementSubtitle: "Selecciona si vols registrar una alta o una baixa.",
-  adoption: "Adopció",
-  baja: "Baixa",
-
-  adoptionData: "Dades d'adopció",
-  donorMother: "Mare donant",
-  donatesPiglets: "Dona garrins",
-  id: "ID",
-  transferredPiglets: "Garrins transferits",
-  totalAdopted: "Total adoptats",
-  total: "Total",
-
-  bajaReason: "Motiu de baixa",
-  reasonCrushing: "Aixafament",
-  reasonDiarrhea: "Diarrea",
-  reasonLowViability: "Baixa viabilitat",
-  reasonDeformities: "Deformitats",
-  reasonOther: "Altres",
-
-  piglet: "garrí",
-  piglets: "garrins",
-  description: "Descripció",
-
-  editReason: "Editar motiu",
-  addReason: "Afegir motiu",
-  reasonModalText: "Indica la quantitat de garrins i descriu el motiu.",
-
-  saving: "Desant...",
-  saveAlta: "Desar alta",
-  saveBaja: "Desar baixa",
-  accept: "Acceptar",
-  cancel: "Cancel·lar",
-
-  error: "Error",
-  missingData: "Falten dades",
-  saveError: "Error en desar",
-  saveErrorText: "No s'ha pogut desar l'operació.",
-  selectedAnimalPkidNotFound: "No s'ha trobat l'identificador intern de l'animal seleccionat.",
-
-  enterTransferredPiglets: "Introdueix el nombre de garrins transferits.",
-  invalidTotalTitle: "Total no vàlid",
-  invalidPigletsNumber: "Introdueix un nombre vàlid de garrins.",
-
-  missingDescriptionTitle: "Descripció obligatòria",
-  missingDescriptionText: "Introdueix la descripció del motiu.",
-  invalidQuantityTitle: "Quantitat no vàlida",
-  invalidPigletQuantity: "Introdueix una quantitat vàlida de garrins.",
-
-  selectReasonRequired: "Selecciona almenys un motiu de baixa.",
-
-  adoptionSavedTitle: "Alta desada",
-  adoptionSavedMessage: "S'han registrat {{count}} garrins correctament.",
-
-  bajasSavedTitle: "Baixes desades",
-  bajasSavedMessage: "S'han registrat {{piglets}} baixes correctament en {{reasons}} motiu(s).",
-},
-avisoAplicacionNoConfigurada: {
-  title: "Aplicació no configurada",
-  text: "Configura l'adreça IP del servidor",
-  link: "Prem aquí",
-},
-generalHome: {
-  movementAnimalTitle: "Moviment animal",
-  readerDescription: "Lector de crotals.",
-  keyboardDescription: "Teclat",
-
-  ctifeedTitle: "CTIFEED",
-  ctifeedDescription: "Accedeix al portal principal.",
-
-  modalApplicationNotConfiguredTitle: "Aplicació no configurada",
-  modalNoSessionTitle: "Sessió no iniciada",
-  modalInstallationUnavailableTitle: "Instal·lació no disponible",
-  modalPreparingSessionTitle: "Preparant sessió",
-  modalReadOnlyPermissionTitle: "Permís només de lectura",
-
-  modalApplicationNotConfiguredText: "No hi ha cap instal·lació configurada. Ves a Instal·lacions i selecciona'n una.",
-  modalNoSessionText: "La instal·lació té IP, però no hi ha cap sessió iniciada. Revisa l'usuari i la clau a Instal·lacions.",
-  modalInstallationUnavailableText: "No es pot connectar amb la instal·lació seleccionada. Comprova que estàs connectat a la xarxa WiFi correcta o revisa la IP del servidor.",
-  modalPreparingSessionText: "La sessió encara s'està carregant. Torna-ho a provar d'aquí a uns segons.",
-  modalReadOnlyPermissionText: "El teu usuari no té permisos d'administrador per accedir a aquesta funcionalitat.",
-
-  accept: "Acceptar",
-
-  connectingTitle: "Connectant...",
-  connectingText: "Comprovant la connexió amb la instal·lació seleccionada.",
-},
-movimientoAnimalMaternidad: {
-  smallLabel: "MOVIMENT",
-  title: "Maternitat",
-  subtitle: "Realitza entrades i sortides manuals amb el teclat.",
-
-  movementType: "Tipus de moviment",
-  entry: "Entrada",
-  exit: "Sortida",
-
-  searchAnimal: "Buscar animal",
-  entryHelper: "Introdueix el corral de destinació i l'ID de l'animal.",
-  exitHelper: "Selecciona si vols fer la sortida per corral o per ID.",
-
-  pen: "Corral",
-  animalId: "ID animal",
-  type: "Tipus",
-
-  sending: "Enviant...",
-  accept: "Acceptar",
-  cancel: "Cancel·lar",
-
-  confirmEntry: "Confirmar entrada",
-  confirmExit: "Confirmar sortida",
-  confirmSubtitle: "Revisa les dades abans d'enviar el moviment.",
-
-  incompleteDataTitle: "Dades incompletes",
-  entryIncompleteText: "Introdueix el corral i l'ID de l'animal.",
-  exitPenIncompleteText: "Introdueix el corral per fer la sortida.",
-  exitIdIncompleteText: "Introdueix l'ID de l'animal per fer la sortida.",
-
-  invalidPenTitle: "Corral no vàlid",
-  invalidPenText: "El corral ha de ser un número vàlid més gran que 0.",
-
-  sendErrorTitle: "Error en enviar",
-  connectionErrorTitle: "Error de connexió",
-  noIpConfigured: "No hi ha cap IP configurada.",
-  serverConnectionError: "No s'ha pogut connectar amb el servidor.",
-  serverEmptyResponse: "El servidor no ha retornat cap missatge. Codi HTTP {{status}}.",
-
-  entrySentTitle: "Entrada enviada",
-  entrySentText: "El moviment d'entrada s'ha enviat correctament.",
-
-  exitSentTitle: "Sortida enviada",
-  exitByPenSentText: "La sortida per corral s'ha enviat correctament.",
-  exitByIdSentText: "La sortida per ID s'ha enviat correctament.",
-},
-movimientoAnimalGestacion: {
-  smallLabel: "GESTACIÓ",
-  title: "Moviment animal",
-  subtitle: "Realitza entrades i sortides manuals amb el teclat.",
-
-  movementType: "Tipus de moviment",
-  entry: "Entrada",
-  exit: "Sortida",
-
-  searchAnimal: "Buscar animal",
-  entryHelper: "Introdueix el corral de destinació i l'ID de l'animal.",
-  exitHelper: "Introdueix l'ID de l'animal per fer la sortida de gestació.",
-
-  pen: "Corral",
-  animalId: "ID animal",
-  type: "Tipus",
-
-  sending: "Enviant...",
-  accept: "Acceptar",
-  cancel: "Cancel·lar",
-
-  confirmEntry: "Confirmar entrada",
-  confirmExit: "Confirmar sortida",
-  confirmSubtitle: "Revisa les dades abans d'enviar el moviment.",
-
-  incompleteDataTitle: "Dades incompletes",
-  entryIncompleteText: "Introdueix el corral i l'ID de l'animal.",
-  exitIdIncompleteText: "Introdueix l'ID de l'animal per fer la sortida.",
-
-  invalidPenTitle: "Corral no vàlid",
-  invalidPenText: "El corral ha de ser un número vàlid més gran que 0.",
-
-  sendErrorTitle: "Error en enviar",
-  noIpConfigured: "No hi ha cap IP configurada.",
-  serverConnectionError: "No s'ha pogut connectar amb el servidor.",
-  serverEmptyResponse: "El servidor no ha retornat cap missatge. Codi HTTP {{status}}.",
-
-  entrySentTitle: "Entrada enviada",
-  entrySentText: "El moviment d'entrada en gestació s'ha enviat correctament.",
-
-  exitSentTitle: "Sortida enviada",
-  exitByIdSentText: "La sortida per ID en gestació s'ha enviat correctament.",
-},
-
-gestCorralDetail: {
-   title: "Estat animal gestació",
-   emptyTitle: "No hi ha cap animal en aquest corral",
-
-   id: "ID",
-   crotal: "Cròtal",
-   cycle: "Cicle",
-   day: "Dia",
-
-   stateGestation: "Gestació",
-   stateOutOfGestation: "Fora de gestació",
-
-   curve: "Corba",
-   correction: "Correcció",
-   entryDate: "Data d’entrada",
-   inseminationDate: "Data d’inseminació",
-   house: "Nau",
-   corral: "Corral",
-   estimatedFarrowingDate: "Data estimada de part",
-   lastFeeding: "Última alimentació",
-
-   oneDayWithoutFeeding: "1 dia sense alimentar",
-   daysWithoutFeeding: "{{count}} dies sense alimentar",
-   of: "de",
-
-   operationsButton: "Operacions",
-   operationsTitle: "Operacions",
-   operationsSubtitle: "Selecciona una operació",
-
-   operationInseminationDate: "Data d’inseminació",
-   operationCurve: "Corba",
-   operationBodyCondition: "Condició corporal",
-   operationChangePen: "Canvi de corral",
-   operationExitAnimal: "Sortida animal",
-   operationReplaceEarTag: "Substituir cròtal",
-
-   cancel: "Cancel·lar",
-   accept: "Acceptar",
-   saving: "Desant...",
-
-   selectCurve: "Seleccionar corba",
-   loadingCurves: "Carregant corbes...",
-   noCurvesAvailable: "No hi ha corbes disponibles",
-
-   selectBodyCondition: "Seleccionar condició corporal",
-   loadingBodyConditions: "Carregant condicions corporals...",
-   noBodyConditionsAvailable: "No hi ha condicions corporals disponibles",
-
-   changePenTitle: "Canviar corral",
-   currentPen: "Corral actual: {{corral}}",
-   newPen: "Nou corral",
-   changePenPlaceholder: "Introdueix el corral de destinació",
-
-   replaceEarTagTitle: "Substituir cròtal",
-   currentEarTag: "Cròtal actual: {{crotal}}",
-   newEarTag: "Nou cròtal",
-   replaceEarTagPlaceholder: "Introdueix el nou cròtal",
-
-   inseminationDateTitle: "Data d’inseminació",
-   selectDate: "Selecciona la data",
-   noFutureInseminationDate: "No es permet seleccionar una data posterior a l’actual.",
-
-   exitAnimalTitle: "Sortida animal",
-   exitAnimalGestation: "Sortida animal gestació",
-   exitDate: "Data de sortida",
-   noFutureExitDate: "La data de sortida no pot ser posterior a l’actual.",
-
-   penNotFound: "Corral no trobat",
-   changePenGenericError: "No s’ha pogut canviar el corral.",
-   earTagAlreadyAssigned: "El cròtal està assignat a un altre animal",
-   replaceEarTagGenericError: "No s’ha pogut substituir el cròtal.",
-},
-
-tareasMovimientos: {
-  tabs: {
-    tareas: "Tasques",
-    historial: "Historial"
-  },
-
-  secciones: {
-    gestacion: "Gestació",
-    maternidad: "Maternitat",
-    todos: "Tots",
-    todas: "Totes"
-  },
-
-  operaciones: {
-    entrada: "Entrada",
-    salida: "Sortida",
-    realizada: "Realitzada"
-  },
-
-  tarjetas: {
-    tareasPendientesMovimientos: "Tasques pendents de moviments",
-    idAnimal: "ID animal",
-    sinCrotal: "Sense crotal",
-    corralDestino: "Corral de destinació",
-    corralOrigen: "Corral d'origen",
-    fecha: "Data"
-  },
-
-  filtros: {
-    titulo: "Filtres",
-    filtrarPorFecha: "Filtrar per data",
-    hoy: "Avui",
-    ayer: "Ahir",
-    fecha: "Data",
-    formatoFecha: "DD/MM/AAAA"
-  },
-
-  carga: {
-    cargandoHistorial: "Carregant historial..."
-  },
-
-  vacio: {
-    sinResultados: "Sense resultats",
-    sinMovimientosConFiltros: "No hi ha moviments realitzats amb aquests filtres.",
-    sinMovimientosTodavia: "Encara no hi ha moviments realitzats."
-  },
-
-  errores: {
-    actualizarServidorTareas: "Cal actualitzar el servidor per utilitzar la funció de tasques de moviments.",
-    noCargarTareas: "No s'han pogut carregar les tasques.",
-    noCargarHistorialTitulo: "No s'ha pogut carregar l'historial",
-    noCargarHistorial: "No s'ha pogut carregar l'historial de moviments.",
-    historialNoDisponible: "Historial no disponible",
-    actualizarServidorHistorial: "Cal actualitzar el servidor per utilitzar l'historial de tasques de moviments."
-  }
-},
-
-tareasMovimientosDetalle: {
-  tabs: {
-    gestacion: "Gestació",
-    maternidad: "Maternitat"
-  },
-
-  acciones: {
-    filtros: "Filtres",
-    ordenar: "Ordenar",
-    marcarRealizado: "Marcar realitzada",
-    marcarSeleccionadas: "Marcar ({{total}})",
-    marcando: "Marcant...",
-    aceptar: "Acceptar",
-    cancelar: "Cancel·lar",
-    confirmar: "Confirmar",
-    validando: "Validant..."
-  },
-
-  orden: {
-    corralAscendente: "Corral ascendent",
-    corralDescendente: "Corral descendent"
-  },
-
-  operaciones: {
-    entrada: "Entrada",
-    salida: "Sortida",
-    trasladoEntrada: "Entrada de trasllat",
-    trasladoSalida: "Sortida de trasllat"
-  },
-
-  tarjetas: {
-    idAnimal: "ID animal",
-    sinCrotal: "Sense crotal",
-    corralDestino: "Corral de destinació",
-    corralOrigen: "Corral d'origen",
-    fecha: "Data"
-  },
-
-  estados: {
-    cargandoTareas: "Carregant tasques...",
-    noCargarTareasTitulo: "No s'han pogut carregar les tasques",
-    pulsaReintentar: "Prem per tornar-ho a intentar",
-    sinTareasConFiltros: "No hi ha tasques amb aquests filtres",
-    sinTareasPendientes: "No hi ha tasques pendents",
-    cambiaFiltros: "Prova de canviar els filtres aplicats.",
-    sinMovimientosPendientes: "No s'han trobat moviments pendents."
-  },
-
-  modalResultado: {
-    tareasRealizadasTitulo: "Tasques realitzades",
-    tareasRealizadasMensaje: "Les tasques seleccionades s'han marcat com a realitzades.",
-    tareaRealizadaTitulo: "Tasca realitzada",
-    tareaRealizadaMensaje: "L'entrada de maternitat s'ha marcat com a realitzada.",
-    errorTitulo: "Error"
-  },
-
-  modalCorral: {
-    titulo: "Confirmar corral",
-    mensaje: "Revisa el corral de destinació de l'entrada en maternitat.",
-    labelCorralDestino: "Corral de destinació",
-    placeholderCorral: "Introdueix el corral"
-  },
-
-  errores: {
-    noCargarTareas: "No s'han pogut carregar les tasques.",
-    entradaMaternidadTitulo: "Entrada de maternitat",
-    soloUnaEntradaMaternidad: "Només pots marcar una entrada de maternitat alhora.",
-    soloUnaEntradaMaternidadCadaVez: "Només pots marcar una entrada de maternitat cada vegada.",
-    noMarcarTareas: "No s'han pogut marcar les tasques com a realitzades.",
-    corralMaximo9: "Introdueix un corral vàlid de màxim 9 números.",
-    corralNoExiste: "El corral no existeix.",
-    corralOcupado: "El corral està ocupat.",
-    noValidarCorral: "No s'ha pogut validar el corral.",
-    noValidarCorralMaternidad: "No s'ha pogut validar el corral de maternitat."
-  }
-},
-filtrosTareasMovimientos: {
-  cabecera: {
-    titulo: "Filtres",
-    subtituloTareasDe: "Tasques de {{seccion}}",
-    limpiar: "Netejar"
-  },
-
-  secciones: {
-    gestacion: "Gestació",
-    maternidad: "Maternitat"
-  },
-
-  bloques: {
-    tipoMovimiento: "Tipus de moviment",
-    fecha: "Data",
+    animalId: "ID ANIMAL",
     corral: "Corral",
-    idAnimal: "ID animal"
+    consumption: "Consum",
+    withoutFeeding: "Sense alimentar",
+    day: "dia",
+    days: "dies",
+    loadingAnimals: "Carregant animals...",
+    title: "Animals no alimentats",
+    totalAnimalsMaternity: "Total d'animals de maternitat:",
+    notSeen: "No vistos",
+    all: "Tots",
+    sort: "Ordenar",
+    emptyTitle: "No hi ha animals pendents",
+    emptyText: "No s'han trobat animals no alimentats a maternitat.",
+    sortBy: "Ordenar per",
+    daysWithoutFeeding: "Dies sense alimentar",
+    sortDaysHelp: "Ordena pels dies sense alimentació",
+    sortCorralHelp: "Ordena pel número de corral",
+    descending: "Descendent",
+    ascending: "Ascendent",
+    filterAnimals: "Filtrar animals",
+    allHelp: "Mostra tots els animals",
+    unmarked: "No marcats",
+    unmarkedHelp: "Oculta els animals ja revisats",
+    clearMarkedTitle: "Netejar animals marcats",
+    clearMarkedText: "S'eliminaran totes les marques dels animals revisats.",
+    cancel: "Cancel·lar",
+    clear: "Netejar",
+    error: "Error",
+    serverConnectionError: "No s'ha pogut connectar amb el servidor."
   },
 
-  opciones: {
-    todos: "Tots",
-    entrada: "Entrada",
-    salida: "Sortida",
-    todasLasFechas: "Totes les dates",
-    hoy: "Avui",
-    manana: "Demà",
-    fecha: "Data",
-    todosLosCorrales: "Tots els corrals",
-    porCorral: "Per corral",
-    todosLosAnimales: "Tots els animals",
-    porId: "Per ID"
-  },
-
-  placeholders: {
-    dia: "DD",
-    mes: "MM",
-    anio: "AA/AAAA",
-    introduceCorral: "Introdueix el corral",
-    introduceIdAnimal: "Introdueix l'ID animal"
-  },
-
-  validaciones: {
-    fechaCompleta: "Introdueix dia, mes i any.",
-    diaDosCifras: "El dia ha de tenir 2 xifres.",
-    mesDosCifras: "El mes ha de tenir 2 xifres.",
-    anioDosOCuatroCifras: "L'any ha de tenir 2 o 4 xifres.",
-    diaRango: "El dia ha d'estar entre 01 i 31.",
-    mesRango: "El mes ha d'estar entre 01 i 12.",
-    fechaNoExiste: "La data no existeix.",
-    introduceCorral: "Introdueix un número de corral.",
-    introduceIdAnimal: "Introdueix un ID d'animal."
-  },
-
-  botones: {
-    cancelar: "Cancel·lar",
-    aceptar: "Acceptar"
-  }
-},
-filtrosHistorialMovimientos: {
-  cabecera: {
-    titulo: "Filtres",
-    subtitulo: "Historial de moviments",
-    limpiar: "Netejar"
-  },
-
-  bloques: {
-    tipoMovimiento: "Tipus de moviment",
-    fecha: "Data",
+  noAlimentadosGestacion: {
+    animalId: "ID ANIMAL",
     corral: "Corral",
-    idAnimal: "ID animal"
+    consumption: "Consum",
+    withoutFeeding: "Sense alimentar",
+    day: "dia",
+    days: "dies",
+    loadingAnimals: "Carregant animals...",
+    title: "Animals no alimentats",
+    totalAnimalsGestation: "Total d'animals de gestació:",
+    notSeen: "No vistos",
+    all: "Tots",
+    sort: "Ordenar",
+    emptyTitle: "No hi ha animals pendents",
+    emptyText: "No s'han trobat animals no alimentats a gestació.",
+    sortBy: "Ordenar per",
+    daysWithoutFeeding: "Dies sense alimentar",
+    sortDaysHelp: "Ordena pels dies sense alimentació",
+    sortCorralHelp: "Ordena pel número de corral",
+    descending: "Descendent",
+    ascending: "Ascendent",
+    filterAnimals: "Filtrar animals",
+    allHelp: "Mostra tots els animals",
+    unmarked: "No marcats",
+    unmarkedHelp: "Oculta els animals ja revisats",
+    clearMarkedTitle: "Netejar animals marcats",
+    clearMarkedText: "S'eliminaran totes les marques dels animals revisats.",
+    cancel: "Cancel·lar",
+    clear: "Netejar",
+    error: "Error",
+    serverConnectionError: "No s'ha pogut connectar amb el servidor.",
+    viewStatus: "Veure estat",
+    animalIdNotFound: "No s'ha trobat l'identificador de l'animal.",
+    openAnimalInfoError: "No s'ha pogut obrir la informació de l'animal.",
+  },
+  capturaAnimalHome: {
+    selectOption: "Selecciona una opció",
+    unfedAnimalsTitle: "Animals no alimentats",
+    unfedAnimalsDescription: "Consulta els animals que no han rebut l'alimentació prevista.",
+    twoFeedsTitle: "2 pinsos",
+    twoFeedsDescription: "Gestiona el canvi d'alimentació a les boques de caiguda.",
+    animalStatusTitle: "Estat de l'animal",
+    animalStatusDescription: "Consultar o actualitzar l'estat de l'animal.",
+  },
+  cambioPiensoMaternidad: {
+    error: "Error",
+    loadTasksError: "No s'han pogut carregar les tasques de canvi de pinso.",
+    loadingTasks: "Carregant tasques...",
+    title: "Canvi de pinso",
+    pendingTask: "{{count}} tasca pendent",
+    pendingTasks: "{{count}} tasques pendents",
+    emptyTitle: "No hi ha tasques pendents",
+    emptyText: "No s'han trobat tasques de canvi de pinso.",
+    animalId: "ID ANIMAL",
+    corral: "Corral",
+    setTo: "Fixar a",
+    destination: "Destinació"
+  },
+  estadoAnimal: {
+    queryLabel: "Consulta",
+    title: "Estat de l'animal",
+    subtitle: "Selecciona com vols identificar l'animal.",
+    corral: "Corral",
+    corralDescription: "Introdueix el número de corral.",
+    id: "ID",
+    idDescription: "Introdueix l'identificador de l'animal.",
+    animalId: "ID animal",
+    requiredData: "Dada obligatòria",
+    enterCorral: "Introdueix el número de corral.",
+    enterId: "Introdueix l'identificador de l'animal.",
+    consulting: "Consultant...",
+    continue: "Continuar",
+    accept: "Acceptar",
+    serverConnectionError: "No s'ha pogut connectar amb el servidor.",
+    noIpConfigured: "No hi ha cap IP configurada.",
+    nextScreenPending: "Farem la pantalla d'informació de l'animal en el següent pas.",
+    moveToWeaning: "Passar a deslletament",
+    corralMaternityDescription: "Introdueix el número del corral de maternitat.",
+    idAnimalDescription: "Cerca l’animal en maternitat i gestació.",
+    animalNotFound: "No s’ha trobat l’animal ni en maternitat ni en gestació.",
+
   },
 
-  opciones: {
-    todos: "Tots",
-    entrada: "Entrada",
-    salida: "Sortida",
-    todasLasFechas: "Totes les dates",
-    hoy: "Avui",
-    manana: "Demà",
-    fecha: "Data",
-    todosLosCorrales: "Tots els corrals",
-    porCorral: "Per corral",
-    todosLosAnimales: "Tots els animals",
-    porId: "Per ID"
+  matCorralDetail: {
+    viewStatus: "Veure estat",
+    animalIdNotFound: "No s'ha trobat l'identificador de l'animal.",
+    openAnimalInfoError: "No s'ha pogut obrir la informació de l'animal.",
+    earTagAlreadyAssigned: "El cròtal està assignat a un altre animal",
+    readOnlyPermission: "Permís de només lectura",
+    readOnlyPermissionText: "Aquest usuari només té permisos de lectura. No pot realitzar operacions sobre l'animal.",
+    animalStatus: "Estat de l'animal",
+    id: "ID",
+    earTag: "Cròtal",
+    cycle: "Cicle",
+    day: "Dia",
+
+    curve: "Corba",
+    correction: "Correcció",
+    entryDate: "Data d'entrada",
+    farrowingDate: "Data de part",
+    house: "Nau",
+    pen: "Corral",
+    lastFeeding: "Última alimentació",
+    presentPiglets: "Garrins vius",
+    inseminationDate: "Data d'inseminació",
+    teatsNumber: "Nre. de mugrons",
+
+    operations: "Operacions",
+
+    consumption: "Consum",
+    ofGrams: "de {{amount}} g",
+    oneDayWithoutFeeding: "1 dia sense alimentar",
+    daysWithoutFeeding: "{{count}} dies sense alimentar",
+
+    noAnimalData: "No hi ha dades de l'animal",
+    noAnimalDataText: "No s'ha rebut informació per mostrar.",
+    back: "Tornar",
+    operationsPendingTitle: "Operacions",
+    operationsPendingText: "Farem les operacions en el pas següent.",
+    moveToWeaning: "Passar a deslletament",
+    chooseOption: "Selecciona una operació per a aquest animal.",
+    nextOperation: "Operació següent",
+    insertAnimal: "Inserir animal",
+    moveToLactation: "Passar a lactància",
+    nextStep: "Pas següent",
+    actions: "Accions",
+
+    bodyCondition: "Condició corporal",
+    subState: "Subestat",
+    pigletCapture: "Captura de garrins",
+    animalExit: "Sortida de l'animal",
+    replaceEarTag: "Substituir cròtal",
+    changePen: "Canviar corral",
+    anonymousAnimalId: "Identificador d'animal anònim",
+
+    cancel: "Cancel·lar",
+    accept: "Acceptar",
+    saving: "Desant...",
+    error: "Error",
+
+    operationDone: "Operació realitzada correctament.",
+    changeStateDone: "Subestat actualitzat correctament.",
+    changeStateError: "No s'ha pogut canviar l'estat de l'animal.",
+    confirmNextOperation: "Segur que vols passar a l'operació següent?",
+    pkidChangeStateNotFound: "No s'ha trobat l'identificador intern de l'animal.",
+
+    selectExitType: "Selecciona el tipus de sortida que vols aplicar.",
+    exitImmediate: "Sortida immediata",
+    exitScheduled: "Sortida programada",
+    exitScheduledEmptyHopper: "Sortida programada amb tremuja buida",
+    cancelScheduledExit: "Cancel·lar sortida programada",
+    scheduledDate: "Data programada",
+    exitDateLimitText: "No es pot seleccionar una data anterior a avui ni posterior a 3 dies.",
+    animalExitDone: "Sortida de l'animal realitzada correctament.",
+    animalExitError: "No s'ha pogut realitzar la sortida de l'animal.",
+    pkidExitNotFound: "No s'ha trobat l'identificador intern de l'animal.",
+
+    selectCurve: "Seleccionar corba",
+    selectCurveText: "Selecciona la nova corba de l'animal.",
+    loadingCurves: "Carregant corbes...",
+    noCurvesAvailable: "No hi ha corbes disponibles.",
+    confirmChangeCurve: "Segur que vols canviar la corba?",
+    loadCurvesError: "No s'han pogut carregar les corbes.",
+    pkidChangeCurveNotFound: "No s'ha trobat l'identificador intern de l'animal.",
+    changeCurveDone: "Corba actualitzada correctament.",
+    changeCurveError: "No s'ha pogut canviar la corba.",
+
+    selectBodyConditionText: "Selecciona la nova condició corporal de l'animal.",
+    loadingBodyConditions: "Carregant condicions corporals...",
+    noBodyConditionsAvailable: "No hi ha condicions corporals disponibles.",
+    confirmChangeBodyCondition: "Segur que vols canviar la condició corporal?",
+    loadBodyConditionsError: "No s'han pogut carregar les condicions corporals.",
+    pkidChangeBodyConditionNotFound: "No s'ha trobat l'identificador intern de l'animal.",
+    changeBodyConditionDone: "Condició corporal actualitzada correctament.",
+    changeBodyConditionError: "No s'ha pogut canviar la condició corporal.",
+
+    selectSubStateText: "Selecciona manualment el nou subestat de l'animal.",
+    confirmChangeSubState: "Segur que vols canviar el subestat?",
+
+    currentPen: "Corral actual: {{pen}}",
+    newPen: "Nou corral",
+    enterNewPen: "Introdueix el nou corral.",
+    pkidChangePenNotFound: "No s'ha trobat l'identificador intern de l'animal.",
+    changePenDone: "Corral actualitzat correctament.",
+    changePenError: "No s'ha pogut canviar el corral.",
+
+    currentEarTag: "Cròtal actual: {{earTag}}",
+    newEarTag: "Nou cròtal",
+    enterNewEarTag: "Introdueix el nou cròtal.",
+    pkidEarTagNotFound: "No s'ha trobat l'identificador intern de l'animal.",
+    replaceEarTagDone: "Cròtal actualitzat correctament.",
+    replaceEarTagError: "No s'ha pogut substituir el cròtal.",
+
+    identifyAnonymousAnimalText: "Tria si vols assignar un ID o un cròtal a l'animal.",
+    newId: "Nou ID",
+    enterNewId: "Introdueix el nou ID.",
+    idExample: "Ex: 1010",
+    earTagExample: "Ex: 123",
+    notAnonymousAnimalText: "Aquest animal no és anònim perquè ja té un ID o un cròtal assignat.",
+    pkidIdentifyNotFound: "No s'ha trobat l'identificador intern de l'animal.",
+    identifyAnonymousAnimalDone: "Identificador de l'animal actualitzat correctament.",
+    identifyAnonymousAnimalError: "No s'ha pogut identificar l'animal anònim.",
+
+    livePiglets: "Vius",
+    deadPiglets: "Morts",
+    mummifiedPiglets: "Momificats",
+    totalBornPiglets: "Nascuts totals",
+    pigletCaptureText: "Introdueix els garrins vius, morts i momificats.",
+    captureBeforeLactationText: "Registra els nascuts abans de passar a lactància.",
+    weaningPigletsOnlyRead: "En deslletament només es poden consultar els garrins.",
+    pkidPigletsNotFound: "No s'ha trobat l'identificador intern de l'animal.",
+    pigletCaptureDone: "Captura de garrins desada correctament.",
+    pigletCaptureError: "No s'ha pogut desar la captura de garrins.",
+    penNotFound: "Corral no trobat",
+
+  },
+  subState: {
+    prepartum: "Prepart",
+    lactation: "Lactància",
+    weaning: "Deslletament",
   },
 
-  placeholders: {
-    dia: "DD",
-    mes: "MM",
-    anio: "AA/AAAA",
-    introduceCorral: "Introdueix el corral",
-    introduceIdAnimal: "Introdueix l'ID animal"
+  capturaParto: {
+    birthDataTitle: "Dades del part",
+    birthDataSubtitle: "Revisa les dades de l'animal abans de registrar el part.",
+    corral: "Corral",
+    id: "ID",
+    date: "Data",
+    subState: "Subestat",
+
+    dataCollectionTitle: "Recollida de dades",
+    dataCollectionSubtitle: "Introdueix els nascuts vius, morts i momificats.",
+    weaningReadOnly: "En deslletament només es poden consultar les dades.",
+
+    totalBorn: "Nascuts totals",
+    live: "Vius",
+    dead: "Morts",
+    mummified: "Momificats",
+
+    prepartum: "Prepart",
+    farrowing: "Part",
+    lactation: "Lactància",
+    weaning: "Deslletament",
+
+    accept: "Acceptar",
+    cancel: "Cancel·lar",
+    saving: "Desant...",
+
+    sentTitle: "Captura enviada",
+    sentMessage: "La captura de part s'ha desat correctament.",
+
+    errorTitle: "Error",
+    invalidAnimalTitle: "Animal no vàlid",
+    invalidAnimalText: "No s'ha trobat l'identificador intern de l'animal.",
+    reportSendError: "No s'ha pogut desar la captura de part.",
+
+    invalidDateTitle: "Data no vàlida",
+    invalidDateMessage: "La data de part no pot ser posterior a avui.",
+    changeDate: "Canviar data",
+
+    selectDateTitle: "Seleccionar data",
+    selectDateMessage: "Ajusta la data del part amb els botons.",
+    penNotFound: "Corral no trobat",
+
   },
 
-  validaciones: {
-    fechaCompleta: "Introdueix dia, mes i any.",
-    diaDosCifras: "El dia ha de tenir 2 xifres.",
-    mesDosCifras: "El mes ha de tenir 2 xifres.",
-    anioDosOCuatroCifras: "L'any ha de tenir 2 o 4 xifres.",
-    diaRango: "El dia ha d'estar entre 01 i 31.",
-    mesRango: "El mes ha d'estar entre 01 i 12.",
-    fechaNoExiste: "La data no existeix.",
-    introduceCorral: "Introdueix un número de corral.",
-    introduceIdAnimal: "Introdueix un ID d'animal."
+  capturaMaternidadEntrada: {
+    title: "Captura de part",
+    description: "Busca l'animal per corral o per ID per registrar el part.",
+    maternityLabel: "MATERNITAT",
+
+    corral: "Corral",
+    corralDescription: "Busca l'animal pel número de corral.",
+    id: "ID",
+    idDescription: "Busca l'animal pel seu identificador.",
+    animalId: "ID animal",
+
+    corralExample: "Ex: 102",
+    idExample: "Ex: 1234",
+
+    consulting: "Consultant...",
+    continue: "Continuar",
+    accept: "Acceptar",
+
+    serverConnectionError: "No s'ha pogut connectar amb el servidor.",
+  },
+  altaBajaStack: {
+    tituloPantalla: "Alta/Baixa de garrins",
+    descripcionPantalla: "Busca la mare per corral o ID per registrar altes o baixes de garrins.",
+  },
+  altaBajaLechones: {
+    heroTitle: "Moviment de garrins",
+    statusAlta: "Alta",
+    statusBaja: "Baixa",
+
+    corralUpper: "CORRAL",
+    idUpper: "ID",
+    dateUpper: "DATA",
+
+    movementType: "Tipus de moviment",
+    movementSubtitle: "Selecciona si vols registrar una alta o una baixa.",
+    adoption: "Adopció",
+    baja: "Baixa",
+
+    adoptionData: "Dades d'adopció",
+    donorMother: "Mare donant",
+    donatesPiglets: "Dona garrins",
+    id: "ID",
+    transferredPiglets: "Garrins transferits",
+    totalAdopted: "Total adoptats",
+    total: "Total",
+
+    bajaReason: "Motiu de baixa",
+    reasonCrushing: "Aixafament",
+    reasonDiarrhea: "Diarrea",
+    reasonLowViability: "Baixa viabilitat",
+    reasonDeformities: "Deformitats",
+    reasonOther: "Altres",
+
+    piglet: "garrí",
+    piglets: "garrins",
+    description: "Descripció",
+
+    editReason: "Editar motiu",
+    addReason: "Afegir motiu",
+    reasonModalText: "Indica la quantitat de garrins i descriu el motiu.",
+
+    saving: "Desant...",
+    saveAlta: "Desar alta",
+    saveBaja: "Desar baixa",
+    accept: "Acceptar",
+    cancel: "Cancel·lar",
+
+    error: "Error",
+    missingData: "Falten dades",
+    saveError: "Error en desar",
+    saveErrorText: "No s'ha pogut desar l'operació.",
+    selectedAnimalPkidNotFound: "No s'ha trobat l'identificador intern de l'animal seleccionat.",
+
+    enterTransferredPiglets: "Introdueix el nombre de garrins transferits.",
+    invalidTotalTitle: "Total no vàlid",
+    invalidPigletsNumber: "Introdueix un nombre vàlid de garrins.",
+
+    missingDescriptionTitle: "Descripció obligatòria",
+    missingDescriptionText: "Introdueix la descripció del motiu.",
+    invalidQuantityTitle: "Quantitat no vàlida",
+    invalidPigletQuantity: "Introdueix una quantitat vàlida de garrins.",
+
+    selectReasonRequired: "Selecciona almenys un motiu de baixa.",
+
+    adoptionSavedTitle: "Alta desada",
+    adoptionSavedMessage: "S'han registrat {{count}} garrins correctament.",
+
+    bajasSavedTitle: "Baixes desades",
+    bajasSavedMessage: "S'han registrat {{piglets}} baixes correctament en {{reasons}} motiu(s).",
+  },
+  avisoAplicacionNoConfigurada: {
+    title: "Aplicació no configurada",
+    text: "Configura l'adreça IP del servidor",
+    link: "Prem aquí",
+  },
+  generalHome: {
+    servidorCtifeedDesactualizadoTitulo: "Servidor CTIFEED desactualitzat",
+    servidorCtifeedDesactualizadoTexto: "Cal actualitzar el servidor CTIFEED per utilitzar aquesta funcionalitat.",
+    tareasMovimientosTitulo: "Tasques de moviments",
+    tareasMovimientosDescripcion: "Consulta i gestió de tasques pendents de moviments.",
+    movementAnimalTitle: "Moviment animal",
+    readerDescription: "Lector de crotals.",
+    keyboardDescription: "Teclat",
+
+    ctifeedTitle: "CTIFEED",
+    ctifeedDescription: "Accedeix al portal principal.",
+
+    modalApplicationNotConfiguredTitle: "Aplicació no configurada",
+    modalNoSessionTitle: "Sessió no iniciada",
+    modalInstallationUnavailableTitle: "Instal·lació no disponible",
+    modalPreparingSessionTitle: "Preparant sessió",
+    modalReadOnlyPermissionTitle: "Permís només de lectura",
+
+    modalApplicationNotConfiguredText: "No hi ha cap instal·lació configurada. Ves a Instal·lacions i selecciona'n una.",
+    modalNoSessionText: "La instal·lació té IP, però no hi ha cap sessió iniciada. Revisa l'usuari i la clau a Instal·lacions.",
+    modalInstallationUnavailableText: "No es pot connectar amb la instal·lació seleccionada. Comprova que estàs connectat a la xarxa WiFi correcta o revisa la IP del servidor.",
+    modalPreparingSessionText: "La sessió encara s'està carregant. Torna-ho a provar d'aquí a uns segons.",
+    modalReadOnlyPermissionText: "El teu usuari no té permisos d'administrador per accedir a aquesta funcionalitat.",
+
+    accept: "Acceptar",
+
+    connectingTitle: "Connectant...",
+    connectingText: "Comprovant la connexió amb la instal·lació seleccionada.",
+  },
+  movimientoAnimalMaternidad: {
+    smallLabel: "MOVIMENT",
+    title: "Maternitat",
+    subtitle: "Realitza entrades i sortides manuals amb el teclat.",
+
+    movementType: "Tipus de moviment",
+    entry: "Entrada",
+    exit: "Sortida",
+
+    searchAnimal: "Buscar animal",
+    entryHelper: "Introdueix el corral de destinació i l'ID de l'animal.",
+    exitHelper: "Selecciona si vols fer la sortida per corral o per ID.",
+
+    pen: "Corral",
+    animalId: "ID animal",
+    type: "Tipus",
+
+    sending: "Enviant...",
+    accept: "Acceptar",
+    cancel: "Cancel·lar",
+
+    confirmEntry: "Confirmar entrada",
+    confirmExit: "Confirmar sortida",
+    confirmSubtitle: "Revisa les dades abans d'enviar el moviment.",
+
+    incompleteDataTitle: "Dades incompletes",
+    entryIncompleteText: "Introdueix el corral i l'ID de l'animal.",
+    exitPenIncompleteText: "Introdueix el corral per fer la sortida.",
+    exitIdIncompleteText: "Introdueix l'ID de l'animal per fer la sortida.",
+
+    invalidPenTitle: "Corral no vàlid",
+    invalidPenText: "El corral ha de ser un número vàlid més gran que 0.",
+
+    sendErrorTitle: "Error en enviar",
+    connectionErrorTitle: "Error de connexió",
+    noIpConfigured: "No hi ha cap IP configurada.",
+    serverConnectionError: "No s'ha pogut connectar amb el servidor.",
+    serverEmptyResponse: "El servidor no ha retornat cap missatge. Codi HTTP {{status}}.",
+
+    entrySentTitle: "Entrada enviada",
+    entrySentText: "El moviment d'entrada s'ha enviat correctament.",
+
+    exitSentTitle: "Sortida enviada",
+    exitByPenSentText: "La sortida per corral s'ha enviat correctament.",
+    exitByIdSentText: "La sortida per ID s'ha enviat correctament.",
+  },
+  movimientoAnimalGestacion: {
+    smallLabel: "GESTACIÓ",
+    title: "Moviment animal",
+    subtitle: "Realitza entrades i sortides manuals amb el teclat.",
+
+    movementType: "Tipus de moviment",
+    entry: "Entrada",
+    exit: "Sortida",
+
+    searchAnimal: "Buscar animal",
+    entryHelper: "Introdueix el corral de destinació i l'ID de l'animal.",
+    exitHelper: "Introdueix l'ID de l'animal per fer la sortida de gestació.",
+
+    pen: "Corral",
+    animalId: "ID animal",
+    type: "Tipus",
+
+    sending: "Enviant...",
+    accept: "Acceptar",
+    cancel: "Cancel·lar",
+
+    confirmEntry: "Confirmar entrada",
+    confirmExit: "Confirmar sortida",
+    confirmSubtitle: "Revisa les dades abans d'enviar el moviment.",
+
+    incompleteDataTitle: "Dades incompletes",
+    entryIncompleteText: "Introdueix el corral i l'ID de l'animal.",
+    exitIdIncompleteText: "Introdueix l'ID de l'animal per fer la sortida.",
+
+    invalidPenTitle: "Corral no vàlid",
+    invalidPenText: "El corral ha de ser un número vàlid més gran que 0.",
+
+    sendErrorTitle: "Error en enviar",
+    noIpConfigured: "No hi ha cap IP configurada.",
+    serverConnectionError: "No s'ha pogut connectar amb el servidor.",
+    serverEmptyResponse: "El servidor no ha retornat cap missatge. Codi HTTP {{status}}.",
+
+    entrySentTitle: "Entrada enviada",
+    entrySentText: "El moviment d'entrada en gestació s'ha enviat correctament.",
+
+    exitSentTitle: "Sortida enviada",
+    exitByIdSentText: "La sortida per ID en gestació s'ha enviat correctament.",
   },
 
-  botones: {
-    cancelar: "Cancel·lar",
-    aceptar: "Acceptar"
+  gestCorralDetail: {
+    title: "Estat animal gestació",
+    emptyTitle: "No hi ha cap animal en aquest corral",
+
+    id: "ID",
+    crotal: "Cròtal",
+    cycle: "Cicle",
+    day: "Dia",
+
+    stateGestation: "Gestació",
+    stateOutOfGestation: "Fora de gestació",
+
+    curve: "Corba",
+    correction: "Correcció",
+    entryDate: "Data d’entrada",
+    inseminationDate: "Data d’inseminació",
+    house: "Nau",
+    corral: "Corral",
+    estimatedFarrowingDate: "Data estimada de part",
+    lastFeeding: "Última alimentació",
+
+    oneDayWithoutFeeding: "1 dia sense alimentar",
+    daysWithoutFeeding: "{{count}} dies sense alimentar",
+    of: "de",
+
+    operationsButton: "Operacions",
+    operationsTitle: "Operacions",
+    operationsSubtitle: "Selecciona una operació",
+
+    operationInseminationDate: "Data d’inseminació",
+    operationCurve: "Corba",
+    operationBodyCondition: "Condició corporal",
+    operationChangePen: "Canvi de corral",
+    operationExitAnimal: "Sortida animal",
+    operationReplaceEarTag: "Substituir cròtal",
+
+    cancel: "Cancel·lar",
+    accept: "Acceptar",
+    saving: "Desant...",
+
+    selectCurve: "Seleccionar corba",
+    loadingCurves: "Carregant corbes...",
+    noCurvesAvailable: "No hi ha corbes disponibles",
+
+    selectBodyCondition: "Seleccionar condició corporal",
+    loadingBodyConditions: "Carregant condicions corporals...",
+    noBodyConditionsAvailable: "No hi ha condicions corporals disponibles",
+
+    changePenTitle: "Canviar corral",
+    currentPen: "Corral actual: {{corral}}",
+    newPen: "Nou corral",
+    changePenPlaceholder: "Introdueix el corral de destinació",
+
+    replaceEarTagTitle: "Substituir cròtal",
+    currentEarTag: "Cròtal actual: {{crotal}}",
+    newEarTag: "Nou cròtal",
+    replaceEarTagPlaceholder: "Introdueix el nou cròtal",
+
+    inseminationDateTitle: "Data d’inseminació",
+    selectDate: "Selecciona la data",
+    noFutureInseminationDate: "No es permet seleccionar una data posterior a l’actual.",
+
+    exitAnimalTitle: "Sortida animal",
+    exitAnimalGestation: "Sortida animal gestació",
+    exitDate: "Data de sortida",
+    noFutureExitDate: "La data de sortida no pot ser posterior a l’actual.",
+
+    penNotFound: "Corral no trobat",
+    changePenGenericError: "No s’ha pogut canviar el corral.",
+    earTagAlreadyAssigned: "El cròtal està assignat a un altre animal",
+    replaceEarTagGenericError: "No s’ha pogut substituir el cròtal.",
+  },
+
+  tareasMovimientos: {
+    tabs: {
+      tareas: "Tasques",
+      historial: "Historial"
+    },
+
+    secciones: {
+      gestacion: "Gestació",
+      maternidad: "Maternitat",
+      todos: "Tots",
+      todas: "Totes"
+    },
+
+    operaciones: {
+      entrada: "Entrada",
+      salida: "Sortida",
+      realizada: "Realitzada"
+    },
+
+    tarjetas: {
+      tareasPendientesMovimientos: "Tasques pendents de moviments",
+      idAnimal: "ID animal",
+      sinCrotal: "Sense crotal",
+      corralDestino: "Corral de destinació",
+      corralOrigen: "Corral d'origen",
+      fecha: "Data programada",
+      fechaRealizado: "Data realitzada",
+    },
+
+    filtros: {
+      titulo: "Filtres",
+      filtrarPorFecha: "Filtrar per data",
+      hoy: "Avui",
+      ayer: "Ahir",
+      fecha: "Data",
+      formatoFecha: "DD/MM/AAAA"
+    },
+
+    carga: {
+      cargandoHistorial: "Carregant historial..."
+    },
+
+    vacio: {
+      sinResultados: "Sense resultats",
+      sinMovimientosConFiltros: "No hi ha moviments realitzats amb aquests filtres.",
+      sinMovimientosTodavia: "Encara no hi ha moviments realitzats."
+    },
+
+    errores: {
+      actualizarServidorTareas: "Cal actualitzar el servidor per utilitzar la funció de tasques de moviments.",
+      noCargarTareas: "No s'han pogut carregar les tasques.",
+      noCargarHistorialTitulo: "No s'ha pogut carregar l'historial",
+      noCargarHistorial: "No s'ha pogut carregar l'historial de moviments.",
+      historialNoDisponible: "Historial no disponible",
+      actualizarServidorHistorial: "Cal actualitzar el servidor per utilitzar l'historial de tasques de moviments."
+    }
+  },
+
+  tareasMovimientosDetalle: {
+    tabs: {
+      gestacion: "Gestació",
+      maternidad: "Maternitat"
+    },
+
+    acciones: {
+      filtros: "Filtres",
+      ordenar: "Ordenar",
+      marcarRealizado: "Marcar realitzada",
+      marcarSeleccionadas: "Marcar ({{total}})",
+      marcando: "Marcant...",
+      aceptar: "Acceptar",
+      cancelar: "Cancel·lar",
+      confirmar: "Confirmar",
+      validando: "Validant..."
+    },
+
+    orden: {
+      corralAscendente: "Corral ascendent",
+      corralDescendente: "Corral descendent"
+    },
+
+    operaciones: {
+      entrada: "Entrada",
+      salida: "Sortida",
+      trasladoEntrada: "Entrada de trasllat",
+      trasladoSalida: "Sortida de trasllat"
+    },
+
+    tarjetas: {
+      idAnimal: "ID animal",
+      sinCrotal: "Sense crotal",
+      corralDestino: "Corral de destinació",
+      corralOrigen: "Corral d'origen",
+      fecha: "Data"
+    },
+
+    estados: {
+      cargandoTareas: "Carregant tasques...",
+      noCargarTareasTitulo: "No s'han pogut carregar les tasques",
+      pulsaReintentar: "Prem per tornar-ho a intentar",
+      sinTareasConFiltros: "No hi ha tasques amb aquests filtres",
+      sinTareasPendientes: "No hi ha tasques pendents",
+      cambiaFiltros: "Prova de canviar els filtres aplicats.",
+      sinMovimientosPendientes: "No s'han trobat moviments pendents."
+    },
+
+    modalResultado: {
+      tareasRealizadasTitulo: "Tasques realitzades",
+      tareasRealizadasMensaje: "Les tasques seleccionades s'han marcat com a realitzades.",
+      tareaRealizadaTitulo: "Tasca realitzada",
+      tareaRealizadaMensaje: "L'entrada de maternitat s'ha marcat com a realitzada.",
+      errorTitulo: "Error"
+    },
+
+    modalCorral: {
+      titulo: "Confirmar corral",
+      mensaje: "Revisa el corral de destinació de l'entrada en maternitat.",
+      labelCorralDestino: "Corral de destinació",
+      placeholderCorral: "Introdueix el corral"
+    },
+
+    errores: {
+      noCargarTareas: "No s'han pogut carregar les tasques.",
+      entradaMaternidadTitulo: "Entrada de maternitat",
+      soloUnaEntradaMaternidad: "Només pots marcar una entrada de maternitat alhora.",
+      soloUnaEntradaMaternidadCadaVez: "Només pots marcar una entrada de maternitat cada vegada.",
+      noMarcarTareas: "No s'han pogut marcar les tasques com a realitzades.",
+      corralMaximo9: "Introdueix un corral vàlid de màxim 9 números.",
+      corralNoExiste: "El corral no existeix.",
+      corralOcupado: "El corral està ocupat.",
+      noValidarCorral: "No s'ha pogut validar el corral.",
+      noValidarCorralMaternidad: "No s'ha pogut validar el corral de maternitat."
+    }
+  },
+  filtrosTareasMovimientos: {
+    cabecera: {
+      titulo: "Filtres",
+      subtituloTareasDe: "Tasques de {{seccion}}",
+      limpiar: "Netejar"
+    },
+
+    secciones: {
+      gestacion: "Gestació",
+      maternidad: "Maternitat"
+    },
+
+    bloques: {
+      tipoMovimiento: "Tipus de moviment",
+      fecha: "Data",
+      corral: "Corral",
+      idAnimal: "ID animal"
+    },
+
+    opciones: {
+      todos: "Tots",
+      entrada: "Entrada",
+      salida: "Sortida",
+      todasLasFechas: "Totes les dates",
+      hoy: "Avui",
+      manana: "Demà",
+      fecha: "Data",
+      todosLosCorrales: "Tots els corrals",
+      porCorral: "Per corral",
+      todosLosAnimales: "Tots els animals",
+      porId: "Per ID"
+    },
+
+    placeholders: {
+      dia: "DD",
+      mes: "MM",
+      anio: "AA/AAAA",
+      introduceCorral: "Introdueix el corral",
+      introduceIdAnimal: "Introdueix l'ID animal"
+    },
+
+    validaciones: {
+      fechaCompleta: "Introdueix dia, mes i any.",
+      diaDosCifras: "El dia ha de tenir 2 xifres.",
+      mesDosCifras: "El mes ha de tenir 2 xifres.",
+      anioDosOCuatroCifras: "L'any ha de tenir 2 o 4 xifres.",
+      diaRango: "El dia ha d'estar entre 01 i 31.",
+      mesRango: "El mes ha d'estar entre 01 i 12.",
+      fechaNoExiste: "La data no existeix.",
+      introduceCorral: "Introdueix un número de corral.",
+      introduceIdAnimal: "Introdueix un ID d'animal."
+    },
+
+    botones: {
+      cancelar: "Cancel·lar",
+      aceptar: "Acceptar"
+    }
+  },
+  filtrosHistorialMovimientos: {
+    cabecera: {
+      titulo: "Filtres",
+      subtitulo: "Historial de moviments",
+      limpiar: "Netejar"
+    },
+
+    bloques: {
+      tipoMovimiento: "Tipus de moviment",
+      fecha: "Data",
+      corral: "Corral",
+      idAnimal: "ID animal"
+    },
+
+    opciones: {
+      todos: "Tots",
+      entrada: "Entrada",
+      salida: "Sortida",
+      todasLasFechas: "Totes les dates",
+      hoy: "Avui",
+      manana: "Demà",
+      fecha: "Data",
+      todosLosCorrales: "Tots els corrals",
+      porCorral: "Per corral",
+      todosLosAnimales: "Tots els animals",
+      porId: "Per ID"
+    },
+
+    placeholders: {
+      dia: "DD",
+      mes: "MM",
+      anio: "AA/AAAA",
+      introduceCorral: "Introdueix el corral",
+      introduceIdAnimal: "Introdueix l'ID animal"
+    },
+
+    validaciones: {
+      fechaCompleta: "Introdueix dia, mes i any.",
+      diaDosCifras: "El dia ha de tenir 2 xifres.",
+      mesDosCifras: "El mes ha de tenir 2 xifres.",
+      anioDosOCuatroCifras: "L'any ha de tenir 2 o 4 xifres.",
+      diaRango: "El dia ha d'estar entre 01 i 31.",
+      mesRango: "El mes ha d'estar entre 01 i 12.",
+      fechaNoExiste: "La data no existeix.",
+      introduceCorral: "Introdueix un número de corral.",
+      introduceIdAnimal: "Introdueix un ID d'animal."
+    },
+
+    botones: {
+      cancelar: "Cancel·lar",
+      aceptar: "Acceptar"
+    }
+  },
+  modalSalidaPendiente: {
+    titulo: "Sortida pendent",
+    mensaje: "Aquest animal té una tasca de sortida pendent. Vols completar primer la sortida i després realitzar l'entrada seleccionada?",
+    animal: "Animal",
+    botonConfirmar: "Realitzar operació",
+    trasladoEntradaTitulo: "Trasllat d'entrada",
+    soloUnTrasladoEntrada: "Només pots marcar un trasllat d'entrada cada vegada.",
   }
-}
 };
 

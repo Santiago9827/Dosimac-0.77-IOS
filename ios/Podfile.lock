@@ -1549,6 +1549,27 @@ PODS:
     - React-logger (= 0.77.1)
     - React-perflogger (= 0.77.1)
     - React-utils (= 0.77.1)
+  - ReactNativeCameraKit (18.0.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNCAsyncStorage (1.23.1):
     - React-Core
   - RNCMaskedView (0.3.2):
@@ -1704,6 +1725,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNSVG (15.15.5):
+    - React-Core
   - RNVectorIcons (10.0.3):
     - DoubleConversion
     - glog
@@ -1802,12 +1825,14 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeCameraKit (from `../node_modules/react-native-camera-kit`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1959,6 +1984,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeCameraKit:
+    :path: "../node_modules/react-native-camera-kit"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
@@ -1971,6 +1998,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
@@ -2048,16 +2077,18 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 41e9fb63606c32cce924653d2d410cb01ec81286
   ReactCodegen: d9a09a7f7eee93f54d0b4135d5ca66b31b0c42a5
   ReactCommon: 08f4808f02ff115884e870e5cfea689703ff759a
+  ReactNativeCameraKit: e00843f4362b37e0d7848848b580abc297cd8d7b
   RNCAsyncStorage: aa75595c1aefa18f868452091fa0c411a516ce11
   RNCMaskedView: 2a1adda250c1b71134fa097ae7fc56e0b41ca01e
   RNGestureHandler: ff5f6de814c8229df499e65918b5dce10a5d60b0
-  RNPermissions: 0b0cdb0dfcc2fabc136a3d596220cc3d91977d79
+  RNPermissions: 85d2e33a2b4e31fe066b310c71e269fe70ea9bec
   RNReanimated: 9821995bd24f989b2618eac9510dc86c14d0a5df
   RNScreens: e03e2989336c4e6b21eeea6e00feaa8f8466c261
+  RNSVG: aa50a76894b4c164794bf9f6fabb579f6273086b
   RNVectorIcons: 0e0b58bfe907d221424c33b33487019ddc335140
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 1fd059161b449018342943b095a6d4e69bcaa719
 
-PODFILE CHECKSUM: 6f40969ea3e60d26227811f8ad59c262c560ae9f
+PODFILE CHECKSUM: 275fd40efb99e4904fac69631f3f48d3d9a77cf1
 
 COCOAPODS: 1.16.2

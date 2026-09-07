@@ -27,7 +27,7 @@ import {
     crearMapaCorralesPorId,
     enviarTareaMovimientoAnimalRealizada,
     validarCorralMaternidadParaTarea,
-    obtenerIdCorralMaternidadPorNombre,
+    obtenerIdCorralMaternidadPorNombre, consultarTareasMovimientoTodos
 } from '../../stores/apiApp';
 
 
@@ -78,6 +78,7 @@ type TareaMovimiento = {
     corralId?: string;
     corralNombre?: string;
     fecha: string;
+    seccion?: TipoSeccionTareas;
     raw?: any;
 };
 type TipoModalResultado =
@@ -95,6 +96,11 @@ type ModalCorralMaternidadState = {
     visible: boolean;
     corral: string;
     tareaEntrada: TareaMovimiento | null;
+};
+type ModalSalidaPendienteState = {
+    visible: boolean;
+    tareaEntrada: TareaMovimiento | null;
+    tareaSalida: TareaMovimiento | null;
 };
 /* =========================
    Helpers
@@ -115,10 +121,59 @@ function formatearFechaMovimiento(fechaApi: string): string {
 
     return `${dia}/${mes}/${anio}`;
 }
+function obtenerTipoOperacionDesdeApi(tarea: any): TipoOperacion {
+    const raw = tarea.raw ?? tarea;
+
+    const texto = String(
+        raw.tarea ??
+        tarea.tarea ??
+        raw.tipoOperacion ??
+        tarea.tipoOperacion ??
+        ''
+    ).toLowerCase();
+
+    const esTraslado =
+        Number(raw.traslado ?? tarea.traslado ?? 0) === 1 ||
+        texto.includes('traslado');
+
+    const esSalida =
+        texto.includes('out_of') ||
+        texto.includes('salida');
+
+    if (esSalida) {
+        return esTraslado
+            ? 'Traslado Salida'
+            : 'Salida';
+    }
+
+    return esTraslado
+        ? 'Traslado Entrada'
+        : 'Entrada';
+}
+
+function obtenerSeccionDesdeTareaApi(
+    tarea: any
+): TipoSeccionTareas {
+    const raw = tarea.raw ?? tarea;
+
+    const texto = String(
+        raw.tarea ??
+        tarea.tarea ??
+        ''
+    ).toLowerCase();
+
+    if (texto.includes('maternity')) {
+        return 'maternidad';
+    }
+
+    return 'gestacion';
+}
 
 function adaptarTareaMovimientoApi(
     tarea: any,
-    mapaCorrales: Record<number, number>
+    mapaCorrales: Record<number, number>,
+    seccion?: TipoSeccionTareas
+
 ): TareaMovimiento {
     const corralId =
         tarea.corralDestino ??
@@ -140,7 +195,7 @@ function adaptarTareaMovimientoApi(
 
     return {
         id: String(tarea.id),
-        tipoOperacion: tarea.tipoOperacion,
+        tipoOperacion: obtenerTipoOperacionDesdeApi(tarea),
         idAnimal: String(tarea.idAnimal ?? ''),
         crotal: String(tarea.crotal ?? ''),
         corralId:
@@ -151,6 +206,7 @@ function adaptarTareaMovimientoApi(
         fecha: formatearFechaMovimiento(
             String(tarea.fecha ?? '')
         ),
+        seccion,
         raw: tarea.raw ?? tarea,
     };
 }
@@ -214,6 +270,68 @@ function esTareaSalida(tarea: TareaMovimiento): boolean {
         tarea.tipoOperacion === 'Traslado Salida'
     );
 }
+
+function esTareaTrasladoEntrada(
+    tarea: TareaMovimiento
+): boolean {
+    return tarea.tipoOperacion === 'Traslado Entrada';
+}
+
+function buscarSalidaPendienteAnterior(
+    tareaEntrada: TareaMovimiento,
+    todasLasTareas: TareaMovimiento[],
+    tareasMarcadas: Record<string, boolean>
+): TareaMovimiento | null {
+    if (!esTareaEntrada(tareaEntrada)) {
+        return null;
+    }
+
+    const idEntrada = Number(tareaEntrada.id);
+
+    if (!Number.isFinite(idEntrada)) {
+        return null;
+    }
+
+    const pkEntrada = String(
+        tareaEntrada.raw?.pkIdAnimal ??
+        tareaEntrada.idAnimal ??
+        ''
+    );
+
+    const salidaPendiente = todasLasTareas
+        .filter((tareaActual) => {
+            if (!esTareaSalida(tareaActual)) {
+                return false;
+            }
+
+            if (tareasMarcadas[tareaActual.id]) {
+                return false;
+            }
+
+            const idSalida = Number(tareaActual.id);
+
+            if (!Number.isFinite(idSalida)) {
+                return false;
+            }
+
+            const pkSalida = String(
+                tareaActual.raw?.pkIdAnimal ??
+                tareaActual.idAnimal ??
+                ''
+            );
+
+            return (
+                pkEntrada &&
+                pkSalida &&
+                pkEntrada === pkSalida &&
+                idSalida < idEntrada
+            );
+        })
+        .sort((a, b) => Number(b.id) - Number(a.id));
+
+    return salidaPendiente[0] ?? null;
+}
+
 
 function filtrarTareasPorMovimiento(
     tareas: TareaMovimiento[],
@@ -829,7 +947,7 @@ function CardTarea({
                         </View>
 
                         <Text style={styles.fechaDetalleLabel}>
-                            {t('tareasMovimientosDetalle.tarjetas.fecha')}
+                            {t('tareasMovimientos.tarjetas.fecha')}
                         </Text>
                     </View>
 
@@ -923,6 +1041,116 @@ function ModalResultadoTareas({
         </Modal>
     );
 }
+
+function ModalSalidaPendiente({
+    visible,
+    tareaEntrada,
+    tareaSalida,
+    marcandoRealizadas,
+    onCancelar,
+    onConfirmar,
+}: {
+    visible: boolean;
+    tareaEntrada: TareaMovimiento | null;
+    tareaSalida: TareaMovimiento | null;
+    marcandoRealizadas: boolean;
+    onCancelar: () => void;
+    onConfirmar: () => void;
+}) {
+    const { t } = useTranslation();
+
+    return (
+        <Modal
+            visible={visible}
+            transparent
+            animationType="fade"
+            onRequestClose={onCancelar}
+        >
+            <View style={styles.modalOverlay}>
+                <View style={styles.modalCard}>
+                    <View
+                        style={[
+                            styles.modalIconBox,
+                            {
+                                backgroundColor: '#FFF7ED',
+                            },
+                        ]}
+                    >
+                        <Ionicons
+                            name="swap-horizontal-outline"
+                            size={42}
+                            color={ORANGE}
+                        />
+                    </View>
+
+                    <Text style={styles.modalTitle}>
+                        {t('modalSalidaPendiente.titulo', {
+                            defaultValue: 'Salida pendiente',
+                        })}
+                    </Text>
+
+                    <Text style={styles.modalMessage}>
+                        {t('modalSalidaPendiente.mensaje', {
+                            defaultValue:
+                                'Este animal tiene una tarea de salida pendiente anterior. ¿Quieres completar esa salida y después realizar la entrada seleccionada?',
+                        })}
+                    </Text>
+
+                    <View style={styles.modalAnimalBox}>
+                        <View style={styles.modalAnimalIconBox}>
+                            <Ionicons
+                                name="paw-outline"
+                                size={24}
+                                color={PURPLE}
+                            />
+                        </View>
+
+                        <View style={styles.modalAnimalTextBlock}>
+                            <Text style={styles.modalAnimalLabel}>
+                                {t('modalSalidaPendiente.animal')}
+                            </Text>
+
+                            <Text style={styles.modalAnimalValue}>
+                                {tareaEntrada?.idAnimal ?? '—'}
+                            </Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.modalButtonsRow}>
+                        <TouchableOpacity
+                            activeOpacity={0.85}
+                            disabled={marcandoRealizadas}
+                            onPress={onCancelar}
+                            style={styles.modalButtonSecondary}
+                        >
+                            <Text style={styles.modalButtonSecondaryText}>
+                                {t('tareasMovimientosDetalle.acciones.cancelar')}
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            activeOpacity={0.85}
+                            disabled={marcandoRealizadas}
+                            onPress={onConfirmar}
+                            style={[
+                                styles.modalButtonConfirm,
+                                marcandoRealizadas &&
+                                styles.actionButtonMainDisabled,
+                            ]}
+                        >
+                            <Text style={styles.modalButtonText}>
+                                {t('modalSalidaPendiente.botonConfirmar', {
+                                    defaultValue: 'Realizar operacion',
+                                })}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </Modal>
+    );
+}
+
 function ModalCorralMaternidad({
     visible,
     corral,
@@ -1063,6 +1291,9 @@ function TareasListaTab({
     const [tareas, setTareas] =
         useState<TareaMovimiento[]>([]);
 
+    const [todasLasTareas, setTodasLasTareas] =
+        useState<TareaMovimiento[]>([]);
+
     const [cargando, setCargando] =
         useState(false);
 
@@ -1092,6 +1323,16 @@ function TareasListaTab({
             tareaEntrada: null,
         });
 
+    const [modalSalidaPendiente, setModalSalidaPendiente] =
+        useState<ModalSalidaPendienteState>({
+            visible: false,
+            tareaEntrada: null,
+            tareaSalida: null,
+        });
+
+    const [tareasExtraParaEnviar, setTareasExtraParaEnviar] =
+        useState<TareaMovimiento[]>([]);
+
     const [errorCorralMaternidad, setErrorCorralMaternidad] =
         useState('');
 
@@ -1111,6 +1352,8 @@ function TareasListaTab({
         }
 
         setErrorCorralMaternidad('');
+        setTareasExtraParaEnviar([]);
+
 
         setModalCorralMaternidad({
             visible: false,
@@ -1139,6 +1382,7 @@ function TareasListaTab({
                     ? state.filtrosGestacion
                     : state.filtrosMaternidad
         );
+
     const cargarTareas = useCallback(
         async (mostrarCargaCompleta = false) => {
             try {
@@ -1148,61 +1392,54 @@ function TareasListaTab({
 
                 setError('');
 
-                if (tipo === 'gestacion') {
-                    const [
-                        tareasApi,
-                        corralesApi,
-                    ] = await Promise.all([
-                        consultarTareasMovimientoGestacion(),
-                        consultarCorralesGestacion(),
-                    ]);
-
-                    const mapaCorrales =
-                        crearMapaCorralesPorId(corralesApi);
-
-                    setTareas(
-                        tareasApi.map((tarea: any) =>
-                            adaptarTareaMovimientoApi(
-                                tarea,
-                                mapaCorrales,
-                            ),
-                        ),
-                    );
-
-                    return;
-                }
-
                 const [
                     tareasApi,
                     corralesApi,
+                    todasTareasApi,
                 ] = await Promise.all([
-                    consultarTareasMovimientoMaternidad(),
-                    consultarCorralesMaternidad(),
+                    tipo === 'gestacion'
+                        ? consultarTareasMovimientoGestacion()
+                        : consultarTareasMovimientoMaternidad(),
+
+                    tipo === 'gestacion'
+                        ? consultarCorralesGestacion()
+                        : consultarCorralesMaternidad(),
+
+                    consultarTareasMovimientoTodos(),
                 ]);
 
                 const mapaCorrales =
                     crearMapaCorralesPorId(corralesApi);
 
-                setTareas(
+                const tareasPantalla =
                     tareasApi.map((tarea: any) =>
                         adaptarTareaMovimientoApi(
                             tarea,
                             mapaCorrales,
-                        ),
-                    ),
-                );
+                            tipo
+                        )
+                    );
+
+                const todasLasTareasAdaptadas =
+                    todasTareasApi.map((tarea: any) =>
+                        adaptarTareaMovimientoApi(
+                            tarea,
+                            {},
+                            obtenerSeccionDesdeTareaApi(tarea)
+                        )
+                    );
+
+                setTareas(tareasPantalla);
+                setTodasLasTareas(todasLasTareasAdaptadas);
             } catch (errorConsulta: any) {
                 console.log(
                     'Error cargando tareas de movimiento:',
                     errorConsulta,
                 );
 
-                /*
-                 * Solo vaciamos la pantalla si todavía
-                 * no había información cargada.
-                 */
                 if (primeraCargaRef.current) {
                     setTareas([]);
+                    setTodasLasTareas([]);
                 }
 
                 setError(
@@ -1283,8 +1520,51 @@ function TareasListaTab({
         const yaEstaMarcada =
             !!tareasMarcadas[tarea.id];
 
+        /*
+         * Si ya está marcada, dejamos desmarcar siempre.
+         */
+        if (yaEstaMarcada) {
+            setTareasMarcadas((estadoActual) => ({
+                ...estadoActual,
+                [tarea.id]: false,
+            }));
+
+            return;
+        }
+
+        /*
+         * GESTACIÓN:
+         * Solo dejamos marcar un Traslado Entrada cada vez.
+         * Una Entrada normal sí puede marcarse junto con otras.
+         */
         if (
-            !yaEstaMarcada &&
+            tipo === 'gestacion' &&
+            esTareaTrasladoEntrada(tarea)
+        ) {
+            const yaHayOtroTrasladoEntradaMarcado =
+                tareas.some((tareaActual) =>
+                    tareaActual.id !== tarea.id &&
+                    tareasMarcadas[tareaActual.id] &&
+                    esTareaTrasladoEntrada(tareaActual)
+                );
+
+            if (yaHayOtroTrasladoEntradaMarcado) {
+                setModalResultado({
+                    visible: true,
+                    tipo: 'error',
+                    titulo: t('modalSalidaPendiente.trasladoEntradaTitulo'),
+                    mensaje: t('modalSalidaPendiente.soloUnTrasladoEntrada'),
+                });
+
+                return;
+            }
+        }
+
+        /*
+         * MATERNIDAD:
+         * Solo dejamos una entrada cada vez porque hay que validar corral.
+         */
+        if (
             tipo === 'maternidad' &&
             esTareaEntrada(tarea)
         ) {
@@ -1299,8 +1579,8 @@ function TareasListaTab({
                 setModalResultado({
                     visible: true,
                     tipo: 'error',
-                    titulo: t('tareasMovimientosDetalle.errores.entradaMaternidadTitulo'),
-                    mensaje: t('tareasMovimientosDetalle.errores.soloUnaEntradaMaternidad'),
+                    titulo: t('modalSalidaPendiente.entradaMaternidadTitulo'),
+                    mensaje: t('modalSalidaPendiente.soloUnaEntradaMaternidad'),
                 });
 
                 return;
@@ -1309,42 +1589,209 @@ function TareasListaTab({
 
         setTareasMarcadas((estadoActual) => ({
             ...estadoActual,
-            [tarea.id]: !estadoActual[tarea.id],
+            [tarea.id]: true,
         }));
     };
-
     const tareasSeleccionadas = tareas.filter(
         (tarea) => tareasMarcadas[tarea.id]
     );
 
     const enviarTareasSeleccionadas = async (
         idCorralInternoMaternidad?: number,
+        tareasExtra: TareaMovimiento[] = [],
     ) => {
-        await Promise.all(
-            tareasSeleccionadas.map((tarea) => {
-                const esEntradaMaternidad =
-                    tipo === 'maternidad' &&
-                    esTareaEntrada(tarea);
+        const mapaTareasEnviar =
+            new Map<string, TareaMovimiento>();
 
-                const valueOperacion = esEntradaMaternidad
-                    ? String(
-                        idCorralInternoMaternidad ??
-                        tarea.raw?.corral ??
-                        tarea.corralId ??
-                        '',
-                    )
-                    : '';
+        tareasSeleccionadas.forEach((tarea) => {
+            mapaTareasEnviar.set(tarea.id, tarea);
+        });
 
-                return enviarTareaMovimientoAnimalRealizada(
-                    tarea.id,
+        tareasExtra.forEach((tarea) => {
+            mapaTareasEnviar.set(tarea.id, tarea);
+        });
+
+        const tareasParaEnviar =
+            Array.from(mapaTareasEnviar.values())
+                .sort((tareaA, tareaB) => {
+                    const idA = Number(tareaA.id);
+                    const idB = Number(tareaB.id);
+
+                    if (
+                        Number.isFinite(idA) &&
+                        Number.isFinite(idB)
+                    ) {
+                        return idA - idB;
+                    }
+
+                    return String(tareaA.id).localeCompare(
+                        String(tareaB.id),
+                    );
+                });
+
+        for (const tarea of tareasParaEnviar) {
+            const seccionTarea =
+                tarea.seccion ?? tipo;
+
+            const esEntradaMaternidad =
+                seccionTarea === 'maternidad' &&
+                esTareaEntrada(tarea);
+
+            const valueOperacion = esEntradaMaternidad
+                ? String(
+                    idCorralInternoMaternidad ??
+                    tarea.raw?.corral ??
+                    tarea.corralId ??
+                    '',
+                )
+                : '';
+
+            console.log(
+                'Marcando tarea movimiento en orden:',
+                {
+                    id: tarea.id,
+                    tipoOperacion: tarea.tipoOperacion,
+                    seccion: seccionTarea,
                     valueOperacion,
-                );
-            }),
-        );
+                },
+            );
+
+            await enviarTareaMovimientoAnimalRealizada(
+                tarea.id,
+                valueOperacion,
+            );
+        }
     };
+
+
+    const abrirModalCorralMaternidadParaTarea = (
+        tareaEntrada: TareaMovimiento,
+        tareasExtra: TareaMovimiento[] = [],
+    ) => {
+        setErrorCorralMaternidad('');
+        setTareasExtraParaEnviar(tareasExtra);
+
+        setModalCorralMaternidad({
+            visible: true,
+            corral: String(tareaEntrada.corralNombre ?? ''),
+            tareaEntrada,
+        });
+    };
+
+    const cerrarModalSalidaPendiente = () => {
+        if (marcandoRealizadas || validandoCorralMaternidad) {
+            return;
+        }
+
+        setModalSalidaPendiente({
+            visible: false,
+            tareaEntrada: null,
+            tareaSalida: null,
+        });
+    };
+
+    const confirmarSalidaPendiente = async () => {
+        const tareaEntrada =
+            modalSalidaPendiente.tareaEntrada;
+
+        const tareaSalida =
+            modalSalidaPendiente.tareaSalida;
+
+        if (!tareaEntrada || !tareaSalida) {
+            cerrarModalSalidaPendiente();
+            return;
+        }
+
+        setModalSalidaPendiente({
+            visible: false,
+            tareaEntrada: null,
+            tareaSalida: null,
+        });
+
+        const tareasExtra = [tareaSalida];
+
+        const esEntradaDeMaternidad =
+            (tareaEntrada.seccion ?? tipo) === 'maternidad' &&
+            esTareaEntrada(tareaEntrada);
+
+        if (esEntradaDeMaternidad) {
+            abrirModalCorralMaternidadParaTarea(
+                tareaEntrada,
+                tareasExtra,
+            );
+
+            return;
+        }
+
+        try {
+            setMarcandoRealizadas(true);
+
+            await enviarTareasSeleccionadas(
+                undefined,
+                tareasExtra,
+            );
+
+            setTareasMarcadas({});
+            setTareasExtraParaEnviar([]);
+
+            await cargarTareas();
+
+            setModalResultado({
+                visible: true,
+                tipo: 'exito',
+                titulo: t('tareasMovimientosDetalle.modalResultado.tareasRealizadasTitulo'),
+                mensaje: t('tareasMovimientosDetalle.modalResultado.tareasRealizadasMensaje'),
+            });
+        } catch (errorMarcar: any) {
+            console.log(
+                'Error marcando salida pendiente y entrada:',
+                errorMarcar,
+            );
+
+            setModalResultado({
+                visible: true,
+                tipo: 'error',
+                titulo: t('tareasMovimientosDetalle.modalResultado.errorTitulo'),
+                mensaje:
+                    errorMarcar?.message ??
+                    t('tareasMovimientosDetalle.errores.noMarcarTareas'),
+            });
+        } finally {
+            setMarcandoRealizadas(false);
+        }
+    };
+
     const marcarTareasRealizadas = async () => {
         if (tareasSeleccionadas.length === 0) {
             return;
+        }
+
+        const tareaEntradaConSalidaPendiente =
+            tareasSeleccionadas.find((tarea) =>
+                buscarSalidaPendienteAnterior(
+                    tarea,
+                    todasLasTareas,
+                    tareasMarcadas,
+                )
+            );
+
+        if (tareaEntradaConSalidaPendiente) {
+            const tareaSalidaPendiente =
+                buscarSalidaPendienteAnterior(
+                    tareaEntradaConSalidaPendiente,
+                    todasLasTareas,
+                    tareasMarcadas,
+                );
+
+            if (tareaSalidaPendiente) {
+                setModalSalidaPendiente({
+                    visible: true,
+                    tareaEntrada: tareaEntradaConSalidaPendiente,
+                    tareaSalida: tareaSalidaPendiente,
+                });
+
+                return;
+            }
         }
 
         const entradasMaternidadSeleccionadas =
@@ -1364,25 +1811,12 @@ function TareasListaTab({
         }
 
         if (entradasMaternidadSeleccionadas.length === 1) {
-            const tareaEntrada =
-                entradasMaternidadSeleccionadas[0];
-
-            setErrorCorralMaternidad('');
-
-            setModalCorralMaternidad({
-                visible: true,
-
-                /*
-                 * Esto es el corral visible/name,
-                 * no el id interno.
-                 */
-                corral: String(tareaEntrada.corralNombre ?? ''),
-                tareaEntrada,
-            });
+            abrirModalCorralMaternidadParaTarea(
+                entradasMaternidadSeleccionadas[0],
+            );
 
             return;
         }
-
         try {
             setMarcandoRealizadas(true);
 
@@ -1529,12 +1963,16 @@ function TareasListaTab({
             setValidandoCorralMaternidad(false);
             setMarcandoRealizadas(true);
 
+            const habiaTareasExtra =
+                tareasExtraParaEnviar.length > 0;
+
             await enviarTareasSeleccionadas(
-                idCorralInterno
+                idCorralInterno,
+                tareasExtraParaEnviar,
             );
 
             setTareasMarcadas({});
-
+            setTareasExtraParaEnviar([]);
             setModalCorralMaternidad({
                 visible: false,
                 corral: '',
@@ -1546,8 +1984,12 @@ function TareasListaTab({
             setModalResultado({
                 visible: true,
                 tipo: 'exito',
-                titulo: t('tareasMovimientosDetalle.modalResultado.tareaRealizadaTitulo'),
-                mensaje: t('tareasMovimientosDetalle.modalResultado.tareaRealizadaMensaje'),
+                titulo: habiaTareasExtra
+                    ? t('tareasMovimientosDetalle.modalResultado.tareasRealizadasTitulo')
+                    : t('tareasMovimientosDetalle.modalResultado.tareaRealizadaTitulo'),
+                mensaje: habiaTareasExtra
+                    ? t('tareasMovimientosDetalle.modalResultado.tareasRealizadasMensaje')
+                    : t('tareasMovimientosDetalle.modalResultado.tareaRealizadaMensaje'),
             });
         } catch (errorMarcar: any) {
             console.log(
@@ -1683,6 +2125,15 @@ function TareasListaTab({
                 titulo={modalResultado.titulo}
                 mensaje={modalResultado.mensaje}
                 onCerrar={cerrarModalResultado}
+            />
+
+            <ModalSalidaPendiente
+                visible={modalSalidaPendiente.visible}
+                tareaEntrada={modalSalidaPendiente.tareaEntrada}
+                tareaSalida={modalSalidaPendiente.tareaSalida}
+                marcandoRealizadas={marcandoRealizadas}
+                onCancelar={cerrarModalSalidaPendiente}
+                onConfirmar={confirmarSalidaPendiente}
             />
 
             <ModalCorralMaternidad
@@ -1948,7 +2399,7 @@ const styles = StyleSheet.create({
 
     fechaDetalleLabel: {
         color: '#5B21B6',
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: '900',
     },
 
@@ -2384,5 +2835,72 @@ const styles = StyleSheet.create({
         backgroundColor: PURPLE,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    modalInfoBox: {
+        width: '100%',
+        backgroundColor: '#F8FAFC',
+        borderColor: BORDER,
+        borderWidth: 1,
+        borderRadius: 16,
+        padding: 12,
+        marginBottom: 18,
+    },
+
+    modalInfoTitle: {
+        color: TEXT,
+        fontSize: 13,
+        fontWeight: '900',
+        marginBottom: 4,
+    },
+
+    modalInfoText: {
+        color: MUTED,
+        fontSize: 12,
+        fontWeight: '800',
+        marginTop: 2,
+    },
+    modalAnimalBox: {
+        width: '100%',
+        minHeight: 82,
+        backgroundColor: '#F5F3FF',
+        borderColor: '#DDD6FE',
+        borderWidth: 1.5,
+        borderRadius: 20,
+        paddingHorizontal: 14,
+        paddingVertical: 12,
+        marginBottom: 20,
+
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+
+    modalAnimalIconBox: {
+        width: 52,
+        height: 52,
+        borderRadius: 17,
+        backgroundColor: '#EDE9FE',
+
+        alignItems: 'center',
+        justifyContent: 'center',
+
+        marginRight: 14,
+    },
+
+    modalAnimalTextBlock: {
+        flex: 1,
+    },
+
+    modalAnimalLabel: {
+        color: MUTED,
+        fontSize: 13,
+        fontWeight: '900',
+        marginBottom: 2,
+    },
+
+    modalAnimalValue: {
+        color: PURPLE,
+        fontSize: 30,
+        lineHeight: 34,
+        fontWeight: '900',
     },
 });

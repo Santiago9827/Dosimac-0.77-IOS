@@ -36,7 +36,23 @@ export default {
   Provincia: 'Województwo',
   NombreWifi: 'Wifi SSID',
   PasswordWifi: 'Hasło Wifi',
-  No_hay_dispositivos: 'Brak urządzeń',
+  colocaQrInstalacionCamara: "Umieść kod QR instalacji w obszarze kamery.",
+  escaneaCodigoQr: "Zeskanuj kod QR",
+  permisoCamaraNecesario: "Wymagane uprawnienie do aparatu",
+permisoCamaraQrTexto: "Musisz zezwolić na dostęp do aparatu, aby zeskanować kod QR.",
+qrNoValido: "Nieprawidłowy kod QR",
+qrNoEsInstalacionDosimac: "To nie jest kod QR instalacji DOSIMAC.",
+ipAplicadaSinCredenciales: "Adres IP został zastosowany poprawnie, ale ta instalacja nie ma Username ani hasła.",
+instalacionSeleccionada: "Wybrano instalację",
+conexionExitosa: "Połączenie udane",
+instalacionConectadaCorrectamente: "Instalacja została połączona poprawnie.",
+noPuedeConectarInstalacionSeleccionada: "Nie można połączyć się z wybraną instalacją. Sprawdź sieć WiFi lub adres IP serwera.",
+  conectando: "Łączenie",
+conectandoInstalacionSeleccionada: "Łączenie z wybraną instalacją...",
+
+
+
+No_hay_dispositivos: 'Brak urządzeń',
   Aviso: 'Uwaga',
   SearchingDevices: 'Wyszukiwanie urządzeń...',
   NoSePuedeBorrarGranja: 'Nie można usunąć nowej farmy',
@@ -295,56 +311,56 @@ export default {
   gestationReader_alertInvalidAssociatedCrotalMessage: "Powiązany kolczyk jest nieprawidłowy.",
   gestationReader_alertUpdateIdErrorTitle: "Błąd podczas aktualizacji ID",
   gestationReader_readerMode: "Czytnik",
-gestationReader_keyboardMode: "Klawiatura",
+  gestationReader_keyboardMode: "Klawiatura",
 
-gestationReader_keyboardEntryTitle: "Wejście z klawiatury",
-gestationReader_keyboardExitTitle: "Wyjście z klawiatury",
-gestationReader_keyboardDescription: "Wprowadź dane ręcznie za pomocą klawiatury telefonu.",
-gestationReader_keyboardId: "ID",
-gestationReader_keyboardCrotal: "Kolczyk",
-gestationReader_keyboardIdLabel: "ID zwierzęcia",
-gestationReader_keyboardCrotalLabel: "Kolczyk",
-gestationReader_keyboardIdPlaceholder: "Wpisz ID",
-gestationReader_keyboardCrotalPlaceholder: "Wpisz kolczyk",
-gestationReader_keyboardAdd: "Dodaj",
-gestationReader_keyboardAdding: "Dodawanie...",
+  gestationReader_keyboardEntryTitle: "Wejście z klawiatury",
+  gestationReader_keyboardExitTitle: "Wyjście z klawiatury",
+  gestationReader_keyboardDescription: "Wprowadź dane ręcznie za pomocą klawiatury telefonu.",
+  gestationReader_keyboardId: "ID",
+  gestationReader_keyboardCrotal: "Kolczyk",
+  gestationReader_keyboardIdLabel: "ID zwierzęcia",
+  gestationReader_keyboardCrotalLabel: "Kolczyk",
+  gestationReader_keyboardIdPlaceholder: "Wpisz ID",
+  gestationReader_keyboardCrotalPlaceholder: "Wpisz kolczyk",
+  gestationReader_keyboardAdd: "Dodaj",
+  gestationReader_keyboardAdding: "Dodawanie...",
 
-gestationReader_pendingRecordsTitle: "Rekordy niewysłane",
-gestationReader_buttonSendingBatch: "Wysyłanie partii...",
-gestationReader_buttonSendBatch: "Wyślij partię",
-gestationReader_buttonSendBatchCount: "Wyślij partię ({{count}})",
+  gestationReader_pendingRecordsTitle: "Rekordy niewysłane",
+  gestationReader_buttonSendingBatch: "Wysyłanie partii...",
+  gestationReader_buttonSendBatch: "Wyślij partię",
+  gestationReader_buttonSendBatchCount: "Wyślij partię ({{count}})",
 
-gestationReader_noPendingRecordsTitle: "Brak rekordów",
-gestationReader_noPendingRecordsText: "Brak rekordów oczekujących na wysłanie.",
-gestationReader_batchSentTitle: "Partia wysłana",
-gestationReader_batchSentText: "Wysłano poprawnie {{count}} rekord(y).",
-gestationReader_batchWithErrorsTitle: "Partia z błędami",
+  gestationReader_noPendingRecordsTitle: "Brak rekordów",
+  gestationReader_noPendingRecordsText: "Brak rekordów oczekujących na wysłanie.",
+  gestationReader_batchSentTitle: "Partia wysłana",
+  gestationReader_batchSentText: "Wysłano poprawnie {{count}} rekord(y).",
+  gestationReader_batchWithErrorsTitle: "Partia z błędami",
 
-gestationReader_recordSentTitle: "Rekord wysłany",
-gestationReader_recordSentText: "Ruch został wysłany poprawnie.",
+  gestationReader_recordSentTitle: "Rekord wysłany",
+  gestationReader_recordSentText: "Ruch został wysłany poprawnie.",
 
-gestationReader_invalidAnimalId: "ID zwierzęcia jest nieprawidłowe.",
-gestationReader_invalidPenRecord: "Kojec rekordu jest nieprawidłowy.",
-gestationReader_invalidCrotalRecord: "Kolczyk rekordu jest nieprawidłowy.",
-gestationReader_duplicateIdPending: "ID {{id}} znajduje się już w tabeli rekordów niewysłanych.",
-gestationReader_duplicateCrotalPending: "Kolczyk {{crotal}} znajduje się już w tabeli rekordów niewysłanych.",
-gestationReader_keyboardMissingId: "Wpisz ID zwierzęcia.",
-gestationReader_keyboardMissingCrotal: "Wpisz kolczyk zwierzęcia.",
-gestationReader_keyboardMissingPen: "Wybierz prawidłowy kojec przed dodaniem zwierzęcia.",
-gestationReader_noAnimalById: "Nie istnieje zwierzę z ID {{id}}.",
-gestationReader_noAnimalByCrotal: "Nie istnieje zwierzę z kolczykiem {{crotal}}.",
-gestationReader_addAnimalError: "Nie można dodać zwierzęcia.",
+  gestationReader_invalidAnimalId: "ID zwierzęcia jest nieprawidłowe.",
+  gestationReader_invalidPenRecord: "Kojec rekordu jest nieprawidłowy.",
+  gestationReader_invalidCrotalRecord: "Kolczyk rekordu jest nieprawidłowy.",
+  gestationReader_duplicateIdPending: "ID {{id}} znajduje się już w tabeli rekordów niewysłanych.",
+  gestationReader_duplicateCrotalPending: "Kolczyk {{crotal}} znajduje się już w tabeli rekordów niewysłanych.",
+  gestationReader_keyboardMissingId: "Wpisz ID zwierzęcia.",
+  gestationReader_keyboardMissingCrotal: "Wpisz kolczyk zwierzęcia.",
+  gestationReader_keyboardMissingPen: "Wybierz prawidłowy kojec przed dodaniem zwierzęcia.",
+  gestationReader_noAnimalById: "Nie istnieje zwierzę z ID {{id}}.",
+  gestationReader_noAnimalByCrotal: "Nie istnieje zwierzę z kolczykiem {{crotal}}.",
+  gestationReader_addAnimalError: "Nie można dodać zwierzęcia.",
 
-gestationReader_pendingAnimalHint: "Odczytane zwierzęta pojawią się tutaj.",
+  gestationReader_pendingAnimalHint: "Odczytane zwierzęta pojawią się tutaj.",
 
-gestationReader_changePenTitle: "Zmień kojec",
-gestationReader_changePenDescription: "Wprowadź nowy kojec wejściowy.",
-gestationReader_newPenLabel: "Nowy kojec",
-gestationReader_newPenPlaceholder: "Np.: 1",
-gestationReader_cancel: "Anuluj",
-gestationReader_save: "Zapisz",
-gestationReader_accept: "Akceptuj",
-gestationReader_sentHistoryTitle: "Historia wysłanych",
+  gestationReader_changePenTitle: "Zmień kojec",
+  gestationReader_changePenDescription: "Wprowadź nowy kojec wejściowy.",
+  gestationReader_newPenLabel: "Nowy kojec",
+  gestationReader_newPenPlaceholder: "Np.: 1",
+  gestationReader_cancel: "Anuluj",
+  gestationReader_save: "Zapisz",
+  gestationReader_accept: "Akceptuj",
+  gestationReader_sentHistoryTitle: "Historia wysłanych",
 
   maternityReader_screenTitle: "Czytnik porodówki",
   maternityReader_alertMissingCrotalTitle: "Brak kolczyka",
@@ -477,7 +493,7 @@ gestationReader_sentHistoryTitle: "Historia wysłanych",
   Config_lastReadMismatchTitle: "Odczytane zwierzę nie pasuje do wyszukiwania",
   Config_lastReadMismatchCrotal: "Kolczyk",
   Config_lastReadMismatchId: "ID",
-  awrBluetoothPermissionMessage: "Włącz Bluetooth i zaakceptuj uprawnienie, aby móc skanować.", 
+  awrBluetoothPermissionMessage: "Włącz Bluetooth i zaakceptuj uprawnienie, aby móc skanować.",
 
   animalState: {
     gestation: "Ciąża",
@@ -486,54 +502,54 @@ gestationReader_sentHistoryTitle: "Historia wysłanych",
     out_of_maternity: "Poza macierzyństwem"
   },
 
-  
-Reader_readingTitle: "Odczyt kolczyków",
-Reader_labelId: "ID",
-Reader_labelCrotal: "Kolczyk",
-Reader_labelCorral: "Zagroda",
-Reader_labelHouse: "Budynek",
-Reader_labelState: "Stan",
-Reader_autoReadingBadge: "Odczyt automatyczny", 
 
-gestacionConfig_flowSectionTitle: "Konfiguracja przepływu",
-gestacionConfig_workModeTitle: "Tryb pracy",
-gestacionConfig_workModeDescription: "Wybierz, co ma zrobić czytnik.",
-gestacionConfig_entryDescription: "Zarejestruj wejście",
-gestacionConfig_exitDescription: "Zarejestruj wyjście",
-gestacionConfig_readingDescription: "Tylko odczyt",
-gestacionConfig_searchDescription: "Szukaj zwierzęcia",
+  Reader_readingTitle: "Odczyt kolczyków",
+  Reader_labelId: "ID",
+  Reader_labelCrotal: "Kolczyk",
+  Reader_labelCorral: "Zagroda",
+  Reader_labelHouse: "Budynek",
+  Reader_labelState: "Stan",
+  Reader_autoReadingBadge: "Odczyt automatyczny",
 
-gestacionConfig_sendSettingsTitle: "Ustawienia wysyłania",
-gestacionConfig_sendSettingsDescription: "Skonfiguruj zachowanie przepływu podczas odczytu zwierząt.",
+  gestacionConfig_flowSectionTitle: "Konfiguracja przepływu",
+  gestacionConfig_workModeTitle: "Tryb pracy",
+  gestacionConfig_workModeDescription: "Wybierz, co ma zrobić czytnik.",
+  gestacionConfig_entryDescription: "Zarejestruj wejście",
+  gestacionConfig_exitDescription: "Zarejestruj wyjście",
+  gestacionConfig_readingDescription: "Tylko odczyt",
+  gestacionConfig_searchDescription: "Szukaj zwierzęcia",
 
-gestacionConfig_corralSectionTitle: "Kojec wejściowy",
-gestacionConfig_corralSectionDescription: "To pole jest wymagane, aby kontynuować rejestrację.",
+  gestacionConfig_sendSettingsTitle: "Ustawienia wysyłania",
+  gestacionConfig_sendSettingsDescription: "Skonfiguruj zachowanie przepływu podczas odczytu zwierząt.",
 
-gestacionConfig_alerts_notice: "Powiadomienie",
-gestacionConfig_alerts_invalidCrotalFromBackend: "Backend nie zwrócił prawidłowego kolczyka do porównania.",
+  gestacionConfig_corralSectionTitle: "Kojec wejściowy",
+  gestacionConfig_corralSectionDescription: "To pole jest wymagane, aby kontynuować rejestrację.",
 
-common_accept: "Akceptuj",
+  gestacionConfig_alerts_notice: "Powiadomienie",
+  gestacionConfig_alerts_invalidCrotalFromBackend: "Backend nie zwrócił prawidłowego kolczyka do porównania.",
 
-maternidadConfig_flowSectionTitle: "Konfiguracja przepływu",
-maternidadConfig_workModeTitle: "Tryb pracy",
-maternidadConfig_workModeDescription: "Wybierz, co ma zrobić czytnik.",
-maternidadConfig_entryDescription: "Zarejestruj wejście",
-maternidadConfig_exitDescription: "Zarejestruj wyjście",
-maternidadConfig_readingDescription: "Tylko odczyt",
-maternidadConfig_searchDescription: "Szukaj zwierzęcia",
+  common_accept: "Akceptuj",
 
-maternidadConfig_sendSettingsTitle: "Ustawienia wysyłania",
-maternidadConfig_sendSettingsDescription: "Skonfiguruj zachowanie przepływu podczas odczytu zwierząt.",
+  maternidadConfig_flowSectionTitle: "Konfiguracja przepływu",
+  maternidadConfig_workModeTitle: "Tryb pracy",
+  maternidadConfig_workModeDescription: "Wybierz, co ma zrobić czytnik.",
+  maternidadConfig_entryDescription: "Zarejestruj wejście",
+  maternidadConfig_exitDescription: "Zarejestruj wyjście",
+  maternidadConfig_readingDescription: "Tylko odczyt",
+  maternidadConfig_searchDescription: "Szukaj zwierzęcia",
 
-maternidadConfig_corralSectionTitle: "Kojec wejściowy",
-maternidadConfig_corralSectionDescription: "To pole jest wymagane, aby kontynuować rejestrację.",
+  maternidadConfig_sendSettingsTitle: "Ustawienia wysyłania",
+  maternidadConfig_sendSettingsDescription: "Skonfiguruj zachowanie przepływu podczas odczytu zwierząt.",
 
-maternidadConfig_alert_invalidCrotalFromBackend: "Backend nie zwrócił prawidłowego kolczyka do porównania.",
+  maternidadConfig_corralSectionTitle: "Kojec wejściowy",
+  maternidadConfig_corralSectionDescription: "To pole jest wymagane, aby kontynuować rejestrację.",
+
+  maternidadConfig_alert_invalidCrotalFromBackend: "Backend nie zwrócił prawidłowego kolczyka do porównania.",
 
 
   maternidadConfig_readOnlyTitle: "Uprawnienia tylko do odczytu",
-maternidadConfig_readOnlyModifySettings: "Ten użytkownik ma tylko uprawnienia do odczytu. Nie może modyfikować tej konfiguracji.",
-maternidadConfig_readOnlyUseFunction: "Ten użytkownik ma tylko uprawnienia do odczytu. Nie może używać tej funkcji.",
+  maternidadConfig_readOnlyModifySettings: "Ten użytkownik ma tylko uprawnienia do odczytu. Nie może modyfikować tej konfiguracji.",
+  maternidadConfig_readOnlyUseFunction: "Ten użytkownik ma tylko uprawnienia do odczytu. Nie może używać tej funkcji.",
 
   ajustesEnvioMaternidad: {
     headerTitle: "Ustawienia wysyłania",
@@ -543,822 +559,835 @@ maternidadConfig_readOnlyUseFunction: "Ten użytkownik ma tylko uprawnienia do o
   },
 
   noAlimentadosMaternidad: {
-  animalId: "ID ZWIERZĘCIA",
-  corral: "Kojec",
-  consumption: "Spożycie",
-  withoutFeeding: "Bez karmienia",
-  day: "dzień",
-  days: "dni",
-  loadingAnimals: "Wczytywanie zwierząt...",
-  title: "Zwierzęta niekarmione",
-  totalAnimalsMaternity: "Łączna liczba zwierząt na porodówce:",
-  notSeen: "Niewidziane",
-  all: "Wszystkie",
-  sort: "Sortuj",
-  emptyTitle: "Brak oczekujących zwierząt",
-  emptyText: "Nie znaleziono niekarmionych zwierząt na porodówce.",
-  sortBy: "Sortuj według",
-  daysWithoutFeeding: "Dni bez karmienia",
-  sortDaysHelp: "Sortuje według liczby dni bez karmienia",
-  sortCorralHelp: "Sortuje według numeru kojca",
-  descending: "Malejąco",
-  ascending: "Rosnąco",
-  filterAnimals: "Filtruj zwierzęta",
-  allHelp: "Pokazuje wszystkie zwierzęta",
-  unmarked: "Nieoznaczone",
-  unmarkedHelp: "Ukrywa już sprawdzone zwierzęta",
-  clearMarkedTitle: "Wyczyść oznaczone zwierzęta",
-  clearMarkedText: "Wszystkie oznaczenia sprawdzonych zwierząt zostaną usunięte.",
-  cancel: "Anuluj",
-  clear: "Wyczyść",
-  error: "Błąd",
-  serverConnectionError: "Nie udało się połączyć z serwerem.",
-  viewStatus: "Zobacz status",
-animalIdNotFound: "Nie znaleziono identyfikatora zwierzęcia.",
-openAnimalInfoError: "Nie można otworzyć informacji o zwierzęciu.",
-},
-
-noAlimentadosGestacion: {
-  animalId: "ID ZWIERZĘCIA",
-  corral: "Kojec",
-  consumption: "Spożycie",
-  withoutFeeding: "Bez karmienia",
-  day: "dzień",
-  days: "dni",
-  loadingAnimals: "Wczytywanie zwierząt...",
-  title: "Zwierzęta niekarmione",
-  totalAnimalsGestation: "Łączna liczba zwierząt w sektorze ciąży:",
-  notSeen: "Niewidziane",
-  all: "Wszystkie",
-  sort: "Sortuj",
-  emptyTitle: "Brak oczekujących zwierząt",
-  emptyText: "Nie znaleziono niekarmionych zwierząt w sektorze ciąży.",
-  sortBy: "Sortuj według",
-  daysWithoutFeeding: "Dni bez karmienia",
-  sortDaysHelp: "Sortuje według liczby dni bez karmienia",
-  sortCorralHelp: "Sortuje według numeru kojca",
-  descending: "Malejąco",
-  ascending: "Rosnąco",
-  filterAnimals: "Filtruj zwierzęta",
-  allHelp: "Pokazuje wszystkie zwierzęta",
-  unmarked: "Nieoznaczone",
-  unmarkedHelp: "Ukrywa już sprawdzone zwierzęta",
-  clearMarkedTitle: "Wyczyść oznaczone zwierzęta",
-  clearMarkedText: "Wszystkie oznaczenia sprawdzonych zwierząt zostaną usunięte.",
-  cancel: "Anuluj",
-  clear: "Wyczyść",
-  error: "Błąd",
-  serverConnectionError: "Nie udało się połączyć z serwerem."
-},
-capturaAnimalHome: {
-  selectOption: "Wybierz opcję",
-  unfedAnimalsTitle: "Zwierzęta niekarmione",
-  unfedAnimalsDescription: "Sprawdź zwierzęta, które nie otrzymały zaplanowanego karmienia.",
-  twoFeedsTitle: "2 pasze",
-  twoFeedsDescription: "Zarządzaj zmianą paszy w wylotach zrzutowych.",
-  animalStatusTitle: "Stan zwierzęcia",
-animalStatusDescription: "Sprawdź lub zaktualizuj stan zwierzęcia.",
-birthCaptureTitle: "Rejestracja porodu",
-birthCaptureDescription: "Zarejestruj urodzone żywe, martwe i zmumifikowane prosięta.",
-},
-cambioPiensoMaternidad: {
-  error: "Błąd",
-  loadTasksError: "Nie udało się wczytać zadań zmiany paszy.",
-  loadingTasks: "Wczytywanie zadań...",
-  title: "Zmiana paszy",
-  pendingTask: "{{count}} zadanie oczekujące",
-  pendingTasks: "{{count}} zadania oczekujące",
-  emptyTitle: "Brak oczekujących zadań",
-  emptyText: "Nie znaleziono zadań zmiany paszy.",
-  animalId: "ID ZWIERZĘCIA",
-  corral: "Kojec",
-  setTo: "Ustaw na",
-  destination: "Cel"
-},
-estadoAnimal: {
-  queryLabel: "Konsultacja",
-  title: "Stan zwierzęcia",
-  subtitle: "Wybierz, jak chcesz zidentyfikować zwierzę.",
-  corral: "Kojec",
-  corralDescription: "Wprowadź numer kojca.",
-  id: "ID",
-  idDescription: "Wprowadź identyfikator zwierzęcia.",
-  animalId: "ID zwierzęcia",
-  requiredData: "Wymagane dane",
-  enterCorral: "Wprowadź numer kojca.",
-  enterId: "Wprowadź identyfikator zwierzęcia.",
-  consulting: "Sprawdzanie...",
-  continue: "Kontynuuj",
-  accept: "Akceptuj",
-  serverConnectionError: "Nie udało się połączyć z serwerem.",
-  noIpConfigured: "Nie skonfigurowano adresu IP.",
-  nextScreenPending: "Ekran informacji o zwierzęciu utworzymy w następnym kroku.",
-  corralMaternityDescription: "Wprowadź numer kojca porodowego.",
-idAnimalDescription: "Wyszukaj zwierzę w porodówce i ciąży.",
-animalNotFound: "Nie znaleziono zwierzęcia",
-},
-matCorralDetail: {
-  viewStatus: "Zobacz status",
-animalIdNotFound: "Nie znaleziono identyfikatora zwierzęcia.",
-openAnimalInfoError: "Nie można otworzyć informacji o zwierzęciu.",
-  penNotFound: "Nie znaleziono kojca",
-earTagAlreadyAssigned: "Kolczyk jest przypisany do innego zwierzęcia",
-  readOnlyPermission: "Uprawnienia tylko do odczytu",
-readOnlyPermissionText: "Ten użytkownik ma tylko uprawnienia do odczytu. Nie może wykonywać operacji na zwierzęciu.",
-
-  animalStatus: "Stan zwierzęcia",
-  id: "ID",
-  earTag: "Kolczyk",
-  cycle: "Cykl",
-  day: "Dzień",
-
-  curve: "Krzywa",
-  correction: "Korekta",
-  entryDate: "Data wejścia",
-  farrowingDate: "Data porodu",
-  house: "Budynek",
-  pen: "Kojec",
-  lastFeeding: "Ostatnie karmienie",
-presentPiglets: "Żywe prosięta",
-  inseminationDate: "Data inseminacji",
-  teatsNumber: "Liczba sutków",
-
-  operations: "Operacje",
-
-  consumption: "Zużycie",
-  ofGrams: "z {{amount}} g",
-  oneDayWithoutFeeding: "1 dzień bez karmienia",
-  daysWithoutFeeding: "{{count}} dni bez karmienia",
-
-  noAnimalData: "Brak danych zwierzęcia",
-  noAnimalDataText: "Nie otrzymano informacji do wyświetlenia.",
-  back: "Wróć",
-  operationsPendingTitle: "Operacje",
-  operationsPendingText: "Operacje wykonamy w następnym kroku.",
-  moveToWeaning: "Przenieś do odsadzenia",
-  chooseOption: "Wybierz operację dla tego zwierzęcia.",
-  nextOperation: "Następna operacja",
-  insertAnimal: "Wstaw zwierzę",
-  moveToLactation: "Przenieś do laktacji",
-  nextStep: "Następny krok",
-  actions: "Działania",
-
-  bodyCondition: "Kondycja ciała",
-  subState: "Podstan",
-  pigletCapture: "Rejestracja prosiąt",
-  animalExit: "Wyjście zwierzęcia",
-  replaceEarTag: "Zastąp kolczyk",
-  changePen: "Zmień kojec",
-  anonymousAnimalId: "Identyfikator zwierzęcia anonimowego",
-
-  cancel: "Anuluj",
-  accept: "Akceptuj",
-  saving: "Zapisywanie...",
-  error: "Błąd",
-
-  operationDone: "Operacja wykonana poprawnie.",
-  changeStateDone: "Podstan zaktualizowany poprawnie.",
-  changeStateError: "Nie można zmienić stanu zwierzęcia.",
-  confirmNextOperation: "Czy na pewno chcesz przejść do następnej operacji?",
-  pkidChangeStateNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
-
-  selectExitType: "Wybierz typ wyjścia, który chcesz zastosować.",
-  exitImmediate: "Wyjście natychmiastowe",
-  exitScheduled: "Wyjście zaplanowane",
-  exitScheduledEmptyHopper: "Wyjście zaplanowane z pustym zasobnikiem",
-  cancelScheduledExit: "Anuluj zaplanowane wyjście",
-  scheduledDate: "Data zaplanowana",
-  exitDateLimitText: "Nie można wybrać daty wcześniejszej niż dziś ani późniejszej niż za 3 dni.",
-  animalExitDone: "Wyjście zwierzęcia wykonane poprawnie.",
-  animalExitError: "Nie można wykonać wyjścia zwierzęcia.",
-  pkidExitNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
-
-  selectCurve: "Wybierz krzywą",
-  selectCurveText: "Wybierz nową krzywą zwierzęcia.",
-  loadingCurves: "Ładowanie krzywych...",
-  noCurvesAvailable: "Brak dostępnych krzywych.",
-  confirmChangeCurve: "Czy na pewno chcesz zmienić krzywą?",
-  loadCurvesError: "Nie można załadować krzywych.",
-  pkidChangeCurveNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
-  changeCurveDone: "Krzywa zaktualizowana poprawnie.",
-  changeCurveError: "Nie można zmienić krzywej.",
-
-  selectBodyConditionText: "Wybierz nową kondycję ciała zwierzęcia.",
-  loadingBodyConditions: "Ładowanie kondycji ciała...",
-  noBodyConditionsAvailable: "Brak dostępnych kondycji ciała.",
-  confirmChangeBodyCondition: "Czy na pewno chcesz zmienić kondycję ciała?",
-  loadBodyConditionsError: "Nie można załadować kondycji ciała.",
-  pkidChangeBodyConditionNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
-  changeBodyConditionDone: "Kondycja ciała zaktualizowana poprawnie.",
-  changeBodyConditionError: "Nie można zmienić kondycji ciała.",
-
-  selectSubStateText: "Ręcznie wybierz nowy podstan zwierzęcia.",
-  confirmChangeSubState: "Czy na pewno chcesz zmienić podstan?",
-
-  currentPen: "Aktualny kojec: {{pen}}",
-  newPen: "Nowy kojec",
-  enterNewPen: "Wprowadź nowy kojec.",
-  pkidChangePenNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
-  changePenDone: "Kojec zaktualizowany poprawnie.",
-  changePenError: "Nie można zmienić kojca.",
-
-  currentEarTag: "Aktualny kolczyk: {{earTag}}",
-  newEarTag: "Nowy kolczyk",
-  enterNewEarTag: "Wprowadź nowy kolczyk.",
-  pkidEarTagNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
-  replaceEarTagDone: "Kolczyk zaktualizowany poprawnie.",
-  replaceEarTagError: "Nie można zastąpić kolczyka.",
-
-  identifyAnonymousAnimalText: "Wybierz, czy chcesz przypisać zwierzęciu ID czy kolczyk.",
-  newId: "Nowe ID",
-  enterNewId: "Wprowadź nowe ID.",
-  idExample: "Np.: 1010",
-  earTagExample: "Np.: 123",
-  notAnonymousAnimalText: "To zwierzę nie jest anonimowe, ponieważ ma już przypisane ID lub kolczyk.",
-  pkidIdentifyNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
-  identifyAnonymousAnimalDone: "Identyfikator zwierzęcia zaktualizowany poprawnie.",
-  identifyAnonymousAnimalError: "Nie można zidentyfikować zwierzęcia anonimowego.",
-
-  livePiglets: "Żywe",
-  deadPiglets: "Martwe",
-  mummifiedPiglets: "Zmumifikowane",
-  totalBornPiglets: "Łącznie urodzone",
-  pigletCaptureText: "Wprowadź liczbę prosiąt żywych, martwych i zmumifikowanych.",
-  captureBeforeLactationText: "Zarejestruj urodzone prosięta przed przejściem do laktacji.",
-  weaningPigletsOnlyRead: "Przy odsadzeniu można tylko przeglądać prosięta.",
-  pkidPigletsNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
-  pigletCaptureDone: "Rejestracja prosiąt zapisana poprawnie.",
-  pigletCaptureError: "Nie można zapisać rejestracji prosiąt.",
-},
-subState: {
-  prepartum: "Przed porodem",
-  lactation: "Laktacja",
-  weaning: "Odsadzenie",
-},
-
-capturaParto: {
-  birthDataTitle: "Dane porodu",
-  birthDataSubtitle: "Sprawdź dane zwierzęcia przed zarejestrowaniem porodu.",
-  corral: "Kojec",
-  id: "ID",
-  date: "Data",
-  subState: "Podstan",
-
-  dataCollectionTitle: "Zbieranie danych",
-  dataCollectionSubtitle: "Wprowadź urodzone żywe, martwe i zmumifikowane prosięta.",
-  weaningReadOnly: "Przy odsadzeniu dane można tylko przeglądać.",
-
-  totalBorn: "Łącznie urodzone",
-  live: "Żywe",
-  dead: "Martwe",
-  mummified: "Zmumifikowane",
-
-  prepartum: "Przed porodem",
-  farrowing: "Poród",
-  lactation: "Laktacja",
-  weaning: "Odsadzenie",
-
-  accept: "Akceptuj",
-  cancel: "Anuluj",
-  saving: "Zapisywanie...",
-
-  sentTitle: "Rejestracja wysłana",
-  sentMessage: "Rejestracja porodu została zapisana poprawnie.",
-
-  errorTitle: "Błąd",
-  invalidAnimalTitle: "Nieprawidłowe zwierzę",
-  invalidAnimalText: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
-  reportSendError: "Nie można zapisać rejestracji porodu.",
-
-  invalidDateTitle: "Nieprawidłowa data",
-  invalidDateMessage: "Data porodu nie może być późniejsza niż dzisiaj.",
-  changeDate: "Zmień datę",
-
-  selectDateTitle: "Wybierz datę",
-  selectDateMessage: "Dostosuj datę porodu za pomocą przycisków.",
-},
-capturaMaternidadEntrada: {
-  title: "Rejestracja porodu",
-  description: "Wyszukaj zwierzę po kojcu lub ID, aby zarejestrować poród.",
-  maternityLabel: "PORODÓWKA",
-
-  corral: "Kojec",
-  corralDescription: "Wyszukaj zwierzę po numerze kojca.",
-  id: "ID",
-  idDescription: "Wyszukaj zwierzę po jego identyfikatorze.",
-  animalId: "ID zwierzęcia",
-
-  corralExample: "Np.: 102",
-  idExample: "Np.: 1234",
-
-  consulting: "Wyszukiwanie...",
-  continue: "Kontynuuj",
-  accept: "Akceptuj",
-
-  serverConnectionError: "Nie można połączyć się z serwerem.",
-},
-altaBajaStack: {
-  tituloPantalla: "Dodanie/ubytek prosiąt",
-  descripcionPantalla: "Wyszukaj lochę po kojcu lub ID, aby zarejestrować dodanie lub ubytek prosiąt.",
-},
-altaBajaLechones: {
-  heroTitle: "Ruch prosiąt",
-  statusAlta: "Dodanie",
-  statusBaja: "Ubytek",
-
-  corralUpper: "KOJEC",
-  idUpper: "ID",
-  dateUpper: "DATA",
-
-  movementType: "Typ ruchu",
-  movementSubtitle: "Wybierz, czy chcesz zarejestrować dodanie czy ubytek.",
-  adoption: "Adopcja",
-  baja: "Ubytek",
-
-  adoptionData: "Dane adopcji",
-  donorMother: "Locha dawczyni",
-  donatesPiglets: "Oddaje prosięta",
-  id: "ID",
-  transferredPiglets: "Przeniesione prosięta",
-  totalAdopted: "Łącznie adoptowane",
-  total: "Łącznie",
-
-  bajaReason: "Powód ubytku",
-  reasonCrushing: "Przygniecenie",
-  reasonDiarrhea: "Biegunka",
-  reasonLowViability: "Niska żywotność",
-  reasonDeformities: "Deformacje",
-  reasonOther: "Inne",
-
-  piglet: "prosię",
-  piglets: "prosięta",
-  description: "Opis",
-
-  editReason: "Edytuj powód",
-  addReason: "Dodaj powód",
-  reasonModalText: "Podaj liczbę prosiąt i opisz powód.",
-
-  saving: "Zapisywanie...",
-  saveAlta: "Zapisz dodanie",
-  saveBaja: "Zapisz ubytek",
-  accept: "Akceptuj",
-  cancel: "Anuluj",
-
-  error: "Błąd",
-  missingData: "Brakujące dane",
-  saveError: "Błąd zapisu",
-  saveErrorText: "Nie można zapisać operacji.",
-  selectedAnimalPkidNotFound: "Nie znaleziono wewnętrznego identyfikatora wybranego zwierzęcia.",
-
-  enterTransferredPiglets: "Wprowadź liczbę przeniesionych prosiąt.",
-  invalidTotalTitle: "Nieprawidłowa suma",
-  invalidPigletsNumber: "Wprowadź prawidłową liczbę prosiąt.",
-
-  missingDescriptionTitle: "Opis jest wymagany",
-  missingDescriptionText: "Wprowadź opis powodu.",
-  invalidQuantityTitle: "Nieprawidłowa ilość",
-  invalidPigletQuantity: "Wprowadź prawidłową liczbę prosiąt.",
-
-  selectReasonRequired: "Wybierz co najmniej jeden powód ubytku.",
-
-  adoptionSavedTitle: "Dodanie zapisane",
-  adoptionSavedMessage: "Zarejestrowano poprawnie {{count}} prosiąt.",
-
-  bajasSavedTitle: "Ubytki zapisane",
-  bajasSavedMessage: "Zarejestrowano poprawnie {{piglets}} ubytków dla {{reasons}} powodu/powodów.",
-},
-avisoAplicacionNoConfigurada: {
-  title: "Aplikacja nie jest skonfigurowana",
-  text: "Skonfiguruj adres IP serwera",
-  link: "Naciśnij tutaj",
-},
-generalHome: {
-  movementAnimalTitle: "Ruch zwierząt",
-  readerDescription: "Czytnik kolczyków.",
-  keyboardDescription: "Klawiatura",
-
-  ctifeedTitle: "CTIFEED",
-  ctifeedDescription: "Przejdź do głównego portalu.",
-
-  modalApplicationNotConfiguredTitle: "Aplikacja nie jest skonfigurowana",
-  modalNoSessionTitle: "Sesja nie została rozpoczęta",
-  modalInstallationUnavailableTitle: "Instalacja niedostępna",
-  modalPreparingSessionTitle: "Przygotowywanie sesji",
-  modalReadOnlyPermissionTitle: "Uprawnienia tylko do odczytu",
-
-  modalApplicationNotConfiguredText: "Nie skonfigurowano żadnej instalacji. Przejdź do Instalacji i wybierz jedną.",
-  modalNoSessionText: "Instalacja ma adres IP, ale sesja nie została rozpoczęta. Sprawdź nazwę użytkownika i hasło w Instalacjach.",
-  modalInstallationUnavailableText: "Nie można połączyć się z wybraną instalacją. Sprawdź, czy jesteś połączony z właściwą siecią WiFi lub zweryfikuj adres IP serwera.",
-  modalPreparingSessionText: "Sesja nadal się ładuje. Spróbuj ponownie za kilka sekund.",
-  modalReadOnlyPermissionText: "Twój użytkownik nie ma uprawnień administratora do tej funkcji.",
-
-  accept: "Akceptuj",
-
-  connectingTitle: "Łączenie...",
-  connectingText: "Sprawdzanie połączenia z wybraną instalacją.",
-},
-movimientoAnimalMaternidad: {
-  smallLabel: "RUCH",
-  title: "Porodówka",
-  subtitle: "Wykonuj ręczne wejścia i wyjścia za pomocą klawiatury.",
-
-  movementType: "Typ ruchu",
-  entry: "Wejście",
-  exit: "Wyjście",
-
-  searchAnimal: "Szukaj zwierzęcia",
-  entryHelper: "Wprowadź kojec docelowy i ID zwierzęcia.",
-  exitHelper: "Wybierz, czy chcesz wykonać wyjście po kojcu czy po ID.",
-
-  pen: "Kojec",
-  animalId: "ID zwierzęcia",
-  type: "Typ",
-
-  sending: "Wysyłanie...",
-  accept: "Akceptuj",
-  cancel: "Anuluj",
-
-  confirmEntry: "Potwierdź wejście",
-  confirmExit: "Potwierdź wyjście",
-  confirmSubtitle: "Sprawdź dane przed wysłaniem ruchu.",
-
-  incompleteDataTitle: "Niekompletne dane",
-  entryIncompleteText: "Wprowadź kojec i ID zwierzęcia.",
-  exitPenIncompleteText: "Wprowadź kojec, aby wykonać wyjście.",
-  exitIdIncompleteText: "Wprowadź ID zwierzęcia, aby wykonać wyjście.",
-
-  invalidPenTitle: "Nieprawidłowy kojec",
-  invalidPenText: "Kojec musi być prawidłową liczbą większą niż 0.",
-
-  sendErrorTitle: "Błąd wysyłania",
-  connectionErrorTitle: "Błąd połączenia",
-  noIpConfigured: "Nie skonfigurowano adresu IP.",
-  serverConnectionError: "Nie można połączyć się z serwerem.",
-  serverEmptyResponse: "Serwer nie zwrócił komunikatu. Kod HTTP {{status}}.",
-
-  entrySentTitle: "Wejście wysłane",
-  entrySentText: "Ruch wejścia został wysłany poprawnie.",
-
-  exitSentTitle: "Wyjście wysłane",
-  exitByPenSentText: "Wyjście po kojcu zostało wysłane poprawnie.",
-  exitByIdSentText: "Wyjście po ID zostało wysłane poprawnie.",
-},
-movimientoAnimalGestacion: {
-  smallLabel: "GESTACJA",
-  title: "Ruch zwierząt",
-  subtitle: "Wykonuj ręczne wejścia i wyjścia za pomocą klawiatury.",
-
-  movementType: "Typ ruchu",
-  entry: "Wejście",
-  exit: "Wyjście",
-
-  searchAnimal: "Szukaj zwierzęcia",
-  entryHelper: "Wprowadź kojec docelowy i ID zwierzęcia.",
-  exitHelper: "Wprowadź ID zwierzęcia, aby wykonać wyjście z gestacji.",
-
-  pen: "Kojec",
-  animalId: "ID zwierzęcia",
-  type: "Typ",
-
-  sending: "Wysyłanie...",
-  accept: "Akceptuj",
-  cancel: "Anuluj",
-
-  confirmEntry: "Potwierdź wejście",
-  confirmExit: "Potwierdź wyjście",
-  confirmSubtitle: "Sprawdź dane przed wysłaniem ruchu.",
-
-  incompleteDataTitle: "Niekompletne dane",
-  entryIncompleteText: "Wprowadź kojec i ID zwierzęcia.",
-  exitIdIncompleteText: "Wprowadź ID zwierzęcia, aby wykonać wyjście.",
-
-  invalidPenTitle: "Nieprawidłowy kojec",
-  invalidPenText: "Kojec musi być prawidłową liczbą większą niż 0.",
-
-  sendErrorTitle: "Błąd wysyłania",
-  noIpConfigured: "Nie skonfigurowano adresu IP.",
-  serverConnectionError: "Nie można połączyć się z serwerem.",
-  serverEmptyResponse: "Serwer nie zwrócił komunikatu. Kod HTTP {{status}}.",
-
-  entrySentTitle: "Wejście wysłane",
-  entrySentText: "Ruch wejścia w gestacji został wysłany poprawnie.",
-
-  exitSentTitle: "Wyjście wysłane",
-  exitByIdSentText: "Wyjście z gestacji po ID zostało wysłane poprawnie.",
-},
-gestCorralDetail: {
-   title: "Stan zwierzęcia w ciąży",
-   emptyTitle: "W tym kojcu nie ma zwierzęcia",
-
-   id: "ID",
-   crotal: "Kolczyk",
-   cycle: "Cykl",
-   day: "Dzień",
-
-   stateGestation: "Ciąża",
-   stateOutOfGestation: "Poza ciążą",
-
-   curve: "Krzywa",
-   correction: "Korekta",
-   entryDate: "Data wejścia",
-   inseminationDate: "Data inseminacji",
-   house: "Budynek",
-   corral: "Kojec",
-   estimatedFarrowingDate: "Szacowana data porodu",
-   lastFeeding: "Ostatnie karmienie",
-
-   oneDayWithoutFeeding: "1 dzień bez karmienia",
-   daysWithoutFeeding: "{{count}} dni bez karmienia",
-   of: "z",
-
-   operationsButton: "Operacje",
-   operationsTitle: "Operacje",
-   operationsSubtitle: "Wybierz operację",
-
-   operationInseminationDate: "Data inseminacji",
-   operationCurve: "Krzywa",
-   operationBodyCondition: "Kondycja ciała",
-   operationChangePen: "Zmiana kojca",
-   operationExitAnimal: "Wyjście zwierzęcia",
-   operationReplaceEarTag: "Zamień kolczyk",
-
-   cancel: "Anuluj",
-   accept: "Akceptuj",
-   saving: "Zapisywanie...",
-
-   selectCurve: "Wybierz krzywą",
-   loadingCurves: "Ładowanie krzywych...",
-   noCurvesAvailable: "Brak dostępnych krzywych",
-
-   selectBodyCondition: "Wybierz kondycję ciała",
-   loadingBodyConditions: "Ładowanie kondycji ciała...",
-   noBodyConditionsAvailable: "Brak dostępnych kondycji ciała",
-
-   changePenTitle: "Zmień kojec",
-   currentPen: "Aktualny kojec: {{corral}}",
-   newPen: "Nowy kojec",
-   changePenPlaceholder: "Wprowadź kojec docelowy",
-
-   replaceEarTagTitle: "Zamień kolczyk",
-   currentEarTag: "Aktualny kolczyk: {{crotal}}",
-   newEarTag: "Nowy kolczyk",
-   replaceEarTagPlaceholder: "Wprowadź nowy kolczyk",
-
-   inseminationDateTitle: "Data inseminacji",
-   selectDate: "Wybierz datę",
-   noFutureInseminationDate: "Nie można wybrać daty późniejszej niż dzisiejsza.",
-
-   exitAnimalTitle: "Wyjście zwierzęcia",
-   exitAnimalGestation: "Wyjście zwierzęcia z ciąży",
-   exitDate: "Data wyjścia",
-   noFutureExitDate: "Data wyjścia nie może być późniejsza niż dzisiejsza.",
-
-   penNotFound: "Nie znaleziono kojca",
-   changePenGenericError: "Nie można zmienić kojca.",
-   earTagAlreadyAssigned: "Kolczyk jest przypisany do innego zwierzęcia",
-   replaceEarTagGenericError: "Nie można zamienić kolczyka.",
-},
-tareasMovimientos: {
-  tabs: {
-    tareas: "Zadania",
-    historial: "Historia"
-  },
-
-  secciones: {
-    gestacion: "Ciąża",
-    maternidad: "Macierzyństwo",
-    todos: "Wszystkie",
-    todas: "Wszystkie"
-  },
-
-  operaciones: {
-    entrada: "Wejście",
-    salida: "Wyjście",
-    realizada: "Wykonano"
-  },
-
-  tarjetas: {
-    tareasPendientesMovimientos: "Oczekujące zadania ruchu",
-    idAnimal: "ID zwierzęcia",
-    sinCrotal: "Bez kolczyka",
-    corralDestino: "Kojec docelowy",
-    corralOrigen: "Kojec początkowy",
-    fecha: "Data"
-  },
-
-  filtros: {
-    titulo: "Filtry",
-    filtrarPorFecha: "Filtruj według daty",
-    hoy: "Dzisiaj",
-    ayer: "Wczoraj",
-    fecha: "Data",
-    formatoFecha: "DD/MM/RRRR"
-  },
-
-  carga: {
-    cargandoHistorial: "Ładowanie historii..."
-  },
-
-  vacio: {
-    sinResultados: "Brak wyników",
-    sinMovimientosConFiltros: "Brak wykonanych ruchów dla tych filtrów.",
-    sinMovimientosTodavia: "Nie ma jeszcze wykonanych ruchów."
-  },
-
-  errores: {
-    actualizarServidorTareas: "Należy zaktualizować serwer, aby korzystać z funkcji zadań ruchu.",
-    noCargarTareas: "Nie udało się załadować zadań.",
-    noCargarHistorialTitulo: "Nie udało się załadować historii",
-    noCargarHistorial: "Nie udało się załadować historii ruchów.",
-    historialNoDisponible: "Historia niedostępna",
-    actualizarServidorHistorial: "Należy zaktualizować serwer, aby korzystać z historii zadań ruchu."
-  }
-},
-tareasMovimientosDetalle: {
-  tabs: {
-    gestacion: "Ciąża",
-    maternidad: "Macierzyństwo"
-  },
-
-  acciones: {
-    filtros: "Filtry",
-    ordenar: "Sortuj",
-    marcarRealizado: "Oznacz jako wykonane",
-    marcarSeleccionadas: "Oznacz ({{total}})",
-    marcando: "Oznaczanie...",
-    aceptar: "Akceptuj",
-    cancelar: "Anuluj",
-    confirmar: "Potwierdź",
-    validando: "Sprawdzanie..."
-  },
-
-  orden: {
-    corralAscendente: "Kojec rosnąco",
-    corralDescendente: "Kojec malejąco"
-  },
-
-  operaciones: {
-    entrada: "Wejście",
-    salida: "Wyjście",
-    trasladoEntrada: "Wejście po przeniesieniu",
-    trasladoSalida: "Wyjście do przeniesienia"
-  },
-
-  tarjetas: {
-    idAnimal: "ID zwierzęcia",
-    sinCrotal: "Bez kolczyka",
-    corralDestino: "Kojec docelowy",
-    corralOrigen: "Kojec początkowy",
-    fecha: "Data"
-  },
-
-  estados: {
-    cargandoTareas: "Ładowanie zadań...",
-    noCargarTareasTitulo: "Nie udało się załadować zadań",
-    pulsaReintentar: "Naciśnij, aby spróbować ponownie",
-    sinTareasConFiltros: "Brak zadań dla tych filtrów",
-    sinTareasPendientes: "Brak oczekujących zadań",
-    cambiaFiltros: "Spróbuj zmienić zastosowane filtry.",
-    sinMovimientosPendientes: "Nie znaleziono oczekujących ruchów."
-  },
-
-  modalResultado: {
-    tareasRealizadasTitulo: "Zadania wykonane",
-    tareasRealizadasMensaje: "Wybrane zadania zostały oznaczone jako wykonane.",
-    tareaRealizadaTitulo: "Zadanie wykonane",
-    tareaRealizadaMensaje: "Wejście do macierzyństwa zostało oznaczone jako wykonane.",
-    errorTitulo: "Błąd"
-  },
-
-  modalCorral: {
-    titulo: "Potwierdź kojec",
-    mensaje: "Sprawdź kojec docelowy wejścia do macierzyństwa.",
-    labelCorralDestino: "Kojec docelowy",
-    placeholderCorral: "Wpisz kojec"
-  },
-
-  errores: {
-    noCargarTareas: "Nie udało się załadować zadań.",
-    entradaMaternidadTitulo: "Wejście do macierzyństwa",
-    soloUnaEntradaMaternidad: "Możesz oznaczyć tylko jedno wejście do macierzyństwa naraz.",
-    soloUnaEntradaMaternidadCadaVez: "Możesz oznaczyć tylko jedno wejście do macierzyństwa za każdym razem.",
-    noMarcarTareas: "Nie udało się oznaczyć zadań jako wykonane.",
-    corralMaximo9: "Wpisz prawidłowy kojec, maksymalnie 9 cyfr.",
-    corralNoExiste: "Kojec nie istnieje.",
-    corralOcupado: "Kojec jest zajęty.",
-    noValidarCorral: "Nie udało się sprawdzić kojca.",
-    noValidarCorralMaternidad: "Nie udało się sprawdzić kojca macierzyństwa."
-  }
-},
-filtrosTareasMovimientos: {
-  cabecera: {
-    titulo: "Filtry",
-    subtituloTareasDe: "Zadania: {{seccion}}",
-    limpiar: "Wyczyść"
-  },
-
-  secciones: {
-    gestacion: "Ciąża",
-    maternidad: "Macierzyństwo"
-  },
-
-  bloques: {
-    tipoMovimiento: "Typ ruchu",
-    fecha: "Data",
+    animalId: "ID ZWIERZĘCIA",
     corral: "Kojec",
-    idAnimal: "ID zwierzęcia"
+    consumption: "Spożycie",
+    withoutFeeding: "Bez karmienia",
+    day: "dzień",
+    days: "dni",
+    loadingAnimals: "Wczytywanie zwierząt...",
+    title: "Zwierzęta niekarmione",
+    totalAnimalsMaternity: "Łączna liczba zwierząt na porodówce:",
+    notSeen: "Niewidziane",
+    all: "Wszystkie",
+    sort: "Sortuj",
+    emptyTitle: "Brak oczekujących zwierząt",
+    emptyText: "Nie znaleziono niekarmionych zwierząt na porodówce.",
+    sortBy: "Sortuj według",
+    daysWithoutFeeding: "Dni bez karmienia",
+    sortDaysHelp: "Sortuje według liczby dni bez karmienia",
+    sortCorralHelp: "Sortuje według numeru kojca",
+    descending: "Malejąco",
+    ascending: "Rosnąco",
+    filterAnimals: "Filtruj zwierzęta",
+    allHelp: "Pokazuje wszystkie zwierzęta",
+    unmarked: "Nieoznaczone",
+    unmarkedHelp: "Ukrywa już sprawdzone zwierzęta",
+    clearMarkedTitle: "Wyczyść oznaczone zwierzęta",
+    clearMarkedText: "Wszystkie oznaczenia sprawdzonych zwierząt zostaną usunięte.",
+    cancel: "Anuluj",
+    clear: "Wyczyść",
+    error: "Błąd",
+    serverConnectionError: "Nie udało się połączyć z serwerem.",
+    viewStatus: "Zobacz status",
+    animalIdNotFound: "Nie znaleziono identyfikatora zwierzęcia.",
+    openAnimalInfoError: "Nie można otworzyć informacji o zwierzęciu.",
   },
 
-  opciones: {
-    todos: "Wszystkie",
-    entrada: "Wejście",
-    salida: "Wyjście",
-    todasLasFechas: "Wszystkie daty",
-    hoy: "Dzisiaj",
-    manana: "Jutro",
-    fecha: "Data",
-    todosLosCorrales: "Wszystkie kojce",
-    porCorral: "Według kojca",
-    todosLosAnimales: "Wszystkie zwierzęta",
-    porId: "Według ID"
-  },
-
-  placeholders: {
-    dia: "DD",
-    mes: "MM",
-    anio: "RR/RRRR",
-    introduceCorral: "Wpisz kojec",
-    introduceIdAnimal: "Wpisz ID zwierzęcia"
-  },
-
-  validaciones: {
-    fechaCompleta: "Wpisz dzień, miesiąc i rok.",
-    diaDosCifras: "Dzień musi mieć 2 cyfry.",
-    mesDosCifras: "Miesiąc musi mieć 2 cyfry.",
-    anioDosOCuatroCifras: "Rok musi mieć 2 lub 4 cyfry.",
-    diaRango: "Dzień musi być między 01 a 31.",
-    mesRango: "Miesiąc musi być między 01 a 12.",
-    fechaNoExiste: "Data nie istnieje.",
-    introduceCorral: "Wpisz numer kojca.",
-    introduceIdAnimal: "Wpisz ID zwierzęcia."
-  },
-
-  botones: {
-    cancelar: "Anuluj",
-    aceptar: "Akceptuj"
-  }
-},
-filtrosHistorialMovimientos: {
-  cabecera: {
-    titulo: "Filtry",
-    subtitulo: "Historia ruchów",
-    limpiar: "Wyczyść"
-  },
-
-  bloques: {
-    tipoMovimiento: "Typ ruchu",
-    fecha: "Data",
+  noAlimentadosGestacion: {
+    animalId: "ID ZWIERZĘCIA",
     corral: "Kojec",
-    idAnimal: "ID zwierzęcia"
+    consumption: "Spożycie",
+    withoutFeeding: "Bez karmienia",
+    day: "dzień",
+    days: "dni",
+    loadingAnimals: "Wczytywanie zwierząt...",
+    title: "Zwierzęta niekarmione",
+    totalAnimalsGestation: "Łączna liczba zwierząt w sektorze ciąży:",
+    notSeen: "Niewidziane",
+    all: "Wszystkie",
+    sort: "Sortuj",
+    emptyTitle: "Brak oczekujących zwierząt",
+    emptyText: "Nie znaleziono niekarmionych zwierząt w sektorze ciąży.",
+    sortBy: "Sortuj według",
+    daysWithoutFeeding: "Dni bez karmienia",
+    sortDaysHelp: "Sortuje według liczby dni bez karmienia",
+    sortCorralHelp: "Sortuje według numeru kojca",
+    descending: "Malejąco",
+    ascending: "Rosnąco",
+    filterAnimals: "Filtruj zwierzęta",
+    allHelp: "Pokazuje wszystkie zwierzęta",
+    unmarked: "Nieoznaczone",
+    unmarkedHelp: "Ukrywa już sprawdzone zwierzęta",
+    clearMarkedTitle: "Wyczyść oznaczone zwierzęta",
+    clearMarkedText: "Wszystkie oznaczenia sprawdzonych zwierząt zostaną usunięte.",
+    cancel: "Anuluj",
+    clear: "Wyczyść",
+    error: "Błąd",
+    serverConnectionError: "Nie udało się połączyć z serwerem."
+  },
+  capturaAnimalHome: {
+    selectOption: "Wybierz opcję",
+    unfedAnimalsTitle: "Zwierzęta niekarmione",
+    unfedAnimalsDescription: "Sprawdź zwierzęta, które nie otrzymały zaplanowanego karmienia.",
+    twoFeedsTitle: "2 pasze",
+    twoFeedsDescription: "Zarządzaj zmianą paszy w wylotach zrzutowych.",
+    animalStatusTitle: "Stan zwierzęcia",
+    animalStatusDescription: "Sprawdź lub zaktualizuj stan zwierzęcia.",
+    birthCaptureTitle: "Rejestracja porodu",
+    birthCaptureDescription: "Zarejestruj urodzone żywe, martwe i zmumifikowane prosięta.",
+  },
+  cambioPiensoMaternidad: {
+    error: "Błąd",
+    loadTasksError: "Nie udało się wczytać zadań zmiany paszy.",
+    loadingTasks: "Wczytywanie zadań...",
+    title: "Zmiana paszy",
+    pendingTask: "{{count}} zadanie oczekujące",
+    pendingTasks: "{{count}} zadania oczekujące",
+    emptyTitle: "Brak oczekujących zadań",
+    emptyText: "Nie znaleziono zadań zmiany paszy.",
+    animalId: "ID ZWIERZĘCIA",
+    corral: "Kojec",
+    setTo: "Ustaw na",
+    destination: "Cel"
+  },
+  estadoAnimal: {
+    queryLabel: "Konsultacja",
+    title: "Stan zwierzęcia",
+    subtitle: "Wybierz, jak chcesz zidentyfikować zwierzę.",
+    corral: "Kojec",
+    corralDescription: "Wprowadź numer kojca.",
+    id: "ID",
+    idDescription: "Wprowadź identyfikator zwierzęcia.",
+    animalId: "ID zwierzęcia",
+    requiredData: "Wymagane dane",
+    enterCorral: "Wprowadź numer kojca.",
+    enterId: "Wprowadź identyfikator zwierzęcia.",
+    consulting: "Sprawdzanie...",
+    continue: "Kontynuuj",
+    accept: "Akceptuj",
+    serverConnectionError: "Nie udało się połączyć z serwerem.",
+    noIpConfigured: "Nie skonfigurowano adresu IP.",
+    nextScreenPending: "Ekran informacji o zwierzęciu utworzymy w następnym kroku.",
+    corralMaternityDescription: "Wprowadź numer kojca porodowego.",
+    idAnimalDescription: "Wyszukaj zwierzę w porodówce i ciąży.",
+    animalNotFound: "Nie znaleziono zwierzęcia",
+  },
+  matCorralDetail: {
+    viewStatus: "Zobacz status",
+    animalIdNotFound: "Nie znaleziono identyfikatora zwierzęcia.",
+    openAnimalInfoError: "Nie można otworzyć informacji o zwierzęciu.",
+    penNotFound: "Nie znaleziono kojca",
+    earTagAlreadyAssigned: "Kolczyk jest przypisany do innego zwierzęcia",
+    readOnlyPermission: "Uprawnienia tylko do odczytu",
+    readOnlyPermissionText: "Ten użytkownik ma tylko uprawnienia do odczytu. Nie może wykonywać operacji na zwierzęciu.",
+
+    animalStatus: "Stan zwierzęcia",
+    id: "ID",
+    earTag: "Kolczyk",
+    cycle: "Cykl",
+    day: "Dzień",
+
+    curve: "Krzywa",
+    correction: "Korekta",
+    entryDate: "Data wejścia",
+    farrowingDate: "Data porodu",
+    house: "Budynek",
+    pen: "Kojec",
+    lastFeeding: "Ostatnie karmienie",
+    presentPiglets: "Żywe prosięta",
+    inseminationDate: "Data inseminacji",
+    teatsNumber: "Liczba sutków",
+
+    operations: "Operacje",
+
+    consumption: "Zużycie",
+    ofGrams: "z {{amount}} g",
+    oneDayWithoutFeeding: "1 dzień bez karmienia",
+    daysWithoutFeeding: "{{count}} dni bez karmienia",
+
+    noAnimalData: "Brak danych zwierzęcia",
+    noAnimalDataText: "Nie otrzymano informacji do wyświetlenia.",
+    back: "Wróć",
+    operationsPendingTitle: "Operacje",
+    operationsPendingText: "Operacje wykonamy w następnym kroku.",
+    moveToWeaning: "Przenieś do odsadzenia",
+    chooseOption: "Wybierz operację dla tego zwierzęcia.",
+    nextOperation: "Następna operacja",
+    insertAnimal: "Wstaw zwierzę",
+    moveToLactation: "Przenieś do laktacji",
+    nextStep: "Następny krok",
+    actions: "Działania",
+
+    bodyCondition: "Kondycja ciała",
+    subState: "Podstan",
+    pigletCapture: "Rejestracja prosiąt",
+    animalExit: "Wyjście zwierzęcia",
+    replaceEarTag: "Zastąp kolczyk",
+    changePen: "Zmień kojec",
+    anonymousAnimalId: "Identyfikator zwierzęcia anonimowego",
+
+    cancel: "Anuluj",
+    accept: "Akceptuj",
+    saving: "Zapisywanie...",
+    error: "Błąd",
+
+    operationDone: "Operacja wykonana poprawnie.",
+    changeStateDone: "Podstan zaktualizowany poprawnie.",
+    changeStateError: "Nie można zmienić stanu zwierzęcia.",
+    confirmNextOperation: "Czy na pewno chcesz przejść do następnej operacji?",
+    pkidChangeStateNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
+
+    selectExitType: "Wybierz typ wyjścia, który chcesz zastosować.",
+    exitImmediate: "Wyjście natychmiastowe",
+    exitScheduled: "Wyjście zaplanowane",
+    exitScheduledEmptyHopper: "Wyjście zaplanowane z pustym zasobnikiem",
+    cancelScheduledExit: "Anuluj zaplanowane wyjście",
+    scheduledDate: "Data zaplanowana",
+    exitDateLimitText: "Nie można wybrać daty wcześniejszej niż dziś ani późniejszej niż za 3 dni.",
+    animalExitDone: "Wyjście zwierzęcia wykonane poprawnie.",
+    animalExitError: "Nie można wykonać wyjścia zwierzęcia.",
+    pkidExitNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
+
+    selectCurve: "Wybierz krzywą",
+    selectCurveText: "Wybierz nową krzywą zwierzęcia.",
+    loadingCurves: "Ładowanie krzywych...",
+    noCurvesAvailable: "Brak dostępnych krzywych.",
+    confirmChangeCurve: "Czy na pewno chcesz zmienić krzywą?",
+    loadCurvesError: "Nie można załadować krzywych.",
+    pkidChangeCurveNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
+    changeCurveDone: "Krzywa zaktualizowana poprawnie.",
+    changeCurveError: "Nie można zmienić krzywej.",
+
+    selectBodyConditionText: "Wybierz nową kondycję ciała zwierzęcia.",
+    loadingBodyConditions: "Ładowanie kondycji ciała...",
+    noBodyConditionsAvailable: "Brak dostępnych kondycji ciała.",
+    confirmChangeBodyCondition: "Czy na pewno chcesz zmienić kondycję ciała?",
+    loadBodyConditionsError: "Nie można załadować kondycji ciała.",
+    pkidChangeBodyConditionNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
+    changeBodyConditionDone: "Kondycja ciała zaktualizowana poprawnie.",
+    changeBodyConditionError: "Nie można zmienić kondycji ciała.",
+
+    selectSubStateText: "Ręcznie wybierz nowy podstan zwierzęcia.",
+    confirmChangeSubState: "Czy na pewno chcesz zmienić podstan?",
+
+    currentPen: "Aktualny kojec: {{pen}}",
+    newPen: "Nowy kojec",
+    enterNewPen: "Wprowadź nowy kojec.",
+    pkidChangePenNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
+    changePenDone: "Kojec zaktualizowany poprawnie.",
+    changePenError: "Nie można zmienić kojca.",
+
+    currentEarTag: "Aktualny kolczyk: {{earTag}}",
+    newEarTag: "Nowy kolczyk",
+    enterNewEarTag: "Wprowadź nowy kolczyk.",
+    pkidEarTagNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
+    replaceEarTagDone: "Kolczyk zaktualizowany poprawnie.",
+    replaceEarTagError: "Nie można zastąpić kolczyka.",
+
+    identifyAnonymousAnimalText: "Wybierz, czy chcesz przypisać zwierzęciu ID czy kolczyk.",
+    newId: "Nowe ID",
+    enterNewId: "Wprowadź nowe ID.",
+    idExample: "Np.: 1010",
+    earTagExample: "Np.: 123",
+    notAnonymousAnimalText: "To zwierzę nie jest anonimowe, ponieważ ma już przypisane ID lub kolczyk.",
+    pkidIdentifyNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
+    identifyAnonymousAnimalDone: "Identyfikator zwierzęcia zaktualizowany poprawnie.",
+    identifyAnonymousAnimalError: "Nie można zidentyfikować zwierzęcia anonimowego.",
+
+    livePiglets: "Żywe",
+    deadPiglets: "Martwe",
+    mummifiedPiglets: "Zmumifikowane",
+    totalBornPiglets: "Łącznie urodzone",
+    pigletCaptureText: "Wprowadź liczbę prosiąt żywych, martwych i zmumifikowanych.",
+    captureBeforeLactationText: "Zarejestruj urodzone prosięta przed przejściem do laktacji.",
+    weaningPigletsOnlyRead: "Przy odsadzeniu można tylko przeglądać prosięta.",
+    pkidPigletsNotFound: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
+    pigletCaptureDone: "Rejestracja prosiąt zapisana poprawnie.",
+    pigletCaptureError: "Nie można zapisać rejestracji prosiąt.",
+  },
+  subState: {
+    prepartum: "Przed porodem",
+    lactation: "Laktacja",
+    weaning: "Odsadzenie",
   },
 
-  opciones: {
-    todos: "Wszystkie",
-    entrada: "Wejście",
-    salida: "Wyjście",
-    todasLasFechas: "Wszystkie daty",
-    hoy: "Dzisiaj",
-    manana: "Jutro",
-    fecha: "Data",
-    todosLosCorrales: "Wszystkie kojce",
-    porCorral: "Według kojca",
-    todosLosAnimales: "Wszystkie zwierzęta",
-    porId: "Według ID"
-  },
+  capturaParto: {
+    birthDataTitle: "Dane porodu",
+    birthDataSubtitle: "Sprawdź dane zwierzęcia przed zarejestrowaniem porodu.",
+    corral: "Kojec",
+    id: "ID",
+    date: "Data",
+    subState: "Podstan",
 
-  placeholders: {
-    dia: "DD",
-    mes: "MM",
-    anio: "RR/RRRR",
-    introduceCorral: "Wpisz kojec",
-    introduceIdAnimal: "Wpisz ID zwierzęcia"
-  },
+    dataCollectionTitle: "Zbieranie danych",
+    dataCollectionSubtitle: "Wprowadź urodzone żywe, martwe i zmumifikowane prosięta.",
+    weaningReadOnly: "Przy odsadzeniu dane można tylko przeglądać.",
 
-  validaciones: {
-    fechaCompleta: "Wpisz dzień, miesiąc i rok.",
-    diaDosCifras: "Dzień musi mieć 2 cyfry.",
-    mesDosCifras: "Miesiąc musi mieć 2 cyfry.",
-    anioDosOCuatroCifras: "Rok musi mieć 2 lub 4 cyfry.",
-    diaRango: "Dzień musi być między 01 a 31.",
-    mesRango: "Miesiąc musi być między 01 a 12.",
-    fechaNoExiste: "Data nie istnieje.",
-    introduceCorral: "Wpisz numer kojca.",
-    introduceIdAnimal: "Wpisz ID zwierzęcia."
-  },
+    totalBorn: "Łącznie urodzone",
+    live: "Żywe",
+    dead: "Martwe",
+    mummified: "Zmumifikowane",
 
-  botones: {
-    cancelar: "Anuluj",
-    aceptar: "Akceptuj"
+    prepartum: "Przed porodem",
+    farrowing: "Poród",
+    lactation: "Laktacja",
+    weaning: "Odsadzenie",
+
+    accept: "Akceptuj",
+    cancel: "Anuluj",
+    saving: "Zapisywanie...",
+
+    sentTitle: "Rejestracja wysłana",
+    sentMessage: "Rejestracja porodu została zapisana poprawnie.",
+
+    errorTitle: "Błąd",
+    invalidAnimalTitle: "Nieprawidłowe zwierzę",
+    invalidAnimalText: "Nie znaleziono wewnętrznego identyfikatora zwierzęcia.",
+    reportSendError: "Nie można zapisać rejestracji porodu.",
+
+    invalidDateTitle: "Nieprawidłowa data",
+    invalidDateMessage: "Data porodu nie może być późniejsza niż dzisiaj.",
+    changeDate: "Zmień datę",
+
+    selectDateTitle: "Wybierz datę",
+    selectDateMessage: "Dostosuj datę porodu za pomocą przycisków.",
+  },
+  capturaMaternidadEntrada: {
+    title: "Rejestracja porodu",
+    description: "Wyszukaj zwierzę po kojcu lub ID, aby zarejestrować poród.",
+    maternityLabel: "PORODÓWKA",
+
+    corral: "Kojec",
+    corralDescription: "Wyszukaj zwierzę po numerze kojca.",
+    id: "ID",
+    idDescription: "Wyszukaj zwierzę po jego identyfikatorze.",
+    animalId: "ID zwierzęcia",
+
+    corralExample: "Np.: 102",
+    idExample: "Np.: 1234",
+
+    consulting: "Wyszukiwanie...",
+    continue: "Kontynuuj",
+    accept: "Akceptuj",
+
+    serverConnectionError: "Nie można połączyć się z serwerem.",
+  },
+  altaBajaStack: {
+    tituloPantalla: "Dodanie/ubytek prosiąt",
+    descripcionPantalla: "Wyszukaj lochę po kojcu lub ID, aby zarejestrować dodanie lub ubytek prosiąt.",
+  },
+  altaBajaLechones: {
+    heroTitle: "Ruch prosiąt",
+    statusAlta: "Dodanie",
+    statusBaja: "Ubytek",
+
+    corralUpper: "KOJEC",
+    idUpper: "ID",
+    dateUpper: "DATA",
+
+    movementType: "Typ ruchu",
+    movementSubtitle: "Wybierz, czy chcesz zarejestrować dodanie czy ubytek.",
+    adoption: "Adopcja",
+    baja: "Ubytek",
+
+    adoptionData: "Dane adopcji",
+    donorMother: "Locha dawczyni",
+    donatesPiglets: "Oddaje prosięta",
+    id: "ID",
+    transferredPiglets: "Przeniesione prosięta",
+    totalAdopted: "Łącznie adoptowane",
+    total: "Łącznie",
+
+    bajaReason: "Powód ubytku",
+    reasonCrushing: "Przygniecenie",
+    reasonDiarrhea: "Biegunka",
+    reasonLowViability: "Niska żywotność",
+    reasonDeformities: "Deformacje",
+    reasonOther: "Inne",
+
+    piglet: "prosię",
+    piglets: "prosięta",
+    description: "Opis",
+
+    editReason: "Edytuj powód",
+    addReason: "Dodaj powód",
+    reasonModalText: "Podaj liczbę prosiąt i opisz powód.",
+
+    saving: "Zapisywanie...",
+    saveAlta: "Zapisz dodanie",
+    saveBaja: "Zapisz ubytek",
+    accept: "Akceptuj",
+    cancel: "Anuluj",
+
+    error: "Błąd",
+    missingData: "Brakujące dane",
+    saveError: "Błąd zapisu",
+    saveErrorText: "Nie można zapisać operacji.",
+    selectedAnimalPkidNotFound: "Nie znaleziono wewnętrznego identyfikatora wybranego zwierzęcia.",
+
+    enterTransferredPiglets: "Wprowadź liczbę przeniesionych prosiąt.",
+    invalidTotalTitle: "Nieprawidłowa suma",
+    invalidPigletsNumber: "Wprowadź prawidłową liczbę prosiąt.",
+
+    missingDescriptionTitle: "Opis jest wymagany",
+    missingDescriptionText: "Wprowadź opis powodu.",
+    invalidQuantityTitle: "Nieprawidłowa ilość",
+    invalidPigletQuantity: "Wprowadź prawidłową liczbę prosiąt.",
+
+    selectReasonRequired: "Wybierz co najmniej jeden powód ubytku.",
+
+    adoptionSavedTitle: "Dodanie zapisane",
+    adoptionSavedMessage: "Zarejestrowano poprawnie {{count}} prosiąt.",
+
+    bajasSavedTitle: "Ubytki zapisane",
+    bajasSavedMessage: "Zarejestrowano poprawnie {{piglets}} ubytków dla {{reasons}} powodu/powodów.",
+  },
+  avisoAplicacionNoConfigurada: {
+    title: "Aplikacja nie jest skonfigurowana",
+    text: "Skonfiguruj adres IP serwera",
+    link: "Naciśnij tutaj",
+  },
+  generalHome: {
+servidorCtifeedDesactualizadoTitulo: "Nieaktualny serwer CTIFEED",
+    servidorCtifeedDesactualizadoTexto: "Aby użyć tej funkcji, należy zaktualizować serwer CTIFEED.",
+    tareasMovimientosTitulo: "Zadania przemieszczeń",
+tareasMovimientosDescripcion: "Podgląd i zarządzanie oczekującymi zadaniami przemieszczeń.",
+    movementAnimalTitle: "Ruch zwierząt",
+    readerDescription: "Czytnik kolczyków.",
+    keyboardDescription: "Klawiatura",
+
+    ctifeedTitle: "CTIFEED",
+    ctifeedDescription: "Przejdź do głównego portalu.",
+
+    modalApplicationNotConfiguredTitle: "Aplikacja nie jest skonfigurowana",
+    modalNoSessionTitle: "Sesja nie została rozpoczęta",
+    modalInstallationUnavailableTitle: "Instalacja niedostępna",
+    modalPreparingSessionTitle: "Przygotowywanie sesji",
+    modalReadOnlyPermissionTitle: "Uprawnienia tylko do odczytu",
+
+    modalApplicationNotConfiguredText: "Nie skonfigurowano żadnej instalacji. Przejdź do Instalacji i wybierz jedną.",
+    modalNoSessionText: "Instalacja ma adres IP, ale sesja nie została rozpoczęta. Sprawdź nazwę użytkownika i hasło w Instalacjach.",
+    modalInstallationUnavailableText: "Nie można połączyć się z wybraną instalacją. Sprawdź, czy jesteś połączony z właściwą siecią WiFi lub zweryfikuj adres IP serwera.",
+    modalPreparingSessionText: "Sesja nadal się ładuje. Spróbuj ponownie za kilka sekund.",
+    modalReadOnlyPermissionText: "Twój użytkownik nie ma uprawnień administratora do tej funkcji.",
+
+    accept: "Akceptuj",
+
+    connectingTitle: "Łączenie...",
+    connectingText: "Sprawdzanie połączenia z wybraną instalacją.",
+  },
+  movimientoAnimalMaternidad: {
+    smallLabel: "RUCH",
+    title: "Porodówka",
+    subtitle: "Wykonuj ręczne wejścia i wyjścia za pomocą klawiatury.",
+
+    movementType: "Typ ruchu",
+    entry: "Wejście",
+    exit: "Wyjście",
+
+    searchAnimal: "Szukaj zwierzęcia",
+    entryHelper: "Wprowadź kojec docelowy i ID zwierzęcia.",
+    exitHelper: "Wybierz, czy chcesz wykonać wyjście po kojcu czy po ID.",
+
+    pen: "Kojec",
+    animalId: "ID zwierzęcia",
+    type: "Typ",
+
+    sending: "Wysyłanie...",
+    accept: "Akceptuj",
+    cancel: "Anuluj",
+
+    confirmEntry: "Potwierdź wejście",
+    confirmExit: "Potwierdź wyjście",
+    confirmSubtitle: "Sprawdź dane przed wysłaniem ruchu.",
+
+    incompleteDataTitle: "Niekompletne dane",
+    entryIncompleteText: "Wprowadź kojec i ID zwierzęcia.",
+    exitPenIncompleteText: "Wprowadź kojec, aby wykonać wyjście.",
+    exitIdIncompleteText: "Wprowadź ID zwierzęcia, aby wykonać wyjście.",
+
+    invalidPenTitle: "Nieprawidłowy kojec",
+    invalidPenText: "Kojec musi być prawidłową liczbą większą niż 0.",
+
+    sendErrorTitle: "Błąd wysyłania",
+    connectionErrorTitle: "Błąd połączenia",
+    noIpConfigured: "Nie skonfigurowano adresu IP.",
+    serverConnectionError: "Nie można połączyć się z serwerem.",
+    serverEmptyResponse: "Serwer nie zwrócił komunikatu. Kod HTTP {{status}}.",
+
+    entrySentTitle: "Wejście wysłane",
+    entrySentText: "Ruch wejścia został wysłany poprawnie.",
+
+    exitSentTitle: "Wyjście wysłane",
+    exitByPenSentText: "Wyjście po kojcu zostało wysłane poprawnie.",
+    exitByIdSentText: "Wyjście po ID zostało wysłane poprawnie.",
+  },
+  movimientoAnimalGestacion: {
+    smallLabel: "GESTACJA",
+    title: "Ruch zwierząt",
+    subtitle: "Wykonuj ręczne wejścia i wyjścia za pomocą klawiatury.",
+
+    movementType: "Typ ruchu",
+    entry: "Wejście",
+    exit: "Wyjście",
+
+    searchAnimal: "Szukaj zwierzęcia",
+    entryHelper: "Wprowadź kojec docelowy i ID zwierzęcia.",
+    exitHelper: "Wprowadź ID zwierzęcia, aby wykonać wyjście z gestacji.",
+
+    pen: "Kojec",
+    animalId: "ID zwierzęcia",
+    type: "Typ",
+
+    sending: "Wysyłanie...",
+    accept: "Akceptuj",
+    cancel: "Anuluj",
+
+    confirmEntry: "Potwierdź wejście",
+    confirmExit: "Potwierdź wyjście",
+    confirmSubtitle: "Sprawdź dane przed wysłaniem ruchu.",
+
+    incompleteDataTitle: "Niekompletne dane",
+    entryIncompleteText: "Wprowadź kojec i ID zwierzęcia.",
+    exitIdIncompleteText: "Wprowadź ID zwierzęcia, aby wykonać wyjście.",
+
+    invalidPenTitle: "Nieprawidłowy kojec",
+    invalidPenText: "Kojec musi być prawidłową liczbą większą niż 0.",
+
+    sendErrorTitle: "Błąd wysyłania",
+    noIpConfigured: "Nie skonfigurowano adresu IP.",
+    serverConnectionError: "Nie można połączyć się z serwerem.",
+    serverEmptyResponse: "Serwer nie zwrócił komunikatu. Kod HTTP {{status}}.",
+
+    entrySentTitle: "Wejście wysłane",
+    entrySentText: "Ruch wejścia w gestacji został wysłany poprawnie.",
+
+    exitSentTitle: "Wyjście wysłane",
+    exitByIdSentText: "Wyjście z gestacji po ID zostało wysłane poprawnie.",
+  },
+  gestCorralDetail: {
+    title: "Stan zwierzęcia w ciąży",
+    emptyTitle: "W tym kojcu nie ma zwierzęcia",
+
+    id: "ID",
+    crotal: "Kolczyk",
+    cycle: "Cykl",
+    day: "Dzień",
+
+    stateGestation: "Ciąża",
+    stateOutOfGestation: "Poza ciążą",
+
+    curve: "Krzywa",
+    correction: "Korekta",
+    entryDate: "Data wejścia",
+    inseminationDate: "Data inseminacji",
+    house: "Budynek",
+    corral: "Kojec",
+    estimatedFarrowingDate: "Szacowana data porodu",
+    lastFeeding: "Ostatnie karmienie",
+
+    oneDayWithoutFeeding: "1 dzień bez karmienia",
+    daysWithoutFeeding: "{{count}} dni bez karmienia",
+    of: "z",
+
+    operationsButton: "Operacje",
+    operationsTitle: "Operacje",
+    operationsSubtitle: "Wybierz operację",
+
+    operationInseminationDate: "Data inseminacji",
+    operationCurve: "Krzywa",
+    operationBodyCondition: "Kondycja ciała",
+    operationChangePen: "Zmiana kojca",
+    operationExitAnimal: "Wyjście zwierzęcia",
+    operationReplaceEarTag: "Zamień kolczyk",
+
+    cancel: "Anuluj",
+    accept: "Akceptuj",
+    saving: "Zapisywanie...",
+
+    selectCurve: "Wybierz krzywą",
+    loadingCurves: "Ładowanie krzywych...",
+    noCurvesAvailable: "Brak dostępnych krzywych",
+
+    selectBodyCondition: "Wybierz kondycję ciała",
+    loadingBodyConditions: "Ładowanie kondycji ciała...",
+    noBodyConditionsAvailable: "Brak dostępnych kondycji ciała",
+
+    changePenTitle: "Zmień kojec",
+    currentPen: "Aktualny kojec: {{corral}}",
+    newPen: "Nowy kojec",
+    changePenPlaceholder: "Wprowadź kojec docelowy",
+
+    replaceEarTagTitle: "Zamień kolczyk",
+    currentEarTag: "Aktualny kolczyk: {{crotal}}",
+    newEarTag: "Nowy kolczyk",
+    replaceEarTagPlaceholder: "Wprowadź nowy kolczyk",
+
+    inseminationDateTitle: "Data inseminacji",
+    selectDate: "Wybierz datę",
+    noFutureInseminationDate: "Nie można wybrać daty późniejszej niż dzisiejsza.",
+
+    exitAnimalTitle: "Wyjście zwierzęcia",
+    exitAnimalGestation: "Wyjście zwierzęcia z ciąży",
+    exitDate: "Data wyjścia",
+    noFutureExitDate: "Data wyjścia nie może być późniejsza niż dzisiejsza.",
+
+    penNotFound: "Nie znaleziono kojca",
+    changePenGenericError: "Nie można zmienić kojca.",
+    earTagAlreadyAssigned: "Kolczyk jest przypisany do innego zwierzęcia",
+    replaceEarTagGenericError: "Nie można zamienić kolczyka.",
+  },
+  tareasMovimientos: {
+    tabs: {
+      tareas: "Zadania",
+      historial: "Historia"
+    },
+
+    secciones: {
+      gestacion: "Ciąża",
+      maternidad: "Macierzyństwo",
+      todos: "Wszystkie",
+      todas: "Wszystkie"
+    },
+
+    operaciones: {
+      entrada: "Wejście",
+      salida: "Wyjście",
+      realizada: "Wykonano"
+    },
+
+    tarjetas: {
+      tareasPendientesMovimientos: "Oczekujące zadania ruchu",
+      idAnimal: "ID zwierzęcia",
+      sinCrotal: "Bez kolczyka",
+      corralDestino: "Kojec docelowy",
+      corralOrigen: "Kojec początkowy",
+      fecha: "Zaplanowana data",
+      fechaRealizado: "Data wykonania",
+    },
+
+    filtros: {
+      titulo: "Filtry",
+      filtrarPorFecha: "Filtruj według daty",
+      hoy: "Dzisiaj",
+      ayer: "Wczoraj",
+      fecha: "Data",
+      formatoFecha: "DD/MM/RRRR"
+    },
+
+    carga: {
+      cargandoHistorial: "Ładowanie historii..."
+    },
+
+    vacio: {
+      sinResultados: "Brak wyników",
+      sinMovimientosConFiltros: "Brak wykonanych ruchów dla tych filtrów.",
+      sinMovimientosTodavia: "Nie ma jeszcze wykonanych ruchów."
+    },
+
+    errores: {
+      actualizarServidorTareas: "Należy zaktualizować serwer, aby korzystać z funkcji zadań ruchu.",
+      noCargarTareas: "Nie udało się załadować zadań.",
+      noCargarHistorialTitulo: "Nie udało się załadować historii",
+      noCargarHistorial: "Nie udało się załadować historii ruchów.",
+      historialNoDisponible: "Historia niedostępna",
+      actualizarServidorHistorial: "Należy zaktualizować serwer, aby korzystać z historii zadań ruchu."
+    }
+  },
+  tareasMovimientosDetalle: {
+    tabs: {
+      gestacion: "Ciąża",
+      maternidad: "Macierzyństwo"
+    },
+
+    acciones: {
+      filtros: "Filtry",
+      ordenar: "Sortuj",
+      marcarRealizado: "Oznacz jako wykonane",
+      marcarSeleccionadas: "Oznacz ({{total}})",
+      marcando: "Oznaczanie...",
+      aceptar: "Akceptuj",
+      cancelar: "Anuluj",
+      confirmar: "Potwierdź",
+      validando: "Sprawdzanie..."
+    },
+
+    orden: {
+      corralAscendente: "Kojec rosnąco",
+      corralDescendente: "Kojec malejąco"
+    },
+
+    operaciones: {
+      entrada: "Wejście",
+      salida: "Wyjście",
+      trasladoEntrada: "Wejście po przeniesieniu",
+      trasladoSalida: "Wyjście do przeniesienia"
+    },
+
+    tarjetas: {
+      idAnimal: "ID zwierzęcia",
+      sinCrotal: "Bez kolczyka",
+      corralDestino: "Kojec docelowy",
+      corralOrigen: "Kojec początkowy",
+      fecha: "Data"
+    },
+
+    estados: {
+      cargandoTareas: "Ładowanie zadań...",
+      noCargarTareasTitulo: "Nie udało się załadować zadań",
+      pulsaReintentar: "Naciśnij, aby spróbować ponownie",
+      sinTareasConFiltros: "Brak zadań dla tych filtrów",
+      sinTareasPendientes: "Brak oczekujących zadań",
+      cambiaFiltros: "Spróbuj zmienić zastosowane filtry.",
+      sinMovimientosPendientes: "Nie znaleziono oczekujących ruchów."
+    },
+
+    modalResultado: {
+      tareasRealizadasTitulo: "Zadania wykonane",
+      tareasRealizadasMensaje: "Wybrane zadania zostały oznaczone jako wykonane.",
+      tareaRealizadaTitulo: "Zadanie wykonane",
+      tareaRealizadaMensaje: "Wejście do macierzyństwa zostało oznaczone jako wykonane.",
+      errorTitulo: "Błąd"
+    },
+
+    modalCorral: {
+      titulo: "Potwierdź kojec",
+      mensaje: "Sprawdź kojec docelowy wejścia do macierzyństwa.",
+      labelCorralDestino: "Kojec docelowy",
+      placeholderCorral: "Wpisz kojec"
+    },
+
+    errores: {
+      noCargarTareas: "Nie udało się załadować zadań.",
+      entradaMaternidadTitulo: "Wejście do macierzyństwa",
+      soloUnaEntradaMaternidad: "Możesz oznaczyć tylko jedno wejście do macierzyństwa naraz.",
+      soloUnaEntradaMaternidadCadaVez: "Możesz oznaczyć tylko jedno wejście do macierzyństwa za każdym razem.",
+      noMarcarTareas: "Nie udało się oznaczyć zadań jako wykonane.",
+      corralMaximo9: "Wpisz prawidłowy kojec, maksymalnie 9 cyfr.",
+      corralNoExiste: "Kojec nie istnieje.",
+      corralOcupado: "Kojec jest zajęty.",
+      noValidarCorral: "Nie udało się sprawdzić kojca.",
+      noValidarCorralMaternidad: "Nie udało się sprawdzić kojca macierzyństwa."
+    }
+  },
+  filtrosTareasMovimientos: {
+    cabecera: {
+      titulo: "Filtry",
+      subtituloTareasDe: "Zadania: {{seccion}}",
+      limpiar: "Wyczyść"
+    },
+
+    secciones: {
+      gestacion: "Ciąża",
+      maternidad: "Macierzyństwo"
+    },
+
+    bloques: {
+      tipoMovimiento: "Typ ruchu",
+      fecha: "Data",
+      corral: "Kojec",
+      idAnimal: "ID zwierzęcia"
+    },
+
+    opciones: {
+      todos: "Wszystkie",
+      entrada: "Wejście",
+      salida: "Wyjście",
+      todasLasFechas: "Wszystkie daty",
+      hoy: "Dzisiaj",
+      manana: "Jutro",
+      fecha: "Data",
+      todosLosCorrales: "Wszystkie kojce",
+      porCorral: "Według kojca",
+      todosLosAnimales: "Wszystkie zwierzęta",
+      porId: "Według ID"
+    },
+
+    placeholders: {
+      dia: "DD",
+      mes: "MM",
+      anio: "RR/RRRR",
+      introduceCorral: "Wpisz kojec",
+      introduceIdAnimal: "Wpisz ID zwierzęcia"
+    },
+
+    validaciones: {
+      fechaCompleta: "Wpisz dzień, miesiąc i rok.",
+      diaDosCifras: "Dzień musi mieć 2 cyfry.",
+      mesDosCifras: "Miesiąc musi mieć 2 cyfry.",
+      anioDosOCuatroCifras: "Rok musi mieć 2 lub 4 cyfry.",
+      diaRango: "Dzień musi być między 01 a 31.",
+      mesRango: "Miesiąc musi być między 01 a 12.",
+      fechaNoExiste: "Data nie istnieje.",
+      introduceCorral: "Wpisz numer kojca.",
+      introduceIdAnimal: "Wpisz ID zwierzęcia."
+    },
+
+    botones: {
+      cancelar: "Anuluj",
+      aceptar: "Akceptuj"
+    }
+  },
+  filtrosHistorialMovimientos: {
+    cabecera: {
+      titulo: "Filtry",
+      subtitulo: "Historia ruchów",
+      limpiar: "Wyczyść"
+    },
+
+    bloques: {
+      tipoMovimiento: "Typ ruchu",
+      fecha: "Data",
+      corral: "Kojec",
+      idAnimal: "ID zwierzęcia"
+    },
+
+    opciones: {
+      todos: "Wszystkie",
+      entrada: "Wejście",
+      salida: "Wyjście",
+      todasLasFechas: "Wszystkie daty",
+      hoy: "Dzisiaj",
+      manana: "Jutro",
+      fecha: "Data",
+      todosLosCorrales: "Wszystkie kojce",
+      porCorral: "Według kojca",
+      todosLosAnimales: "Wszystkie zwierzęta",
+      porId: "Według ID"
+    },
+
+    placeholders: {
+      dia: "DD",
+      mes: "MM",
+      anio: "RR/RRRR",
+      introduceCorral: "Wpisz kojec",
+      introduceIdAnimal: "Wpisz ID zwierzęcia"
+    },
+
+    validaciones: {
+      fechaCompleta: "Wpisz dzień, miesiąc i rok.",
+      diaDosCifras: "Dzień musi mieć 2 cyfry.",
+      mesDosCifras: "Miesiąc musi mieć 2 cyfry.",
+      anioDosOCuatroCifras: "Rok musi mieć 2 lub 4 cyfry.",
+      diaRango: "Dzień musi być między 01 a 31.",
+      mesRango: "Miesiąc musi być między 01 a 12.",
+      fechaNoExiste: "Data nie istnieje.",
+      introduceCorral: "Wpisz numer kojca.",
+      introduceIdAnimal: "Wpisz ID zwierzęcia."
+    },
+
+    botones: {
+      cancelar: "Anuluj",
+      aceptar: "Akceptuj"
+    }
+  },
+  modalSalidaPendiente: {
+    titulo: "Oczekujące wyjście",
+    mensaje: "To zwierzę ma oczekujące zadanie wyjścia. Czy chcesz najpierw zakończyć wyjście, a następnie wykonać wybrane wejście?",
+    animal: "Zwierzę",
+    botonConfirmar: "Wykonaj operację",
+    trasladoEntradaTitulo: "Przeniesienie wejściowe",
+    soloUnTrasladoEntrada: "Możesz zaznaczyć tylko jedno przeniesienie wejściowe naraz.",
   }
-}
 };

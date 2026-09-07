@@ -42,6 +42,23 @@ export default {
    Provincia: 'Provincia',
    NombreWifi: 'Nombre Wifi',
    PasswordWifi: 'Contraseña Wifi',
+   colocaQrInstalacionCamara: "Coloca el código QR de la instalación dentro de la cámara.",
+   escaneaCodigoQr: "Escanea el código QR",
+   permisoCamaraNecesario: "Permiso de cámara necesario",
+   permisoCamaraQrTexto: "Necesitas permitir el acceso a la cámara para escanear el código QR.",
+   qrNoValido: "QR no válido",
+   qrNoEsInstalacionDosimac: "Este no es un QR de instalación DOSIMAC.",
+   ipAplicadaSinCredenciales: "La IP se ha aplicado correctamente, pero esta instalación no tiene Username y Clave.",
+   instalacionSeleccionada: "Instalación seleccionada",
+   conexionExitosa: "Conexión exitosa",
+   instalacionConectadaCorrectamente: "La instalación se ha conectado correctamente.",
+   noPuedeConectarInstalacionSeleccionada: "No se puede conectar con la instalación seleccionada. Comprueba la red WiFi o la IP del servidor.",
+   conectando: "Conectando",
+   conectandoInstalacionSeleccionada: "Estamos conectando con la instalación seleccionada...",
+
+
+
+
 
    No_hay_dispositivos: 'No hay dispositivos',
    Aviso: 'Aviso',
@@ -631,8 +648,8 @@ export default {
       error: "Error",
       serverConnectionError: "No se pudo conectar con el servidor.",
       viewStatus: "Ver estado",
-animalIdNotFound: "No se encontró el identificador del animal.",
-openAnimalInfoError: "No se pudo abrir la información del animal.",
+      animalIdNotFound: "No se encontró el identificador del animal.",
+      openAnimalInfoError: "No se pudo abrir la información del animal.",
    },
 
    capturaAnimalHome: {
@@ -963,6 +980,10 @@ openAnimalInfoError: "No se pudo abrir la información del animal.",
       link: "Pulse aquí",
    },
    generalHome: {
+      servidorCtifeedDesactualizadoTitulo: "Servidor CTIFEED desactualizado",
+      servidorCtifeedDesactualizadoTexto: "Es necesario actualizar el servidor CTIFEED para usar esta funcionalidad.",
+      tareasMovimientosTitulo: "Tareas de movimientos",
+      tareasMovimientosDescripcion: "Consulta y gestión de tareas pendientes de movimientos.",
       movementAnimalTitle: "Movimiento animal",
       readerDescription: "Lector de crotales.",
       keyboardDescription: "Teclado",
@@ -1149,249 +1170,258 @@ openAnimalInfoError: "No se pudo abrir la información del animal.",
       replaceEarTagGenericError: "No se pudo sustituir el crotal.",
    },
 
- tareasMovimientos: {
-    tabs: {
-      tareas: "Tareas",
-      historial: "Historial"
-    },
+   tareasMovimientos: {
+      tabs: {
+         tareas: "Tareas",
+         historial: "Historial"
+      },
 
-    secciones: {
-      gestacion: "Gestación",
-      maternidad: "Maternidad",
-      todos: "Todos",
-      todas: "Todas"
-    },
+      secciones: {
+         gestacion: "Gestación",
+         maternidad: "Maternidad",
+         todos: "Todos",
+         todas: "Todas"
+      },
 
-    operaciones: {
-      entrada: "Entrada",
-      salida: "Salida",
-      realizada: "Realizada"
-    },
+      operaciones: {
+         entrada: "Entrada",
+         salida: "Salida",
+         realizada: "Realizada"
+      },
 
-    tarjetas: {
-      tareasPendientesMovimientos: "Tareas pendientes de movimientos",
-      idAnimal: "ID animal",
-      sinCrotal: "Sin crotal",
-      corralDestino: "Corral destino",
-      corralOrigen: "Corral origen",
-      fecha: "Fecha"
-    },
+      tarjetas: {
+         tareasPendientesMovimientos: "Tareas pendientes de movimientos",
+         idAnimal: "ID animal",
+         sinCrotal: "Sin crotal",
+         corralDestino: "Corral destino",
+         corralOrigen: "Corral origen",
+         fecha: "Fecha programada",
+         fechaRealizado: "Fecha realizada",
+      },
 
-    filtros: {
-      titulo: "Filtros",
-      filtrarPorFecha: "Filtrar por fecha",
-      hoy: "Hoy",
-      ayer: "Ayer",
-      fecha: "Fecha",
-      formatoFecha: "DD/MM/AAAA"
-    },
+      filtros: {
+         titulo: "Filtros",
+         filtrarPorFecha: "Filtrar por fecha",
+         hoy: "Hoy",
+         ayer: "Ayer",
+         fecha: "Fecha",
+         formatoFecha: "DD/MM/AAAA"
+      },
 
-    carga: {
-      cargandoHistorial: "Cargando historial..."
-    },
+      carga: {
+         cargandoHistorial: "Cargando historial..."
+      },
 
-    vacio: {
-      sinResultados: "Sin resultados",
-      sinMovimientosConFiltros: "No hay movimientos realizados con esos filtros.",
-      sinMovimientosTodavia: "No hay movimientos realizados todavía."
-    },
+      vacio: {
+         sinResultados: "Sin resultados",
+         sinMovimientosConFiltros: "No hay movimientos realizados con esos filtros.",
+         sinMovimientosTodavia: "No hay movimientos realizados todavía."
+      },
 
-    errores: {
-      actualizarServidorTareas: "Debe actualizar el servidor para utilizar la función de tareas de movimientos.",
-      noCargarTareas: "No se pudieron cargar las tareas.",
-      noCargarHistorialTitulo: "No se pudo cargar el historial",
-      noCargarHistorial: "No se pudo cargar el historial de movimientos.",
-      historialNoDisponible: "Historial no disponible",
-      actualizarServidorHistorial: "Debe actualizar el servidor para utilizar el historial de tareas de movimientos."
-    }
-  },
+      errores: {
+         actualizarServidorTareas: "Debe actualizar el servidor para utilizar la función de tareas de movimientos.",
+         noCargarTareas: "No se pudieron cargar las tareas.",
+         noCargarHistorialTitulo: "No se pudo cargar el historial",
+         noCargarHistorial: "No se pudo cargar el historial de movimientos.",
+         historialNoDisponible: "Historial no disponible",
+         actualizarServidorHistorial: "Debe actualizar el servidor para utilizar el historial de tareas de movimientos."
+      }
+   },
 
-  tareasMovimientosDetalle: {
-  tabs: {
-    gestacion: "Gestación",
-    maternidad: "Maternidad"
-  },
+   tareasMovimientosDetalle: {
+      tabs: {
+         gestacion: "Gestación",
+         maternidad: "Maternidad"
+      },
 
-  acciones: {
-    filtros: "Filtros",
-    ordenar: "Ordenar",
-    marcarRealizado: "Marcar Realizado",
-    marcarSeleccionadas: "Marcar ({{total}})",
-    marcando: "Marcando...",
-    aceptar: "Aceptar",
-    cancelar: "Cancelar",
-    confirmar: "Confirmar",
-    validando: "Validando..."
-  },
+      acciones: {
+         filtros: "Filtros",
+         ordenar: "Ordenar",
+         marcarRealizado: "Marcar Realizado",
+         marcarSeleccionadas: "Marcar ({{total}})",
+         marcando: "Marcando...",
+         aceptar: "Aceptar",
+         cancelar: "Cancelar",
+         confirmar: "Confirmar",
+         validando: "Validando..."
+      },
 
-  orden: {
-    corralAscendente: "Corral ascendente",
-    corralDescendente: "Corral descendente"
-  },
+      orden: {
+         corralAscendente: "Corral ascendente",
+         corralDescendente: "Corral descendente"
+      },
 
-  operaciones: {
-    entrada: "Entrada",
-    salida: "Salida",
-    trasladoEntrada: "Traslado Entrada",
-    trasladoSalida: "Traslado Salida"
-  },
+      operaciones: {
+         entrada: "Entrada",
+         salida: "Salida",
+         trasladoEntrada: "Traslado Entrada",
+         trasladoSalida: "Traslado Salida"
+      },
 
-  tarjetas: {
-    idAnimal: "ID animal",
-    sinCrotal: "Sin crotal",
-    corralDestino: "Corral destino",
-    corralOrigen: "Corral origen",
-    fecha: "Fecha"
-  },
+      tarjetas: {
+         idAnimal: "ID animal",
+         sinCrotal: "Sin crotal",
+         corralDestino: "Corral destino",
+         corralOrigen: "Corral origen",
+         fecha: "Fecha programada"
+      },
 
-  estados: {
-    cargandoTareas: "Cargando tareas...",
-    noCargarTareasTitulo: "No se pudieron cargar las tareas",
-    pulsaReintentar: "Pulsa para reintentar",
-    sinTareasConFiltros: "No hay tareas con esos filtros",
-    sinTareasPendientes: "No hay tareas pendientes",
-    cambiaFiltros: "Prueba cambiando los filtros aplicados.",
-    sinMovimientosPendientes: "No se encontraron movimientos pendientes."
-  },
+      estados: {
+         cargandoTareas: "Cargando tareas...",
+         noCargarTareasTitulo: "No se pudieron cargar las tareas",
+         pulsaReintentar: "Pulsa para reintentar",
+         sinTareasConFiltros: "No hay tareas con esos filtros",
+         sinTareasPendientes: "No hay tareas pendientes",
+         cambiaFiltros: "Prueba cambiando los filtros aplicados.",
+         sinMovimientosPendientes: "No se encontraron movimientos pendientes."
+      },
 
-  modalResultado: {
-    tareasRealizadasTitulo: "Tareas realizadas",
-    tareasRealizadasMensaje: "Las tareas seleccionadas se han marcado como realizadas.",
-    tareaRealizadaTitulo: "Tarea realizada",
-    tareaRealizadaMensaje: "La entrada de maternidad se ha marcado como realizada.",
-    errorTitulo: "Error"
-  },
+      modalResultado: {
+         tareasRealizadasTitulo: "Tareas realizadas",
+         tareasRealizadasMensaje: "Las tareas seleccionadas se han marcado como realizadas.",
+         tareaRealizadaTitulo: "Tarea realizada",
+         tareaRealizadaMensaje: "La entrada de maternidad se ha marcado como realizada.",
+         errorTitulo: "Error"
+      },
 
-  modalCorral: {
-    titulo: "Confirmar corral",
-    mensaje: "Revisa el corral destino de la entrada en maternidad.",
-    labelCorralDestino: "Corral destino",
-    placeholderCorral: "Introduce el corral"
-  },
+      modalCorral: {
+         titulo: "Confirmar corral",
+         mensaje: "Revisa el corral destino de la entrada en maternidad.",
+         labelCorralDestino: "Corral destino",
+         placeholderCorral: "Introduce el corral"
+      },
 
-  errores: {
-    noCargarTareas: "No se pudieron cargar las tareas.",
-    entradaMaternidadTitulo: "Entrada de maternidad",
-    soloUnaEntradaMaternidad: "Solo puedes marcar una entrada de maternidad a la vez.",
-    soloUnaEntradaMaternidadCadaVez: "Solo puedes marcar una entrada de maternidad cada vez.",
-    noMarcarTareas: "No se pudieron marcar las tareas como realizadas.",
-    corralMaximo9: "Introduce un corral válido de máximo 9 números.",
-    corralNoExiste: "El corral no existe.",
-    corralOcupado: "El corral está ocupado.",
-    noValidarCorral: "No se pudo validar el corral.",
-    noValidarCorralMaternidad: "No se pudo validar el corral de maternidad."
-  }
-},
-filtrosTareasMovimientos: {
-  cabecera: {
-    titulo: "Filtros",
-    subtituloTareasDe: "Tareas de {{seccion}}",
-    limpiar: "Limpiar"
-  },
+      errores: {
+         noCargarTareas: "No se pudieron cargar las tareas.",
+         entradaMaternidadTitulo: "Entrada de maternidad",
+         soloUnaEntradaMaternidad: "Solo puedes marcar una entrada de maternidad a la vez.",
+         soloUnaEntradaMaternidadCadaVez: "Solo puedes marcar una entrada de maternidad cada vez.",
+         noMarcarTareas: "No se pudieron marcar las tareas como realizadas.",
+         corralMaximo9: "Introduce un corral válido de máximo 9 números.",
+         corralNoExiste: "El corral no existe.",
+         corralOcupado: "El corral está ocupado.",
+         noValidarCorral: "No se pudo validar el corral.",
+         noValidarCorralMaternidad: "No se pudo validar el corral de maternidad."
+      }
+   },
+   filtrosTareasMovimientos: {
+      cabecera: {
+         titulo: "Filtros",
+         subtituloTareasDe: "Tareas de {{seccion}}",
+         limpiar: "Limpiar"
+      },
 
-  secciones: {
-    gestacion: "Gestación",
-    maternidad: "Maternidad"
-  },
+      secciones: {
+         gestacion: "Gestación",
+         maternidad: "Maternidad"
+      },
 
-  bloques: {
-    tipoMovimiento: "Tipo de movimiento",
-    fecha: "Fecha",
-    corral: "Corral",
-    idAnimal: "ID animal"
-  },
+      bloques: {
+         tipoMovimiento: "Tipo de movimiento",
+         fecha: "Fecha",
+         corral: "Corral",
+         idAnimal: "ID animal"
+      },
 
-  opciones: {
-    todos: "Todos",
-    entrada: "Entrada",
-    salida: "Salida",
-    todasLasFechas: "Todas las fechas",
-    hoy: "Hoy",
-    manana: "Mañana",
-    fecha: "Fecha",
-    todosLosCorrales: "Todos los corrales",
-    porCorral: "Por corral",
-    todosLosAnimales: "Todos los animales",
-    porId: "Por ID"
-  },
+      opciones: {
+         todos: "Todos",
+         entrada: "Entrada",
+         salida: "Salida",
+         todasLasFechas: "Todas las fechas",
+         hoy: "Hoy",
+         manana: "Mañana",
+         fecha: "Fecha",
+         todosLosCorrales: "Todos los corrales",
+         porCorral: "Por corral",
+         todosLosAnimales: "Todos los animales",
+         porId: "Por ID"
+      },
 
-  placeholders: {
-    dia: "DD",
-    mes: "MM",
-    anio: "AA/AAAA",
-    introduceCorral: "Introduce el corral",
-    introduceIdAnimal: "Introduce el ID animal"
-  },
+      placeholders: {
+         dia: "DD",
+         mes: "MM",
+         anio: "AA/AAAA",
+         introduceCorral: "Introduce el corral",
+         introduceIdAnimal: "Introduce el ID animal"
+      },
 
-  validaciones: {
-    fechaCompleta: "Introduce día, mes y año.",
-    diaDosCifras: "El día debe tener 2 cifras.",
-    mesDosCifras: "El mes debe tener 2 cifras.",
-    anioDosOCuatroCifras: "El año debe tener 2 o 4 cifras.",
-    diaRango: "El día debe estar entre 01 y 31.",
-    mesRango: "El mes debe estar entre 01 y 12.",
-    fechaNoExiste: "La fecha no existe.",
-    introduceCorral: "Introduce un número de corral.",
-    introduceIdAnimal: "Introduce un ID de animal."
-  },
+      validaciones: {
+         fechaCompleta: "Introduce día, mes y año.",
+         diaDosCifras: "El día debe tener 2 cifras.",
+         mesDosCifras: "El mes debe tener 2 cifras.",
+         anioDosOCuatroCifras: "El año debe tener 2 o 4 cifras.",
+         diaRango: "El día debe estar entre 01 y 31.",
+         mesRango: "El mes debe estar entre 01 y 12.",
+         fechaNoExiste: "La fecha no existe.",
+         introduceCorral: "Introduce un número de corral.",
+         introduceIdAnimal: "Introduce un ID de animal."
+      },
 
-  botones: {
-    cancelar: "Cancelar",
-    aceptar: "Aceptar"
-  }
-},
-filtrosHistorialMovimientos: {
-  cabecera: {
-    titulo: "Filtros",
-    subtitulo: "Historial de movimientos",
-    limpiar: "Limpiar"
-  },
+      botones: {
+         cancelar: "Cancelar",
+         aceptar: "Aceptar"
+      }
+   },
+   filtrosHistorialMovimientos: {
+      cabecera: {
+         titulo: "Filtros",
+         subtitulo: "Historial de movimientos",
+         limpiar: "Limpiar"
+      },
 
-  bloques: {
-    tipoMovimiento: "Tipo de movimiento",
-    fecha: "Fecha",
-    corral: "Corral",
-    idAnimal: "ID animal"
-  },
+      bloques: {
+         tipoMovimiento: "Tipo de movimiento",
+         fecha: "Fecha",
+         corral: "Corral",
+         idAnimal: "ID animal"
+      },
 
-  opciones: {
-    todos: "Todos",
-    entrada: "Entrada",
-    salida: "Salida",
-    todasLasFechas: "Todas las fechas",
-    hoy: "Hoy",
-    manana: "Mañana",
-    fecha: "Fecha",
-    todosLosCorrales: "Todos los corrales",
-    porCorral: "Por corral",
-    todosLosAnimales: "Todos los animales",
-    porId: "Por ID"
-  },
+      opciones: {
+         todos: "Todos",
+         entrada: "Entrada",
+         salida: "Salida",
+         todasLasFechas: "Todas las fechas",
+         hoy: "Hoy",
+         manana: "Mañana",
+         fecha: "Fecha",
+         todosLosCorrales: "Todos los corrales",
+         porCorral: "Por corral",
+         todosLosAnimales: "Todos los animales",
+         porId: "Por ID"
+      },
 
-  placeholders: {
-    dia: "DD",
-    mes: "MM",
-    anio: "AA/AAAA",
-    introduceCorral: "Introduce el corral",
-    introduceIdAnimal: "Introduce el ID animal"
-  },
+      placeholders: {
+         dia: "DD",
+         mes: "MM",
+         anio: "AA/AAAA",
+         introduceCorral: "Introduce el corral",
+         introduceIdAnimal: "Introduce el ID animal"
+      },
 
-  validaciones: {
-    fechaCompleta: "Introduce día, mes y año.",
-    diaDosCifras: "El día debe tener 2 cifras.",
-    mesDosCifras: "El mes debe tener 2 cifras.",
-    anioDosOCuatroCifras: "El año debe tener 2 o 4 cifras.",
-    diaRango: "El día debe estar entre 01 y 31.",
-    mesRango: "El mes debe estar entre 01 y 12.",
-    fechaNoExiste: "La fecha no existe.",
-    introduceCorral: "Introduce un número de corral.",
-    introduceIdAnimal: "Introduce un ID de animal."
-  },
+      validaciones: {
+         fechaCompleta: "Introduce día, mes y año.",
+         diaDosCifras: "El día debe tener 2 cifras.",
+         mesDosCifras: "El mes debe tener 2 cifras.",
+         anioDosOCuatroCifras: "El año debe tener 2 o 4 cifras.",
+         diaRango: "El día debe estar entre 01 y 31.",
+         mesRango: "El mes debe estar entre 01 y 12.",
+         fechaNoExiste: "La fecha no existe.",
+         introduceCorral: "Introduce un número de corral.",
+         introduceIdAnimal: "Introduce un ID de animal."
+      },
 
-  botones: {
-    cancelar: "Cancelar",
-    aceptar: "Aceptar"
-  }
-}
+      botones: {
+         cancelar: "Cancelar",
+         aceptar: "Aceptar"
+      }
+   },
+   modalSalidaPendiente: {
+      titulo: "Salida pendiente",
+      mensaje: "Este animal tiene una tarea de salida pendiente. ¿Quieres completar primero la salida y después realizar la entrada seleccionada?",
+      animal: "Animal",
+      botonConfirmar: "Realizar operación",
+      trasladoEntradaTitulo: "Traslado de entrada",
+      soloUnTrasladoEntrada: "Solo puedes marcar un traslado de entrada cada vez.",
+   }
 
 };

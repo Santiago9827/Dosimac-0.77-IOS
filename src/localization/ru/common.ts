@@ -36,7 +36,21 @@ export default {
   Provincia: 'Область',
   NombreWifi: 'Wifi SSID',
   PasswordWifi: 'Пароль Wifi',
-  No_hay_dispositivos: 'Нет устройств',
+  colocaQrInstalacionCamara: "Поместите QR-код установки в область камеры.",
+  escaneaCodigoQr: "Отсканируйте QR-код",
+  permisoCamaraNecesario: "Требуется разрешение на камеру",
+permisoCamaraQrTexto: "Необходимо разрешить доступ к камере, чтобы отсканировать QR-код.",
+qrNoValido: "Недействительный QR-код",
+qrNoEsInstalacionDosimac: "Это не QR-код установки DOSIMAC.",
+ipAplicadaSinCredenciales: "IP применён правильно, но у этой установки нет Username и пароля.",
+instalacionSeleccionada: "Установка выбрана",
+  conexionExitosa: "Успешное подключение",
+instalacionConectadaCorrectamente: "Установка успешно подключена.",
+noPuedeConectarInstalacionSeleccionada: "Не удаётся подключиться к выбранной установке. Проверьте сеть WiFi или IP-адрес сервера.",
+conectando: "Подключение",
+conectandoInstalacionSeleccionada: "Подключение к выбранной установке...",
+
+No_hay_dispositivos: 'Нет устройств',
   Aviso: 'Уведомление',
   SearchingDevices: 'Поиск устройств...',
   NoSePuedeBorrarGranja: 'Нельзя удалить новую ферму',
@@ -932,6 +946,10 @@ avisoAplicacionNoConfigurada: {
   link: "Нажмите здесь",
 },
 generalHome: {
+  servidorCtifeedDesactualizadoTitulo: "Servidor CTIFEED desatualizado",
+servidorCtifeedDesactualizadoTexto: "Необходимо обновить сервер CTIFEED, чтобы использовать эту функцию.",
+  tareasMovimientosTitulo: "Задачи перемещения",
+tareasMovimientosDescripcion: "Просмотр и управление ожидающими задачами перемещения.",
   movementAnimalTitle: "Перемещение животных",
   readerDescription: "Считыватель ушных меток.",
   keyboardDescription: "Клавиатура",
@@ -1142,7 +1160,8 @@ tareasMovimientos: {
     sinCrotal: "Без ушной метки",
     corralDestino: "Целевой загон",
     corralOrigen: "Исходный загон",
-    fecha: "Дата"
+    fecha: "Запланированная дата",
+    fechaRealizado: "Дата выполнения",
   },
 
   filtros: {
@@ -1359,5 +1378,13 @@ filtrosHistorialMovimientos: {
     cancelar: "Отмена",
     aceptar: "Принять"
   }
+},
+modalSalidaPendiente: {
+  titulo: "Ожидающий выход",
+  mensaje: "У этого животного есть ожидающая задача выхода. Хотите сначала выполнить выход, а затем выполнить выбранный вход?",
+  animal: "Животное",
+  botonConfirmar: "Выполнить операцию",
+  trasladoEntradaTitulo: "Перемещение на вход",
+soloUnTrasladoEntrada: "Можно выбрать только одно перемещение на вход за раз.",
 }
 };
